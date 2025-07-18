@@ -908,6 +908,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     // ofile->Close();
 	}
 
+/*
      //gut check
 std::cout<<"Origional Norms: "<<sum_nominal<<"  "<<sum_uni<<"  num="<<num<<std::endl;
             double sum_x = 0;
@@ -918,7 +919,7 @@ std::cout<<"New Norm diff: "<<sum_x<<std::endl;
 std::cout<<std::endl;
 
       }
-
+*/
 
       // add covariance matrix ...
       for (size_t n = 0;n!=rows; n++){
@@ -1054,6 +1055,7 @@ std::cout<<std::endl;
       //	  std::cout << i << " " << x[start_bin+i] << std::endl;
     }
 
+/*
     //gut check
 std::cout<<"Origional vec mean norm: "<<sum_vec_mean<<"  num="<<num<<std::endl;
             sum_vec_mean = 0;
@@ -1062,6 +1064,7 @@ std::cout<<"Origional vec mean norm: "<<sum_vec_mean<<"  num="<<num<<std::endl;
             }
 std::cout<<"New vec mean norm: "<<sum_vec_mean<<std::endl;
 std::cout<<std::endl;
+*/
 
     if (num!=1){
       // vec_signal, mat_R
