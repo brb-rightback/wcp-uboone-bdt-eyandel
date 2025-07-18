@@ -669,7 +669,7 @@ bool LEEana::CovMatrix::is_xs_chname(TString name){
   }
 }
 
-void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists, TVectorD* vec_mean,  TMatrixD* cov_xs_mat, TVectorD* vec_signal, TMatrixD* mat_R){
+void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists, TVectorD* vec_mean,  TMatrixD* cov_xs_mat, TVectorD* vec_signal, TMatrixD* mat_R, int norm_sig_flag){
   // prepare the maps ... name --> no,  covch, lee
   std::map<TString, std::tuple<int, int, int, TString>> map_histoname_infos ;
   std::map<int, TString> map_no_histoname;
@@ -864,11 +864,22 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
   // } // end of hack
 
      	int start_bin = map_covch_startbin[covch];
+        double sum_nominal = 1;
+        double sum_uni = 1;
+        if(num!=1 && norm_sig_flag!=0){
+          for (int j=0; j!=hpred->GetNbinsX()+1;j++){
+            sum_nominal += hpred->GetBinContent(j+1);
+            for (int k=0;k!=hsigma->GetNbinsX();k++){
+              sum_uni += hR->GetBinContent(j+1,k+1)/hsigma->GetBinContent(k+1)*hsigmabar->GetBinContent(k+1); // hR(j,k)/hsigma(k): response in new universe
+            }
+          }
+        }
+
      	for (int k=0;k!=hpred->GetNbinsX()+1;k++){
 	  if (num == 1){
 	    x[start_bin+k] = hpred->GetBinContent(k+1) ;
 	  }else{
-	    x[start_bin+k] = - hpred->GetBinContent(k+1);
+	    x[start_bin+k] = - hpred->GetBinContent(k+1)/sum_nominal;
 	  }
      	  //	  std::cout << i << " " << x[start_bin+i] << std::endl;
      	}
@@ -877,10 +888,9 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
 	  for (int k=0;k!=hsigma->GetNbinsX();k++){
 	    //	    int bin = std::round(hsigma->GetBinCenter(k+1));
 	    for (int j=0; j!=hpred->GetNbinsX()+1;j++){
-	      x[start_bin+j] += hR->GetBinContent(j+1,k+1)/hsigma->GetBinContent(k+1)*hsigmabar->GetBinContent(k+1); // hR(j,k)/hsigma(k): response in new universe
+	      x[start_bin+j] += hR->GetBinContent(j+1,k+1)/hsigma->GetBinContent(k+1)*hsigmabar->GetBinContent(k+1)/sum_uni; // hR(j,k)/hsigma(k): response in new universe
 	    }
 	  }
-
     //// hack: save CV for UBGenieAll
     // if (nsize==600 and i==0) { // only save CV once
     //   auto ofile = new TFile("wgu_cv.root", "update");
@@ -898,7 +908,17 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     // ofile->Close();
 	}
 
+     //gut check
+std::cout<<"Origional Norms: "<<sum_nominal<<"  "<<sum_uni<<"  num="<<num<<std::endl;
+            double sum_x = 0;
+            for (int j=0; j!=hpred->GetNbinsX()+1;j++){
+              sum_x+=x[start_bin+j];
+            }
+std::cout<<"New Norm diff: "<<sum_x<<std::endl;
+std::cout<<std::endl;
+
       }
+
 
       // add covariance matrix ...
       for (size_t n = 0;n!=rows; n++){
@@ -1023,10 +1043,25 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     }
 
     int start_bin = map_covch_startbin[covch];
+    double sum_vec_mean = 1;
+    if(num!=1 && norm_sig_flag!=0){
+      for (int k=0; k!=hpred->GetNbinsX()+1;k++){
+        sum_vec_mean+=hpred->GetBinContent(k+1);
+      }
+    }
     for (int k=0;k!=hpred->GetNbinsX()+1;k++){
-      (*vec_mean)(start_bin+k) = hpred->GetBinContent(k+1) ;
+      (*vec_mean)(start_bin+k) = hpred->GetBinContent(k+1)/sum_vec_mean;
       //	  std::cout << i << " " << x[start_bin+i] << std::endl;
     }
+
+    //gut check
+std::cout<<"Origional vec mean norm: "<<sum_vec_mean<<"  num="<<num<<std::endl;
+            sum_vec_mean = 0;
+            for (int k=0; k!=hpred->GetNbinsX()+1;k++){
+              sum_vec_mean+=(*vec_mean)(start_bin+k);
+            }
+std::cout<<"New vec mean norm: "<<sum_vec_mean<<std::endl;
+std::cout<<std::endl;
 
     if (num!=1){
       // vec_signal, mat_R
