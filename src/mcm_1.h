@@ -262,6 +262,322 @@ void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_co
 
 }
 
+
+void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tuple<TH1F*, TH1F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0){
+
+
+  // prepare the maps ... name --> no,  covch, lee
+  std::map<TString, std::tuple<int, int, int, TString>> map_histoname_infos ;
+  std::map<int, TString> map_no_histoname;
+
+  int ncount = 0;
+  for (auto it = map_inputfile_info.begin(); it != map_inputfile_info.end(); it++){
+    TString input_filename = it->first;
+    int filetype = std::get<0>(it->second);
+    int period = std::get<1>(it->second);
+
+    if (period != run) continue;
+    TString out_filename = std::get<2>(it->second);
+    int file_no = std::get<4>(it->second);
+    std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = get_histograms(input_filename,0);
+
+    for (auto it1 = histo_infos.begin(); it1 != histo_infos.end(); it1++){
+      int ch = map_name_ch[std::get<5>(*it1)];
+      int obsch = get_obsch_name(std::get<5>(*it1));
+      int covch = get_covch_name(std::get<5>(*it1));
+      int flag_lee = std::get<7>(map_ch_hist[ch]);
+      TString histoname = std::get<0>(*it1);
+      //TH1F *htemp = map_histoname_hist[histoname];
+      //
+      map_histoname_infos[histoname] = std::make_tuple(ncount, covch, flag_lee, input_filename);
+      map_no_histoname[ncount] = histoname;
+      ncount ++;
+
+      //std::cout << histoname << obsch << " " << covch << " " << flag_lee << std::endl;
+    }
+  }
+
+  // results ... filename --> re --> variable, weight, lee weight,
+  std::map<TString, std::vector<std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > > map_all_events;
+  std::map<TString, double> map_filename_pot;
+  for (auto it = map_inputfile_info.begin(); it != map_inputfile_info.end(); it++){
+    TString input_filename = it->first;
+    //int filetype = std::get<0>(it->second);
+    int period = std::get<1>(it->second);
+    if (period != run) continue;
+
+    //map_all_events[input_filename];
+    get_events_info(input_filename, map_all_events, map_filename_pot, map_histoname_infos);
+  }
+
+  double data_pot = 5e19; // example ...
+
+  const int rows = cov_mat_bootstrapping->GetNcols();
+  TPrincipal prin(rows, "ND");
+  Double_t *x = new Double_t[rows];
+
+  std::map<TString, TH1D*> map_filename_histo;
+  // form histogram ...
+  for (auto it = map_all_events.begin(); it != map_all_events.end(); it++){
+    TString filename = it->first;
+    int nsize = it->second.size();
+    TH1D* htemp = new TH1D(filename, filename, nsize, 0.5, nsize+0.5);
+    for (size_t i=0;i!=nsize;i++){
+      htemp->SetBinContent(i+1, std::get<2>(it->second.at(i)) );
+    }
+    //std::cout << htemp->GetSum() << std::endl;
+    map_filename_histo[filename] = htemp;
+  }
+
+  // working on the bootstrapping ...
+  for (int qx = 0; qx != 1000; qx++){
+    if (qx % 500 ==0) std::cout << qx << std::endl;
+
+    for (int i=0;i!=rows;i++){
+      x[i] = 0;
+    }
+
+    // fill the histogram with CV
+    fill_det_histograms(map_filename_histo, map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hists);
+    // merge histograms according to POTs ...
+    for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
+      int covch = it->first;
+      auto tmp_results  = map_covch_hists[covch];
+      TH1F *hCV = std::get<0>(tmp_results);
+      TH1F *hDET = std::get<1>(tmp_results);
+      int num = std::get<2>(tmp_results);
+      hCV->Reset();
+      hDET->Reset();
+
+      for (auto it1 = it->second.begin(); it1 != it->second.end(); it1++){
+	TH1F *htempCV = (TH1F*)hCV->Clone("htempCV");
+	htempCV->Reset();
+	TH1F *htempDET = (TH1F*)hDET->Clone("htempDET");
+	htempDET->Reset();
+	std::map<int, double> temp_map_mc_acc_pot;
+
+	for (auto it2 = it1->begin(); it2 != it1->end(); it2++){
+	  TString histoname = (*it2).first;
+	  TString input_filename = map_histogram_inputfile[histoname];
+	  auto it3 = map_inputfile_info.find(input_filename);
+	  int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+	  int norm_period = std::get<6>(it3->second);
+	  double mc_pot = map_filename_pot[input_filename];
+	  //std::cout << mc_pot << std::endl;
+	  if (temp_map_mc_acc_pot.find(norm_period) == temp_map_mc_acc_pot.end()){
+	    temp_map_mc_acc_pot[norm_period] = mc_pot;
+	  }else{
+	    temp_map_mc_acc_pot[norm_period] += mc_pot;
+	  }
+	}
+
+	for (auto it2 = it1->begin(); it2 != it1->end(); it2++){
+	  TString histoname = (*it2).first;
+	  TString input_filename = map_histogram_inputfile[histoname];
+	  auto it3 = map_inputfile_info.find(input_filename);
+	  int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+	  int norm_period = std::get<6>(it3->second);
+	  data_pot = std::get<5>(map_inputfile_info[input_filename]);
+	  double ratio = data_pot/temp_map_mc_acc_pot[norm_period];
+	  auto tmp_hists = map_histoname_hists[histoname];
+	  TH1F *hmcCV = std::get<0>(tmp_hists);//Reco space prediction for CV
+	  TH1F *hmcDET = std::get<1>(tmp_hists);//Reco space prediction for DETvar
+
+	  htempCV->Add(hmcCV, ratio);
+	  htempDET->Add(hmcDET,ratio);
+	}
+
+	hCV->Add(htempCV);
+	hDET->Add(htempDET);
+	delete htempCV;
+	delete htempDET;
+      }
+
+
+
+      int start_bin = map_covch_startbin[covch];
+      double sum_nominal = 1;
+      double sum_uni = 1;
+      if(num!=1){//signal channel and we are normalizing universes
+        sum_nominal = 0;
+        sum_uni = 0;
+      	for (int j=0; j!=hCV->GetNbinsX()+1;j++){
+          sum_nominal += hCV->GetBinContent(j+1);
+	  sum_uni += hDET->GetBinContent(j+1);
+        }
+      }
+
+      //get the difference
+      for (int i=0;i!=hCV->GetNbinsX()+1;i++){
+	x[start_bin+i] = hDET->GetBinContent(i+1)/sum_uni-hCV->GetBinContent(i+1)/sum_nominal;
+      }
+
+        //gut check
+        std::cout<<"Origional Norms: "<<sum_nominal<<"  "<<sum_uni<<"  num="<<num<<"  covch="<<covch<<std::endl;
+        double sum_x = 0;
+        for (int j=0; j!=hCV->GetNbinsX()+1;j++){
+          sum_x+=x[start_bin+j];//This should be zero for signal channels, aka num=2, when normalizing universes
+        }
+        std::cout<<"New Norm diff: "<<sum_x<<std::endl;
+        std::cout<<std::endl;
+
+    }
+
+    prin.AddRow(x);
+
+  }
+
+  (*cov_mat_bootstrapping) = (*(TMatrixD*)prin.GetCovarianceMatrix());
+  for (int i=0;i!=rows;i++){
+    for (int j=0;j!=rows;j++){
+      if (i<j) { (*cov_mat_bootstrapping)(i,j) = (*(TMatrixD*)prin.GetCovarianceMatrix())(j,i); }
+    }
+  }
+  *vec_mean_diff = (*prin.GetMeanValues());
+
+  //Do GP Smoothing Here
+  GPSmoothing(vec_mean_diff, cov_mat_bootstrapping, "./configurations/gp_input.txt", flag_gp);
+
+  // Now get the full covariance matrix ...
+  TMatrixDSym DMatrix(rows);
+  for (int i=0;i!=rows;i++){
+    for (int j=0;j!=rows;j++){
+      DMatrix(i,j) =  (*cov_mat_bootstrapping)(i,j);
+    }
+  }
+  TMatrixDSymEigen DMatrix_eigen(DMatrix);
+  TMatrixD matrix_eigenvector = DMatrix_eigen.GetEigenVectors();
+  TMatrixD matrix_eigenvector_T(rows,rows);
+  matrix_eigenvector_T.Transpose(matrix_eigenvector);
+  TVectorD matrix_eigenvalue = DMatrix_eigen.GetEigenValues();
+
+  TPrincipal prin_full(rows, "ND");
+  TRandom3 random3(0);
+  for (int i=0;i!=16000;i++){
+    TMatrixD matrix_element(rows,1);
+    for (int j=0;j!=rows;j++){
+      if (matrix_eigenvalue(j) >=0)
+	matrix_element(j,0) = random3.Gaus(0,sqrt(matrix_eigenvalue(j)));
+      else
+	matrix_element(j,0) = 0;
+    }
+    TMatrixD matrix_variation = matrix_eigenvector * matrix_element;
+    double rel_err = random3.Gaus(0,1);
+    for (int j=0;j!=rows;j++){
+      //      matrix_variation(j,0) = matrix_variation(j,0)/sqrt(11.) + (*vec_mean_diff)(j); // increase MC stat by a factor of 11  x11
+      matrix_variation(j,0) += (*vec_mean_diff)(j); // standard ...
+      //matrix_variation(j,0) = (*vec_mean_diff)(j); // no random term
+      x[j] = rel_err * matrix_variation(j,0);
+      //x[j] = matrix_variation(j,0); //original no abs term
+    }
+    prin_full.AddRow(x);
+
+  }
+  (*cov_det_mat) = (*(TMatrixD*)prin_full.GetCovarianceMatrix());
+  for (int i=0;i!=rows;i++){
+    for (int j=0;j!=rows;j++){
+      if (i<j) (*cov_det_mat)(i,j) = (*(TMatrixD*)prin_full.GetCovarianceMatrix())(j,i);
+    }
+  }
+
+
+  delete[] x;
+
+  // clean up the memory ...
+   for (auto it = map_filename_histo.begin(); it != map_filename_histo.end(); it++){
+     delete it->second;
+   }
+
+   // fill the histogram with CV
+   fill_det_histograms(map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hists);
+   // merge histograms according to POTs ...
+   for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
+     int covch = it->first;
+     auto tmp_results  = map_covch_hists[covch];
+     TH1F *hCV = std::get<0>(tmp_results);
+     TH1F *hDET = std::get<1>(tmp_results);
+     int num = std::get<2>(tmp_results);
+     hCV->Reset();
+     hDET->Reset();
+
+     for (auto it1 = it->second.begin(); it1 != it->second.end(); it1++){
+       TH1F *htempCV = (TH1F*)hCV->Clone("htempCV");
+       htempCV->Reset();
+       TH1F *htempDET = (TH1F*)hDET->Clone("htempDET");
+       htempDET->Reset();
+       std::map<int, double> temp_map_mc_acc_pot;
+
+       for (auto it2 = it1->begin(); it2 != it1->end(); it2++){
+         TString histoname = (*it2).first;
+         TString input_filename = map_histogram_inputfile[histoname];
+         auto it3 = map_inputfile_info.find(input_filename);
+         int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+         int norm_period = std::get<6>(it3->second);
+         double mc_pot = map_filename_pot[input_filename];
+         //std::cout << mc_pot << std::endl;
+         if (temp_map_mc_acc_pot.find(norm_period) == temp_map_mc_acc_pot.end()){
+           temp_map_mc_acc_pot[norm_period] = mc_pot;
+         }else{
+           temp_map_mc_acc_pot[norm_period] += mc_pot;
+         }
+       }
+
+       for (auto it2 = it1->begin(); it2 != it1->end(); it2++){
+         TString histoname = (*it2).first;
+         TString input_filename = map_histogram_inputfile[histoname];
+         auto it3 = map_inputfile_info.find(input_filename);
+         int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+         int norm_period = std::get<6>(it3->second);
+         data_pot = std::get<5>(map_inputfile_info[input_filename]);
+         double ratio = data_pot/temp_map_mc_acc_pot[norm_period];
+         auto tmp_hists = map_histoname_hists[histoname];
+         TH1F *hmcCV = std::get<0>(tmp_hists);//Reco space prediction for CV
+         TH1F *hmcDET = std::get<1>(tmp_hists);//Reco space prediction for DETvar
+
+         htempCV->Add(hmcCV, ratio);
+         htempDET->Add(hmcDET,ratio);
+       }
+
+       hCV->Add(htempCV);
+       hDET->Add(htempDET);
+       delete htempCV;
+       delete htempDET;
+    }
+
+    int start_bin = map_covch_startbin[covch];
+    double sum_nominal = 1;
+    if(num!=1){//signal channel and we are normalizing universes
+      sum_nominal = 0;
+      for (int j=0; j!=hCV->GetNbinsX()+1;j++){
+        sum_nominal += hCV->GetBinContent(j+1);
+      }
+    }
+    for (int i=0;i!=hCV->GetNbinsX()+1;i++){
+      (*vec_mean)[start_bin+i] = hCV->GetBinContent(i+1)/sum_nominal;
+
+      //std::cout << start_bin+i << " " << (*vec_mean_diff)(start_bin+i) << " " <<  hpred->GetBinContent(i+1) << std::endl;;
+	//std::cout << x[start_bin+i] << std::endl;
+    }
+
+    //gut check
+    std::cout<<"Origional vec mean norm: "<<sum_nominal<<"  num="<<num<<"  covch="<<covch<<std::endl;
+    double sum_vec_mean = 0;
+    for (int k=0; k!=hCV->GetNbinsX()+1;k++){
+      sum_vec_mean+=(*vec_mean)(start_bin+k);
+    }
+    std::cout<<"New vec mean norm: "<<sum_vec_mean<<std::endl;
+    std::cout<<std::endl;
+
+  }
+
+
+
+}
+
+
+
+
+
 void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filename_histo, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > >&map_all_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, TH1F*>& map_histoname_hist){
   for (auto it = map_histoname_hist.begin(); it != map_histoname_hist.end(); it++){
      it->second->Reset();
@@ -381,6 +697,126 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
 
 
  }
+
+
+// Boostrapped CV and DETvar when normalizing
+void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filename_histo, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > >&map_all_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists){
+  for (auto it = map_histoname_hists.begin(); it != map_histoname_hists.end(); it++){
+    int num = std::get<2>(it->second);
+    TH1F *h1 = std::get<0>(it->second);
+    TH1F *h2 = std::get<1>(it->second);
+    h1->Reset();
+    h2->Reset();
+  }
+
+  // loop over files
+  for (auto it = map_all_events.begin(); it!=map_all_events.end(); it++){
+    TString filename = it->first;
+    TH1D *hweight = map_filename_histo[filename];
+    double sum = hweight->GetSum();
+    for (size_t i=0;i<sum;i++){
+      int global_index = hweight->FindBin(hweight->GetRandom())-1;
+      double weight = std::get<2>(it->second.at(global_index));
+      double weight_lee = std::get<3>(it->second.at(global_index));
+
+      for (auto it1 = std::get<4>(it->second.at(global_index)).begin(); it1 != std::get<4>(it->second.at(global_index)).end(); it1++){
+           int no = std::get<0>(*it1);
+           double val_cv = std::get<1>(*it1);
+           bool flag_cv = std::get<2>(*it1);
+           double val_det = std::get<3>(*it1);
+           bool flag_det = std::get<4>(*it1);
+
+           TString histoname = map_no_histoname[no];
+
+	   auto tmp_hists = map_histoname_hists[histoname];
+	   TH1F *h1 = std::get<0>(tmp_hists);//Reco space prediction CV
+	   TH1F *h2 = std::get<1>(tmp_hists);//Reco space prediction DetVar
+	   int num = std::get<2>(tmp_hists);
+	   int flag_lee = std::get<2>(map_histoname_infos[histoname]);
+
+           // central value ...
+           if (flag_cv){
+             if (flag_lee){
+               h1->Fill(val_cv, weight_lee);
+             }else{
+               h1->Fill(val_cv, 1);
+             }
+           }
+           if (flag_det){
+             if (flag_lee){
+               h2->Fill(val_det, weight_lee);
+             }else{
+               h2->Fill(val_det, 1);
+             }
+           }
+
+           // if (no==2)
+           //std::cout << std::get<0>(it->second.at(i)) << " " << std::get<1>(it->second.at(i)) << " " << val_cv << " " << weight << std::endl;
+           // std::cout << weight << " " << weight_lee << " " << flag_lee << " " << histoname << std::endl;
+         }
+
+    }
+  }
+
+
+}
+
+
+
+// CV when normalizing
+void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > >&map_all_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists){
+  for (auto it = map_histoname_hists.begin(); it != map_histoname_hists.end(); it++){
+    int num = std::get<2>(it->second);
+    TH1F *h1 = std::get<0>(it->second);
+    TH1F *h2 = std::get<1>(it->second);
+    h1->Reset();
+    h2->Reset();
+  }
+
+  // loop over files
+  for (auto it = map_all_events.begin(); it!=map_all_events.end(); it++){
+    // loop over events ...
+    //std::cout << it->first << " " << it->second.size() << std::endl;
+    for (size_t i=0;i!=it->second.size(); i++){
+      double weight = std::get<2>(it->second.at(i));
+      double weight_lee = std::get<3>(it->second.at(i));
+         for (auto it1 = std::get<4>(it->second.at(i)).begin(); it1 != std::get<4>(it->second.at(i)).end(); it1++){
+           int no = std::get<0>(*it1);
+           double val_cv = std::get<1>(*it1);
+           bool flag_cv = std::get<2>(*it1);
+           double val_det = std::get<3>(*it1);
+           bool flag_det = std::get<4>(*it1);
+
+           TString histoname = map_no_histoname[no];
+
+           auto tmp_hists = map_histoname_hists[histoname];
+           TH1F *h1 = std::get<0>(tmp_hists);//Reco space prediction CV
+           TH1F *h2 = std::get<1>(tmp_hists);//Reco space prediction DetVar
+           int num = std::get<2>(tmp_hists);
+           int flag_lee = std::get<2>(map_histoname_infos[histoname]);
+
+           // central value ...
+           if (flag_cv){
+             if (flag_lee){
+               h1->Fill(val_cv, weight_lee);
+             }else{
+               h1->Fill(val_cv, 1);
+             }
+           }
+
+           // if (no==2)
+           //std::cout << std::get<0>(it->second.at(i)) << " " << std::get<1>(it->second.at(i)) << " " << val_cv << " " << weight << std::endl;
+           // std::cout << weight << " " << weight_lee << " " << flag_lee << " " << histoname << std::endl;
+         }
+
+    }
+  }
+
+
+}
+
+
+
 
 
  void LEEana::CovMatrix::get_events_info(TString input_filename, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > > &map_all_events, std::map<TString, double>& map_filename_pot,  std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos){

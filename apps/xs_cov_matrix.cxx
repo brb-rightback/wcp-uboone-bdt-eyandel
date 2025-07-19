@@ -208,7 +208,8 @@ int main( int argc, char** argv )
   // for (auto it = map_histoname_hist.begin(); it != map_histoname_hist.end(); it++){
   //  ((TH1F*)it->second)->SetDirectory(file);
   // }
-  
+
+  //Note that this is not the cv, would have to rerun to get cv.  
   for (auto it = map_covch_hists.begin(); it != map_covch_hists.end(); it++){
     auto results = it->second;
     TH1F *h1 = std::get<0>(results);
