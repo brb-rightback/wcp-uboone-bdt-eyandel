@@ -839,6 +839,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     int start_bin = map_covch_startbin[covch];
     double sum_vec_mean = 1;
     if(num!=1 && norm_sig_flag!=0){
+      sum_vec_mean = 0;
       for (int k=0; k!=hpred->GetNbinsX()+1;k++){
         sum_vec_mean+=hpred->GetBinContent(k+1);
       }
@@ -1009,6 +1010,8 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
         double sum_nominal = 1;
         double sum_uni = 1;
         if(num!=1 && norm_sig_flag!=0){//signal channel and we are normalizing universes
+	  sum_nominal = 0;
+	  sum_uni = 0;
           for (int j=0; j!=hpred->GetNbinsX()+1;j++){
             sum_nominal += hpred->GetBinContent(j+1);
             if(norm_sig_flag==1){//only account for the impact on efficiency and smearing
@@ -1023,7 +1026,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
 	  if (num == 1){//not a signal channel
 	    x[start_bin+k] = hpred->GetBinContent(k+1) ;
           }else if(norm_sig_flag>1){//signal channel, calculate full uncertainty
-                x[start_bin+k] += hpred->GetBinContent(k+1)/sum_nominal-(*vec_mean)(start_bin+k);
+                x[start_bin+k] += hpred->GetBinContent(k+1)/sum_nominal-(*vec_mean)(start_bin+k);//vec_mean was already divided to get proper normalization
 	  }else{//signal channel, only account for the uncertainty on the efficiency and smearing
 	    x[start_bin+k] = - hpred->GetBinContent(k+1)/sum_nominal;
 	  }
