@@ -39,12 +39,12 @@ int main( int argc, char** argv )
       break;
     }
   }
-  if (run !=17 && run!=0 && run!=18 && run!=19) {
-    std::cout  << "Force run = 17, check configurations ..." << std::endl;
-    run = 17;
-  }
+  
   if(norm_sig!=0){
     std::cout<<"Normalizing the signal distributions in each universe when forming the cov matrix"<<std::endl;
+  }
+  if(norm_sig>1){
+    std::cout<<"Calculating full uncertainty rather than only the uncertainty on efficiency and smearing"<<std::endl;
   }
 
   TString xf_input_config_file = "./configurations/xf_input.txt";
@@ -151,9 +151,12 @@ int main( int argc, char** argv )
   }
   
   // hack ...
-  outfile_name = "./hist_rootfiles/XsFlux/cov_xs.root";
-  if(run==18) outfile_name = "./hist_rootfiles/XsFlux/cov_rw.root";
-  if(run==19) outfile_name = "./hist_rootfiles/XsFlux/cov_rw_cor.root";
+
+  outfile_name = Form("./hist_rootfiles/XsFlux/cov_xs_%d.root",run); 
+  if(norm_sig!=0) outfile_name = Form("./hist_rootfiles/XsFlux/cov_xs_%d_%d.root",run,norm_sig);
+  if(run==17 && norm_sig==0) outfile_name = "./hist_rootfiles/XsFlux/cov_xs.root";
+  if(run==18 && norm_sig==0) outfile_name = "./hist_rootfiles/XsFlux/cov_rw.root";
+  if(run==19 && norm_sig==0) outfile_name = "./hist_rootfiles/XsFlux/cov_rw_cor.root";
   std::cout << outfile_name << std::endl;
   TMatrixD* cov_add_mat = cov.get_add_cov_matrix();
   // create a covariance matrix for bootstrapping ...
