@@ -849,7 +849,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
       //          std::cout << i << " " << x[start_bin+i] << std::endl;
     }
 
-    
+    /* 
     //gut check
     std::cout<<"Origional vec mean norm: "<<sum_vec_mean<<"  num="<<num<<"  covch="<<covch<<std::endl;
     sum_vec_mean = 0;
@@ -858,7 +858,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     }
     std::cout<<"New vec mean norm: "<<sum_vec_mean<<std::endl;
     std::cout<<std::endl;
-    
+    */
 
     if (num!=1){
       // vec_signal, mat_R
@@ -1056,7 +1056,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     // hsigma1->Write();
     // ofile->Close();
 
-        
+       /* 
         //gut check
         std::cout<<"Origional Norms: "<<sum_nominal<<"  "<<sum_uni<<"  num="<<num<<"  covch="<<covch<<std::endl;
         double sum_x = 0;
@@ -1065,7 +1065,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
         }
         std::cout<<"New Norm diff: "<<sum_x<<std::endl;
         std::cout<<std::endl;
-        
+        */
       }
 
 

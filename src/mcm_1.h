@@ -411,16 +411,16 @@ void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tupl
       for (int i=0;i!=hCV->GetNbinsX()+1;i++){
 	x[start_bin+i] = hDET->GetBinContent(i+1)/sum_uni-hCV->GetBinContent(i+1)/sum_nominal;
       }
-
-        //gut check
-        std::cout<<"Origional Norms: "<<sum_nominal<<"  "<<sum_uni<<"  num="<<num<<"  covch="<<covch<<std::endl;
-        double sum_x = 0;
-        for (int j=0; j!=hCV->GetNbinsX()+1;j++){
-          sum_x+=x[start_bin+j];//This should be zero for signal channels, aka num=2, when normalizing universes
-        }
-        std::cout<<"New Norm diff: "<<sum_x<<std::endl;
-        std::cout<<std::endl;
-
+      /*
+      //gut check
+      std::cout<<"Origional Norms: "<<sum_nominal<<"  "<<sum_uni<<"  num="<<num<<"  covch="<<covch<<std::endl;
+      double sum_x = 0;
+      for (int j=0; j!=hCV->GetNbinsX()+1;j++){
+        sum_x+=x[start_bin+j];//This should be zero for signal channels, aka num=2, when normalizing universes
+      }
+      std::cout<<"New Norm diff: "<<sum_x<<std::endl;
+      std::cout<<std::endl;
+      */
     }
 
     prin.AddRow(x);
@@ -559,6 +559,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tupl
 	//std::cout << x[start_bin+i] << std::endl;
     }
 
+    /*
     //gut check
     std::cout<<"Origional vec mean norm: "<<sum_nominal<<"  num="<<num<<"  covch="<<covch<<std::endl;
     double sum_vec_mean = 0;
@@ -567,7 +568,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tupl
     }
     std::cout<<"New vec mean norm: "<<sum_vec_mean<<std::endl;
     std::cout<<std::endl;
-
+    */
   }
 
 
