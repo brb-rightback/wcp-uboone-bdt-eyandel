@@ -1,0 +1,40 @@
+#ifndef LEEANAC_TREE_WRANGLER
+#define LEEANAC_TREE_WRANGLER
+
+#include "WCPLEEANA/Util.h"
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TKey.h"
+#include "TROOT.h"
+
+#include <iostream>
+#include <map>
+#include <string>
+#include <fstream>
+#include <sstream>
+
+namespace LEEana{
+  class tree_wrangler{
+  public:
+    tree_wrangler(bool configure=true, std::string config_file_name="config.txt", char delimiter=',', bool set_verbose=true);
+    ~tree_wrangler();
+
+    std::vector<TTree*>* get_old_trees(TFile* file);
+    std::vector<TTree*>* set_new_trees(TFile* file);
+
+    void CopyDir(TDirectory *source, bool blank_tree=false, std::vector<std::string> to_skip={});
+    void CopyDir(TDirectory *source, TString TDirectory_name, bool blank_tree=false, std::vector<std::string> to_skip={});
+
+    std::vector<TTree*>* CopyTrees(TDirectory *source, bool blank_tree=false, bool rename=false, TString TDirectory_name="", std::vector<std::string> to_skip={});
+    std::vector<TTree*>* GetTrees(TDirectory *source, std::vector<std::string> to_skip={});
+
+
+  private:
+    bool verbose;
+    std::map<std::string,std::vector<std::string>> directories_wi_trees_to_skip_names;
+    std::map<std::string, std::tuple<TDirectory*,std::vector<TTree*>*>> names_wi_directories_and_trees;
+  };
+}
+
+#endif

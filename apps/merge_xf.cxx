@@ -21,7 +21,7 @@
 
 #include "WCPLEEANA/eval.h"
 
-#include "WCPLEEANA/Util.h"
+#include "WCPLEEANA/tree_wrangler.h"
 
 using namespace std;
 using namespace LEEana;
@@ -43,8 +43,8 @@ int main( int argc, char** argv )
   TString input_file_xf = argv[2];
   TString out_file = argv[3];
   TString option = argv[4];
-  std::string config_file_name;
   bool flag_config = false;
+  std::string config_file_name="config.txt";
   char delimiter = ',';
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
@@ -55,38 +55,11 @@ int main( int argc, char** argv )
     case 'd':
         delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
       break;
-   }
+    }
   }
 
-  std::map<std::string,std::vector<std::string>> directories_wi_trees_to_skip_names;
-  std::map<std::string, std::tuple<TDirectory*,std::vector<TTree*>*>> names_wi_directories_and_trees;
-
-  // From the config file get the directories to load and which trees to skip
-  std::ifstream config_file(config_file_name);
-  if(config_file.is_open()){
-    std::cout<<"Loading directories and trees based off the configuration in "<<config_file_name<<std::endl;
-    while(!config_file.eof()){
-      std::string line;
-      std::getline(config_file, line);
-      while(line.empty()) {std::getline(config_file, line);}//Skip empty lines
-      if(line == "end" || line == "End") break;
-      std::istringstream iss(line);
-      std::string temp_dir;
-      std::string temp_all_trees_to_skip;
-      std::vector<std::string> temp_trees_to_skip;
-      iss >> temp_dir >> temp_all_trees_to_skip;//Read the line
-      temp_trees_to_skip = splitString(temp_all_trees_to_skip, delimiter);//Break up the trees
-      if (directories_wi_trees_to_skip_names.find(temp_dir) != directories_wi_trees_to_skip_names.end()) {std::cout<<"WARNING: Failed to open the config file, just loading WC"<<std::endl;}
-      sort( temp_trees_to_skip.begin(), temp_trees_to_skip.end() );
-      const bool hasDuplicates = std::adjacent_find(temp_trees_to_skip.begin(), temp_trees_to_skip.end()) != temp_trees_to_skip.end();
-      if(hasDuplicates){
-        std::cout<<"Duplicates in trees to skip for "<<temp_dir<<". You should check the config file."<<std::endl;
-        temp_trees_to_skip.erase( unique( temp_trees_to_skip.begin(), temp_trees_to_skip.end() ), temp_trees_to_skip.end() );
-      }
-      directories_wi_trees_to_skip_names[temp_dir] = temp_trees_to_skip;
-    }
-  }else if(flag_config){std::cout<<"WARNING: Failed to open the config file: " <<config_file_name<<". Just loading WC"<<std::endl;}
-
+  tree_wrangler wrangler(flag_config, config_file_name, delimiter);
+  
   // Always load WC
   TFile *file1 = new TFile(input_file_cv);
   TTree *T_BDTvars = (TTree*)file1->Get("wcpselection/T_BDTvars");
@@ -98,23 +71,7 @@ int main( int argc, char** argv )
 
   //Load other trees from directories as specified by the config file
   std::vector<TTree*>* old_trees = new std::vector<TTree*>;
-  for (const auto& it_directories_trees_names : directories_wi_trees_to_skip_names) {
-    std::string directory_name = it_directories_trees_names.first;
-    std::vector<std::string> trees_to_skip_names = it_directories_trees_names.second;
-    TDirectory *topdir = gDirectory;
-    if (file1->GetDirectory(directory_name.c_str())){
-      file1->cd(directory_name.c_str());
-      TDirectory *temp_directory = new TDirectory;
-      temp_directory = gDirectory;
-      std::vector<TTree*>* temp_trees = new std::vector<TTree*>;
-      temp_trees = GetTrees(temp_directory,trees_to_skip_names);
-      old_trees->insert(old_trees->end(), temp_trees->begin(), temp_trees->end());
-      std::tuple<TDirectory*,std::vector<TTree*>*> temp_directory_trees(temp_directory,temp_trees);
-      names_wi_directories_and_trees[directory_name] = temp_directory_trees;
-      topdir->cd();
-    }else{std::cout<<"WARNING: can't find the directory "<<directory_name<<" in the input file. Check the config."<<std::endl;}
-  }
-
+  old_trees = wrangler.get_old_trees(file1);
 
   TFile *file2 = new TFile(input_file_xf);
   TTree *T;
@@ -200,22 +157,11 @@ int main( int argc, char** argv )
 
   TFile *file3 = new TFile(out_file,"RECREATE");
   file3->cd();
-  TDirectory *topdirout = gDirectory;
 
   //Setup the directories specified in the config file
   std::vector<TTree*>* new_trees = new std::vector<TTree*>;
-  for (const auto& it_directories_trees_names : directories_wi_trees_to_skip_names) {
-    std::string directory_name = it_directories_trees_names.first;
-    std::vector<std::string> trees_to_skip_names = it_directories_trees_names.second;
-    TDirectory * temp_input_directory = std::get<0>(names_wi_directories_and_trees[directory_name]);
-    file3->mkdir(directory_name.c_str());
-    file3->cd(directory_name.c_str());
-    std::vector<TTree*>* temp_new_trees = new std::vector<TTree*>;
-    temp_new_trees = CopyTrees(temp_input_directory,true,false,"",trees_to_skip_names);
-    new_trees->insert(new_trees->end(), temp_new_trees->begin(), temp_new_trees->end());
-    topdirout->cd();
-  }
-  
+  new_trees = wrangler.set_new_trees(file3);
+
   // Always do WC
   file3->mkdir("wcpselection");
   file3->cd("wcpselection");

@@ -13,6 +13,13 @@
 #include "TKey.h"
 #include "TROOT.h"
 
+#include <iostream>
+#include <map>
+#include <string>
+#include <set>
+#include <fstream>
+#include <sstream>
+
 // interactive initilization of a matrix/vector
 TMatrixD Matrix(Int_t row, Int_t column);
 TVectorD Vector(Int_t row);
