@@ -16,10 +16,10 @@
 #include "TMath.h"
 #include "TH1F.h"
 
-#include "WCPLEEANA/Util.h"
+#include "WCPLEEANA/tree_wrangler.h"
 
 using namespace std;
-
+using namespace LEEana;
 
 //One can use this program to generate the NuMI flux geometry weights root file.
 //It takes three arguments.
@@ -37,7 +37,9 @@ int main( int argc, char** argv )
   string path_to_weightHistos = "/home/xqian/wire-cell/wcp-uboone-bdt/scripts/NuMI_Geometry_Weights_Histograms.root";
   string hornMode = "FHC";
   string outfile_name = "/data1/xqian/MicroBooNE/processed_checkout_rootfiles/prodgenie_numi_intrinsic_nue_overlay_run1/nucleoninexsec_FluxUnisim.root";
-
+  bool flag_config = false;
+  std::string config_file_name="config.txt";
+  char delimiter = ',';
   if (argc < 3){
     std::cout << "applyNuMIGeometryWeights -i[#input_file] -o[#out_putfile] -w[#weight_file] -m[mode]" << std::endl;
     return -1;
@@ -57,11 +59,17 @@ int main( int argc, char** argv )
     case 'm':
       hornMode = &argv[i][2];
       break;
+    case 't':
+       config_file_name = &argv[i][2];
+       flag_config = true;
+      break;
+    case 'd':
+        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
+      break;
     }
   }
   
-  std::vector<std::string> pelee_skip = {"SubRun"};
-  std::vector<std::string> glee_skip = {"run_subrun_tree","pot_tree"};
+  tree_wrangler wrangler(flag_config, config_file_name, delimiter);
 
   auto CVfile = TFile::Open(path_to_CV.c_str());
   auto weightHistosFile = TFile::Open(path_to_weightHistos.c_str());
@@ -72,52 +80,9 @@ int main( int argc, char** argv )
   auto T_BDTvars_copy = (TTree*)CVfile->Get("wcpselection/T_BDTvars");//truth_nuPdg, truth_nuEnergy,run,subrun,event
   TTree *T_spacepoints_copy = (TTree*)CVfile->Get("wcpselection/T_spacepoints");
 
-  TDirectory *nuselection;
-  TDirectory *shrreco3d;
-  TDirectory *proximity;
-  std::vector<TTree*>* nuselection_ttree_vec = new std::vector<TTree*>();
-  std::vector<TTree*>* shrreco3d_ttree_vec = new std::vector<TTree*>();
-  std::vector<TTree*>* proximity_ttree_vec = new std::vector<TTree*>();
-  bool has_pelee = false;
-  if (CVfile->GetDirectory("nuselection")){
-    has_pelee = true;
-    TDirectory *topdir = gDirectory;
-
-    CVfile->cd("nuselection");
-    nuselection = gDirectory;
-    nuselection_ttree_vec = GetTrees(nuselection,pelee_skip);
-
-    CVfile->cd("shrreco3d");
-    shrreco3d = gDirectory;
-    shrreco3d_ttree_vec = GetTrees(shrreco3d,pelee_skip);
-
-    CVfile->cd("proximity");
-    proximity = gDirectory;
-    proximity_ttree_vec = GetTrees(proximity,pelee_skip);
-
-    topdir->cd();
-  }
-
-  TDirectory *singlephotonana;
-  std::vector<TTree*>* singlephotonana_ttree_vec = new std::vector<TTree*>();
-  bool has_glee = false;
-  if (CVfile->GetDirectory("singlephotonana")){
-    has_glee = true;
-    TDirectory *topdir = gDirectory;
-
-    CVfile->cd("singlephotonana");
-    singlephotonana = gDirectory;
-    singlephotonana_ttree_vec = GetTrees(singlephotonana,glee_skip);
-
-    topdir->cd();
-  }
-
-  TTree *EventTree;
-  bool has_lantern = false;
-  if (CVfile->GetDirectory("lantern")){
-    has_lantern = true;
-    EventTree = (TTree*)CVfile->Get("lantern/EventTree");
-  }
+  //Load other trees from directories as specified by the config file
+  std::vector<TTree*>* old_trees = new std::vector<TTree*>;
+  old_trees = wrangler.get_old_trees(CVfile);
 
   auto h_nue_FHC_variation1=(TH1D*)weightHistosFile->Get("EnergyVarBin/ratio_run1_FHC_nue_CV_AV_TPC");
   auto h_nue_FHC_variation2=(TH1D*)weightHistosFile->Get("EnergyVarBin/ratio_run2_FHC_nue_CV_AV_TPC");
@@ -311,54 +276,9 @@ int main( int argc, char** argv )
   //  auto ofile = new TFile("nucleoninexsec_FluxUnisim.root","RECREATE");
   auto ofile = new TFile(outfile_name.c_str(),"RECREATE");
 
-  std::vector<TTree*>* new_nuselection_ttree_vec = new std::vector<TTree*>();
-  std::vector<TTree*>* new_shrreco3d_ttree_vec = new std::vector<TTree*>();
-  std::vector<TTree*>* new_proximity_ttree_vec = new std::vector<TTree*>();
-  std::cout<<"Checking pelee"<<std::endl;
-  if (has_pelee){
-    std::cout<<"Starting pelee"<<std::endl;
-    TDirectory *topdirout = gDirectory;
-    topdirout->cd();
-
-    ofile->mkdir("nuselection");
-    ofile->cd("nuselection");
-    new_nuselection_ttree_vec = CopyTrees(nuselection,true,false,"",pelee_skip);
-    topdirout->cd();
-
-    ofile->mkdir("shrreco3d");
-    ofile->cd("shrreco3d");
-    new_shrreco3d_ttree_vec = CopyTrees(shrreco3d,true,false,"",pelee_skip);
-    topdirout->cd();
-
-    ofile->mkdir("proximity");
-    ofile->cd("proximity");
-    new_proximity_ttree_vec = CopyTrees(proximity,true,false,"",pelee_skip);
-    topdirout->cd();
-  }else{std::cout<<"No pelee"<<std::endl;}
-  
-
-  std::vector<TTree*>* new_singlephotonana_ttree_vec = new std::vector<TTree*>();
-  std::cout<<"Checking glee"<<std::endl;
-  if (has_glee){
-    std::cout<<"Starting glee"<<std::endl;
-    TDirectory *topdirout = gDirectory;
-    ofile->mkdir("singlephotonana");
-    ofile->cd("singlephotonana");
-    new_singlephotonana_ttree_vec = CopyTrees(singlephotonana,true,false,"",glee_skip);
-    topdirout->cd();
-  }else{std::cout<<"No glee"<<std::endl;}
-
-
-  std::cout<<"Checking lantern"<<std::endl;
-  TTree *new_EventTree;
-  if (has_lantern){
-    std::cout<<"Starting lantern"<<std::endl;
-    TDirectory *topdirout = gDirectory;
-    ofile->mkdir("lantern");
-    ofile->cd("lantern");
-    new_EventTree = EventTree->CloneTree(0);
-    topdirout->cd();
-  }else{std::cout<<"No lantern"<<std::endl;}
+  //Setup the directories specified in the config file
+  std::vector<TTree*>* new_trees = new std::vector<TTree*>;
+  new_trees = wrangler.set_new_trees(ofile);
 
 
   ofile->mkdir("wcpselection")->cd();
@@ -450,41 +370,12 @@ int main( int argc, char** argv )
     T_spacepoints_copy->GetEntry(i);
     T_spacepoints->Fill();
 
-    if (has_pelee){
-      for(auto tree_it=nuselection_ttree_vec->begin(); tree_it!=nuselection_ttree_vec->end(); tree_it++){
-        (*tree_it)->GetEntry(i);
-      }
-      for(auto tree_it=shrreco3d_ttree_vec->begin(); tree_it!=shrreco3d_ttree_vec->end(); tree_it++){
-        (*tree_it)->GetEntry(i);
-      }
-      for(auto tree_it=proximity_ttree_vec->begin(); tree_it!=proximity_ttree_vec->end(); tree_it++){
-        (*tree_it)->GetEntry(i);
-      }
-      for(auto tree_it=new_nuselection_ttree_vec->begin(); tree_it!=new_nuselection_ttree_vec->end(); tree_it++){
-        (*tree_it)->Fill();
-      }
-
-      for(auto tree_it=new_shrreco3d_ttree_vec->begin(); tree_it!=new_shrreco3d_ttree_vec->end(); tree_it++){
-        (*tree_it)->Fill();
-      }
-
-      for(auto tree_it=new_proximity_ttree_vec->begin(); tree_it!=new_proximity_ttree_vec->end(); tree_it++){
-        (*tree_it)->Fill();
-      }
+    for(auto tree_it=old_trees->begin(); tree_it!=old_trees->end(); tree_it++){
+      (*tree_it)->GetEntry(i);
     }
 
-    if (has_glee){
-      for(auto tree_it=singlephotonana_ttree_vec->begin(); tree_it!=singlephotonana_ttree_vec->end(); tree_it++){
-        (*tree_it)->GetEntry(i);
-      }
-      for(auto tree_it=new_singlephotonana_ttree_vec->begin(); tree_it!=new_singlephotonana_ttree_vec->end(); tree_it++){
-        (*tree_it)->Fill();
-      }
-    }
-
-    if (has_lantern){
-      EventTree->GetEntry(i);
-      new_EventTree->Fill();
+    for(auto tree_it=new_trees->begin(); tree_it!=new_trees->end(); tree_it++){
+      (*tree_it)->Fill();
     }
 
 

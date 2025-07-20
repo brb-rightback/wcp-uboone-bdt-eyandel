@@ -21,12 +21,12 @@ namespace LEEana{
     ~tree_wrangler();
 
     std::vector<TTree*>* get_old_trees(TFile* file);
-    std::vector<TTree*>* set_new_trees(TFile* file);
+    std::vector<TTree*>* set_new_trees(TFile* file, bool rename=false, TString TDirectory_extension="");
 
     void CopyDir(TDirectory *source, bool blank_tree=false, std::vector<std::string> to_skip={});
-    void CopyDir(TDirectory *source, TString TDirectory_name, bool blank_tree=false, std::vector<std::string> to_skip={});
+    void CopyDir(TDirectory *source, TString TDirectory_extension, bool blank_tree=false, std::vector<std::string> to_skip={});
 
-    std::vector<TTree*>* CopyTrees(TDirectory *source, bool blank_tree=false, bool rename=false, TString TDirectory_name="", std::vector<std::string> to_skip={});
+    std::vector<TTree*>* CopyTrees(TDirectory *source, bool blank_tree=false, bool rename=false, TString TDirectory_extension="", std::vector<std::string> to_skip={});
     std::vector<TTree*>* GetTrees(TDirectory *source, std::vector<std::string> to_skip={});
 
 

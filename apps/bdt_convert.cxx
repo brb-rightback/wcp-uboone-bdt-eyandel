@@ -36,7 +36,8 @@ using namespace LEEana;
 #include "WCPLEEANA/pfeval.h"
 #include "WCPLEEANA/kine.h"
 
-#include "WCPLEEANA/Util.h"
+//#include "WCPLEEANA/Util.h"
+#include "WCPLEEANA/tree_wrangler.h"
 
 int main( int argc, char** argv )
 {
@@ -55,14 +56,18 @@ int main( int argc, char** argv )
   string global_file_type = "";
   int skip_cut = 0;
   int flag_numi = 0;
-  
+
+  bool flag_config = false;
+  std::string config_file_name="config.txt";
+  char delimiter = ',';
+
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'c':
       weight_cut_val = atof(&argv[i][2]);
       break;
-    case 't':
-      fail_percentage = atof(&argv[i][2]);
+    case 'f':
+      fail_percentage = atof(&argv[i][2]);//Note, changed from previouse code
       break;
     case 'l':
       training_list = &argv[i][2];
@@ -75,6 +80,13 @@ int main( int argc, char** argv )
       break;
     case 'n':
       flag_numi = atoi(&argv[i][2]);
+      break;
+    case 't':
+       config_file_name = &argv[i][2];
+       flag_config = true;
+      break;
+    case 'd':
+        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
       break;
     }
   }
@@ -110,6 +122,8 @@ int main( int argc, char** argv )
   //std::cout << input_file << " " << out_file << std::endl;
 
 
+  tree_wrangler wrangler(flag_config, config_file_name, delimiter);
+
   TFile *file1 = new TFile(input_file);
   TTree *T_BDTvars = (TTree*)file1->Get("wcpselection/T_BDTvars");
 
@@ -119,64 +133,12 @@ int main( int argc, char** argv )
   TTree *T_KINEvars = (TTree*)file1->Get("wcpselection/T_KINEvars");
   TTree *T_spacepoints = (TTree*)file1->Get("wcpselection/T_spacepoints");
 
-  
-  TTree *NeutrinoSelectionFilter;
-  TTree *SubRun;
-  TDirectory *shrreco3d;
-  TDirectory *proximity;
-  bool has_pelee = false;
-  if (file1->GetDirectory("nuselection")){
-    has_pelee = true;
-    TDirectory *topdir = gDirectory;
-    //file1->cd("nuselection");
-    //TDirectory *nuselection = gDirectory;
-    file1->cd("shrreco3d");
-    shrreco3d = gDirectory;
-    file1->cd("proximity");
-    proximity = gDirectory;
-    topdir->cd();
-    NeutrinoSelectionFilter = (TTree*)file1->Get("nuselection/NeutrinoSelectionFilter");
-    SubRun = (TTree*)file1->Get("nuselection/SubRun");
-    //TTree *_energy_tree = (TTree*)file1->Get("shrreco3d/_energy_tree");
-    //TTree *_dedx_tree = (TTree*)file1->Get("shrreco3d/_dedx_tree");
-    //TTree *_rcshr_tree = (TTree*)file1->Get("shrreco3d/_rcshr_tree");
-    //TTree *_clus_tree = (TTree*)file1->Get("proximity/_clus_tree");
-  }
-
-  TTree *vertex_tree;
-  //TTree *pot_tree;
-  TTree *eventweight_tree;
-  //TTree *ncdelta_slice_tree;
-  TTree *run_subrun_tree;
-  TTree *geant4_tree;
-  //TTree *true_eventweight_tree;
-  bool has_glee = false;
-  if (file1->GetDirectory("singlephotonana")){
-    has_glee = true;
-    
-    vertex_tree = (TTree*)file1->Get("singlephotonana/vertex_tree");
-    //pot_tree = (TTree*)file1->Get("singlephotonana/pot_tree");
-    eventweight_tree = (TTree*)file1->Get("singlephotonana/eventweight_tree");
-    //ncdelta_slice_tree = (TTree*)file1->Get("singlephotonana/ncdelta_slice_tree");
-    run_subrun_tree = (TTree*)file1->Get("singlephotonana/run_subrun_tree");
-  }
-
-  TTree *EventTree;
-  bool has_lantern = false;
-  if (file1->GetDirectory("lantern")){
-    has_lantern = true;
-    EventTree = (TTree*)file1->Get("lantern/EventTree");
-  }
-
+  //Load other trees from directories as specified by the config file
+  std::vector<TTree*>* old_trees = new std::vector<TTree*>;
+  old_trees = wrangler.get_old_trees(file1);
 
   if (T_eval->GetBranch("weight_cv")) flag_data =false;
   //  if (T_eval->GetBranch("file_type")) flag_use_global_file_type = false;
-
-  if (has_glee && !flag_data){
-    geant4_tree = (TTree*)file1->Get("singlephotonana/geant4_tree");
-    //true_eventweight_tree = (TTree*)file1->Get("singlephotonana/true_eventweight_tree");
-  }
-
   // std::cout << flag_use_global_file_type << " " << flag_check_run_subrun << std::endl;
   // return 0;
 
@@ -763,55 +725,10 @@ int main( int argc, char** argv )
   
   TFile *file2 = new TFile(out_file,"RECREATE");
 
-  //CopyDir(nuselection);
-  TTree *new_NeutrinoSelectionFilter;// = new TTree("NeutrinoSelectionFilter","NeutrinoSelectionFilter");
-  TTree *new_SubRun;// = new TTree("SubRun","SubRun");
-  if (has_pelee){
-    TDirectory *topdirout = gDirectory;
-    file2->mkdir("nuselection");
-    file2->cd("nuselection");
-    new_NeutrinoSelectionFilter = NeutrinoSelectionFilter->CloneTree(0);
-    new_SubRun = SubRun->CloneTree(0);
-    topdirout->cd();
-    CopyDir(shrreco3d);
-    //file2->mkdir("shrreco3d");
-    //file2->cd("shrreco3d");
-    //TTree *new_energy_tree = _energy_tree->CloneTree(0);
-    //TTree *new_dedx_tree = _dedx_tree->CloneTree(0);
-    //TTree *new_rcshr_tree = _rcshr_tree->CloneTree(0);
-    CopyDir(proximity);
-    //file2->mkdir("proximity");
-    //file2->cd("proximity");
-    //TTree *new_clus_tree = _clus_tree->CloneTree(0);
-  }
+  //Setup the directories specified in the config file
+  std::vector<TTree*>* new_trees = new std::vector<TTree*>;
+  new_trees = wrangler.set_new_trees(file2);
 
-  TTree *new_vertex_tree;
-  //TTree *pot_tree;
-  TTree *new_eventweight_tree;
-  //TTree *ncdelta_slice_tree;
-  TTree *new_run_subrun_tree;
-  TTree *new_geant4_tree;
-  //TTree *true_eventweight_tree;
-
-  if (has_glee){
-    TDirectory *topdirout = gDirectory;
-    file2->mkdir("singlephotonana");
-    file2->cd("singlephotonana");
-    new_vertex_tree = vertex_tree->CloneTree(0);
-    new_eventweight_tree = eventweight_tree->CloneTree(0);
-    new_run_subrun_tree = run_subrun_tree->CloneTree(0);
-    if (!flag_data) new_geant4_tree = geant4_tree->CloneTree(0);
-    topdirout->cd();
-  }
-
-  TTree *new_EventTree;
-  if (has_lantern){
-    TDirectory *topdirout = gDirectory;
-    file2->mkdir("lantern");
-    file2->cd("lantern");
-    new_EventTree = EventTree->CloneTree(0);
-    topdirout->cd();
-  }
 
   file2->mkdir("wcpselection");
   file2->cd("wcpselection");
@@ -3692,26 +3609,14 @@ int main( int argc, char** argv )
     T_spacepoints->GetEntry(i);
     new_T_spacepoints->Fill();
 
-    if (has_pelee){
-      NeutrinoSelectionFilter->GetEntry(i);
-      new_NeutrinoSelectionFilter->Fill();
+    for(auto tree_it=old_trees->begin(); tree_it!=old_trees->end(); tree_it++){
+        (*tree_it)->GetEntry(i);
     }
 
-    if (has_glee){
-      vertex_tree->GetEntry(i);
-      new_vertex_tree->Fill();
-      eventweight_tree->GetEntry(i);
-      new_eventweight_tree->Fill();
-      if (!flag_data) {
-        geant4_tree->GetEntry(i);
-        new_geant4_tree->Fill();
-      }
+    for(auto tree_it=new_trees->begin(); tree_it!=new_trees->end(); tree_it++){
+        (*tree_it)->Fill();
     }
 
-    if (has_lantern){
-      EventTree->GetEntry(i);
-      new_EventTree->Fill();
-    }
 
     //    std::cout << pfeval.reco_daughters->size() << std::endl;
     //    break;
@@ -3741,7 +3646,7 @@ int main( int argc, char** argv )
       if (pot.runNo >=15369 && pot.runNo <= 15402) continue;
     }
     t2->Fill();
-
+/*
     if (has_pelee){
       SubRun->GetEntry(i);
       new_SubRun->Fill();
@@ -3751,6 +3656,7 @@ int main( int argc, char** argv )
       run_subrun_tree->GetEntry(i);
       new_run_subrun_tree->Fill();
     }
+*/
   }
 
 

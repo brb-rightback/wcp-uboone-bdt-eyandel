@@ -18,7 +18,10 @@
 #include "TROOT.h"
 #include "TMath.h"
 
+#include "WCPLEEANA/tree_wrangler.h"
+
 using namespace std;
+using namespace LEEana;
 
 int main( int argc, char** argv )
 {
@@ -33,13 +36,26 @@ int main( int argc, char** argv )
   bool flag_data = true;
   int flag_numi = 0;
 
+  bool flag_config = false;
+  std::string config_file_name="config.txt";
+  char delimiter = ',';
+
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
       case 'n':
         flag_numi = atoi(&argv[i][2]);
         break;
+      case 't':
+        config_file_name = &argv[i][2];
+        flag_config = true;
+        break;
+      case 'd':
+        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
+        break;
     }
   }
+
+  tree_wrangler wrangler(flag_config, config_file_name, delimiter);
 
   TFile *file1 = new TFile(input_file);
 
@@ -48,7 +64,11 @@ int main( int argc, char** argv )
   TTree *T_pot = (TTree*)file1->Get("wcpselection/T_pot");
   TTree *T_PFeval = (TTree*)file1->Get("wcpselection/T_PFeval");
   TTree *T_KINEvars = (TTree*)file1->Get("wcpselection/T_KINEvars");
+  TTree *T_spacepoints = (TTree*)file1->Get("wcpselection/T_spacepoints");
 
+  //Load other trees from directories as specified by the config file
+  std::vector<TTree*>* old_trees = new std::vector<TTree*>;
+  old_trees = wrangler.get_old_trees(file1);
 
   if (T_eval->GetBranch("weight_cv")) flag_data =false;
 
@@ -613,6 +633,11 @@ int main( int argc, char** argv )
   std::set<int> low_neutrino_count_numi_run2RHC_set(low_neutrino_count_numi_run2RHC.begin(), low_neutrino_count_numi_run2RHC.end());
 
   TFile *file2 = new TFile(out_file,"RECREATE");
+
+  //Setup the directories specified in the config file
+  std::vector<TTree*>* new_trees = new std::vector<TTree*>;
+  new_trees = wrangler.set_new_trees(file2);
+
   file2->mkdir("wcpselection");
   file2->cd("wcpselection");
   TTree *t1 = (TTree*) T_eval->CloneTree(0);
@@ -620,6 +645,7 @@ int main( int argc, char** argv )
   TTree *t3 = (TTree*) T_PFeval->CloneTree(0);
   TTree *t4 = (TTree*) T_BDTvars->CloneTree(0);
   TTree *t5 = (TTree*) T_KINEvars->CloneTree(0);
+  TTree *new_T_spacepoints = T_spacepoints->CloneTree(0);
 
   T_eval->SetBranchStatus("*",1);
   T_pot->SetBranchStatus("*",1);
@@ -654,6 +680,18 @@ int main( int argc, char** argv )
     t3->Fill();
     t4->Fill();
     t5->Fill();
+
+    T_spacepoints->GetEntry(i);
+    new_T_spacepoints->Fill();
+
+    for(auto tree_it=old_trees->begin(); tree_it!=old_trees->end(); tree_it++){
+        (*tree_it)->GetEntry(i);
+    }
+
+    for(auto tree_it=new_trees->begin(); tree_it!=new_trees->end(); tree_it++){
+        (*tree_it)->Fill();
+    }
+
   }
 
   for (Int_t i=0;i!=T_pot->GetEntries();i++){

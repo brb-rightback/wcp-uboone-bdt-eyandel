@@ -87,7 +87,7 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, bool blank_tree, std::ve
  savdir->cd();
 }
 
-void LEEana::tree_wrangler::CopyDir(TDirectory *source, TString TDirectory_name, bool blank_tree, std::vector<std::string> to_skip) {
+void LEEana::tree_wrangler::CopyDir(TDirectory *source, TString TDirectory_extension, bool blank_tree, std::vector<std::string> to_skip) {
   //copy all objects and subdirs of directory source as a subdir of the current directory
   if(verbose) source->ls();
   TDirectory *savdir = gDirectory;
@@ -105,15 +105,15 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, TString TDirectory_name,
         int nentry = -1;
         if (blank_tree){nentry=0;}
         TTree *newT = T->CloneTree(nentry,"fast");
-        newT->SetObject(key->GetName()+TDirectory_name,key->GetName()+TDirectory_name);
-        newT->Write();
+        newT->SetObject(key->GetName()+TDirectory_extension,key->GetName()+TDirectory_extension);
+	newT->Write();
     }
  }
  savdir->cd();
 }
 
 
-std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool blank_tree,  bool rename, TString TDirectory_name, std::vector<std::string> to_skip) {
+std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool blank_tree,  bool rename, TString TDirectory_extension, std::vector<std::string> to_skip) {
   if(verbose) source->ls();
   TDirectory *savdir = gDirectory;
   TKey *key;
@@ -131,8 +131,10 @@ std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool b
         int nentry = -1;
         if (blank_tree) {nentry=0;}
         TTree *newT = T->CloneTree(nentry,"fast");
-        if (rename) {newT->SetObject(key->GetName()+TDirectory_name,key->GetName()+TDirectory_name);}
-        newT->Write();
+        if (rename) {
+		newT->SetObject(key->GetName()+TDirectory_extension,key->GetName()+TDirectory_extension);
+	}
+	newT->Write();
         ttree_vec->push_back(newT);
     }
   }
@@ -183,20 +185,22 @@ std::vector<TTree*>* LEEana::tree_wrangler::get_old_trees(TFile* file){
   return old_trees;
 }
 
-std::vector<TTree*>* LEEana::tree_wrangler::set_new_trees(TFile* file){
+
+std::vector<TTree*>* LEEana::tree_wrangler::set_new_trees(TFile* file, bool rename, TString TDirectory_extension){
   TDirectory *topdirout = gDirectory;
+  std::cout<<"TDirectory_extension1 "<<TDirectory_extension<<std::endl;
   std::vector<TTree*>* new_trees = new std::vector<TTree*>;
   for (const auto& it_directories_trees_names : directories_wi_trees_to_skip_names) {
     std::string directory_name = it_directories_trees_names.first;
     std::vector<std::string> trees_to_skip_names = it_directories_trees_names.second;
     TDirectory * temp_input_directory = std::get<0>(names_wi_directories_and_trees[directory_name]);
-    file->mkdir(directory_name.c_str());
+    if(!file->GetDirectory(directory_name.c_str())){file->mkdir(directory_name.c_str());}
     file->cd(directory_name.c_str());
     std::vector<TTree*>* temp_new_trees = new std::vector<TTree*>;
-    temp_new_trees = CopyTrees(temp_input_directory,true,false,"",trees_to_skip_names);
+    temp_new_trees = CopyTrees(temp_input_directory,true,rename,TDirectory_extension,trees_to_skip_names);
     new_trees->insert(new_trees->end(), temp_new_trees->begin(), temp_new_trees->end());
     topdirout->cd();
   }
   return new_trees;
 }
-                                                                                                                                                                                                                                                                                                                             
+
