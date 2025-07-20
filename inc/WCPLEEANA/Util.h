@@ -41,4 +41,7 @@ void CopyDir(TDirectory *source, bool blank_tree=false, std::vector<std::string>
 void CopyDir(TDirectory *source, TString TDirectory_name, bool blank_tree=false, std::vector<std::string> to_skip={}, bool verbose=true);
 std::vector<TTree*>* CopyTrees(TDirectory *source, bool blank_tree=false, bool rename=false, TString TDirectory_name="", std::vector<std::string> to_skip={}, bool verbose=true);
 std::vector<TTree*>* GetTrees(TDirectory *source, std::vector<std::string> to_skip={}, bool verbose=true);
+
+std::vector<std::string> splitString(const std::string& s, char delimiter);
+
 #endif
