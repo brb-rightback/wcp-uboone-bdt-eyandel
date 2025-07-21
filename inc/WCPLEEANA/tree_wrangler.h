@@ -29,7 +29,11 @@ namespace LEEana{
     std::vector<TTree*>* CopyTrees(TDirectory *source, bool blank_tree=false, bool rename=false, TString TDirectory_extension="", std::vector<std::string> to_skip={});
     std::vector<TTree*>* GetTrees(TDirectory *source, std::vector<std::string> to_skip={});
 
-
+    std::vector<int> get_low_lifetime_runs();
+    std::vector<int> get_good_run_list();
+    std::vector<int> get_low_neutrino_count_numi_run2RHC();
+	
+	    
   private:
     bool verbose;
     std::map<std::string,std::vector<std::string>> directories_wi_trees_to_skip_names;
