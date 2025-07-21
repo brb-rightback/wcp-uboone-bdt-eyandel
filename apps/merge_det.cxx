@@ -56,6 +56,8 @@ int main( int argc, char** argv )
 
   tree_wrangler wrangler_cv(flag_config, config_file_name, delimiter);
   tree_wrangler wrangler_det(flag_config, config_file_name, delimiter);
+  tree_wrangler wrangler_pot_cv(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot_det(flag_config, config_file_name, delimiter,true);
 
   TFile *file1 = new TFile(input_file_cv);
   TTree *T_BDTvars_cv = (TTree*)file1->Get("wcpselection/T_BDTvars");
@@ -78,7 +80,10 @@ int main( int argc, char** argv )
   old_trees_cv = wrangler_cv.get_old_trees(file1);
   std::vector<TTree*>* old_trees_det = new std::vector<TTree*>;
   old_trees_det = wrangler_det.get_old_trees(file2);
-
+  std::vector<TTree*>* old_trees_pot_cv = new std::vector<TTree*>;
+  old_trees_pot_cv = wrangler_pot_cv.get_old_trees(file1);
+  std::vector<TTree*>* old_trees_pot_det = new std::vector<TTree*>;
+  old_trees_pot_det = wrangler_pot_det.get_old_trees(file2);
 
   TFile *file3 = new TFile(out_file,"RECREATE");
 
@@ -87,6 +92,10 @@ int main( int argc, char** argv )
   new_trees_cv = wrangler_cv.set_new_trees(file3,true,"_cv");
   std::vector<TTree*>* new_trees_det = new std::vector<TTree*>;
   new_trees_det = wrangler_det.set_new_trees(file3,true,"_det");
+  std::vector<TTree*>* new_trees_pot_cv = new std::vector<TTree*>;
+  new_trees_pot_cv = wrangler_pot_cv.set_new_trees(file3,true,"_cv");
+  std::vector<TTree*>* new_trees_pot_det = new std::vector<TTree*>;
+  new_trees_pot_det = wrangler_pot_det.set_new_trees(file3,true,"_det");
 
   //Always do WC
   file3->mkdir("wcpselection");
@@ -771,7 +780,7 @@ int main( int argc, char** argv )
           (*tree_it)->GetEntry(it->first);
       }
       for(auto tree_it=old_trees_det->begin(); tree_it!=old_trees_det->end(); tree_it++){
-          (*tree_it)->GetEntry(it->first);
+          (*tree_it)->GetEntry(it->second);
       }
 
 
@@ -829,6 +838,18 @@ int main( int argc, char** argv )
 
       t2_cv->Fill();
       t2_det->Fill();
+      for(auto tree_it=old_trees_pot_cv->begin(); tree_it!=old_trees_pot_cv->end(); tree_it++){
+        (*tree_it)->GetEntry(it1->second.first);
+      }
+      for(auto tree_it=new_trees_pot_cv->begin(); tree_it!=new_trees_pot_cv->end(); tree_it++){
+        (*tree_it)->Fill();
+      }
+      for(auto tree_it=old_trees_pot_det->begin(); tree_it!=old_trees_pot_det->end(); tree_it++){
+        (*tree_it)->GetEntry(it2->second.first);
+      }
+      for(auto tree_it=new_trees_pot_det->begin(); tree_it!=new_trees_pot_det->end(); tree_it++){
+        (*tree_it)->Fill();
+      }    
     }
   }
 

@@ -14,17 +14,28 @@
 
 using namespace LEEana;
 
-LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_name, char delimiter, bool set_verbose){
+LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_name, char delimiter, bool set_flag_exclusive, bool set_verbose){
   verbose = set_verbose;
+  flag_exclusive = set_flag_exclusive;
   if(configure){
     std::ifstream config_file(config_file_name);
+    bool first_pass = true;
     if(config_file.is_open()){
       std::cout<<"Loading directories and trees based off the configuration in "<<config_file_name<<std::endl;
       while(!config_file.eof()){
         std::string line;
         std::getline(config_file, line);
         while(line.empty()) {std::getline(config_file, line);}//Skip empty lines
-        if(line == "end" || line == "End") break;
+        if(set_flag_exclusive && first_pass){
+          while(line!="exclusive" && line!="Exclusive"){//Burn lines untill we get to the exclusive section when configured that way
+	    if(line == "end" || line == "End") break;
+	    std::getline(config_file, line);
+	  }
+	  first_pass = false;
+	  std::getline(config_file, line);
+	}
+	if(line == "end" || line == "End") break;
+	if(!set_flag_exclusive && (line=="exclusive" || line=="Exclusive")) break; //Stop reading when you get to the exclusive section if not running in that mode
         std::istringstream iss(line);
         std::string temp_dir;
         std::string temp_all_trees_to_skip;
@@ -69,8 +80,11 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, bool blank_tree, std::ve
      } else if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
-        adir->cd();
+        //if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
+        bool found_tree = 0;
+        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
+        if(found_tree!=flag_exclusive) continue;
+	adir->cd();
         int nentry = -1;
         if (blank_tree){nentry=0;}
         TTree *newT = T->CloneTree(nentry,"fast");
@@ -100,8 +114,11 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, TString TDirectory_exten
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
-        savdir->cd();
+        //if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
+        bool found_tree = 0;
+        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
+        if(found_tree!=flag_exclusive) continue;
+	savdir->cd();
         int nentry = -1;
         if (blank_tree){nentry=0;}
         TTree *newT = T->CloneTree(nentry,"fast");
@@ -126,8 +143,11 @@ std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool b
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
-       savdir->cd();
+        //if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
+        bool found_tree = 0;
+        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
+        if(found_tree!=flag_exclusive) continue;
+	savdir->cd();
         int nentry = -1;
         if (blank_tree) {nentry=0;}
         TTree *newT = T->CloneTree(nentry,"fast");
@@ -155,8 +175,10 @@ std::vector<TTree*>* LEEana::tree_wrangler::GetTrees(TDirectory *source, std::ve
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
-        ttree_vec->push_back(T);
+	bool found_tree = 0;
+        if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
+        if(found_tree!=flag_exclusive) continue;
+	ttree_vec->push_back(T);
     }
   }
   savdir->cd();
@@ -188,7 +210,6 @@ std::vector<TTree*>* LEEana::tree_wrangler::get_old_trees(TFile* file){
 
 std::vector<TTree*>* LEEana::tree_wrangler::set_new_trees(TFile* file, bool rename, TString TDirectory_extension){
   TDirectory *topdirout = gDirectory;
-  std::cout<<"TDirectory_extension1 "<<TDirectory_extension<<std::endl;
   std::vector<TTree*>* new_trees = new std::vector<TTree*>;
   for (const auto& it_directories_trees_names : directories_wi_trees_to_skip_names) {
     std::string directory_name = it_directories_trees_names.first;
