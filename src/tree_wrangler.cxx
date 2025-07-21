@@ -21,7 +21,7 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
     std::ifstream config_file(config_file_name);
     bool first_pass = true;
     if(config_file.is_open()){
-      std::cout<<"Loading directories and trees based off the configuration in "<<config_file_name<<std::endl;
+      std::cout<<"LEEana::tree_wrangler::tree_wrangler: Loading directories and trees based off the configuration in "<<config_file_name<<std::endl;
       while(!config_file.eof()){
         std::string line;
         std::getline(config_file, line);
@@ -42,16 +42,16 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
         std::vector<std::string> temp_trees_to_skip;
         iss >> temp_dir >> temp_all_trees_to_skip;//Read the line
         temp_trees_to_skip = splitString(temp_all_trees_to_skip, delimiter);//Break up the trees
-        if (directories_wi_trees_to_skip_names.find(temp_dir) != directories_wi_trees_to_skip_names.end()) {std::cout<<"WARNING: Failed to open the config file, just loading WC"<<std::endl;}
+        if (directories_wi_trees_to_skip_names.find(temp_dir) != directories_wi_trees_to_skip_names.end()) {std::cout<<"LEEana::tree_wrangler::tree_wrangler: WARNING: Failed to open the config file, just loading WC"<<std::endl;}
         sort( temp_trees_to_skip.begin(), temp_trees_to_skip.end() );
         const bool hasDuplicates = std::adjacent_find(temp_trees_to_skip.begin(), temp_trees_to_skip.end()) != temp_trees_to_skip.end();
         if(hasDuplicates){
-          std::cout<<"Duplicates in trees to skip for "<<temp_dir<<". You should check the config file."<<std::endl;
+          std::cout<<"LEEana::tree_wrangler::tree_wrangler: Duplicates in trees to skip for "<<temp_dir<<". You should check the config file."<<std::endl;
           temp_trees_to_skip.erase( unique( temp_trees_to_skip.begin(), temp_trees_to_skip.end() ), temp_trees_to_skip.end() );
         }
         directories_wi_trees_to_skip_names[temp_dir] = temp_trees_to_skip;
       }
-    }else {std::cout<<"WARNING: Failed to open the config file: " <<config_file_name<<". Just loading WC"<<std::endl;}
+    }else {std::cout<<"LEEana::tree_wrangler::tree_wrangler: Failed to open the config file: " <<config_file_name<<". Just loading WC"<<std::endl;}
   }//configure
 }
 
@@ -80,7 +80,6 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, bool blank_tree, std::ve
      } else if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        //if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
         bool found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
         if(found_tree!=flag_exclusive) continue;
@@ -114,7 +113,6 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, TString TDirectory_exten
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        //if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
         bool found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
         if(found_tree!=flag_exclusive) continue;
@@ -143,7 +141,6 @@ std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool b
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        //if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) continue;
         bool found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
         if(found_tree!=flag_exclusive) continue;
@@ -202,7 +199,7 @@ std::vector<TTree*>* LEEana::tree_wrangler::get_old_trees(TFile* file){
       std::tuple<TDirectory*,std::vector<TTree*>*> temp_directory_trees(temp_directory,temp_trees);
       names_wi_directories_and_trees[directory_name] = temp_directory_trees;
       topdir->cd();
-    }else{std::cout<<"WARNING: can't find the directory "<<directory_name<<" in the input file. Check the config."<<std::endl;}
+    }else{std::cout<<"LEEana::tree_wrangler::get_old_trees: Can't find the directory "<<directory_name<<" in the input file. Check the config."<<std::endl;}
   }
   return old_trees;
 }
@@ -214,6 +211,7 @@ std::vector<TTree*>* LEEana::tree_wrangler::set_new_trees(TFile* file, bool rena
   for (const auto& it_directories_trees_names : directories_wi_trees_to_skip_names) {
     std::string directory_name = it_directories_trees_names.first;
     std::vector<std::string> trees_to_skip_names = it_directories_trees_names.second;
+    if (names_wi_directories_and_trees.find(directory_name) == names_wi_directories_and_trees.end()) {std::cout<<"LEEana::tree_wrangler::set_new_trees: Could not find directory "<<directory_name<<" when forming trees and will skip it now."<<std::endl; continue;}
     TDirectory * temp_input_directory = std::get<0>(names_wi_directories_and_trees[directory_name]);
     if(!file->GetDirectory(directory_name.c_str())){file->mkdir(directory_name.c_str());}
     file->cd(directory_name.c_str());
