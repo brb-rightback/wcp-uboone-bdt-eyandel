@@ -263,8 +263,9 @@ void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_co
 }
 
 
-void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tuple<TH1F*, TH1F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0){
+void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tuple<TH1F*, TH1F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0, double seed=0){
 
+  gRandom = new TRandom3(seed);
 
   // prepare the maps ... name --> no,  covch, lee
   std::map<TString, std::tuple<int, int, int, TString>> map_histoname_infos ;
@@ -339,6 +340,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tupl
 
     // fill the histogram with CV
     fill_det_histograms(map_filename_histo, map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hists);
+    //fill_det_histograms(map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hists);//No boostrapping
     // merge histograms according to POTs ...
     for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
       int covch = it->first;
@@ -452,7 +454,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tupl
   TVectorD matrix_eigenvalue = DMatrix_eigen.GetEigenValues();
 
   TPrincipal prin_full(rows, "ND");
-  TRandom3 random3(0);
+  TRandom3 random3(seed);
   for (int i=0;i!=16000;i++){
     TMatrixD matrix_element(rows,1);
     for (int j=0;j!=rows;j++){
@@ -740,7 +742,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
              if (flag_lee){
                h1->Fill(val_cv, weight_lee);
              }else{
-               h1->Fill(val_cv, 1);
+               h1->Fill(val_cv, 1);//No weights here, already accounted for when picking events in the bootstrapping
              }
            }
            if (flag_det){
@@ -799,12 +801,18 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
            // central value ...
            if (flag_cv){
              if (flag_lee){
-               h1->Fill(val_cv, weight_lee);
+               h1->Fill(val_cv, weight*weight_lee);
              }else{
-               h1->Fill(val_cv, 1);
+               h1->Fill(val_cv, weight);
              }
            }
-
+           if (flag_det){
+             if (flag_lee){
+               h2->Fill(val_det, weight*weight_lee);
+             }else{
+               h2->Fill(val_det, weight);
+             }
+           }
            // if (no==2)
            //std::cout << std::get<0>(it->second.at(i)) << " " << std::get<1>(it->second.at(i)) << " " << val_cv << " " << weight << std::endl;
            // std::cout << weight << " " << weight_lee << " " << flag_lee << " " << histoname << std::endl;
