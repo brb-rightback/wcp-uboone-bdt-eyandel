@@ -3,4 +3,9 @@ shrreco3d none
 proximity none
 singlephotonana run_subrun_tree,pot_tree
 lanturn none
+
+exclusive
+nuselection SubRun
+singlephotonana run_subrun_tree,pot_tree
+
 end
