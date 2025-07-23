@@ -454,6 +454,7 @@ int main( int argc, char** argv )
   set_tree_address(T_BDTvars, tagger,2 );
   tagger.flag_nc_gamma_bdt = true;
   tagger.flag_nc_gamma_0track_bdt = true;
+  tagger.saved_ssm_bdt_scores = true;
   put_tree_address(t4, tagger,2);
 
   if (flag_data){

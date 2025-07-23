@@ -4431,17 +4431,17 @@ void LEEana::set_tree_address(TTree *tree0, TaggerInfo& tagger_info, int flag){
       tree0->SetBranchAddress("ssm_kine_pio_dis_2", &tagger_info.ssm_kine_pio_dis_2);
       tree0->SetBranchAddress("ssm_kine_pio_angle", &tagger_info.ssm_kine_pio_angle);
     }
-    tree0->SetBranchAddress("ssm_cosmict_flag_1",&tagger_info.cosmict_flag_1);
-    tree0->SetBranchAddress("ssm_cosmict_flag_2",&tagger_info.cosmict_flag_2);
-    tree0->SetBranchAddress("ssm_cosmict_flag_3",&tagger_info.cosmict_flag_3);
-    tree0->SetBranchAddress("ssm_cosmict_flag_4",&tagger_info.cosmict_flag_4);
-    tree0->SetBranchAddress("ssm_cosmict_flag_5",&tagger_info.cosmict_flag_5);
-    tree0->SetBranchAddress("ssm_cosmict_flag_6",&tagger_info.cosmict_flag_6);
-    tree0->SetBranchAddress("ssm_cosmict_flag_7",&tagger_info.cosmict_flag_7);
-    tree0->SetBranchAddress("ssm_cosmict_flag_8",&tagger_info.cosmict_flag_8);
-    tree0->SetBranchAddress("ssm_cosmict_flag_9",&tagger_info.cosmict_flag_9);
-    tree0->SetBranchAddress("ssm_cosmict_flag_10",&tagger_info.cosmict_flag_10);
-    tree0->SetBranchAddress("ssm_cosmict_flag",&tagger_info.cosmict_flag);
+    tree0->SetBranchAddress("ssm_cosmict_flag_1",&tagger_info.ssm_cosmict_flag_1);
+    tree0->SetBranchAddress("ssm_cosmict_flag_2",&tagger_info.ssm_cosmict_flag_2);
+    tree0->SetBranchAddress("ssm_cosmict_flag_3",&tagger_info.ssm_cosmict_flag_3);
+    tree0->SetBranchAddress("ssm_cosmict_flag_4",&tagger_info.ssm_cosmict_flag_4);
+    tree0->SetBranchAddress("ssm_cosmict_flag_5",&tagger_info.ssm_cosmict_flag_5);
+    tree0->SetBranchAddress("ssm_cosmict_flag_6",&tagger_info.ssm_cosmict_flag_6);
+    tree0->SetBranchAddress("ssm_cosmict_flag_7",&tagger_info.ssm_cosmict_flag_7);
+    tree0->SetBranchAddress("ssm_cosmict_flag_8",&tagger_info.ssm_cosmict_flag_8);
+    tree0->SetBranchAddress("ssm_cosmict_flag_9",&tagger_info.ssm_cosmict_flag_9);
+    tree0->SetBranchAddress("ssm_cosmict_flag_10",&tagger_info.ssm_cosmict_flag_10);
+    tree0->SetBranchAddress("ssm_cosmict_flag",&tagger_info.ssm_cosmict_flag);
   }
   // End KDAR vars
 
