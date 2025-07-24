@@ -963,6 +963,20 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   }
   //
 
+  if(tagger_cv.saved_ssm_bdt_scores){
+    T_BDTvars_cv->SetBranchStatus("ssm_kdar_score_lowE",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_kdar_score_hiE",1);
+  }
+  if(tagger_cv.saved_ssm_bdt_vars){
+    T_BDTvars_cv->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_kine_reco_Enu",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_kine_pio_mass",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_cosmict_flag_9",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+  }
 
   T_eval_cv->SetBranchStatus("*",0);
   T_eval_cv->SetBranchStatus("run",1);
@@ -1172,6 +1186,20 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_det->SetBranchStatus("shw_sp_n_vertex",1);
   }
   //
+  if(tagger_det.saved_ssm_bdt_scores){
+    T_BDTvars_det->SetBranchStatus("ssm_kdar_score_lowE",1);
+    T_BDTvars_det->SetBranchStatus("ssm_kdar_score_hiE",1);
+  }
+  if(tagger_det.saved_ssm_bdt_vars){
+    T_BDTvars_det->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars_det->SetBranchStatus("ssm_kine_reco_Enu",1);
+    T_BDTvars_det->SetBranchStatus("ssm_kine_pio_mass",1);
+    T_BDTvars_det->SetBranchStatus("ssm_cosmict_flag_9",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+  }
 
   T_eval_det->SetBranchStatus("*",0);
   T_eval_det->SetBranchStatus("run",1);

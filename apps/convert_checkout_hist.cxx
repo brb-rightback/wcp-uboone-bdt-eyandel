@@ -33,20 +33,15 @@ int main( int argc, char** argv )
     }
   }
 
-
   TFile *file = new TFile(input_filename,"READ");
-
   CovMatrix cov;
   if (flag_osc) cov.add_osc_config();
-
   cov.print_rw(cov.get_rw_info());
-
   TTree *T_BDTvars = (TTree*)file->Get("wcpselection/T_BDTvars");
   TTree *T_eval = (TTree*)file->Get("wcpselection/T_eval");
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
   TTree *T_PFeval = (TTree*)file->Get("wcpselection/T_PFeval");
   TTree *T_KINEvars = (TTree*)file->Get("wcpselection/T_KINEvars");
-
   if (T_eval->GetBranch("weight_cv")) flag_data = false;
 
   EvalInfo eval;
@@ -229,7 +224,22 @@ int main( int argc, char** argv )
     T_BDTvars->SetBranchStatus("shw_sp_length_total",1);
     T_BDTvars->SetBranchStatus("shw_sp_n_vertex",1);
   }
+  if(tagger.saved_ssm_bdt_scores){
+    T_BDTvars->SetBranchStatus("ssm_kdar_score_lowE",1);
+    T_BDTvars->SetBranchStatus("ssm_kdar_score_hiE",1);
+  }
+  if(tagger.saved_ssm_bdt_vars){
+    T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars->SetBranchStatus("ssm_kine_reco_Enu",1);
+    T_BDTvars->SetBranchStatus("ssm_kine_pio_mass",1);
+    T_BDTvars->SetBranchStatus("ssm_cosmict_flag_9",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+  }
   //
+
 
   T_eval->SetBranchStatus("*",0);
   T_eval->SetBranchStatus("match_energy",1);
@@ -293,7 +303,7 @@ int main( int argc, char** argv )
   }
 
 
-  T_PFeval->SetBranchStatus("*",1);
+  T_PFeval->SetBranchStatus("*",0);
   T_PFeval->SetBranchStatus("run",1);
   T_PFeval->SetBranchStatus("subrun",1);
   T_PFeval->SetBranchStatus("event",1);
@@ -320,7 +330,7 @@ int main( int argc, char** argv )
         T_PFeval->SetBranchStatus("truth_mother",1);
         T_PFeval->SetBranchStatus("truth_startMomentum",1);
       }
-
+      T_PFeval->SetBranchStatus("truth_nu_momentum",1);
   }
   if (pfeval.flag_NCDelta){
 
@@ -366,6 +376,7 @@ int main( int argc, char** argv )
       T_PFeval->SetBranchStatus("mcflux_ndecay",1);
     }
   }
+
 
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;
 

@@ -1681,7 +1681,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   map_filename_pot[input_filename] = total_pot;
 
   // fill histogram ...
-  T_BDTvars->SetBranchStatus("*",0);
+  T_BDTvars->SetBranchStatus("*",1);
   T_BDTvars->SetBranchStatus("numu_cc_flag",1);
   T_BDTvars->SetBranchStatus("numu_score",1);
   T_BDTvars->SetBranchStatus("nue_score",1);
@@ -1762,6 +1762,22 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("shw_sp_n_vertex",1);
   }
   //
+
+  if(tagger.saved_ssm_bdt_scores){
+    T_BDTvars->SetBranchStatus("ssm_kdar_score_lowE",1);
+    T_BDTvars->SetBranchStatus("ssm_kdar_score_hiE",1);
+  }
+  if(tagger.saved_ssm_bdt_vars){
+    T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars->SetBranchStatus("ssm_kine_reco_Enu",1);
+    T_BDTvars->SetBranchStatus("ssm_kine_pio_mass",1);
+    T_BDTvars->SetBranchStatus("ssm_cosmict_flag_9",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+  }
+
 
   T_eval->SetBranchStatus("*",0);
   T_eval->SetBranchStatus("run",1);
@@ -1864,6 +1880,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_PFeval->SetBranchStatus("truth_mother",1);
     T_PFeval->SetBranchStatus("truth_startMomentum",1);
   }
+  T_PFeval->SetBranchStatus("truth_nu_momentum",1);
   //Erin
   if (pfeval.flag_single_photon){
     T_PFeval->SetBranchStatus("truth_Npi0",1);
