@@ -24,6 +24,15 @@ namespace LEEana{
   double em_charge_scale = 0.95;
   //double em_charge_scale = 1.0;
 
+  double get_angle(double momentum_0, double momentum_1, double momentum_2, int option, bool to_numi);
+
+  double get_true_nu_angle(PFevalInfo& pfeval, int option, bool to_numi);
+  bool is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval);
+
+  double get_ssmE(TaggerInfo& tagger_info);
+  bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
+  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.4, double hiE_cut=1.02);
+
   // correct reco neutrino energy and reco shower energy
   double get_reco_Enu_corr(KineInfo& kine, bool flag_data);
   double get_reco_showerKE_corr(PFevalInfo& pfeval, bool flag_data);
@@ -513,6 +522,8 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
   //  }else
   if (var_name == "kine_reco_Enu"){
     return get_reco_Enu_corr(kine, flag_data);
+  }else if (var_name == "ssm_kine_energy"){
+    return tagger.ssm_kine_energy;
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
   }else if (var_name == "kine_reco_Eproton"){
@@ -2477,6 +2488,33 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       else if (cut_name == "numuCC.inside.Enu.le.4000.gt.2050"){ if (pre_cut && eval.truth_nuEnergy>2050  && eval.truth_nuEnergy<=4000) { return number; } }
       else{ std::cout << "get_xs_signal_no: no cut found!" << std::endl; }
     }
+
+
+    else if (cut_file==777){
+      int bin_width=5;
+      int min = 0;
+      int max = 130; 
+      int nbins = int(max/bin_width);  
+      bool found_cut = false;   
+      std::string base_cut_string = "kdar.Emu.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+	// Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+	  if(cut_name == cut_string){
+	    found_cut = true;
+	    if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; } 
+          }
+  	}
+	// Double check the overflow
+	std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+	if(cut_name == cut_string && KE_muon>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
   }
 
   return -1;
@@ -2713,6 +2751,9 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   map_cuts_flag["none"] = false;
   map_cuts_flag["LEE"] = true;
 
+  if(is_true_kdar(eval,pfeval)) map_cuts_flag["kdar"] = true;
+  else map_cuts_flag["kdar"] = false;
+
   // figure out additional cuts and flag_data ...
   bool flag_add = true;
   if(add_cut == "all") flag_add = true;
@@ -2781,6 +2822,9 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   bool flag_singlephoton_eff_ncpi0 = is_singlephoton_eff_ncpi0(tagger, pfeval);
   bool flag_singlephoton_eff_nue = is_singlephoton_eff_nue(tagger, pfeval);
   bool flag_singlephoton_oneshw = is_singlephoton_oneshw(tagger, pfeval);
+
+  bool flag_kdar_presel = is_kdar_presel(tagger,eval);
+  bool flag_kdar_bdtsel = is_kdar_bdtsel(tagger);
   //
 
   float costheta_binning[10] = {-1, -.5, 0, .27, .45, .62, .76, .86, .94, 1};		// PeLEE binning
@@ -2793,7 +2837,13 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
+  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext"){
+    bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
+    if(ch_name == "kdar_bdtsel_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_bdtsel_bck")  flag_pass = flag_pass && !map_cuts_flag["kdar"]; 
+    return flag_pass;
+
+  }else if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
     if (flag_nueCC && flag_FC && flag_truth_inside) return true;
     else return false;
   }else if (ch_name == "nueCC_FC_nueoverlay_numi"){
@@ -9392,5 +9442,112 @@ int LEEana::alt_var_index(std::string var1, float val1, std::string var2, float 
 
   return -1;
 }
+
+
+//option:1 costheta, 2 theta in rad, 3 theta in deg, 4 cosphi, 5 phi in rad, 6 phi in deg
+double LEEana::get_angle(double momentum_0, double momentum_1, double momentum_2, int option, bool to_numi){
+
+  double theta=0;
+  double phi=0;
+
+  double momentum_0_new = momentum_0;
+  double momentum_1_new = momentum_1;
+  double momentum_2_new = momentum_2;
+
+  if (to_numi){
+    //define rotation
+    double R11 =  0.74302418;
+    double R12 = -0.58403596;
+    double R13 =  0.3268288;
+    double R21 = -0.58403596;
+    double R22 = -0.32735446;
+    double R23 =  0.74279274;
+    double R31 = -0.3268288;
+    double R32 = -0.74279274;
+    double R33 = -0.58433029;
+    momentum_0_new = momentum_0*R11 + momentum_1*R12 + momentum_2*R13;
+    momentum_1_new = momentum_0*R21 + momentum_1*R22 + momentum_2*R23;
+    momentum_2_new = momentum_0*R31 + momentum_1*R32 + momentum_2*R33;
+  }
+
+  double momentum_perp = sqrt(momentum_0_new * momentum_0_new + momentum_1_new * momentum_1_new);
+  theta = atan2(momentum_perp, momentum_2_new);
+  phi = atan2(momentum_1_new, momentum_0_new);
+
+  if (option==1) return cos(theta);
+  if (option==2) return theta;
+  if (option==3) return theta*180/3.14159;
+  if (option==4) return cos(phi);
+  if (option==5) return phi;
+  if (option==6) return phi*180/3.14159;
+  std::cout<<"LEEana::get_angle: Warning, option not included, defaulting to returning cos(theta)"<<std::endl;
+  return cos(theta);//just defualt to returning costheta
+}
+
+
+//option:1 costheta, 2 theta in rad, 3 theta in deg, 4 cosphi, 5 phi in rad, 6 phi in deg
+double LEEana::get_true_nu_angle(PFevalInfo& pfeval, int option, bool to_numi){
+  /*
+  double nu_momentum[4] = pfeval.truth_nu_momentum;
+  double momentum_0 = nu_momentum[0];
+  double momentum_1 = nu_momentum[1];
+  double momentum_2 = nu_momentum[2];
+  */
+  double momentum_0 = pfeval.truth_nu_momentum[0];
+  double momentum_1 = pfeval.truth_nu_momentum[1];
+  double momentum_2 = pfeval.truth_nu_momentum[2];  
+
+  return get_angle(momentum_0, momentum_1, momentum_2, option, to_numi);
+
+} 
+    
+
+bool LEEana::is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval){
+    bool flag=false;
+    if(eval.truth_nuEnergy>237) return flag;
+    if(eval.truth_nuEnergy<234) return flag;
+    if(eval.truth_nuPdg!=14)  return flag;
+    if(eval.truth_isCC!=1) return flag;
+    if(eval.truth_vtxInside!=1)  return flag;
+    double truth_nu_theta_deg = get_true_nu_angle(pfeval, 3, true);
+    if(truth_nu_theta_deg<105) return flag;
+    if(truth_nu_theta_deg>130) return flag;
+    flag=true;
+    return flag;
+}
+
+double LEEana::get_ssmE(TaggerInfo& tagger_info){
+  if(tagger_info.ssm_kine_energy<0) return -999;
+  double ssm_E=0;  
+  ssm_E+=tagger_info.ssm_kine_energy+105.7;
+  if(tagger_info.ssm_prim_track1_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_track1_kine_energy_range;
+  if(tagger_info.ssm_prim_track2_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_track2_kine_energy_range;
+  if(tagger_info.ssm_prim_shw1_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_shw1_kine_energy_best;
+  if(tagger_info.ssm_prim_shw2_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_shw2_kine_energy_best;
+  return ssm_E;
+}
+
+
+bool LEEana::is_kdar_presel(TaggerInfo& tagger_info, EvalInfo& eval){
+  bool flag=false;
+  if(eval.match_isFC==0) return flag;
+  if(tagger_info.ssm_kine_energy<0) return flag;
+  if(tagger_info.ssm_kine_reco_Enu<10) return flag;
+  if(tagger_info.ssm_kine_reco_Enu>350) return flag;
+  if(tagger_info.ssm_kine_pio_mass>50) return flag;
+  if(tagger_info.ssm_cosmict_flag_9==1) return flag;
+  if(get_ssmE(tagger_info)>270) return flag;
+  flag=true;
+  return flag;
+}
+
+bool LEEana::is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut, double hiE_cut){
+  bool flag=false;
+  if(tagger_info.ssm_kdar_score_lowE<lowE_cut) return flag;
+  if(tagger_info.ssm_kdar_score_hiE<hiE_cut) return flag;
+  flag=true;
+  return flag;
+}
+
 
 #endif
