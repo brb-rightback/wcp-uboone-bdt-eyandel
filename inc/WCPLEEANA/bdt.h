@@ -215,7 +215,6 @@ float LEEana::cal_kdar_lowE_bdt_xgboost(TaggerInfo& tagger_info, EvalInfo& eval,
   float val = -999;
   double val1 = reader.EvaluateMVA("MyBDT");
   val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
-  std::cout<<eval.run<<" "<<" "<<eval.subrun<<" "<<eval.event<<" "<<tagger_info.ssm_kine_energy<<"  "<<tagger_info.ssm_kine_reco_Enu<<" "<<val<<std::endl;
   return val;
 }
 
@@ -223,7 +222,6 @@ float LEEana::cal_kdar_hiE_bdt_xgboost(TaggerInfo& tagger_info, EvalInfo& eval, 
   float val = -999;
   double val1 = reader.EvaluateMVA("MyBDT");
   val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
-  //std::cout<<eval.run<<" "<<" "<<eval.subrun<<" "<<eval.event<<" "<<tagger_info.ssm_kine_energy<<"  "<<tagger_info.ssm_kine_reco_Enu<<" "<<tagger_info.ssm_dq_dx_fwd_1<<" "<<tagger_info.ssm_dq_dx_fwd_2<<" "<<val<<std::endl;
   return val;
 }
 

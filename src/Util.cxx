@@ -151,7 +151,7 @@ void V2H(const TVectorD vec, TH1D* histo)
         histo->SetBinContent(i+1, vec(i));
     }
 }
-
+/*
 void CopyDir(TDirectory *source, bool blank_tree, std::vector<std::string> to_skip, bool verbose) {
   //copy all objects and subdirs of directory source as a subdir of the current directory
   if(verbose) source->ls();
@@ -265,7 +265,7 @@ std::vector<TTree*>* GetTrees(TDirectory *source, std::vector<std::string> to_sk
   savdir->cd();
   return ttree_vec;
 }
-
+*/
 
 std::vector<std::string> splitString(const std::string& s, char delimiter) {
         std::vector<std::string> tokens;
