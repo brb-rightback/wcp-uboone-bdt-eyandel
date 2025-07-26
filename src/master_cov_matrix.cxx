@@ -870,6 +870,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
       // loop real signal bin ...
       for (int k=0;k!=hsigma->GetNbinsX();k++){
         int bin = std::round(hsigma->GetBinCenter(k+1));
+        if (hsigma->GetBinContent(k+1)==0) continue;
         for (int j=0; j!=hpred->GetNbinsX()+1;j++){
           (*mat_R)(start_bin+j,k) = hR->GetBinContent(j+1,k+1)/(hsigma->GetBinContent(k+1)/map_xs_bin_constant[bin]);
         }
@@ -1016,6 +1017,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
             sum_nominal += hpred->GetBinContent(j+1);
             if(norm_sig_flag==1){//only account for the impact on efficiency and smearing
               for (int k=0;k!=hsigma->GetNbinsX();k++){
+                if (hsigma->GetBinContent(k+1)==0) continue;
                 sum_uni += hR->GetBinContent(j+1,k+1)/hsigma->GetBinContent(k+1)*hsigmabar->GetBinContent(k+1); // hR(j,k)/hsigma(k): response in new universe
               }
             }
@@ -1035,6 +1037,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
 	if (num!=1 && norm_sig_flag<2){//signal channel, only account for the uncertainty on the efficiency and smearing, now we need to get the new universe
 	  for (int k=0;k!=hsigma->GetNbinsX();k++){
 	    //	    int bin = std::round(hsigma->GetBinCenter(k+1));
+	      if (hsigma->GetBinContent(k+1)==0) continue;
       	      for (int j=0; j!=hpred->GetNbinsX()+1;j++){
 	        x[start_bin+j] += hR->GetBinContent(j+1,k+1)/hsigma->GetBinContent(k+1)*hsigmabar->GetBinContent(k+1)/sum_uni; // hR(j,k)/hsigma(k): response in new universe
 	      }
@@ -1860,8 +1863,8 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   T_PFeval->SetBranchStatus("truth_corr_nuvtxX",1);
   T_PFeval->SetBranchStatus("truth_corr_nuvtxY",1);
   T_PFeval->SetBranchStatus("truth_corr_nuvtxZ",1);
+  T_PFeval->SetBranchStatus("truth_nu_momentum",1);
   if (pfeval.flag_NCDelta){
-
     T_PFeval->SetBranchStatus("truth_NCDelta",1);
     T_PFeval->SetBranchStatus("truth_NprimPio",1);
   }

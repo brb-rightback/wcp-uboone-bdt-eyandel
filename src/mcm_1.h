@@ -1062,8 +1062,8 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   T_PFeval_cv->SetBranchStatus("truth_corr_nuvtxX",1);
   T_PFeval_cv->SetBranchStatus("truth_corr_nuvtxY",1);
   T_PFeval_cv->SetBranchStatus("truth_corr_nuvtxZ",1);
+  T_PFeval_cv->SetBranchStatus("truth_nu_momentum",1);
   if (pfeval_cv.flag_NCDelta){
-
     T_PFeval_cv->SetBranchStatus("truth_NCDelta",1);
     T_PFeval_cv->SetBranchStatus("truth_NprimPio",1);
   }
@@ -1284,6 +1284,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   T_PFeval_det->SetBranchStatus("truth_corr_nuvtxX",1);
   T_PFeval_det->SetBranchStatus("truth_corr_nuvtxY",1);
   T_PFeval_det->SetBranchStatus("truth_corr_nuvtxZ",1);
+  T_PFeval_det->SetBranchStatus("truth_nu_momentum",1);
   if (pfeval_det.flag_NCDelta){
 
       T_PFeval_det->SetBranchStatus("truth_NCDelta",1);

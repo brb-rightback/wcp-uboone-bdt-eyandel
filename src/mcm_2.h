@@ -775,6 +775,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   T_PFeval->SetBranchStatus("showervtx_diff",1);
   T_PFeval->SetBranchStatus("muonvtx_diff",1);
   T_PFeval->SetBranchStatus("truth_muonMomentum",1);
+  T_PFeval->SetBranchStatus("truth_nu_momentum",1);
   T_PFeval->SetBranchStatus("truth_corr_nuvtxX",1);
   T_PFeval->SetBranchStatus("truth_corr_nuvtxY",1);
   T_PFeval->SetBranchStatus("truth_corr_nuvtxZ",1);

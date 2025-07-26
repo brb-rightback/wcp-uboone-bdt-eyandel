@@ -3,6 +3,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/Util.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -39,7 +40,7 @@ int main( int argc, char** argv )
   float lee_strength = 0; // no LEE strength ...
   int flag_display = 0;
   int flag_breakdown = 0;
-
+  bool flag_v2h = false;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':
@@ -56,6 +57,10 @@ int main( int argc, char** argv )
       break;
     case 'b':
       flag_breakdown = atoi(&argv[i][2]);
+      break;
+    case 'h':
+      flag_v2h = atoi(&argv[i][2]);
+      if(flag_v2h==1) std::cout<<"Will save histograms in addition to vectors"<<std::endl;
       break;
     }
   }
@@ -296,13 +301,39 @@ int main( int argc, char** argv )
       hdata->SetName(Form("hdata_obsch_%d",obsch));
       hmc->SetName(Form("hmc_obsch_%d",obsch));
       hdata->SetDirectory(file3);
-      hmc->SetDirectory(file3);
-    }
+      hmc->SetDirectory(file3); 
+   }
     
     mat_add_cov->Write("cov_mat_add");
     vec_signal->Write("vec_signal");
     mat_R->Write("mat_R");
     
+    if(flag_v2h){
+      std::cout<<"Saving histograms in addition to vectors"<<std::endl;
+      int nbin = vec_signal->GetNrows();
+      TH1D* h_signal = new TH1D("h_signal", "h_signal", nbin, 0, nbin);
+      V2H((*vec_signal), h_signal);
+      h_signal->Write();
+
+      int nbinx = mat_add_cov->GetNrows();
+      int nbiny = mat_add_cov->GetNcols();
+      TH2D* h_add_cov = new TH2D("h_add_cov", "h_add_cov", nbinx, 0, nbinx, nbiny, 0, nbiny);
+      M2H((*mat_add_cov), h_add_cov);
+      h_add_cov->Write();
+
+      nbinx = mat_R->GetNrows();
+      nbiny = mat_R->GetNcols();
+      TH2D* h_R = new TH2D("h_R", "h_R", nbinx, 0, nbinx, nbiny, 0, nbiny);
+      M2H((*mat_R), h_R);
+      h_R->Write();
+
+      nbinx = mat_collapse->GetNrows();
+      nbiny = mat_collapse->GetNcols();
+      TH2D* h_collapse = new TH2D("h_collapse", "h_collapse", nbinx, 0, nbinx, nbiny, 0, nbiny);
+      M2H((*mat_collapse), h_collapse);
+      h_collapse->Write();
+    }
+
     file3->Write();
     file3->Close();
   }

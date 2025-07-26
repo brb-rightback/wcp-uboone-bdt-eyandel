@@ -2837,10 +2837,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext"){
+  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train"){
     bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
     if(ch_name == "kdar_bdtsel_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_bdtsel_bck")  flag_pass = flag_pass && !map_cuts_flag["kdar"]; 
+    if(ch_name == "kdar_bdtsel_nuwro_train")  {flag_pass = flag_pass && map_cuts_flag["kdar"]; if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
 
   }else if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){

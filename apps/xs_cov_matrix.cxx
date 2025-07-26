@@ -2,6 +2,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/Util.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -29,6 +30,7 @@ int main( int argc, char** argv )
   }
   int run = 17; // run 1 ... xs ...
   int norm_sig = 0;
+  bool flag_v2h=false;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':
@@ -36,6 +38,10 @@ int main( int argc, char** argv )
       break;
     case 'n':
       norm_sig = atoi(&argv[i][2]); // 0, do not normalize, 1 normalize sig across universes
+      break;
+    case 'h':
+      flag_v2h = atoi(&argv[i][2]);
+      if(flag_v2h==1) std::cout<<"Will save histograms in addition to vectors"<<std::endl;
       break;
     }
   }
@@ -203,7 +209,39 @@ int main( int argc, char** argv )
   frac_cov_xs_mat->Write(Form("frac_cov_xf_mat_%d",run));
   vec_signal->Write(Form("vec_signal_%d",run));
   mat_R->Write(Form("mat_R_%d",run));
-  
+ 
+  if(flag_v2h){
+    std::cout<<"Saving histograms in addition to vectors"<<std::endl;
+    int nbin = vec_mean->GetNrows();
+    TH1D* h_mean = new TH1D(Form("h_mean_%d",run), Form("h_mean_%d",run), nbin, 0, nbin);
+    V2H((*vec_mean), h_mean);
+    h_mean->Write();
+
+    int nbinx = cov_xs_mat->GetNrows();
+    int nbiny = cov_xs_mat->GetNcols();
+    TH2D* h_cov_xs = new TH2D(Form("h_cov_xs_%d",run), Form("h_cov_xs_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*cov_xs_mat), h_cov_xs);
+    h_cov_xs->Write();
+
+    nbinx = frac_cov_xs_mat->GetNrows();
+    nbiny = frac_cov_xs_mat->GetNcols();
+    TH2D* h_frac_cov_xs = new TH2D(Form("h_frac_cov_xs_%d",run), Form("h_frac_cov_xs_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*frac_cov_xs_mat), h_frac_cov_xs);
+    h_frac_cov_xs->Write();
+
+    nbin = vec_signal->GetNrows();
+    TH1D* h_signal = new TH1D(Form("h_signal_%d",run), Form("h_signal_%d",run), nbin, 0, nbin);
+    V2H((*vec_signal), h_signal);
+    h_signal->Write();
+
+    nbinx = mat_R->GetNrows();
+    nbiny = mat_R->GetNcols();
+    TH2D* h_R = new TH2D(Form("h_R_%d",run), Form("h_R_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*mat_R), h_R);
+    h_R->Write();
+   }
+
+ 
   // save central ... results ...
   // for (auto it = map_histoname_hist.begin(); it != map_histoname_hist.end(); it++){
   //  ((TH1F*)it->second)->SetDirectory(file);

@@ -2,6 +2,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/Util.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -30,6 +31,7 @@ int main( int argc, char** argv )
   bool flag_osc = false;
   int flag_gp = 0; // gaussian process smoothing
   double seed = 0;
+  bool flag_v2h=false;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':
@@ -44,6 +46,10 @@ int main( int argc, char** argv )
      case 's':
       seed = atoi(&argv[i][2]); //Set the seed for bootsrapping
       std::cout<<"Setting bootstrapping seed to "<<seed<<std::endl;
+      break;
+    case 'h':
+      flag_v2h = atoi(&argv[i][2]);
+      if(flag_v2h==1) std::cout<<"Will save histograms in addition to vectors"<<std::endl;
       break;
     }
   }
@@ -158,6 +164,37 @@ int main( int argc, char** argv )
 
   TVectorD vseed(1,1,seed,"END");
   vseed.Write("seed");
+
+  if(flag_v2h){
+    std::cout<<"Saving histograms in addition to vectors"<<std::endl;
+    int nbin = vec_mean->GetNrows();
+    TH1D* h_mean = new TH1D(Form("h_mean_%d",run), Form("h_mean_%d",run), nbin, 0, nbin);
+    V2H((*vec_mean), h_mean);
+    h_mean->Write();
+
+    nbin = vec_mean_diff->GetNrows();
+    TH1D* h_mean_diff = new TH1D(Form("h_mean_diff_%d",run), Form("h_mean_diff_%d",run), nbin, 0, nbin);
+    V2H((*vec_mean_diff), h_mean_diff);
+    h_mean_diff->Write();
+
+    int nbinx = cov_det_mat->GetNrows();
+    int nbiny = cov_det_mat->GetNcols();
+    TH2D* h_cov_det = new TH2D(Form("h_cov_det_%d",run), Form("h_cov_det_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*cov_det_mat), h_cov_det);
+    h_cov_det->Write();
+
+    nbinx = frac_cov_det_mat->GetNrows();
+    nbiny = frac_cov_det_mat->GetNcols();
+    TH2D* h_frac_cov_det = new TH2D(Form("h_frac_cov_det_%d",run), Form("h_frac_cov_det_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*frac_cov_det_mat), h_frac_cov_det);
+    h_frac_cov_det->Write();
+
+    nbinx = cov_mat_bootstrapping->GetNrows();
+    nbiny = cov_mat_bootstrapping->GetNcols();
+    TH2D* h_cov_bootstrapping = new TH2D(Form("h_cov_bootstrapping_%d",run), Form("h_cov_bootstrapping_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*cov_mat_bootstrapping), h_cov_bootstrapping);
+    h_cov_bootstrapping->Write();
+   }
 
   for (auto it = map_covch_hists.begin(); it != map_covch_hists.end(); it++){
     auto results = it->second;
