@@ -969,6 +969,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   }
   if(tagger_cv.saved_ssm_bdt_vars){
     T_BDTvars_cv->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_angle_to_absorber",1);
     T_BDTvars_cv->SetBranchStatus("ssm_kine_reco_Enu",1);
     T_BDTvars_cv->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars_cv->SetBranchStatus("ssm_cosmict_flag_9",1);
@@ -1192,6 +1193,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   }
   if(tagger_det.saved_ssm_bdt_vars){
     T_BDTvars_det->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars_det->SetBranchStatus("ssm_angle_to_absorber",1);
     T_BDTvars_det->SetBranchStatus("ssm_kine_reco_Enu",1);
     T_BDTvars_det->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars_det->SetBranchStatus("ssm_cosmict_flag_9",1);

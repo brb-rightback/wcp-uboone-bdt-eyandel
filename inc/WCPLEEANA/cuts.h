@@ -25,7 +25,8 @@ namespace LEEana{
   //double em_charge_scale = 1.0;
 
   double get_angle(double momentum_0, double momentum_1, double momentum_2, int option, bool to_numi);
-
+  double get_angle_to_absorber(double momentum_0, double momentum_1, double momentum_2);
+  double get_true_nu_angle_to_absorber(PFevalInfo& pfeval);
   double get_true_nu_angle(PFevalInfo& pfeval, int option, bool to_numi);
   bool is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval);
 
@@ -522,8 +523,26 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
   //  }else
   if (var_name == "kine_reco_Enu"){
     return get_reco_Enu_corr(kine, flag_data);
+  }else if (var_name == "ssm_kine_reco_Enu"){
+    return tagger.ssm_kine_reco_Enu;
   }else if (var_name == "ssm_kine_energy"){
     return tagger.ssm_kine_energy;
+  }else if (var_name == "ssm_angle_to_absorber"){
+    return tagger.ssm_angle_to_absorber;
+  }else if (var_name == "ssm_angle_to_absorber_deg"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    return tagger.ssm_angle_to_absorber*180/3.14159;
+  }else if (var_name == "ssm_pl" || var_name == "ssm_pt" || var_name == "ssm_q" || var_name == "ssm_Q2" || var_name == "ssm_sqrtQ2"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    double k = sqrt(tagger.ssm_kine_energy*tagger.ssm_kine_energy+2*tagger.ssm_kine_energy*105.7);
+    double var = -999;
+    if(var_name == "ssm_pl") var = k*TMath::Cos(tagger.ssm_angle_to_absorber);
+    if(var_name == "ssm_pt") var = k*TMath::Sin(tagger.ssm_angle_to_absorber);
+    if(var_name == "ssm_q") var = sqrt(235.5*235.5+k*k-2*235.5*k*cos(tagger.ssm_angle_to_absorber));
+    double Q2 = 2*235.5*(105.7+tagger.ssm_kine_energy-k*cos(tagger.ssm_angle_to_absorber))-105.7*105.7;		   
+    if(var_name == "ssm_Q2") var = Q2;
+    if(var_name == "ssm_sqrtQ2") var = sqrt(Q2);
+    return var;
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
   }else if (var_name == "kine_reco_Eproton"){
@@ -1694,6 +1713,12 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     TLorentzVector muonMomentum(pfeval.truth_muonMomentum[0], pfeval.truth_muonMomentum[1], pfeval.truth_muonMomentum[2], pfeval.truth_muonMomentum[3]);
     float costh = TMath::Cos(muonMomentum.Theta());
 
+    double theta_absorber = get_angle_to_absorber(pfeval.truth_muonMomentum[0], pfeval.truth_muonMomentum[1], pfeval.truth_muonMomentum[2]);
+    float costh_absorber = TMath::Cos(theta_absorber);
+    float sinth_absorber = TMath::Sin(theta_absorber);
+    double pl_absorber = pmuon*costh_absorber;
+    double pt_absorber = pmuon*sinth_absorber;
+
     if (cut_file == 1){
       if (cut_name == "numuCC.inside.Enu.le.300"){
 	if (eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=300) return number;
@@ -2498,6 +2523,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       bool found_cut = false;   
       std::string base_cut_string = "kdar.Emu.le.";
       if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
       else{
 	// Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2511,6 +2537,56 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
 	// Double check the overflow
 	std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
 	if(cut_name == cut_string && KE_muon>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==778){
+      int bin_width=10;
+      int min = -200;
+      int max = 200;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.pl.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(pl_absorber<=bin*bin_width+bin_width+min  && pl_absorber>bin*bin_width+min)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && pl_absorber>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==779){
+      int bin_width=8;
+      int min = 0;
+      int max = 200;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.pt.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(pt_absorber<=bin*bin_width+bin_width+min  && pt_absorber>bin*bin_width+min)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && pt_absorber>max)   { return number; }
       }
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
@@ -2837,13 +2913,23 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train"){
+  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"){
     bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
     if(ch_name == "kdar_bdtsel_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
-    if(ch_name == "kdar_bdtsel_bck")  flag_pass = flag_pass && !map_cuts_flag["kdar"]; 
-    if(ch_name == "kdar_bdtsel_nuwro_train")  {flag_pass = flag_pass && map_cuts_flag["kdar"]; if(eval.event%10<5){flag_pass=false;} }
+    if(ch_name == "kdar_bdtsel_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  {flag_pass = flag_pass && map_cuts_flag["kdar"]; if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
-
+  }else if(ch_name == "kdar_sideband_bck"  || ch_name == "kdar_sideband_dirt" || ch_name == "kdar_sideband_sig" || ch_name == "kdar_sideband" || ch_name == "kdar_sideband_ext"
+     || ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext"
+     || ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext"
+     || ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext"
+     || ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext"){
+    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC && !(flag_kdar_bdtsel && flag_kdar_presel);
+    if(ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext" && reco_Enu>300) flag_pass = false;
+    if(ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext" && (reco_Enu>500 || reco_Enu<300)) flag_pass = false;
+    if(ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext" && (reco_Enu>700 || reco_Enu<500)) flag_pass = false;
+    if(ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext" && (reco_Enu<700)) flag_pass = false;
+    return flag_pass;
   }else if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
     if (flag_nueCC && flag_FC && flag_truth_inside) return true;
     else return false;
@@ -9457,15 +9543,16 @@ double LEEana::get_angle(double momentum_0, double momentum_1, double momentum_2
 
   if (to_numi){
     //define rotation
-    double R11 =  0.74302418;
-    double R12 = -0.58403596;
-    double R13 =  0.3268288;
-    double R21 = -0.58403596;
-    double R22 = -0.32735446;
-    double R23 =  0.74279274;
-    double R31 = -0.3268288;
-    double R32 = -0.74279274;
-    double R33 = -0.58433029;
+    double R11 = 9.21033958e-01;
+    double R12 = 6.18338739e-05; 
+    double R13 = -3.89544856e-01;
+    double R21 = 2.26996774e-02;  
+    double R22 = 9.98285581e-01;  
+    double R23 = 5.38031249e-02;
+    double R31 = 3.88820884e-01; 
+    double R32 = -5.84161267e-02;  
+    double R33 = 9.19386684e-01;
+    
     momentum_0_new = momentum_0*R11 + momentum_1*R12 + momentum_2*R13;
     momentum_1_new = momentum_0*R21 + momentum_1*R22 + momentum_2*R23;
     momentum_2_new = momentum_0*R31 + momentum_1*R32 + momentum_2*R33;
@@ -9474,7 +9561,6 @@ double LEEana::get_angle(double momentum_0, double momentum_1, double momentum_2
   double momentum_perp = sqrt(momentum_0_new * momentum_0_new + momentum_1_new * momentum_1_new);
   theta = atan2(momentum_perp, momentum_2_new);
   phi = atan2(momentum_1_new, momentum_0_new);
-
   if (option==1) return cos(theta);
   if (option==2) return theta;
   if (option==3) return theta*180/3.14159;
@@ -9485,15 +9571,19 @@ double LEEana::get_angle(double momentum_0, double momentum_1, double momentum_2
   return cos(theta);//just defualt to returning costheta
 }
 
+double LEEana::get_angle_to_absorber(double momentum_0, double momentum_1, double momentum_2){
+    double absorber_dir_0 = 0.33;
+    double absorber_dir_1 = 0.75;
+    double absorber_dir_2 = -0.59;
+    double cos = absorber_dir_0*momentum_0+absorber_dir_1*momentum_1+absorber_dir_2*momentum_2;
+    cos = cos / sqrt(momentum_0*momentum_0 + momentum_1*momentum_1 + momentum_2*momentum_2) / sqrt(absorber_dir_0*absorber_dir_0 + absorber_dir_1*absorber_dir_1 + absorber_dir_2*absorber_dir_2); 
+    double angle = TMath::ACos(cos);
+    return angle;
+}
 
 //option:1 costheta, 2 theta in rad, 3 theta in deg, 4 cosphi, 5 phi in rad, 6 phi in deg
 double LEEana::get_true_nu_angle(PFevalInfo& pfeval, int option, bool to_numi){
-  /*
-  double nu_momentum[4] = pfeval.truth_nu_momentum;
-  double momentum_0 = nu_momentum[0];
-  double momentum_1 = nu_momentum[1];
-  double momentum_2 = nu_momentum[2];
-  */
+
   double momentum_0 = pfeval.truth_nu_momentum[0];
   double momentum_1 = pfeval.truth_nu_momentum[1];
   double momentum_2 = pfeval.truth_nu_momentum[2];  
@@ -9501,7 +9591,16 @@ double LEEana::get_true_nu_angle(PFevalInfo& pfeval, int option, bool to_numi){
   return get_angle(momentum_0, momentum_1, momentum_2, option, to_numi);
 
 } 
-    
+
+double LEEana::get_true_nu_angle_to_absorber(PFevalInfo& pfeval){
+
+  double momentum_0 = pfeval.truth_nu_momentum[0];
+  double momentum_1 = pfeval.truth_nu_momentum[1];
+  double momentum_2 = pfeval.truth_nu_momentum[2];
+
+  return get_angle_to_absorber(momentum_0, momentum_1, momentum_2);
+
+}
 
 bool LEEana::is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval){
     bool flag=false;
@@ -9510,9 +9609,8 @@ bool LEEana::is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval){
     if(eval.truth_nuPdg!=14)  return flag;
     if(eval.truth_isCC!=1) return flag;
     if(eval.truth_vtxInside!=1)  return flag;
-    double truth_nu_theta_deg = get_true_nu_angle(pfeval, 3, true);
-    if(truth_nu_theta_deg<105) return flag;
-    if(truth_nu_theta_deg>130) return flag;
+    double truth_nu_angle_to_absorber = get_true_nu_angle_to_absorber(pfeval)*180/3.14159;
+    if(truth_nu_angle_to_absorber>8) return flag;
     flag=true;
     return flag;
 }

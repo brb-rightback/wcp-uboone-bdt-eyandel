@@ -1772,6 +1772,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   }
   if(tagger.saved_ssm_bdt_vars){
     T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars->SetBranchStatus("ssm_angle_to_absorber",1);
     T_BDTvars->SetBranchStatus("ssm_kine_reco_Enu",1);
     T_BDTvars->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars->SetBranchStatus("ssm_cosmict_flag_9",1);

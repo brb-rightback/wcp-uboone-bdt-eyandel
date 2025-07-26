@@ -61,6 +61,8 @@ int main( int argc, char** argv )
   std::string config_file_name="config.txt";
   char delimiter = ',';
 
+  bool flag_gibuu = false;
+
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'c':
@@ -87,6 +89,10 @@ int main( int argc, char** argv )
       break;
     case 'd':
         delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
+      break;
+    case 'w':
+      flag_gibuu = &argv[i][2];
+      if (flag_gibuu) std::cout<<"GiBUU sample, overiding the weights"<<std::endl;
       break;
     }
   }
@@ -3663,6 +3669,15 @@ int main( int argc, char** argv )
       eval.weight_spline = 1;
       eval.weight_cv = 1;
       eval.weight_change = true;
+    }
+
+    if(flag_gibuu){
+      eval.weight_spline = 1;
+      eval.weight_cv = eval.truth_nuTime;
+      eval.truth_nuTime = pfeval.truth_startXYZT[0][3]/1000;
+      pfeval.truth_nuTime = pfeval.truth_startXYZT[0][3]/1000;
+      pfeval.truth_nu_pos[3] = pfeval.truth_startXYZT[0][3];
+      pfeval.mc_nu_pos[3] = pfeval.truth_startXYZT[0][3];
     }
 
     if (flag_data && skip_cut == 0){

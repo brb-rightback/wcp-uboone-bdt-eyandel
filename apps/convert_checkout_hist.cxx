@@ -230,6 +230,7 @@ int main( int argc, char** argv )
   }
   if(tagger.saved_ssm_bdt_vars){
     T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
+    T_BDTvars->SetBranchStatus("ssm_angle_to_abosrber",1);
     T_BDTvars->SetBranchStatus("ssm_kine_reco_Enu",1);
     T_BDTvars->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars->SetBranchStatus("ssm_cosmict_flag_9",1);
@@ -270,7 +271,9 @@ int main( int argc, char** argv )
     T_eval->SetBranchStatus("truth_vtxZ",1);
     T_eval->SetBranchStatus("match_completeness_energy",1);
   }
-
+  T_eval->SetBranchStatus("run",1);
+  T_eval->SetBranchStatus("subrun",1);
+  T_eval->SetBranchStatus("event",1);
 
   T_KINEvars->SetBranchStatus("*",0);
   T_KINEvars->SetBranchStatus("kine_reco_Enu",1);

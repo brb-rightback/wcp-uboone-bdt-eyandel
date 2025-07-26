@@ -708,6 +708,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
   if(tagger.saved_ssm_bdt_vars){
     T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
     T_BDTvars->SetBranchStatus("ssm_kine_reco_Enu",1);
+    T_BDTvars->SetBranchStatus("ssm_angle_to_absorber",1);
     T_BDTvars->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars->SetBranchStatus("ssm_cosmict_flag_9",1);
     T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
