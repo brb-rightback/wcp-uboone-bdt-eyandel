@@ -2,6 +2,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/Util.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -29,6 +30,7 @@ int main( int argc, char** argv )
   int run = 1; // run 1 ..
   int flag_spec_weights = 0;
   bool flag_osc = false;
+  bool flag_v2h=false;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':
@@ -39,6 +41,10 @@ int main( int argc, char** argv )
       break;
     case 'o':
       flag_osc = atoi(&argv[i][2]);
+      break;
+    case 'h':
+      flag_v2h = atoi(&argv[i][2]);
+      if(flag_v2h==1) std::cout<<"Will save histograms in addition to vectors"<<std::endl;
       break;
     }
   }
@@ -142,7 +148,29 @@ int main( int argc, char** argv )
   vec_mean->Write(Form("vec_mean_%d",run));
   cov_xf_mat->Write(Form("cov_xf_mat_%d",run));
   frac_cov_xf_mat->Write(Form("frac_cov_xf_mat_%d",run));
-  
+
+
+  if(flag_v2h){
+    std::cout<<"Saving histograms in addition to vectors"<<std::endl;
+    int nbin = vec_mean->GetNrows();
+    TH1D* h_mean = new TH1D(Form("h_mean_%d",run), Form("h_mean_%d",run), nbin, 0, nbin);
+    V2H((*vec_mean), h_mean);
+    h_mean->Write();
+
+    int nbinx = cov_xf_mat->GetNrows();
+    int nbiny = cov_xf_mat->GetNcols();
+    TH2D* h_cov_xf = new TH2D(Form("h_cov_xf_%d",run), Form("h_cov_xf_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*cov_xf_mat), h_cov_xf);
+    h_cov_xf->Write();
+
+    nbinx = frac_cov_xf_mat->GetNrows();
+    nbiny = frac_cov_xf_mat->GetNcols();
+    TH2D* h_frac_cov_xf = new TH2D(Form("h_frac_cov_xf_%d",run), Form("h_frac_cov_xf_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*frac_cov_xf_mat), h_frac_cov_xf);
+    h_frac_cov_xf->Write();
+   }
+
+
   // save central ... results ...
   // for (auto it = map_histoname_hist.begin(); it != map_histoname_hist.end(); it++){
   //  ((TH1F*)it->second)->SetDirectory(file);
