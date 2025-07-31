@@ -295,6 +295,8 @@ int main( int argc, char** argv )
         T_PFeval->SetBranchStatus("truth_startMomentum",1);
       }
       T_PFeval->SetBranchStatus("truth_nu_momentum",1);
+      T_PFeval->SetBranchStatus("mcflux_dk2gen",1);
+      T_PFeval->SetBranchStatus("mcflux_gen2vtx",1);
   }
   if (pfeval.flag_NCDelta){
 

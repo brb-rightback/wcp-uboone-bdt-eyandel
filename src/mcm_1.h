@@ -1302,6 +1302,8 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
       T_PFeval_det->SetBranchStatus("truth_pdg",1);
       T_PFeval_det->SetBranchStatus("truth_mother",1);
       T_PFeval_det->SetBranchStatus("truth_startMomentum",1);
+      T_PFeval_det->SetBranchStatus("mcflux_dk2gen",1);
+      T_PFeval_det->SetBranchStatus("mcflux_gen2vtx",1);
   }
   //Erin
   if (pfeval_det.flag_single_photon){

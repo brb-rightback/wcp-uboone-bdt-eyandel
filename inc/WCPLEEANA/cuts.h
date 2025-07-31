@@ -34,6 +34,8 @@ namespace LEEana{
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
   bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.4, double hiE_cut=1.02);
 
+  double get_oldflux_weight(EvalInfo& eval,PFevalInfo& pfeval);
+
   // correct reco neutrino energy and reco shower energy
   double get_reco_Enu_corr(KineInfo& kine, bool flag_data);
   double get_reco_showerKE_corr(PFevalInfo& pfeval, bool flag_data);
@@ -131,6 +133,7 @@ namespace LEEana{
   bool is_truth_numuCC_inside(EvalInfo& eval);
 
   bool is_true_0p(PFevalInfo& pfeval);
+  double get_true_Kp(PFevalInfo& pfeval,bool MeV=true,bool total=false);
 
   int mcc8_pmuon_costheta_bin(float pmuon, float costh);
   int alt_var_index(std::string var1, float val1, std::string var2, float val2, std::string config="./configurations/alt_var_xbins.txt");
@@ -202,9 +205,23 @@ bool LEEana::is_true_0p(PFevalInfo& pfeval){
   return true;
 }
 
+double LEEana::get_true_Kp(PFevalInfo& pfeval,bool MeV,bool total){
+    double Kp=0;
+    double units=1;
+    if(MeV) units=1000;
+    double mass=0.938272*units;
+    if(total) mass=0;
+    for(size_t i=0; i<pfeval.truth_Ntrack; i++){
+      if(pfeval.truth_mother[i] != 0) continue;
+      if(pfeval.truth_pdg[i] != 2212) continue;
+      if(pfeval.truth_startMomentum[i][3] >Kp) Kp=pfeval.truth_startMomentum[i][3]; 
+    }
+  if (Kp==0.938272) return 0;
+  return Kp*units-mass;
+}
+
 double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data){
   double addtl_weight = 1.0;
-
   // CV correction from numuCC cross section data
   // if (eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1){
   //   if (eval.truth_nuEnergy>200 && eval.truth_nuEnergy<=540) addtl_weight = 1.28043;
@@ -270,7 +287,17 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
 
   if (weight_name == "cv_spline"){
     return addtl_weight*eval.weight_cv * eval.weight_spline;
-  //Erin - ns beam time scaling
+  }else if (weight_name == "cv_spline_oldflux"){
+    double oldflux_weight = get_oldflux_weight(eval,pfeval);
+    return eval.weight_cv * eval.weight_spline * oldflux_weight;
+  }else if (weight_name == "cv_spline_oldflux_cv_spline_oldflux"){
+    double oldflux_weight = get_oldflux_weight(eval,pfeval);
+    return pow(eval.weight_cv * eval.weight_spline * oldflux_weight,2);
+  }else if (weight_name == "cv_spline_cv_spline_oldflux" || weight_name == "cv_spline_oldflux_cv_spline"){
+    double oldflux_weight = get_oldflux_weight(eval,pfeval);
+    return oldflux_weight * pow(eval.weight_cv * eval.weight_spline,2);
+  
+    //Erin - ns beam time scaling
   }else if (weight_name == "cv_spline_nsbeam"){
     float beam_scale = 0.86;
 
@@ -501,6 +528,17 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
     return eval.weight_lee * pow( eval.weight_spline,2);
   }else if (weight_name == "add_weight"){//for systematics
     return addtl_weight;
+  }else if (weight_name == "cv_spline_oldflux"){
+    std::cout<<"Entered"<<std::endl;
+    double oldflux_weight = get_oldflux_weight(eval,pfeval);
+    std::cout<<oldflux_weight<<std::endl;
+    return eval.weight_cv * eval.weight_spline * oldflux_weight;
+  }else if (weight_name == "cv_spline_oldflux_cv_spline_oldflux"){
+    double oldflux_weight = get_oldflux_weight(eval,pfeval);
+    return pow(eval.weight_cv * eval.weight_spline * oldflux_weight,2);
+  }else if (weight_name == "cv_spline_cv_spline_oldflux" || weight_name == "cv_spline_oldflux_cv_spline"){
+    double oldflux_weight = get_oldflux_weight(eval,pfeval);
+    return oldflux_weight * pow(eval.weight_cv * eval.weight_spline,2);
   }else{
     std::cout <<"Unknown weights: " << weight_name << std::endl;
   }
@@ -527,6 +565,10 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     return tagger.ssm_kine_reco_Enu;
   }else if (var_name == "ssm_kine_energy"){
     return tagger.ssm_kine_energy;
+  }else if (var_name == "ssm_kine_energy_force_min"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (tagger.ssm_kine_energy<30) return 30.1;
+    return tagger.ssm_kine_energy;
   }else if (var_name == "ssm_angle_to_absorber"){
     return tagger.ssm_angle_to_absorber;
   }else if (var_name == "ssm_angle_to_absorber_deg"){
@@ -543,6 +585,26 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if(var_name == "ssm_Q2") var = Q2;
     if(var_name == "ssm_sqrtQ2") var = sqrt(Q2);
     return var;
+  }else if (var_name == "ssm_prim_track1_kine_energy_range"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01;
+    return tagger.ssm_prim_track1_kine_energy_range;
+  }else if (var_name == "ssm_prim_track1_kine_energy_range_vtx"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
+    if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-20;
+    return tagger.ssm_prim_track1_kine_energy_range;
+  }else if (var_name == "ssm_prim_track1_kine_energy_range_vtx50"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
+    if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-50;
+    if (tagger.ssm_prim_track1_kine_energy_range<50) return 10;
+    return tagger.ssm_prim_track1_kine_energy_range;
+  }else if (var_name == "ssm_E" || var_name == "ssm_KE"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    double E = get_ssmE(tagger);
+    if(var_name == "ssm_E") return E;
+    return E-105.7;
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
   }else if (var_name == "kine_reco_Eproton"){
@@ -1718,6 +1780,10 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     float sinth_absorber = TMath::Sin(theta_absorber);
     double pl_absorber = pmuon*costh_absorber;
     double pt_absorber = pmuon*sinth_absorber;
+    double q_absorber = sqrt(235.5*235.2+pmuon*pmuon-2*235.5*pmuon*costh_absorber);
+    double Q2_absorber = sqrt(2*235.5*(Emuon-pmuon*costh_absorber)-105.7*105.7 );
+
+    double Kp = get_true_Kp(pfeval);
 
     if (cut_file == 1){
       if (cut_name == "numuCC.inside.Enu.le.300"){
@@ -2514,7 +2580,177 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       else{ std::cout << "get_xs_signal_no: no cut found!" << std::endl; }
     }
 
+    else if (cut_file==769){
+      int bin_width=10;
+      int min = 30;
+      int max = 120;
+      int nbins = int(max/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.nuwro.Emu.le.";
+            if(!is_true_kdar(eval,pfeval)  || eval.event%10<5 ){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<" eval.event%10<5="<<eval.event%10<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && KE_muon>max)   { return number; }
+        cut_string = base_cut_string+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+        if(cut_name == cut_string && KE_muon<min)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
 
+    else if (cut_file==770){
+      int bin_width=10;
+      int min = 30;
+      int max = 120;
+      int nbins = int(max/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Emu.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && KE_muon>max)   { return number; }
+        cut_string = base_cut_string+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+        if(cut_name == cut_string && KE_muon<min)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==771){
+      int bin_width=20;
+      int min = 0;
+      int max = 120;
+      int nbins = int(max/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Emu.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && KE_muon>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+
+    else if (cut_file==772){
+      int bin_width=10;
+      int min = 0;
+      int max = 130;
+      int nbins = int(max/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.nuwro.Emu.le.";
+      if(!is_true_kdar(eval,pfeval)  || eval.event%10<5 ){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<" eval.event%10<5="<<eval.event%10<<std::endl;}
+      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && KE_muon>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+
+    else if (cut_file==773){
+      int bin_width=10;
+      int min = 0;
+      int max = 130;
+      int nbins = int(max/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Emu.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && KE_muon>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==774){
+      bool found_cut = false;
+      std::string cut_string = "kdar.gibuu.tot";
+      if(!is_true_kdar(eval,pfeval) || eval.event%10<5){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        if(cut_name == cut_string){
+          found_cut = true;
+          return number;
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+    else if (cut_file==775){
+      bool found_cut = false;
+      std::string cut_string = "kdar.nuwro.tot";
+      if(!is_true_kdar(eval,pfeval) || eval.event%10<5){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        if(cut_name == cut_string){
+          found_cut = true;
+          return number;
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+    else if (cut_file==776){
+      bool found_cut = false;
+      std::string cut_string = "kdar.tot";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{         
+        if(cut_name == cut_string){
+          found_cut = true;
+          return number; 
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
     else if (cut_file==777){
       int bin_width=5;
       int min = 0;
@@ -2562,6 +2798,9 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
         // Double check the overflow
         std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
         if(cut_name == cut_string && pl_absorber>max)   { return number; }
+        // Double check the underflow
+        cut_string = base_cut_string+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+        if(cut_name == cut_string && pl_absorber<min)   { return number; }
       }
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
@@ -2590,6 +2829,166 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       }
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
+
+    else if (cut_file==780){
+      int bin_width=12;
+      int min = 0;
+      int max = 480;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.q.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(q_absorber<=bin*bin_width+bin_width+min  && q_absorber>bin*bin_width+min)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && q_absorber>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==781){
+      int bin_width=12;
+      int min = 0;
+      int max = 420;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Q2.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(Q2_absorber<=bin*bin_width+bin_width+min  && Q2_absorber>bin*bin_width+min)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && Q2_absorber>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==782){
+      int bin_width=5;
+      int min = 0;
+      int max = 130;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Kp.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(Kp<bin*bin_width+bin_width+min && Kp>=bin*bin_width+min)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && Kp>max)   { return number; }
+        // Double check the underflow
+        cut_string = base_cut_string+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+        if(cut_name == cut_string && Kp<min)   { return number; }        
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+    else if (cut_file==783){
+      int slice_width=12;
+      int slice_min = 0;
+      int slice_max = 120;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 128;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Kp.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+	// Check all slices
+	for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = base_cut_string+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".Kmu.le.";
+          // Check all the bins
+          for(int bin=0; bin<nbins; bin++){
+            std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+            //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+            if(cut_name == cut_string){
+              found_cut = true;
+              if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min)   { return number; }
+	      //check overflow and underflow for the slice while looping bins
+              if(slice_bin==slice_nbins-1 && Kp>slice_max && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){ return number; }
+              if(slice_bin==0 && Kp<slice_min && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){ return number; }
+	    }
+          }
+          // Double check the overflow
+          std::string cut_string = cut_string_slice+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+          if(cut_name == cut_string && KE_muon>max)   { return number; }
+          // Double check the underflow
+          cut_string = cut_string_slice+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+          if(cut_name == cut_string && KE_muon<min)   { return number; }
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==784){
+      int i_slice_width=125;
+      int i_slice_min = -1000;
+      int i_slice_max = 1000;
+      int slice_nbins = int( (i_slice_max-i_slice_min)/i_slice_width);
+      double slice_width = double(i_slice_width)/1000;
+      double slice_min = double(i_slice_min)/1000;
+      double slice_max = double(i_slice_max)/1000;
+      int bin_width=8;
+      int min = 0;
+      int max = 128;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.CosMu.le.";
+      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      else{
+        // Check all slices
+        for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = base_cut_string+std::to_string(abs(slice_bin*i_slice_width+i_slice_width+i_slice_min))+".gt."+std::to_string(abs(slice_bin*i_slice_width+i_slice_min))+".Kmu.le.";
+          // Check all the bins
+          for(int bin=0; bin<nbins; bin++){
+            std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+            //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+            if(cut_name == cut_string){
+              found_cut = true;
+              if(costh_absorber<=slice_bin*slice_width+slice_width+slice_min && costh_absorber>=slice_bin*slice_width+slice_min && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min)   { return number; }
+              //check overflow and underflow for the slice while looping bins
+              if(slice_bin==slice_nbins-1 && costh_absorber>slice_max && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){ return number; }
+              if(slice_bin==0 && costh_absorber<slice_min && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){ return number; }
+            }
+          }
+          // Double check the overflow
+          std::string cut_string = cut_string_slice+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+          if(cut_name == cut_string && KE_muon>max && costh_absorber<slice_bin*slice_width+slice_width+slice_min && costh_absorber>=slice_bin*slice_width+slice_min)   { return number; }
+          // Double check the underflow
+          cut_string = cut_string_slice+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+          if(cut_name == cut_string && KE_muon<min && costh_absorber<slice_bin*slice_width+slice_width+slice_min && costh_absorber>=slice_bin*slice_width+slice_min)   { return number; }
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+
 
   }
 
@@ -2924,7 +3323,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
      || ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext"
      || ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext"
      || ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext"){
-    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC && !(flag_kdar_bdtsel && flag_kdar_presel);
+    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
     if(ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext" && reco_Enu>300) flag_pass = false;
     if(ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext" && (reco_Enu>500 || reco_Enu<300)) flag_pass = false;
     if(ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext" && (reco_Enu>700 || reco_Enu<500)) flag_pass = false;
@@ -9648,5 +10047,97 @@ bool LEEana::is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut, double hiE
   return flag;
 }
 
+
+double LEEana::get_oldflux_weight(EvalInfo& eval, PFevalInfo& pfeval){
+std::vector<std::vector<double>> ratio_numu = {
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.071, 1.044, 1.106, 1.126, 1.078, 1.108, 1.13, 1.098, 1.089, 1.026, 1.006, 0.99, 1.003, 1.04, 1.046, 1.009, 1.005, 0.976, 1.021, 1.014, 1.023, 1.036, 1.043, 1.046, 1.03, 1.04, 1.018, 1.013, 1.003, 1.15, 1.214, 1.22, 1.251, 1.241, 1.219, 1.222, 1.457, 2.138, 1.683, 1.508, 1.183, 1.47, 1.054, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.802, 0.799, 0.808, 0.808, 0.801, 0.8, 0.807, 0.819, 0.952, 0.998, 0.997, 0.997, 0.997, 0.998, 0.998, 0.995, 0.996, 0.996, 0.995, 0.996, 0.996, 0.995, 1.016, 1.027, 1.026, 1.026, 1.026, 1.027, 1.026, 1.115, 1.18, 1.179, 1.179, 1.178, 1.181, 1.177, 1.43, 1.646, 1.425, 1.546, 1.384, 1.419, 1.133, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.604, 0.599, 0.668, 0.677, 0.705, 0.69, 0.702, 0.752, 0.879, 0.863, 0.879, 0.899, 0.879, 0.893, 0.89, 0.922, 0.93, 0.937, 0.916, 0.917, 0.935, 0.932, 0.958, 0.959, 0.958, 0.957, 0.958, 0.96, 0.96, 1.039, 1.083, 1.083, 1.083, 1.083, 1.083, 1.083, 1.247, 1.471, 1.416, 1.819, 1.806, 1.531, 1.055, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.754, 0.749, 0.749, 0.771, 0.752, 0.733, 0.799, 0.717, 0.889, 0.913, 0.916, 0.913, 0.912, 0.912, 0.915, 0.921, 0.923, 0.925, 0.924, 0.922, 0.925, 0.923, 0.949, 0.959, 0.959, 0.959, 0.959, 0.959, 0.959, 1.061, 1.102, 1.103, 1.103, 1.103, 1.105, 1.103, 1.196, 1.412, 1.383, 1.915, 1.842, 1.747, 1.094, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.983, 0.954, 0.946, 1.006, 0.973, 0.963, 0.988, 0.979, 0.964, 1.023, 1.009, 0.917, 0.944, 0.99, 0.949, 0.935, 0.928, 0.91, 0.902, 0.918, 0.921, 0.884, 0.92, 0.923, 0.937, 0.92, 0.924, 0.937, 0.925, 0.97, 1.0, 1.004, 1.001, 0.999, 1.002, 1.0, 1.102, 1.375, 1.386, 1.91, 1.798, 1.855, 1.086, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.593, 0.643, 0.633, 0.647, 0.637, 0.629, 0.623, 0.659, 0.681, 0.685, 0.699, 0.685, 0.675, 0.693, 0.686, 0.751, 0.763, 0.76, 0.755, 0.756, 0.758, 0.757, 0.875, 0.914, 0.921, 0.909, 0.916, 0.916, 0.916, 0.971, 1.004, 1.007, 1.004, 1.002, 1.004, 1.003, 1.173, 1.591, 1.244, 1.893, 1.675, 1.991, 1.116, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.804, 0.735, 0.786, 0.728, 0.81, 0.761, 0.775, 0.748, 0.804, 0.835, 0.777, 0.812, 0.811, 0.814, 0.82, 0.753, 0.732, 0.731, 0.736, 0.724, 0.73, 0.73, 0.797, 0.819, 0.819, 0.819, 0.819, 0.819, 0.819, 0.977, 1.063, 1.064, 1.062, 1.063, 1.062, 1.063, 1.244, 1.549, 1.222, 1.762, 1.706, 1.973, 1.118, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.662, 0.678, 0.679, 0.68, 0.68, 0.675, 0.673, 0.675, 0.681, 0.68, 0.681, 0.68, 0.682, 0.68, 0.681, 0.767, 0.789, 0.781, 0.791, 0.787, 0.78, 0.769, 0.934, 0.957, 0.954, 0.962, 0.955, 0.96, 0.959, 0.95, 0.939, 0.931, 0.933, 0.941, 0.932, 0.932, 1.159, 1.367, 1.638, 1.727, 1.709, 2.052, 1.142, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.735, 0.735, 0.692, 0.423, 0.635, 0.462, 0.44, 0.514, 0.979, 0.958, 0.995, 1.009, 0.96, 1.013, 0.989, 0.794, 0.751, 0.751, 0.75, 0.75, 0.751, 0.75, 0.873, 0.926, 0.927, 0.926, 0.929, 0.93, 0.927, 0.926, 0.938, 0.934, 0.933, 0.931, 0.931, 0.935, 1.025, 1.469, 1.158, 1.832, 1.513, 2.162, 1.093, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.77, 0.799, 0.814, 0.819, 0.823, 0.881, 0.76, 0.797, 0.792, 0.786, 0.774, 0.783, 0.78, 0.741, 0.75, 0.749, 0.752, 0.753, 0.746, 0.751, 0.723, 0.715, 0.715, 0.715, 0.715, 0.715, 0.715, 0.963, 1.064, 1.064, 1.064, 1.064, 1.062, 1.064, 1.329, 1.656, 1.295, 1.464, 1.352, 2.417, 1.208, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.456, 0.467, 0.522, 0.504, 0.47, 0.47, 0.484, 0.477, 0.498, 0.49, 0.486, 0.49, 0.489, 0.695, 0.757, 0.749, 0.755, 0.751, 0.753, 0.766, 0.813, 0.835, 0.84, 0.845, 0.843, 0.832, 0.862, 0.986, 1.059, 1.059, 1.062, 1.058, 1.061, 1.062, 1.131, 1.466, 1.356, 1.016, 1.418, 2.324, 1.162, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.439, 0.839, 1.439, 0.482, 0.556, 0.516, 0.671, 0.542, 0.347, 0.354, 0.362, 0.384, 0.402, 0.686, 0.743, 0.743, 0.742, 0.741, 0.742, 0.742, 0.785, 0.808, 0.808, 0.801, 0.807, 0.833, 0.79, 0.95, 1.064, 1.076, 1.059, 1.064, 1.068, 1.066, 0.937, 1.215, 1.219, 1.541, 1.447, 2.447, 1.223, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.66, 1.0, 1.0, 1.607, 1.041, 0.869, 0.612, 0.667, 0.621, 0.836, 0.7, 0.704, 0.719, 0.881, 0.909, 0.919, 0.897, 0.916, 0.909, 0.923, 0.78, 0.726, 0.732, 0.732, 0.741, 0.729, 0.727, 0.906, 1.008, 1.008, 1.008, 1.008, 1.008, 1.008, 1.236, 1.843, 1.104, 1.164, 1.382, 2.662, 1.173, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.81, 1.0, 0.763, 0.777, 0.797, 0.773, 0.455, 0.368, 0.351, 0.376, 0.345, 0.325, 0.348, 0.806, 0.904, 0.912, 0.91, 0.904, 0.905, 0.922, 0.879, 0.863, 0.864, 0.856, 0.871, 0.868, 0.856, 0.906, 0.911, 0.922, 0.926, 0.921, 0.93, 0.927, 1.239, 1.187, 1.104, 1.215, 1.246, 2.486, 1.216, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.871, 1.0, 0.939, 1.7976931348623157e+308, 0.884, 0.728, 0.704, 0.625, 0.657, 0.639, 0.652, 0.757, 0.839, 0.849, 0.846, 0.85, 0.848, 0.843, 0.805, 0.794, 0.802, 0.801, 0.799, 0.798, 0.802, 0.8, 0.798, 0.818, 0.821, 0.807, 0.807, 0.799, 0.979, 1.244, 0.902, 1.086, 1.054, 2.212, 1.216, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.213, 0.425, 0.755, 0.893, 0.726, 0.772, 0.753, 0.748, 0.765, 0.766, 0.734, 0.733, 0.718, 0.738, 0.739, 0.739, 0.737, 0.768, 0.758, 0.776, 0.767, 0.764, 0.759, 0.77, 0.964, 1.145, 1.145, 1.145, 1.146, 1.145, 1.145, 1.215, 1.023, 1.134, 1.319, 1.185, 2.616, 1.223, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.476, 1.7976931348623157e+308, 1.0, 0.883, 0.853, 0.909, 0.858, 0.916, 0.87, 0.856, 0.756, 0.683, 0.697, 0.678, 0.681, 0.709, 0.711, 0.797, 0.848, 0.857, 0.839, 0.853, 0.832, 0.839, 0.863, 0.868, 0.869, 0.869, 0.868, 0.868, 0.868, 1.306, 1.154, 0.994, 1.27, 1.344, 2.178, 1.176, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 0.865, 0.805, 0.528, 0.658, 0.638, 0.729, 0.581, 0.847, 0.821, 0.841, 0.823, 0.816, 0.835, 0.832, 0.794, 0.783, 0.782, 0.783, 0.782, 0.782, 0.782, 0.797, 0.793, 0.8, 0.808, 0.805, 0.806, 0.813, 1.078, 1.297, 1.109, 1.451, 1.499, 2.389, 1.152, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 0.888, 1.194, 1.289, 1.125, 1.09, 0.766, 0.718, 0.717, 0.719, 0.714, 0.718, 0.721, 0.717, 0.841, 0.896, 0.904, 0.892, 0.899, 0.902, 0.9, 0.884, 0.873, 0.872, 0.873, 0.874, 0.875, 0.874, 1.018, 1.197, 1.159, 1.509, 1.268, 2.169, 1.112, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.337, 1.868, 1.308, 1.608, 1.724, 1.032, 1.197, 0.717, 0.717, 0.725, 0.734, 0.712, 0.72, 0.718, 0.713, 0.709, 0.714, 0.711, 0.708, 0.712, 0.838, 0.881, 0.882, 0.881, 0.88, 0.882, 0.88, 1.366, 1.307, 1.158, 1.507, 1.341, 2.035, 1.207, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.018, 3.37, 3.194, 2.43, 3.151, 2.604, 1.248, 1.082, 1.033, 1.068, 1.081, 1.094, 1.058, 0.827, 0.796, 0.811, 0.814, 0.798, 0.806, 0.801, 0.879, 0.909, 0.913, 0.917, 0.912, 0.904, 0.912, 0.888, 1.214, 1.31, 1.8, 1.503, 2.261, 1.056, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 0.903, 0.903, 0.903, 1.0, 1.411, 2.456, 0.814, 1.009, 1.019, 0.854, 0.825, 0.827, 0.952, 0.787, 0.739, 0.732, 0.732, 0.737, 0.737, 0.726, 0.834, 0.887, 0.887, 0.887, 0.887, 0.887, 0.887, 1.199, 0.9, 1.034, 1.674, 1.507, 1.992, 1.056, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.707, 1.0, 0.746, 0.844, 0.668, 0.847, 0.692, 0.554, 0.558, 0.534, 0.585, 0.523, 0.515, 0.523, 0.824, 0.858, 0.82, 0.847, 0.866, 0.849, 0.854, 0.8, 0.791, 0.781, 0.788, 0.777, 0.784, 0.783, 1.031, 1.462, 1.052, 1.713, 1.687, 2.153, 1.214, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.222, 1.111, 1.111, 1.7976931348623157e+308, 1.0, 1.739, 1.7976931348623157e+308, 0.714, 0.682, 0.687, 0.683, 0.711, 0.689, 0.684, 0.786, 0.813, 0.799, 0.776, 0.799, 0.805, 0.81, 0.931, 0.958, 0.965, 0.978, 0.967, 0.975, 0.961, 1.089, 1.747, 1.272, 1.562, 1.544, 2.231, 1.126, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.428, 0.768, 1.0, 0.768, 0.768, 0.333, 0.576, 0.74, 0.579, 0.562, 0.636, 0.609, 0.633, 0.919, 0.977, 0.995, 0.987, 0.966, 0.949, 1.012, 0.925, 0.925, 0.925, 0.906, 0.917, 0.913, 0.934, 1.241, 0.87, 1.342, 1.648, 1.295, 2.258, 1.051, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.363, 0.301, 1.0, 0.301, 0.51, 0.961, 0.812, 0.81, 1.373, 0.833, 0.9, 1.021, 0.79, 0.775, 0.813, 0.806, 0.815, 0.808, 0.806, 0.807, 0.902, 0.93, 0.929, 0.924, 0.927, 0.931, 0.929, 1.103, 1.132, 1.388, 1.587, 1.977, 1.976, 1.045, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.862, 1.448, 1.446, 1.36, 1.511, 1.419, 1.426, 0.856, 0.682, 0.727, 0.787, 0.744, 0.798, 0.811, 0.885, 0.928, 0.935, 0.923, 0.914, 0.924, 0.922, 0.915, 1.253, 0.913, 2.165, 1.414, 2.05, 1.154, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 9.72, 1.29, 1.293, 1.328, 1.021, 1.13, 1.08, 1.193, 0.672, 0.648, 0.648, 0.646, 0.648, 0.648, 0.647, 0.787, 0.844, 0.863, 0.852, 0.852, 0.838, 0.85, 1.33, 1.592, 1.294, 2.678, 1.751, 2.151, 1.023, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 0.37, 0.37, 0.37, 0.644, 0.462, 0.476, 0.51, 0.651, 0.974, 0.935, 0.949, 0.929, 1.013, 0.918, 0.95, 0.942, 0.938, 0.936, 0.945, 0.944, 0.934, 1.153, 1.018, 1.241, 1.911, 1.937, 1.711, 0.96, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.061, 1.0, 1.0, 1.187, 0.194, 0.328, 0.194, 0.277, 0.275, 0.218, 0.214, 0.448, 0.799, 0.83, 0.811, 0.833, 0.793, 0.81, 0.935, 1.084, 0.991, 1.082, 1.064, 1.011, 0.989, 1.297, 0.909, 1.269, 2.282, 1.517, 2.148, 1.151, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 2.349, 1.696, 2.984, 2.06, 2.241, 1.614, 2.178, 0.546, 0.554, 0.534, 0.561, 0.559, 0.57, 0.527, 0.778, 0.83, 0.896, 0.85, 0.805, 0.851, 0.851, 0.834, 0.986, 1.014, 1.583, 1.78, 2.488, 0.994, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 0.506, 0.413, 0.366, 0.299, 0.389, 0.449, 0.299, 0.77, 0.645, 0.683, 0.704, 0.685, 0.676, 0.697, 0.818, 0.923, 0.911, 0.91, 0.886, 0.903, 0.898, 0.613, 1.341, 1.068, 2.149, 2.021, 2.029, 1.194, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.121, 0.696, 2.241, 1.0, 0.726, 0.886, 0.887, 1.005, 1.004, 1.034, 1.094, 1.073, 1.12, 1.14, 0.865, 0.841, 0.837, 0.84, 0.842, 0.838, 0.839, 0.871, 0.959, 1.028, 1.366, 2.087, 2.136, 1.09, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.547, 3.524, 5.103, 3.619, 1.602, 1.206, 1.64, 3.277, 0.918, 0.827, 0.853, 0.958, 1.029, 0.839, 0.97, 1.005, 1.003, 1.005, 1.004, 1.006, 1.004, 1.091, 1.4, 1.162, 1.741, 2.15, 2.425, 1.185, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.037, 0.475, 0.552, 0.575, 0.512, 0.581, 0.586, 0.962, 1.144, 1.177, 1.147, 1.1, 1.143, 1.154, 1.294, 2.628, 1.115, 2.009, 1.475, 2.021, 1.089, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 14.844, 1.0, 1.0, 5.6, 4.338, 11.044, 1.004, 0.637, 0.562, 0.625, 0.595, 0.549, 0.696, 0.897, 0.94, 1.088, 0.939, 1.167, 0.998, 1.01, 0.786, 1.818, 1.514, 1.979, 1.996, 2.349, 1.136, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.701, 1.0, 0.804, 0.779, 0.799, 0.775, 0.791, 0.857, 0.876, 0.868, 0.865, 0.852, 0.892, 0.839, 0.875, 2.486, 0.829, 2.182, 2.018, 2.663, 1.158, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.572, 1.0, 1.0, 1.0, 0.409, 1.7976931348623157e+308, 1.0, 1.567, 1.082, 1.082, 1.2, 1.1, 1.065, 1.178, 1.116, 1.084, 1.099, 1.142, 1.104, 1.133, 3.066, 0.655, 1.058, 1.471, 2.482, 3.013, 1.108, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 0.773, 0.815, 0.799, 0.823, 0.791, 0.799, 1.007, 0.857, 1.066, 0.877, 0.966, 0.972, 0.989, 1.745, 1.408, 1.468, 1.062, 1.123, 3.532, 1.098, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.142, 1.446, 1.203, 1.287, 1.319, 1.172, 0.66, 0.702, 0.677, 0.729, 0.66, 0.684, 0.693, 1.57, 1.349, 2.201, 2.752, 1.812, 3.094, 1.244, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 0.596, 1.0, 4.621, 4.621, 1.422, 1.798, 4.621, 1.966, 2.192, 1.146, 1.058, 1.075, 1.024, 1.103, 1.132, 1.07, 1.933, 1.296, 1.8, 1.464, 2.666, 2.667, 1.296, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 0.349, 0.361, 0.358, 0.363, 0.361, 0.369, 0.796, 0.796, 0.594, 0.653, 0.704, 0.741, 0.686, 1.167, 1.193, 1.196, 1.352, 2.746, 3.223, 1.368, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.456, 0.747, 1.025, 0.747, 1.494, 0.94, 0.642, 0.645, 0.59, 0.657, 0.61, 0.655, 0.42, 1.003, 0.969, 1.759, 1.75, 2.99, 1.087, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 0.448, 0.618, 0.385, 0.981, 0.887, 0.845, 0.703, 0.918, 0.854, 0.723, 1.003, 3.827, 3.258, 1.468, 1.048, 3.234, 1.216, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 7.323, 7.258, 10.773, 4.513, 1.521, 0.67, 0.718, 0.78, 0.614, 0.614, 0.62, 0.577, 1.03, 1.06, 4.491, 2.007, 3.277, 1.316, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 0.152, 1.0, 1.0, 0.282, 0.192, 0.301, 0.295, 0.492, 1.289, 1.269, 1.202, 1.148, 1.22, 1.321, 0.803, 4.194, 1.868, 0.794, 2.874, 3.292, 1.333, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.6, 3.112, 1.914, 4.076, 1.827, 1.957, 1.581, 0.7, 1.162, 1.469, 1.689, 3.404, 3.572, 3.876, 1.954, 3.389, 1.214, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.514, 0.875, 1.142, 1.286, 1.725, 1.776, 1.936, 4.0, 2.098, 1.576, 2.396, 2.618, 1.7976931348623157e+308, 4.838, 6.468, 2.4, 3.373, 1.342, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.228, 0.988, 1.009, 1.223, 1.062, 1.014, 1.058, 2.614, 3.96, 3.339, 3.047, 3.37, 3.239, 1.41, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.018, 1.052, 1.026, 1.022, 1.008, 1.016, 1.744, 12.647, 1.017, 1.08, 2.375, 4.456, 1.29, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 0.715, 0.646, 0.588, 0.651, 0.596, 0.66, 0.711, 1.041, 1.7976931348623157e+308, 0.872, 0.942, 6.092, 3.7, 1.511, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 0.459, 0.276, 0.264, 0.279, 0.264, 0.297, 0.332, 0.524, 1.7976931348623157e+308, 1.896, 1.567, 0.866, 3.304, 1.424, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 2.297, 2.672, 3.005, 4.625, 5.202, 4.693, 5.701, 1.7976931348623157e+308, 2.761, 3.955, 11.248, 1.209, 3.686, 1.703, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.496, 1.0, 1.994, 2.992, 1.0, 1.833, 1.922, 1.892, 2.011, 1.904, 1.867, 4.927, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.38, 5.238, 1.43, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.1, 2.922, 3.827, 6.254, 1.276, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.008, 0.958, 1.008, 0.869, 0.903, 0.88, 1.197, 1.7976931348623157e+308, 1.7976931348623157e+308, 6.451, 7.43, 2.627, 1.587, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 2.202, 2.718, 1.7976931348623157e+308, 3.2, 14.265, 1.7976931348623157e+308, 1.7976931348623157e+308, 32.438, 1.943, 4.475, 1.717, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 12.824, 15.934, 4.275, 9.57, 11.376, 7.798, 38.251, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 19.564, 4.918, 1.691, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.898, 1.0, 1.0, 1.347, 1.0, 1.0, 1.356, 1.7976931348623157e+308, 1.247, 1.199, 1.7976931348623157e+308, 1.873, 1.417, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 12.967, 40.94, 4.118, 5.821, 1.478, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 7.165, 5.891, 1.162, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.437, 1.033, 0.958, 0.958, 0.992, 1.002, 0.998, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.64, 10.308, 39.996, 3.216, 1.487, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.216, 1.7976931348623157e+308, 0.635, 1.7976931348623157e+308, 1.7976931348623157e+308, 2.792, 1.801, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 5.472, 4.653, 2.022, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 3.291, 7.222, 1.678, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 2.244, 1.7976931348623157e+308, 1.7976931348623157e+308, 8.952, 4.285, 2.039, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 8.99, 4.522, 2.292, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 7.283, 4.817, 1.552, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 4.901, 15.028, 4.53, 1.539, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.0, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 7.3, 29.598, 1.7976931348623157e+308, 4.794, 1.546, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.0, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.0, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 1.7976931348623157e+308, 2.503, 1.665, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}};
+  int nbins_Enu = ratio_numu.size();
+  double bin_width_Enu = 7000/double(nbins_Enu);
+  int nbins_dist = ratio_numu.at(0).size();
+  double bin_width_dist = 850/double(nbins_dist);
+//std::cout<<"nbins_Enu="<<nbins_Enu<<" bin_width_Enu="<<bin_width_Enu<<" nbins_dist="<<nbins_dist<<" bin_width_dist="<<bin_width_dist<<std::endl; 
+  int this_Enu_bin = std::floor(eval.truth_nuEnergy/bin_width_Enu);
+  if (this_Enu_bin >= nbins_Enu) this_Enu_bin = nbins_Enu-1;
+
+  double dist = pfeval.mcflux_dk2gen + pfeval.mcflux_gen2vtx;
+  int this_dist_bin = std::floor(dist/bin_width_dist);
+  if (this_dist_bin >= nbins_dist) this_dist_bin = nbins_dist-1;
+//std::cout<<"eval.truth_nuEnergy="<<eval.truth_nuEnergy<<" this_Enu_bin="<<this_Enu_bin<<" dist="<<dist<<" this_dist_bin="<<this_dist_bin<<std::endl;
+  std::cout<<ratio_numu.at(this_Enu_bin).at(this_dist_bin)<<" "<<1.0/ratio_numu.at(this_Enu_bin).at(this_dist_bin)<<std::endl;
+  double new_weight = ratio_numu.at(this_Enu_bin).at(this_dist_bin);
+  if (new_weight>10) new_weight=1;
+  return new_weight;
+ 
+
+}
 
 #endif
