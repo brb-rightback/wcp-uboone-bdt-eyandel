@@ -10124,15 +10124,15 @@ std::vector<std::vector<double>> ratio_numu = {
   double bin_width_Enu = 7000/double(nbins_Enu);
   int nbins_dist = ratio_numu.at(0).size();
   double bin_width_dist = 850/double(nbins_dist);
-//std::cout<<"nbins_Enu="<<nbins_Enu<<" bin_width_Enu="<<bin_width_Enu<<" nbins_dist="<<nbins_dist<<" bin_width_dist="<<bin_width_dist<<std::endl; 
+  //std::cout<<"nbins_Enu="<<nbins_Enu<<" bin_width_Enu="<<bin_width_Enu<<" nbins_dist="<<nbins_dist<<" bin_width_dist="<<bin_width_dist<<std::endl; 
   int this_Enu_bin = std::floor(eval.truth_nuEnergy/bin_width_Enu);
   if (this_Enu_bin >= nbins_Enu) this_Enu_bin = nbins_Enu-1;
 
   double dist = pfeval.mcflux_dk2gen + pfeval.mcflux_gen2vtx;
   int this_dist_bin = std::floor(dist/bin_width_dist);
   if (this_dist_bin >= nbins_dist) this_dist_bin = nbins_dist-1;
-//std::cout<<"eval.truth_nuEnergy="<<eval.truth_nuEnergy<<" this_Enu_bin="<<this_Enu_bin<<" dist="<<dist<<" this_dist_bin="<<this_dist_bin<<std::endl;
-  std::cout<<ratio_numu.at(this_Enu_bin).at(this_dist_bin)<<" "<<1.0/ratio_numu.at(this_Enu_bin).at(this_dist_bin)<<std::endl;
+  //std::cout<<"eval.truth_nuEnergy="<<eval.truth_nuEnergy<<" this_Enu_bin="<<this_Enu_bin<<" dist="<<dist<<" this_dist_bin="<<this_dist_bin<<std::endl;
+  //std::cout<<ratio_numu.at(this_Enu_bin).at(this_dist_bin)<<" "<<1.0/ratio_numu.at(this_Enu_bin).at(this_dist_bin)<<std::endl;
   double new_weight = ratio_numu.at(this_Enu_bin).at(this_dist_bin);
   if (new_weight>10) new_weight=1;
   return new_weight;
