@@ -261,6 +261,9 @@ void LEEana::CovMatrix::fill_xf_histograms(int num, int tot_num, int acc_no, int
 
 	if (std::isnan(rel_weight_diff) || std::isinf(rel_weight_diff)) continue;
 	// seems to have extremely small cv weight
+        //if (fabs(rel_weight_diff)>10) continue; //std::cout<<"big change "<<rel_weight_diff<<std::endl;
+        //std::cout<<"change "<<rel_weight_diff<<std::endl;
+        //if (fabs(rel_weight_diff)>10) {std::cout<<"change="<<rel_weight_diff<<" cv="<<weight<<" alt="<<(1+rel_weight_diff) * weight<<" val="<<val<<std::endl; continue;}
 	if (fabs(rel_weight_diff)>100) continue;
 
 
@@ -695,6 +698,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+    T_BDTvars->SetBranchStatus("ssm_vtx_activity",1);
   }
 
 

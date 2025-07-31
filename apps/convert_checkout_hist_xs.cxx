@@ -214,6 +214,7 @@ int main( int argc, char** argv )
     T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+    T_BDTvars->SetBranchStatus("ssm_vtx_activity",1);
   }
 
   T_eval->SetBranchStatus("run",1);

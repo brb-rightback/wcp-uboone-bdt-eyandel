@@ -230,7 +230,7 @@ int main( int argc, char** argv )
   }
   if(tagger.saved_ssm_bdt_vars){
     T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
-    T_BDTvars->SetBranchStatus("ssm_angle_to_abosrber",1);
+    T_BDTvars->SetBranchStatus("ssm_angle_to_absorber",1);
     T_BDTvars->SetBranchStatus("ssm_kine_reco_Enu",1);
     T_BDTvars->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars->SetBranchStatus("ssm_cosmict_flag_9",1);
@@ -238,6 +238,7 @@ int main( int argc, char** argv )
     T_BDTvars->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
+    T_BDTvars->SetBranchStatus("ssm_vtx_activity",1);
   }
   //
 
