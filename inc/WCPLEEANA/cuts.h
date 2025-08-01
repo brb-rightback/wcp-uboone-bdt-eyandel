@@ -28,7 +28,10 @@ namespace LEEana{
   double get_angle_to_absorber(double momentum_0, double momentum_1, double momentum_2);
   double get_true_nu_angle_to_absorber(PFevalInfo& pfeval);
   double get_true_nu_angle(PFevalInfo& pfeval, int option, bool to_numi);
+
+  bool is_true_kdar_all(EvalInfo& eval, PFevalInfo& pfeval);
   bool is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval);
+  bool is_true_kdar_outFV(EvalInfo& eval, PFevalInfo& pfeval);
 
   double get_ssmE(TaggerInfo& tagger_info);
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
@@ -2587,7 +2590,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int(max/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.nuwro.Emu.le.";
-            if(!is_true_kdar(eval,pfeval)  || eval.event%10<5 ){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<" eval.event%10<5="<<eval.event%10<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)  || eval.event%10<5 ){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2614,8 +2617,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int(max/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.Emu.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
-      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2642,8 +2644,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int(max/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.Emu.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
-      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2669,8 +2670,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int(max/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.nuwro.Emu.le.";
-      if(!is_true_kdar(eval,pfeval)  || eval.event%10<5 ){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<" eval.event%10<5="<<eval.event%10<<std::endl;}
-      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)  || eval.event%10<5 ){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2696,8 +2696,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int(max/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.Emu.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
-      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2718,7 +2717,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     else if (cut_file==774){
       bool found_cut = false;
       std::string cut_string = "kdar.gibuu.tot";
-      if(!is_true_kdar(eval,pfeval) || eval.event%10<5){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval) || eval.event%10<5){found_cut=true;}
       else{
         if(cut_name == cut_string){
           found_cut = true;
@@ -2730,7 +2729,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     else if (cut_file==775){
       bool found_cut = false;
       std::string cut_string = "kdar.nuwro.tot";
-      if(!is_true_kdar(eval,pfeval) || eval.event%10<5){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval) || eval.event%10<5){found_cut=true;}
       else{
         if(cut_name == cut_string){
           found_cut = true;
@@ -2742,7 +2741,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     else if (cut_file==776){
       bool found_cut = false;
       std::string cut_string = "kdar.tot";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{         
         if(cut_name == cut_string){
           found_cut = true;
@@ -2758,8 +2757,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int(max/bin_width);  
       bool found_cut = false;   
       std::string base_cut_string = "kdar.Emu.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
-      //if(!eval.truth_vtxInside){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
 	// Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2784,7 +2782,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.pl.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2812,7 +2810,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.pt.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2837,7 +2835,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.q.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2862,7 +2860,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.Q2.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2887,7 +2885,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.Kp.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all the bins
         for(int bin=0; bin<nbins; bin++){
@@ -2918,7 +2916,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.Kp.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
 	// Check all slices
 	for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
@@ -2937,10 +2935,14 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
           }
           // Double check the overflow
           std::string cut_string = cut_string_slice+std::to_string(max)+".gt."+std::to_string(max-bin_width);
-          if(cut_name == cut_string && KE_muon>max)   { return number; }
+          if(cut_name == cut_string && KE_muon>max && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
+          if(cut_name == cut_string && KE_muon>max && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
+          if(cut_name == cut_string && KE_muon>max && slice_bin==0 && Kp<slice_min){ return number; }
           // Double check the underflow
           cut_string = cut_string_slice+std::to_string(min+bin_width)+".gt."+std::to_string(min);
-          if(cut_name == cut_string && KE_muon<min)   { return number; }
+          if(cut_name == cut_string && KE_muon<min && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
+          if(cut_name == cut_string && KE_muon<min && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
+          if(cut_name == cut_string && KE_muon<min && slice_bin==0 && Kp<slice_min){ return number; }
         }
       }
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
@@ -2960,7 +2962,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       int nbins = int( (max-min)/bin_width);
       bool found_cut = false;
       std::string base_cut_string = "kdar.CosMu.le.";
-      if(!is_true_kdar(eval,pfeval)){std::cout << "get_xs_signal_no: non-signal event? truth_vtxInside=" << eval.truth_vtxInside<<" truth_isCC="<<eval.truth_isCC<<" truth_nuPdg="<<eval.truth_nuPdg<<std::endl;}
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
       else{
         // Check all slices
         for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
@@ -3228,6 +3230,8 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
   if(is_true_kdar(eval,pfeval)) map_cuts_flag["kdar"] = true;
   else map_cuts_flag["kdar"] = false;
+  if(is_true_kdar_outFV(eval,pfeval)) map_cuts_flag["kdar_outFV"] = true;
+  else map_cuts_flag["kdar_outFV"] = false;
 
   // figure out additional cuts and flag_data ...
   bool flag_add = true;
@@ -3312,9 +3316,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"){
+  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"){
     bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
     if(ch_name == "kdar_bdtsel_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_bdtsel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_outFV"];
     if(ch_name == "kdar_bdtsel_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
     if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  {flag_pass = flag_pass && map_cuts_flag["kdar"]; if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
@@ -3324,10 +3329,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
      || ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext"
      || ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext"){
     bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if(ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext" && reco_Enu>300) flag_pass = false;
-    if(ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext" && (reco_Enu>500 || reco_Enu<300)) flag_pass = false;
-    if(ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext" && (reco_Enu>700 || reco_Enu<500)) flag_pass = false;
-    if(ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext" && (reco_Enu<700)) flag_pass = false;
+    if( (ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext") && reco_Enu>400) flag_pass = false;
+    if( (ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
+    if( (ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
+    if( (ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
   }else if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
     if (flag_nueCC && flag_FC && flag_truth_inside) return true;
@@ -10001,15 +10006,31 @@ double LEEana::get_true_nu_angle_to_absorber(PFevalInfo& pfeval){
 
 }
 
-bool LEEana::is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval){
+bool LEEana::is_true_kdar_all(EvalInfo& eval, PFevalInfo& pfeval){
     bool flag=false;
     if(eval.truth_nuEnergy>237) return flag;
     if(eval.truth_nuEnergy<234) return flag;
     if(eval.truth_nuPdg!=14)  return flag;
     if(eval.truth_isCC!=1) return flag;
-    if(eval.truth_vtxInside!=1)  return flag;
+    //if(eval.truth_vtxInside!=1)  return flag;
     double truth_nu_angle_to_absorber = get_true_nu_angle_to_absorber(pfeval)*180/3.14159;
     if(truth_nu_angle_to_absorber>8) return flag;
+    flag=true;
+    return flag;
+}
+
+bool LEEana::is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval){
+    bool flag=false;
+    if(eval.truth_vtxInside!=1)  return flag;
+    if(!is_true_kdar_all(eval, pfeval)) return flag;
+    flag=true;
+    return flag;
+}
+
+bool LEEana::is_true_kdar_outFV(EvalInfo& eval, PFevalInfo& pfeval){
+    bool flag=false;
+    if(eval.truth_vtxInside!=0)  return flag;
+    if(!is_true_kdar_all(eval, pfeval)) return flag;
     flag=true;
     return flag;
 }
