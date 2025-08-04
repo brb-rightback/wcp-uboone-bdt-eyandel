@@ -978,6 +978,9 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_cv->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars_cv->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
     T_BDTvars_cv->SetBranchStatus("ssm_vtx_activity",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_track1_x_dir",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_track1_y_dir",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_prim_track1_z_dir",1);
   }
 
   T_eval_cv->SetBranchStatus("*",0);
@@ -1203,6 +1206,9 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_det->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars_det->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
     T_BDTvars_det->SetBranchStatus("ssm_vtx_activity",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_track1_x_dir",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_track1_y_dir",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_track1_z_dir",1);
   }
 
   T_eval_det->SetBranchStatus("*",0);

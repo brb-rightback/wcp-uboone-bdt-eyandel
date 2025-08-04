@@ -137,6 +137,7 @@ namespace LEEana{
 
   bool is_true_0p(PFevalInfo& pfeval);
   double get_true_Kp(PFevalInfo& pfeval,bool MeV=true,bool total=false);
+  double get_true_p_angle_absorber(PFevalInfo& pfeval);
 
   int mcc8_pmuon_costheta_bin(float pmuon, float costh);
   int alt_var_index(std::string var1, float val1, std::string var2, float val2, std::string config="./configurations/alt_var_xbins.txt");
@@ -222,6 +223,26 @@ double LEEana::get_true_Kp(PFevalInfo& pfeval,bool MeV,bool total){
   if (Kp==0.938272) return 0;
   return Kp*units-mass;
 }
+
+double LEEana::get_true_p_angle_absorber(PFevalInfo& pfeval){
+    double Kp=0;
+    double p0=0;
+    double p1=0;
+    double p2=0;
+    for(size_t i=0; i<pfeval.truth_Ntrack; i++){
+      if(pfeval.truth_mother[i] != 0) continue;
+      if(pfeval.truth_pdg[i] != 2212) continue;
+      if(pfeval.truth_startMomentum[i][3] >Kp){
+        Kp=pfeval.truth_startMomentum[i][3];
+	p0 = pfeval.truth_startMomentum[i][0];
+	p1 = pfeval.truth_startMomentum[i][1];
+	p2 = pfeval.truth_startMomentum[i][2];
+      }
+    }
+  if (Kp==0) return -999;
+  return get_angle_to_absorber(p0,p1,p2);
+}
+
 
 double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data){
   double addtl_weight = 1.0;
@@ -608,6 +629,16 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     double E = get_ssmE(tagger);
     if(var_name == "ssm_E") return E;
     return E-105.7;
+  }else if (var_name == "ssm_cosP" || var_name == "ssm_angle_P" || var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
+    if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -30-0.1;
+    if (var_name != "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -999;
+    double theta = get_angle_to_absorber(tagger.ssm_prim_track1_x_dir, tagger.ssm_prim_track1_y_dir, tagger.ssm_prim_track1_z_dir);
+    if (var_name == "ssm_cosP") return TMath::Cos(theta);
+    if (var_name == "ssm_angle_P") return theta;
+    if (var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx") return theta*180/3.14159;
+
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
   }else if (var_name == "kine_reco_Eproton"){
@@ -1787,6 +1818,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     double Q2_absorber = sqrt(2*235.5*(Emuon-pmuon*costh_absorber)-105.7*105.7 );
 
     double Kp = get_true_Kp(pfeval);
+    double p_angle_absorber_deg = get_true_p_angle_absorber(pfeval)*180/3.14159;
 
     if (cut_file == 1){
       if (cut_name == "numuCC.inside.Enu.le.300"){
@@ -2775,6 +2807,31 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
 
+    else if (cut_file==7771){
+      int bin_width=5;
+      int min = 0;
+      int max = 130;
+      int nbins = int(max/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.nuwro.Emu.le.";
+      if(!is_true_kdar(eval,pfeval) || eval.event%10<5 ){found_cut=true;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
+          }
+        }
+        // Double check the overflow
+        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+        if(cut_name == cut_string && KE_muon>max)   { return number; }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
     else if (cut_file==778){
       int bin_width=10;
       int min = -200;
@@ -2989,7 +3046,113 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       }
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
+    else if (cut_file==785){
+      int slice_width=8;
+      int slice_min = 0;
+      int slice_max = 128;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 128;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Kp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+        // Check all slices
+        for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = base_cut_string+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".Kmu.le.";
+          // Check all the bins
+          for(int bin=0; bin<nbins; bin++){
+            std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+            //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+            if(cut_name == cut_string){
+              found_cut = true;
+              if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min)   { return number; }
+              //check overflow and underflow for the slice while looping bins
+              if(slice_bin==slice_nbins-1 && Kp>slice_max && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){ return number; }
+              if(slice_bin==0 && Kp<slice_min && KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){ return number; }
+            }
+          }
+          // Double check the overflow
+          std::string cut_string = cut_string_slice+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+          if(cut_name == cut_string && KE_muon>max && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
+          if(cut_name == cut_string && KE_muon>max && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
+          if(cut_name == cut_string && KE_muon>max && slice_bin==0 && Kp<slice_min){ return number; }
+          // Double check the underflow
+          cut_string = cut_string_slice+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+          if(cut_name == cut_string && KE_muon<min && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
+          if(cut_name == cut_string && KE_muon<min && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
+          if(cut_name == cut_string && KE_muon<min && slice_bin==0 && Kp<slice_min){ return number; }
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
 
+    else if (cut_file==786){
+      int bin_width=5;
+      int min = 0;
+      int max = 180;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.ThetaP.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+        // Check all the bins
+        for(int bin=0; bin<nbins; bin++){
+          std::string cut_string = base_cut_string+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+          //std::cout<<cut_string<<"  "<<cut_name<<" "<<p_angle_absorber_deg<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+          if(cut_name == cut_string){
+            found_cut = true;
+            if(p_angle_absorber_deg<=bin*bin_width+bin_width+min && p_angle_absorber_deg>bin*bin_width+min)   { return number; }
+          }
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
+
+    else if (cut_file==787){
+      int slice_width=8;
+      int slice_min = 0;
+      int slice_max = 128;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=10;
+      int min = 0;
+      int max = 180;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.Kp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+        // Check all slices
+        for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = base_cut_string+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".ThetaP.le.";
+          // Check all the bins
+          for(int bin=0; bin<nbins; bin++){
+            std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+            //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
+            if(cut_name == cut_string){
+              found_cut = true;
+              if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min && p_angle_absorber_deg<bin*bin_width+bin_width+min && p_angle_absorber_deg>=bin*bin_width+min)   { return number; }
+              //check overflow and underflow for the slice while looping bins
+              if(slice_bin==slice_nbins-1 && Kp>slice_max && p_angle_absorber_deg<bin*bin_width+bin_width+min && p_angle_absorber_deg>=bin*bin_width+min){ return number; }
+              if(slice_bin==0 && Kp<slice_min && p_angle_absorber_deg<bin*bin_width+bin_width+min && p_angle_absorber_deg>=bin*bin_width+min){ return number; }
+            }
+          }
+          // Double check the overflow
+          std::string cut_string = cut_string_slice+std::to_string(max)+".gt."+std::to_string(max-bin_width);
+          //if(cut_name == cut_string && KE_muon>max && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
+          //if(cut_name == cut_string && KE_muon>max && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
+          //if(cut_name == cut_string && KE_muon>max && slice_bin==0 && Kp<slice_min){ return number; }
+          // Double check the underflow
+          cut_string = cut_string_slice+std::to_string(min+bin_width)+".gt."+std::to_string(min);
+          //if(cut_name == cut_string && p_angle_absorber_deg<min && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
+          //if(cut_name == cut_string && KE_muon<min && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
+          if(cut_name == cut_string && p_angle_absorber_deg<min && slice_bin==0 && Kp<slice_min){ return number; }
+        }
+      }
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+    }
 
 
   }
@@ -3230,9 +3393,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
   if(is_true_kdar(eval,pfeval)) map_cuts_flag["kdar"] = true;
   else map_cuts_flag["kdar"] = false;
-  if(is_true_kdar_outFV(eval,pfeval)) map_cuts_flag["kdar_outFV"] = true;
-  else map_cuts_flag["kdar_outFV"] = false;
-
+  if(is_true_kdar_outFV(eval,pfeval)) map_cuts_flag["kdarOutFV"] = true;
+  else map_cuts_flag["kdaroutFV"] = false;
+  if(is_true_kdar(eval,pfeval) && get_true_Kp(pfeval)>0) map_cuts_flag["kdarNp"] = true;
+  else map_cuts_flag["kdarNp"] = false;
   // figure out additional cuts and flag_data ...
   bool flag_add = true;
   if(add_cut == "all") flag_add = true;
@@ -3316,12 +3480,14 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"){
+  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train" || ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_bckNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp"){
     bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
-    if(ch_name == "kdar_bdtsel_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
-    if(ch_name == "kdar_bdtsel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_outFV"];
+    if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_bdtsel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
+    if(ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
     if(ch_name == "kdar_bdtsel_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
-    if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  {flag_pass = flag_pass && map_cuts_flag["kdar"]; if(eval.event%10<5){flag_pass=false;} }
+    if(ch_name == "kdar_bdtsel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
+    if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"|| ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
   }else if(ch_name == "kdar_sideband_bck"  || ch_name == "kdar_sideband_dirt" || ch_name == "kdar_sideband_sig" || ch_name == "kdar_sideband" || ch_name == "kdar_sideband_ext"
      || ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext"

@@ -699,6 +699,9 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_vtx_activity",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_x_dir",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_y_dir",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_z_dir",1);
   }
 
 

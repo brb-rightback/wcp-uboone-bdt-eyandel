@@ -716,6 +716,9 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     T_BDTvars->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
     T_BDTvars->SetBranchStatus("ssm_vtx_activity",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_x_dir",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_y_dir",1);
+    T_BDTvars->SetBranchStatus("ssm_prim_track1_z_dir",1);
   }
 
 
