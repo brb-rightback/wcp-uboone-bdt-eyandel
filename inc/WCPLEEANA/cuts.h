@@ -320,7 +320,9 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
   }else if (weight_name == "cv_spline_cv_spline_oldflux" || weight_name == "cv_spline_oldflux_cv_spline"){
     double oldflux_weight = get_oldflux_weight(eval,pfeval);
     return oldflux_weight * pow(eval.weight_cv * eval.weight_spline,2);
-  
+  }else if (weight_name == "add_weight"){//for systematics
+    return addtl_weight;
+
     //Erin - ns beam time scaling
   }else if (weight_name == "cv_spline_nsbeam"){
     float beam_scale = 0.86;
@@ -407,7 +409,7 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
     float ext_scale = 1.0 - ext_rej;
     return pow(ext_scale,2);
 //cex bug fix weights
-  }else if (weight_name = "cv_spline_cexbugfix"){
+  }else if (weight_name == "cv_spline_cexbugfix"){
     double ratio_weight = 1.0;
     if (eval.truth_isCC == 0 && pfeval.truth_NprimPio==1)
     {
@@ -464,7 +466,7 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
     if (ratio_weight > 10.0) ratio_weight = 10.0;
     if (ratio_weight < 0.0) ratio_weight = 0.0;
     return addtl_weight*eval.weight_cv * eval.weight_spline * ratio_weight;
-  }else if (weight_name = "cv_spline_cexbugfix_cv_spline_cexbugfix"){
+  }else if (weight_name == "cv_spline_cexbugfix_cv_spline_cexbugfix"){
     double ratio_weight = 1.0;
     if (eval.truth_isCC == 0 && pfeval.truth_NprimPio==1)
     {
