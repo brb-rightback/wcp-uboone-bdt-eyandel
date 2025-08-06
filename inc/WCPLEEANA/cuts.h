@@ -626,6 +626,12 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-50;
     if (tagger.ssm_prim_track1_kine_energy_range<50) return 10;
     return tagger.ssm_prim_track1_kine_energy_range;
+  }else if (var_name == "ssm_prim_track1_kine_energy_range_vtx40"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
+    if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-40;
+    return tagger.ssm_prim_track1_kine_energy_range;
+
   }else if (var_name == "ssm_E" || var_name == "ssm_KE"){
     if (tagger.ssm_kine_energy<0) return -999;
     double E = get_ssmE(tagger);
