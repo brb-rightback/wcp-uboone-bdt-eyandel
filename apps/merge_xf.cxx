@@ -611,7 +611,7 @@ int main( int argc, char** argv )
   std::cout << "Events: " << t1->GetEntries()<<"/"<<T_eval->GetEntries() << std::endl;
   std::cout << "POT:    " << cv1_pot << " " << cv_pot << std::endl;
 
-  file3->Write();
+  file3->Write("",TFile::kOverwrite);
   file3->Close();
 
   return 0;

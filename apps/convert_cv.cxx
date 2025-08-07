@@ -693,7 +693,7 @@ int main( int argc, char** argv )
   std::cout << "Events: " << t1_cv->GetEntries()<<"/"<<T_eval_cv->GetEntries() << std::endl;
   std::cout << "POT:    " << cv1_pot << " " << cv_pot << std::endl;
 
-  file3->Write();
+  file3->Write("",TFile::kOverwrite);
   file3->Close();
 
 

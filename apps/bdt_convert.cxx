@@ -3758,7 +3758,7 @@ int main( int argc, char** argv )
     std::cout <<"remove  run:" << it->first << " subrun:" << it->second << std::endl;
   }
 
-  file2->Write();
+  file2->Write("",TFile::kOverwrite);
   file2->Close();
 
   if (!fail_percentage || flag_presel){}
