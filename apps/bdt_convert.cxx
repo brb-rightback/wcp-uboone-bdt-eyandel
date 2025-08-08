@@ -3660,6 +3660,31 @@ int main( int argc, char** argv )
     tagger.single_photon_ncpi0_score = cal_single_photon_ncpi0_bdts_xgboost(tagger, reader_single_photon_ncpi0);
     tagger.single_photon_nue_score = cal_single_photon_nue_bdts_xgboost(tagger, reader_single_photon_nue);
 
+    if (std::isnan(tagger.ssm_nu_angle_z)) tagger.ssm_nu_angle_z = 0;
+    if (std::isnan(tagger.ssm_nu_angle_target)) tagger.ssm_nu_angle_target = 0;
+    if (std::isnan(tagger.ssm_nu_angle_absorber)) tagger.ssm_nu_angle_absorber = 0;
+    if (std::isnan(tagger.ssm_nu_angle_vertical)) tagger.ssm_nu_angle_vertical = 0;
+    if (std::isnan(tagger.ssm_prim_nu_angle_z)) tagger.ssm_prim_nu_angle_z = 0;
+    if (std::isnan(tagger.ssm_prim_nu_angle_target)) tagger.ssm_prim_nu_angle_target = 0;
+    if (std::isnan(tagger.ssm_prim_nu_angle_absorber)) tagger.ssm_prim_nu_angle_absorber = 0;
+    if (std::isnan(tagger.ssm_prim_nu_angle_vertical)) tagger.ssm_prim_nu_angle_vertical = 0;
+    if (std::isnan(tagger.ssm_con_nu_angle_z)) tagger.ssm_con_nu_angle_z = 0;
+    if (std::isnan(tagger.ssm_con_nu_angle_target)) tagger.ssm_con_nu_angle_target = 0;
+    if (std::isnan(tagger.ssm_con_nu_angle_absorber)) tagger.ssm_con_nu_angle_absorber = 0;
+    if (std::isnan(tagger.ssm_con_nu_angle_vertical)) tagger.ssm_con_nu_angle_vertical = 0;
+    if (std::isnan(tagger.ssm_track_angle_z)) tagger.ssm_track_angle_z = 0;
+    if (std::isnan(tagger.ssm_track_angle_target)) tagger.ssm_track_angle_target = 0;
+    if (std::isnan(tagger.ssm_track_angle_absorber)) tagger.ssm_track_angle_absorber = 0;
+    if (std::isnan(tagger.ssm_track_angle_vertical)) tagger.ssm_track_angle_vertical = 0;
+    if (std::isnan(tagger.ssm_kine_pio_mass)) tagger.ssm_kine_pio_mass = 0;
+    if (std::isnan(tagger.ssm_kine_pio_vtx_dis)) tagger.ssm_kine_pio_vtx_dis = 0;
+    if (std::isnan(tagger.ssm_kine_pio_theta_1)) tagger.ssm_kine_pio_theta_1 = 0;
+    if (std::isnan(tagger.ssm_kine_pio_theta_2)) tagger.ssm_kine_pio_theta_2 = 0;
+    if (std::isnan(tagger.ssm_kine_pio_phi_1)) tagger.ssm_kine_pio_phi_1 = 0;
+    if (std::isnan(tagger.ssm_kine_pio_phi_2)) tagger.ssm_kine_pio_phi_2 = 0;
+    if (std::isnan(tagger.ssm_kine_pio_dis_1)) tagger.ssm_kine_pio_dis_1 = 0;
+    if (std::isnan(tagger.ssm_kine_pio_dis_2)) tagger.ssm_kine_pio_dis_2 = 0;
+    if (std::isnan(tagger.ssm_kine_pio_angle)) tagger.ssm_kine_pio_angle = 0;
     tagger.ssm_kdar_score_lowE = cal_kdar_lowE_bdt_xgboost(tagger, eval, reader_kdar_lowE);
     tagger.ssm_kdar_score_hiE = cal_kdar_hiE_bdt_xgboost(tagger, eval, reader_kdar_hiE);
 
