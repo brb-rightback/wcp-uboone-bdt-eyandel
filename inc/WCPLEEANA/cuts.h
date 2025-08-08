@@ -35,7 +35,7 @@ namespace LEEana{
 
   double get_ssmE(TaggerInfo& tagger_info);
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
-  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.4, double hiE_cut=1.02);
+  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.7, double hiE_cut=1.02);
 
   double get_oldflux_weight(EvalInfo& eval,PFevalInfo& pfeval);
 
