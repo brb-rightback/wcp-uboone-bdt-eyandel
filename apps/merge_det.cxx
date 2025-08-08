@@ -42,7 +42,7 @@ int main( int argc, char** argv )
   bool flag_config = false;
   std::string config_file_name="config.txt";
   char delimiter = ',';
-  for (Int_t i=1;i!=argc;i++){
+  for (Int_t i=4;i!=argc;i++){
     switch(argv[i][1]){
     case 't':
        config_file_name = &argv[i][2];
@@ -380,7 +380,14 @@ int main( int argc, char** argv )
   tagger_cv.numu_cc_2_total_length = new std::vector<float>;
   tagger_cv.numu_cc_2_n_daughter_tracks = new std::vector<float>;
   tagger_cv.numu_cc_2_n_daughter_all = new std::vector<float>;
-
+  tagger_cv.ssm_kine_energy_particle = new std::vector<float>;
+  tagger_cv.ssm_kine_energy_info = new std::vector<int>;
+  tagger_cv.ssm_kine_particle_type = new std::vector<int>;
+  tagger_cv.ssm_kine_energy_included = new std::vector<int>;
+  tagger_cv.ssm_cosmict_flag_10 = new std::vector<float>;
+  tagger_cv.WCPMTInfoPePred = new std::vector<double>;
+  tagger_cv.WCPMTInfoPeMeas = new std::vector<double>;
+  tagger_cv.WCPMTInfoPeMeasErr = new std::vector<double>;
 
   EvalInfo eval_det;
   eval_det.file_type = new std::string();
@@ -646,7 +653,14 @@ int main( int argc, char** argv )
   tagger_det.numu_cc_2_total_length = new std::vector<float>;
   tagger_det.numu_cc_2_n_daughter_tracks = new std::vector<float>;
   tagger_det.numu_cc_2_n_daughter_all = new std::vector<float>;
-
+  tagger_det.ssm_kine_energy_particle = new std::vector<float>;
+  tagger_det.ssm_kine_energy_info = new std::vector<int>;
+  tagger_det.ssm_kine_particle_type = new std::vector<int>;
+  tagger_det.ssm_kine_energy_included = new std::vector<int>;
+  tagger_det.ssm_cosmict_flag_10 = new std::vector<float>;
+  tagger_det.WCPMTInfoPePred = new std::vector<double>;
+  tagger_det.WCPMTInfoPeMeas = new std::vector<double>;
+  tagger_det.WCPMTInfoPeMeasErr = new std::vector<double>;
 
 
   set_tree_address(T_BDTvars_cv, tagger_cv,2 );

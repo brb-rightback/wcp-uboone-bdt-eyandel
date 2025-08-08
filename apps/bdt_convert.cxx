@@ -63,7 +63,7 @@ int main( int argc, char** argv )
 
   bool flag_gibuu = false;
 
-  for (Int_t i=1;i!=argc;i++){
+  for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
     case 'c':
       weight_cut_val = atof(&argv[i][2]);
@@ -153,7 +153,7 @@ int main( int argc, char** argv )
   
   std::vector<int>good_run_list_vec = wrangler.get_good_run_list();
   std::set<int> good_runlist_set(good_run_list_vec.begin(), good_run_list_vec.end());
-  
+
   std::vector<int> low_lifetime_runs = wrangler.get_low_lifetime_runs();
   std::set<int> low_lifetime_set(low_lifetime_runs.begin(), low_lifetime_runs.end());
   
@@ -455,7 +455,9 @@ int main( int argc, char** argv )
   tagger.ssm_kine_particle_type = new std::vector<int>;
   tagger.ssm_kine_energy_included = new std::vector<int>;
   tagger.ssm_cosmict_flag_10 = new std::vector<float>;
-
+  tagger.WCPMTInfoPePred = new std::vector<double>;
+  tagger.WCPMTInfoPeMeas = new std::vector<double>;
+  tagger.WCPMTInfoPeMeasErr = new std::vector<double>;
 
   set_tree_address(T_BDTvars, tagger,2 );
   tagger.flag_nc_gamma_bdt = true;
