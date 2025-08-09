@@ -596,11 +596,14 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_kine_energy<30) return 30.1;
     return tagger.ssm_kine_energy;
   }else if (var_name == "ssm_angle_to_absorber"){
+    if(std::isnan(tagger.ssm_angle_to_absorber)) return -999;
     return tagger.ssm_angle_to_absorber;
   }else if (var_name == "ssm_angle_to_absorber_deg"){
+    if(std::isnan(tagger.ssm_angle_to_absorber)) return -999;
     if (tagger.ssm_kine_energy<0) return -999;
     return tagger.ssm_angle_to_absorber*180/3.14159;
   }else if (var_name == "ssm_pl" || var_name == "ssm_pt" || var_name == "ssm_q" || var_name == "ssm_Q2" || var_name == "ssm_sqrtQ2"){
+    if(std::isnan(tagger.ssm_angle_to_absorber)) return -999;
     if (tagger.ssm_kine_energy<0) return -999;
     double k = sqrt(tagger.ssm_kine_energy*tagger.ssm_kine_energy+2*tagger.ssm_kine_energy*105.7);
     double var = -999;
