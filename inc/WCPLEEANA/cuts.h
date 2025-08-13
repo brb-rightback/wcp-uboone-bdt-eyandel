@@ -35,7 +35,8 @@ namespace LEEana{
 
   double get_ssmE(TaggerInfo& tagger_info);
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
-  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.7, double hiE_cut=1.02);
+  //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.7, double hiE_cut=1.02);
+  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.1523, double hiE_cut=1.409);
 
   double get_oldflux_weight(EvalInfo& eval,PFevalInfo& pfeval);
 
@@ -629,6 +630,12 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-50;
     if (tagger.ssm_prim_track1_kine_energy_range<50) return 10;
     return tagger.ssm_prim_track1_kine_energy_range;
+  }else if (var_name == "ssm_prim_track1_kine_energy_range_vtx60"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
+    if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-60;
+    if (tagger.ssm_prim_track1_kine_energy_range<60) return 10;
+    return tagger.ssm_prim_track1_kine_energy_range;
   }else if (var_name == "ssm_prim_track1_kine_energy_range_vtx40"){
     if (tagger.ssm_kine_energy<0) return -999;
     if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
@@ -643,9 +650,10 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
   }else if (var_name == "ssm_cosP" || var_name == "ssm_angle_P" || var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx"){
     if (tagger.ssm_kine_energy<0) return -999;
     if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
-    if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -30-0.1;
+    if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -50-0.1;
     if (var_name != "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -999;
     double theta = get_angle_to_absorber(tagger.ssm_prim_track1_x_dir, tagger.ssm_prim_track1_y_dir, tagger.ssm_prim_track1_z_dir);
+    if(std::isnan(theta)) return -999;
     if (var_name == "ssm_cosP") return TMath::Cos(theta);
     if (var_name == "ssm_angle_P") return theta;
     if (var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx") return theta*180/3.14159;
