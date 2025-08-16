@@ -33,7 +33,7 @@ namespace LEEana{
   bool is_true_kdar(EvalInfo& eval, PFevalInfo& pfeval);
   bool is_true_kdar_outFV(EvalInfo& eval, PFevalInfo& pfeval);
 
-  double get_ssmE(TaggerInfo& tagger_info);
+  double get_ssmE(TaggerInfo& tagger_info, bool flag_2track=false);
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
   //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.7, double hiE_cut=1.02);
   bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.1523, double hiE_cut=1.409);
@@ -642,18 +642,25 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_prim_track1_kine_energy_range<0) return -0.01-40;
     return tagger.ssm_prim_track1_kine_energy_range;
 
-  }else if (var_name == "ssm_E" || var_name == "ssm_KE"){
+  }else if (var_name == "ssm_E" || var_name == "ssm_KE" || var_name == "ssm_KE_2track"){
     if (tagger.ssm_kine_energy<0) return -999;
+    if (var_name == "ssm_KE_2track") return get_ssmE(tagger,true)-105.7;
     double E = get_ssmE(tagger);
     if(var_name == "ssm_E") return E;
     return E-105.7;
+
   }else if (var_name == "ssm_cosP" || var_name == "ssm_angle_P" || var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx"){
     if (tagger.ssm_kine_energy<0) return -999;
     if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_vtx_activity) return -0.01;
     if (var_name == "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -50-0.1;
     if (var_name != "ssm_angle_P_deg_vtx" && tagger.ssm_prim_track1_kine_energy_range<0) return -999;
+
     double theta = get_angle_to_absorber(tagger.ssm_prim_track1_x_dir, tagger.ssm_prim_track1_y_dir, tagger.ssm_prim_track1_z_dir);
-    if(std::isnan(theta)) return -999;
+
+    if (std::isnan(theta) && tagger.ssm_vtx_activity && var_name == "ssm_angle_P_deg_vtx") return -0.1;
+    if (std::isnan(theta) && var_name == "ssm_angle_P_deg_vtx") return -50-0.1;
+    if (std::isnan(theta)) return -999;
+
     if (var_name == "ssm_cosP") return TMath::Cos(theta);
     if (var_name == "ssm_angle_P") return theta;
     if (var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx") return theta*180/3.14159;
@@ -2826,30 +2833,6 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
 
-    else if (cut_file==7771){
-      int bin_width=5;
-      int min = 0;
-      int max = 130;
-      int nbins = int(max/bin_width);
-      bool found_cut = false;
-      std::string base_cut_string = "kdar.nuwro.Emu.le.";
-      if(!is_true_kdar(eval,pfeval) || eval.event%10<5 ){found_cut=true;}
-      else{
-        // Check all the bins
-        for(int bin=0; bin<nbins; bin++){
-          std::string cut_string = base_cut_string+std::to_string(bin*bin_width+bin_width)+".gt."+std::to_string(bin*bin_width);
-          //std::cout<<cut_string<<"  "<<cut_name<<" "<<KE_muon<<" "<<is_true_kdar(eval,pfeval)<<std::endl;
-          if(cut_name == cut_string){
-            found_cut = true;
-            if(KE_muon<=bin*bin_width+bin_width  && KE_muon>bin*bin_width)   { return number; }
-          }
-        }
-        // Double check the overflow
-        std::string cut_string = base_cut_string+std::to_string(max)+".gt."+std::to_string(max-bin_width);
-        if(cut_name == cut_string && KE_muon>max)   { return number; }
-      }
-      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
-    }
 
     else if (cut_file==778){
       int bin_width=10;
@@ -3498,9 +3481,25 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int costheta_bin = get_costheta_bin(TMath::Cos(muonMomentum.Theta()));
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
+  double merge_time = get_kine_var(kine, eval, pfeval, tagger, flag_data, "numi_ns_beam_time");
 
-  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train" || ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_bckNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp"){
+  if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_bckNp"
+  || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtsel_sigNp"
+  || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp"
+  || ch_name == "kdar_bdtsel" || ch_name == "kdar_bdtsel_ext" 
+
+  || ch_name == "kdar_bdtselns_bck"  || ch_name == "kdar_bdtselns_dirt" || ch_name == "kdar_bdtselns_bckNp"
+  || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_outFV_sig" || ch_name == "kdar_bdtselns_sigNp"
+  || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp"
+  || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext"){ 
+
     bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
+
+    if((ch_name == "kdar_bdtselns_bck"  || ch_name == "kdar_bdtselns_dirt" || ch_name == "kdar_bdtselns_bckNp"
+    || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_outFV_sig" || ch_name == "kdar_bdtselns_sigNp"
+    || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp"
+    || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext") && merge_time>-3 && merge_time<3 ){flag_pass=false;}
+
     if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_bdtsel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
     if(ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
@@ -3508,6 +3507,33 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if(ch_name == "kdar_bdtsel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
     if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"|| ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
+
+  }else if(ch_name == "kdar_presel_bck"  || ch_name == "kdar_presel_dirt" || ch_name == "kdar_presel_bckNp"
+  || ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_outFV_sig" || ch_name == "kdar_presel_sigNp"
+  || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp"
+  || ch_name == "kdar_presel" || ch_name == "kdar_presel_ext"
+
+  || ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp"
+  || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
+  || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
+  || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext"){
+
+    bool flag_pass = flag_kdar_presel;
+
+    if((ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp"
+    || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
+    || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
+    || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && merge_time>-3 && merge_time<3 ){flag_pass=false;}
+
+    if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
+    if(ch_name == "kdar_presel_sigNp" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
+    if(ch_name == "kdar_presel_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
+    if(ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train"|| ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+    return flag_pass;
+
+
   }else if(ch_name == "kdar_sideband_bck"  || ch_name == "kdar_sideband_dirt" || ch_name == "kdar_sideband_sig" || ch_name == "kdar_sideband" || ch_name == "kdar_sideband_ext"
      || ch_name == "kdar_sideband1_bck"  || ch_name == "kdar_sideband1_dirt" || ch_name == "kdar_sideband1_sig" || ch_name == "kdar_sideband1" || ch_name == "kdar_sideband1_ext"
      || ch_name == "kdar_sideband2_bck"  || ch_name == "kdar_sideband2_dirt" || ch_name == "kdar_sideband2_sig" || ch_name == "kdar_sideband2" || ch_name == "kdar_sideband2_ext"
@@ -3519,6 +3545,8 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_sideband3_bck"  || ch_name == "kdar_sideband3_dirt" || ch_name == "kdar_sideband3_sig" || ch_name == "kdar_sideband3" || ch_name == "kdar_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
+
+
   }else if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
     if (flag_nueCC && flag_FC && flag_truth_inside) return true;
     else return false;
@@ -10220,14 +10248,14 @@ bool LEEana::is_true_kdar_outFV(EvalInfo& eval, PFevalInfo& pfeval){
     return flag;
 }
 
-double LEEana::get_ssmE(TaggerInfo& tagger_info){
+double LEEana::get_ssmE(TaggerInfo& tagger_info, bool flag_2track){
   if(tagger_info.ssm_kine_energy<0) return -999;
   double ssm_E=0;  
   ssm_E+=tagger_info.ssm_kine_energy+105.7;
   if(tagger_info.ssm_prim_track1_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_track1_kine_energy_range;
-  if(tagger_info.ssm_prim_track2_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_track2_kine_energy_range;
-  if(tagger_info.ssm_prim_shw1_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_shw1_kine_energy_best;
-  if(tagger_info.ssm_prim_shw2_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_shw2_kine_energy_best;
+  if(tagger_info.ssm_prim_track2_kine_energy_range>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_track2_kine_energy_range;
+  if(tagger_info.ssm_prim_shw1_kine_energy_range>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_shw1_kine_energy_best;
+  if(tagger_info.ssm_prim_shw2_kine_energy_range>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_shw2_kine_energy_best;
   return ssm_E;
 }
 
