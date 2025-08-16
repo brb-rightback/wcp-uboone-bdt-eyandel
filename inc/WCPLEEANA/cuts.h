@@ -35,10 +35,13 @@ namespace LEEana{
 
   double get_ssmE(TaggerInfo& tagger_info, bool flag_2track=false);
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
-  //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.7, double hiE_cut=1.02);
   bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.1523, double hiE_cut=1.409);
 
   double get_oldflux_weight(EvalInfo& eval,PFevalInfo& pfeval);
+
+  double recover_nsbeamtiming(PFevalInfo& pfeval, bool flag_data);
+  double get_dE_dx_range(double R, int pdg);
+  std::tuple< std::vector<float>*,std::vector<float>*,std::vector<float>*,std::vector<float>* > get_extrapolated_times(PFevalInfo& pfeval, int particle, double mother_time);
 
   // correct reco neutrino energy and reco shower energy
   double get_reco_Enu_corr(KineInfo& kine, bool flag_data);
@@ -664,6 +667,30 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (var_name == "ssm_cosP") return TMath::Cos(theta);
     if (var_name == "ssm_angle_P") return theta;
     if (var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx") return theta*180/3.14159;
+
+  }else if (var_name == "evtTimeNS_recover"){
+    return recover_nsbeamtiming(pfeval, flag_data); 
+  }else if (var_name == "evtTimeNS"){
+    if (flag_data) return pfeval.evtTimeNS;
+    else return pfeval.evtTimeNS_cor;
+  }else if(var_name=="merge_time_recover_numi"){
+    double evtTimeNS = recover_nsbeamtiming(pfeval, flag_data);
+    double TThelp=0;
+    double gap = 18.8305;
+    double fShift=0.9378;
+    if(flag_data){
+      if (eval.run<19855) fShift=0.9378-7.2836;
+      else if (eval.run>20800 && eval.run<20855) fShift=0.9378-1.0278;
+      else if (eval.run>20855 && eval.run<20870) fShift=0.9378-10.1;
+      else if (eval.run>20870 && eval.run<20890) fShift=0.9378-2.48;
+      else if (eval.run>20890 && eval.run<20915) fShift=0.9378-5.02;
+      else if (eval.run>20915 && eval.run<21000) fShift=0.9378+3.3475;
+      else if (eval.run>21000) fShift=0.9378-6.3796;
+    }
+    TThelp = evtTimeNS-fShift+gap*0.5;
+    double TT_merged = -9999.;
+    if (evtTimeNS>0) TT_merged=(TThelp-(int((TThelp)/gap))*gap)-gap*0.5;
+    return TT_merged;
 
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
@@ -3481,7 +3508,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int costheta_bin = get_costheta_bin(TMath::Cos(muonMomentum.Theta()));
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
-  double merge_time = get_kine_var(kine, eval, pfeval, tagger, flag_data, "numi_ns_beam_time");
+  double merge_time = get_kine_var(kine, eval, pfeval, tagger, flag_data, "merge_time_recover_numi");
 
   if(ch_name == "kdar_bdtsel_bck"  || ch_name == "kdar_bdtsel_dirt" || ch_name == "kdar_bdtsel_bckNp"
   || ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtsel_sigNp"
@@ -3498,7 +3525,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if((ch_name == "kdar_bdtselns_bck"  || ch_name == "kdar_bdtselns_dirt" || ch_name == "kdar_bdtselns_bckNp"
     || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_outFV_sig" || ch_name == "kdar_bdtselns_sigNp"
     || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp"
-    || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext") && merge_time>-3 && merge_time<3 ){flag_pass=false;}
+    || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
 
     if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_bdtsel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
@@ -3523,7 +3550,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if((ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp"
     || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
     || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
-    || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && merge_time>-3 && merge_time<3 ){flag_pass=false;}
+    || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
 
     if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
@@ -10372,6 +10399,316 @@ std::vector<std::vector<double>> ratio_numu = {
   return new_weight;
  
 
+}
+
+double LEEana::recover_nsbeamtiming(PFevalInfo& pfeval, bool flag_data){
+
+  if(pfeval.PMT_Amp->size()>2){
+    if(!flag_data) return pfeval.evtTimeNS_cor;
+    return pfeval.evtTimeNS;
+  }
+  if(pfeval.PMT_Amp->size()==0){
+    if(!flag_data) return pfeval.evtTimeNS_cor;
+    return pfeval.evtTimeNS;
+  }
+
+  double f_evtTimeNS=-99999;
+
+  float f_shiftoffset=0;
+  float f_ccnd1_a=0.4343;
+  float f_ccnd1_b=6.2884;
+  float f_ccnd2_a=0.0637;
+  float f_ccnd2_b=1.489;
+  float f_ccnd3_a=0;
+  float f_ccnd3_b=0;
+  float f_ccnd3_c=0;
+  float f_ccnd3_d=0;
+  float f_ccnd4_a=0.0125;
+  float f_ccnd4_b=2.3152;
+  float f_ccnd4_2_a=0;
+  float f_ccnd4_2_b=0;
+  float f_dist_cut_x_cor=999999999;
+
+  if(!flag_data){
+    f_shiftoffset=0;
+    f_ccnd1_a=0;
+    f_ccnd1_b=0;
+    f_ccnd2_a=0;
+    f_ccnd2_b=0;
+    f_ccnd3_a=0;
+    f_ccnd3_b=0;
+    f_ccnd3_c=0;
+    f_ccnd3_d=0;
+    f_ccnd4_a=0;
+    f_ccnd4_b=0;
+    f_ccnd4_2_a=0;
+    f_ccnd4_2_b=0;
+  }
+
+  double RWM_T = pfeval.RWM_Time;
+  
+  Float_t x = pfeval.reco_nuvtxX;
+  Float_t y = pfeval.reco_nuvtxY;
+  Float_t z = pfeval.reco_nuvtxZ;
+  
+  std::vector<float> *sps_x = new std::vector<float>;
+  std::vector<float> *sps_y = new std::vector<float>;
+  std::vector<float> *sps_z = new std::vector<float>;
+  std::vector<float> *sps_t = new std::vector<float>;
+  //method using linear extrapolation and PID
+
+  std::map<int,std::tuple< std::vector<float>*,std::vector<float>*,std::vector<float>*,std::vector<float>* > >my_particle_times;
+    //<id,<x,y,z,t>>
+
+    //only do primary particles first
+    for (int particle=0; particle<pfeval.reco_Ntrack; particle++){
+      int mother = pfeval.reco_mother[particle];
+      if(mother!=0) {continue;} 
+      int id = pfeval.reco_id[particle];
+      auto this_id = my_particle_times.find(id);      
+      if (this_id==my_particle_times.end()){
+        my_particle_times[id] = get_extrapolated_times(pfeval,particle, 0);
+      }
+
+      //now find the direct daughters of this primary particle
+      std::vector< std::tuple<int,int,double> > daughters; //<id,particle,mother_time>
+      for(int daughter_particle=0; daughter_particle<pfeval.reco_Ntrack; daughter_particle++){
+        int mother_of_daughter = pfeval.reco_mother[daughter_particle];
+        int daughter_id = pfeval.reco_id[daughter_particle];
+        if (mother_of_daughter == id) {
+          double mother_time = std::get<3>(my_particle_times[id])->back();
+          daughters.push_back(std::make_tuple(daughter_id,daughter_particle,mother_time));
+        }
+      }
+
+      //Now add this daughter and find the daughters of the daughter
+      //keep going untill we exahust all daughters of daughters
+      while (daughters.size() > 0){
+        int daughter_id = std::get<0>(daughters.front());
+        auto this_daughter_id = my_particle_times.find(daughter_id);
+        //skip is we have already added it
+	if (this_daughter_id!=my_particle_times.end()){
+          daughters.erase(daughters.begin());
+          continue;
+        }
+        my_particle_times[daughter_id] = get_extrapolated_times(pfeval, std::get<1>(daughters.front()), std::get<2>(daughters.front()));
+        for(int daughter_daughter_particle=0; daughter_daughter_particle<pfeval.reco_Ntrack; daughter_daughter_particle++){
+          int mother_of_daughter_daughter_id = pfeval.reco_mother[daughter_daughter_particle];
+          int daughter_daughter_id = pfeval.reco_id[daughter_daughter_particle];
+          auto this_daughter_daughter_id = my_particle_times.find(daughter_daughter_id);
+	  if (daughter_id == mother_of_daughter_daughter_id && this_daughter_daughter_id==my_particle_times.end()) {
+            //new daughter that we need to check on, its a daughter of this daughter.
+	    //Set its mother time according to the time we just added for the daughter we were working on.
+            daughters.push_back(std::make_tuple(daughter_daughter_id,daughter_daughter_particle,std::get<3>(my_particle_times[daughter_id])->back())); 
+	  }
+        } //no more daugters of the current daughter
+        daughters.erase(daughters.begin());
+      }//no more daughter or duaghters of daughters
+    }//end loop over all primary particles
+
+    //unpack this for the rest of the code
+    for (auto my_particle = my_particle_times.begin(); my_particle != my_particle_times.end(); my_particle++) {
+      std::vector<float>* _x = std::get<0>(my_particle->second);
+      std::vector<float>* _y = std::get<1>(my_particle->second);
+      std::vector<float>* _z = std::get<2>(my_particle->second);
+      std::vector<float>* _t = std::get<3>(my_particle->second);
+      for(uint point=0; point < _x->size(); point++){
+        sps_x->push_back(_x->at(point));
+        sps_y->push_back(_y->at(point));
+        sps_z->push_back(_z->at(point));
+        sps_t->push_back(_t->at(point));	 
+	//if(pfeval.evtTimeNS>=0) std::cout<<point<<" "<<sps_x->at(point)<<" "<<sps_y->at(point)<<" "<<sps_z->at(point)<<" "<<sps_t->at(point)<<std::endl;
+      }
+    }
+  //}
+  
+  double PMT0[3]={-11.4545, -28.625, 990.356};  double PMT1[3]={-11.4175, 27.607, 989.712};
+  double PMT2[3]={-11.7755, -56.514, 951.865};  double PMT3[3]={-11.6415, 55.313, 951.861};
+  double PMT4[3]={-12.0585, -56.309, 911.939};  double PMT5[3]={-11.8345, 55.822, 911.065};
+  double PMT6[3]={-12.1765, -0.722, 865.599};   double PMT7[3]={-12.3045, -0.502, 796.208};
+  double PMT8[3]={-12.6045, -56.284, 751.905};  double PMT9[3]={-12.5405, 55.625, 751.884};
+  double PMT10[3]={-12.6125, -56.408, 711.274}; double PMT11[3]={-12.6615, 55.8, 711.073};
+  double PMT12[3]={-12.6245, -0.051, 664.203};  double PMT13[3]={-12.6515, -0.549, 585.284};
+  double PMT14[3]={-12.8735, 55.822, 540.929};  double PMT15[3]={-12.6205, -56.205, 540.616};
+  double PMT16[3]={-12.5945, -56.323, 500.221}; double PMT17[3]={-12.9835, 55.771, 500.134};
+  double PMT18[3]={-12.6185, -0.875, 453.096};  double PMT19[3]={-13.0855, -0.706, 373.839};
+  double PMT20[3]={-12.6485, -57.022, 328.341}; double PMT21[3]={-13.1865, 54.693, 328.212};
+  double PMT22[3]={-13.4175, 54.646, 287.976};  double PMT23[3]={-13.0075, -56.261, 287.639};
+  double PMT24[3]={-13.1505, -0.829, 242.014};  double PMT25[3]={-13.4415, -0.303, 173.743};
+  double PMT26[3]={-13.3965, 55.249, 128.354};  double PMT27[3]={-13.2784, -56.203, 128.18};
+  double PMT28[3]={-13.2375, -56.615, 87.8695}; double PMT29[3]={-13.5415, 55.249, 87.7605};
+  double PMT30[3]={-13.4345, 27.431, 51.1015};  double PMT31[3]={-13.1525, -28.576, 50.4745};
+  double PMT[32][3];    for(int j=0; j<3; j++){ PMT[30][j]=PMT30[j]; PMT[31][j]=PMT31[j];
+  PMT[0][j]=PMT0[j];   PMT[10][j]=PMT10[j]; PMT[20][j]=PMT20[j]; PMT[1][j]=PMT1[j];   PMT[11][j]=PMT11[j];
+  PMT[21][j]=PMT21[j]; PMT[2][j]=PMT2[j];   PMT[12][j]=PMT12[j]; PMT[22][j]=PMT22[j]; PMT[3][j]=PMT3[j];
+  PMT[13][j]=PMT13[j]; PMT[23][j]=PMT23[j]; PMT[4][j]=PMT4[j];   PMT[14][j]=PMT14[j]; PMT[24][j]=PMT24[j];
+  PMT[5][j]=PMT5[j];   PMT[15][j]=PMT15[j]; PMT[25][j]=PMT25[j]; PMT[6][j]=PMT6[j];   PMT[16][j]=PMT16[j];
+  PMT[18][j]=PMT18[j]; PMT[28][j]=PMT28[j]; PMT[9][j]=PMT9[j];   PMT[19][j]=PMT19[j]; PMT[29][j]=PMT29[j];
+  PMT[26][j]=PMT26[j]; PMT[7][j]=PMT7[j];   PMT[17][j]=PMT17[j]; PMT[27][j]=PMT27[j]; PMT[8][j]=PMT8[j];}
+  double offset[32]={1.03002, -5.18104, -2.11164, -5.99395, -1.25798, 0.633079, 2.87666, 2.21969, 0.885092, 2.35423,
+    -1.63039, -1.83775, -0.859883, 3.4741, 1.84833, 1.58233, -2.71783, 0, 3.18776, 0.982666, 0.728438, 0.280592, -5.27068,
+    -3.27857, -1.41196, 1.59643, 1.41425, -1.62682, -2.55772, 1.49136, -0.522791, 0.974533};
+  if(!flag_data){
+    for(int i=0; i<32; i++){offset[i]=0;}//no need to apply the additional pmt calibration to the MC
+    for(int j=0; j<3; j++){//do the PMT remapping for the MC
+      double temp = PMT[31][j];
+      PMT[31][j] = PMT[30][j];
+      PMT[30][j] = PMT[29][j];
+      PMT[29][j] = PMT[28][j];
+      PMT[28][j] = PMT[27][j];
+      PMT[27][j] = PMT[26][j];
+      PMT[26][j] = temp;
+    }
+  }
+  //================================================================================================================
+  double ccnd1, ccnd2,ccnd3, ccnd4;
+  double Ph_Tot, nuToF, DPh,DLh, tPhelp,tp, tDPhelp,tDP, tDLhelp,tDL;
+  double Med_TT3=-9999.;
+  double TT_merged = -9999.;
+  nuToF=0;
+  //===================================================================================================================
+  //===================================================================================================================
+  //do not use a time cut in the NuMI case
+  std::vector<double> timeProp = std::vector<double>(pfeval.PMT_Amp->size(),0);
+  std::vector<double> timeDP = std::vector<double>(pfeval.PMT_Amp->size(),0);
+  std::vector<double> timeDL = std::vector<double>(pfeval.PMT_Amp->size(),0);
+  //--------------------------------------------------------------------------------------------------------------------
+  
+    double dist = z; //in BNB correct to front face of TPC, in NuMI correct to plane perpendicular to the beam
+    //if(fIsNuMI) {
+      TVector3 target_dir(-0.46, -0.05, -0.885);
+      double min_a = -122.86902944472968;  
+      double min_b = 80.60659897339974; 
+      double min_c = 59.34119182916038;
+      dist = ( (min_a-x)*target_dir[0] + (min_b-y)*target_dir[1] + (min_c-z)*target_dir[2] ) / sqrt(target_dir[0]*target_dir[0] + target_dir[1]*target_dir[1] + target_dir[2]*target_dir[2] );
+    //}
+    nuToF=dist*0.033356;
+    for(uint i=0; i<pfeval.PMT_Amp->size(); i++){
+        Ph_Tot += pfeval.PMT_Amp->at(i);
+        tp=5000000000.0;
+        tDL=5000000000.0;
+        tDP=5000000000.0;
+	for(uint j=0; j<sps_x->size(); j++){
+          DPh=abs(sqrt(TMath::Power(x-sps_x->at(j),2)+TMath::Power(y-sps_y->at(j),2)+TMath::Power(z-sps_z->at(j),2)));
+          DLh=abs(sqrt(TMath::Power(PMT[pfeval.PMT_ID->at(i)][0]-sps_x->at(j),2)+TMath::Power(PMT[pfeval.PMT_ID->at(i)][1]-sps_y->at(j),2)+TMath::Power(PMT[pfeval.PMT_ID->at(i)][2]-sps_z->at(j),2)));
+          tPhelp=sps_t->at(j)+(DLh*0.0746);
+          tDPhelp=sps_t->at(j);
+          tDLhelp=(DLh*0.0746);
+  	  if(tPhelp<tp){
+            tp=tPhelp;
+            tDP=tDPhelp;
+            tDL=tDLhelp;
+          }
+	}
+        timeProp[i]=tp;
+        timeDP[i]=tDP;
+        timeDL[i]=tDL;
+    }
+    double TT3_array[32];
+    float RWM_offset = 5700.0 - f_shiftoffset;
+    for(uint i=0; i<pfeval.PMT_Amp->size(); i++){
+      ccnd1= timeProp[i]*(f_ccnd1_a)-(f_ccnd1_b);
+      ccnd2= pfeval.PMT_Amp->at(i)*(f_ccnd2_a)-(f_ccnd2_b);
+      ccnd4= x*(f_ccnd4_a)-(f_ccnd4_b);//for x dependent correction
+      if(x>f_dist_cut_x_cor) ccnd4= x*(f_ccnd4_2_a)-(f_ccnd4_2_b);//for x dependent correction at high x in the MC
+      if(Ph_Tot>150){ccnd3=f_ccnd3_a-f_ccnd3_b*Ph_Tot+f_ccnd3_c*Ph_Tot*Ph_Tot;}
+      else{ccnd3=f_ccnd3_d;}
+
+      
+      //all the corrections
+      TT3_array[i]=pfeval.PMT_Time->at(i)-RWM_T+RWM_offset-nuToF-timeProp[i]-offset[pfeval.PMT_ID->at(i)]+ccnd1+ccnd2+ccnd3+ccnd4;
+    }
+    Med_TT3=TMath::Median((Long64_t)pfeval.PMT_Amp->size(),TT3_array);
+  
+  f_evtTimeNS = Med_TT3;
+  if(!flag_data){ 
+    f_evtTimeNS = Med_TT3+pfeval.cor_nu_deltatime; 
+  }
+
+  return f_evtTimeNS;
+
+}
+
+
+
+std::tuple< std::vector<float>*,std::vector<float>*,std::vector<float>*,std::vector<float>* > LEEana::get_extrapolated_times(PFevalInfo& pfeval, int particle, double mother_time){
+
+          double fsol = 0.033356;
+
+  	  //<x,y,z,t>
+          std::vector<float> *_x = new std::vector<float>;
+          std::vector<float> *_y = new std::vector<float>;
+          std::vector<float> *_z = new std::vector<float>;
+          std::vector<float> *_t = new std::vector<float>;
+
+          double dx = 0.5;
+          int pdg = pfeval.reco_pdg[particle];
+          double start_x_pos = pfeval.reco_startXYZT[particle][0];
+          double start_y_pos = pfeval.reco_startXYZT[particle][1];
+          double start_z_pos = pfeval.reco_startXYZT[particle][2];
+          double end_x_pos = pfeval.reco_endXYZT[particle][0];
+          double end_y_pos = pfeval.reco_endXYZT[particle][1];
+          double end_z_pos = pfeval.reco_endXYZT[particle][2];
+          double length = sqrt( pow(start_x_pos-end_x_pos,2) + pow(start_y_pos-end_y_pos,2) + pow(start_z_pos-end_z_pos,2) );
+          // just assign the start and end points of neutrons
+          if(pdg==2112){
+             _x->push_back(start_x_pos);
+             _y->push_back(start_y_pos);
+             _z->push_back(start_z_pos);
+             _t->push_back(mother_time);   
+             _x->push_back(end_x_pos);
+             _y->push_back(end_y_pos);
+             _z->push_back(end_z_pos);
+             _t->push_back(mother_time+length*fsol);        
+             return std::make_tuple(_x,_y,_z,_t);
+          }
+          if(!isfinite(length)){length=0.3;}
+          double residual_range = length;
+          double x_pos = start_x_pos;
+          double y_pos = start_y_pos;
+          double z_pos = start_z_pos;
+          double t_pos = mother_time;
+          double mass = 0;
+          if (pdg == 13){ mass = 0.1057;}
+          if (pdg == 2212){ mass = 0.9397933;}//Don't do neutrons, KE is not assigned well so just assume c
+          if (pdg == 211){ mass = 0.13982067;}
+          double KE =  pfeval.reco_startMomentum[particle][3] - mass;
+          double v = fsol*1/sqrt( 1-pow(mass/(mass+KE),2) );
+          if(!isfinite(v)){v=fsol;}
+	  if (pdg==22 || pdg==2112 || pdg==11){ v = fsol;}
+          double gamma=0;//used for extrapolating the line from start to end position
+          while (residual_range>=0){
+            _x->push_back(x_pos);
+            _y->push_back(y_pos);
+            _z->push_back(z_pos);
+            _t->push_back(t_pos);
+            t_pos += v*dx;
+            double dedx = get_dE_dx_range(residual_range,pdg)/1000;
+            KE = KE-dedx*dx;
+            v = fsol*1/sqrt( 1-pow(mass/(mass+KE),2) );
+	    if (!isfinite(v)){v=fsol;}
+            if (pdg==22 || pdg==2112 || pdg==11){ v = fsol;}
+            gamma+=(dx/length);
+            x_pos = start_x_pos + gamma*(end_x_pos-start_x_pos);
+            y_pos = start_y_pos + gamma*(end_y_pos-start_y_pos);
+            z_pos = start_z_pos + gamma*(end_z_pos-start_z_pos);
+            residual_range = length - sqrt( pow(start_x_pos-x_pos,2) + pow(start_y_pos-y_pos,2) + pow(start_z_pos-z_pos,2));
+            if (!isfinite(residual_range)){break;}
+	  }
+
+          return std::make_tuple(_x,_y,_z,_t);
+}
+
+double LEEana::get_dE_dx_range(double R, int pdg){
+    if (pdg==22 || pdg==11 || pdg==2112){ return 0; }
+    double A = 8; 
+    double b = -0.37; 
+    if (pdg==2212){    
+        A = 17;
+        b = -0.42;
+    }
+    double dedx = A*pow(R,b);
+    return dedx;
 }
 
 #endif

@@ -383,7 +383,22 @@ int main( int argc, char** argv )
       T_PFeval->SetBranchStatus("mcflux_ndecay",1);
     }
   }
-
+  T_PFeval->SetBranchStatus("reco_Ntrack",1);
+  T_PFeval->SetBranchStatus("reco_startMomentum",1);
+  T_PFeval->SetBranchStatus("reco_mother",1);
+  T_PFeval->SetBranchStatus("reco_id",1);
+  T_PFeval->SetBranchStatus("reco_startXYZT",1);
+  T_PFeval->SetBranchStatus("reco_endXYZT",1);
+  if(pfeval.flag_PMT){
+    T_PFeval->SetBranchStatus("PMT_Amp",1);
+    T_PFeval->SetBranchStatus("PMT_ID",1);
+    T_PFeval->SetBranchStatus("RWM_Time",1);
+    T_PFeval->SetBranchStatus("PMT_Time",1);
+  }
+  if (pfeval.flag_ns_time_cor){
+    T_PFeval->SetBranchStatus("evtTimeNS_cor",1);
+    T_PFeval->SetBranchStatus("cor_nu_deltatime",1);
+  }
 
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;
 

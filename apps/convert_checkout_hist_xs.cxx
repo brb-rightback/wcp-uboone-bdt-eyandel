@@ -220,6 +220,7 @@ int main( int argc, char** argv )
     T_BDTvars->SetBranchStatus("ssm_prim_track1_z_dir",1);
   }
 
+
   T_eval->SetBranchStatus("run",1);
   T_eval->SetBranchStatus("subrun",1);
   T_eval->SetBranchStatus("event",1);
@@ -282,6 +283,12 @@ int main( int argc, char** argv )
   T_PFeval->SetBranchStatus("reco_showervtxZ",1);
   T_PFeval->SetBranchStatus("reco_muonMomentum",1);
   T_PFeval->SetBranchStatus("reco_showerKE",1);
+  T_PFeval->SetBranchStatus("reco_Ntrack",1);
+  T_PFeval->SetBranchStatus("reco_startMomentum",1);
+  T_PFeval->SetBranchStatus("reco_mother",1);
+  T_PFeval->SetBranchStatus("reco_id",1);
+  T_PFeval->SetBranchStatus("reco_startXYZT",1);
+  T_PFeval->SetBranchStatus("reco_endXYZT",1);
   if (!flag_data){
       T_PFeval->SetBranchStatus("nuvtx_diff",1);
       T_PFeval->SetBranchStatus("showervtx_diff",1);
@@ -319,6 +326,21 @@ int main( int argc, char** argv )
       T_PFeval->SetBranchStatus("truth_showerMomentum",1);
       T_PFeval->SetBranchStatus("truth_nuScatType",1);
     }
+  }
+
+  if (pfeval.flag_nsbeam){
+    T_PFeval->SetBranchStatus("evtDeltaTimeNS",1);
+    T_PFeval->SetBranchStatus("evtTimeNS",1);
+  }
+  if(pfeval.flag_PMT){
+    T_PFeval->SetBranchStatus("PMT_Amp",1);
+    T_PFeval->SetBranchStatus("PMT_ID",1);
+    T_PFeval->SetBranchStatus("RWM_Time",1);
+    T_PFeval->SetBranchStatus("PMT_Time",1);
+  }
+  if (pfeval.flag_ns_time_cor){
+    T_PFeval->SetBranchStatus("evtTimeNS_cor",1);
+    T_PFeval->SetBranchStatus("cor_nu_deltatime",1);
   }
 
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;

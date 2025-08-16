@@ -1106,6 +1106,22 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_PFeval_cv->SetBranchStatus("evtDeltaTimeNS",1);
     T_PFeval_cv->SetBranchStatus("evtTimeNS",1);
   }
+  T_PFeval_cv->SetBranchStatus("reco_Ntrack",1);
+  T_PFeval_cv->SetBranchStatus("reco_startMomentum",1);
+  T_PFeval_cv->SetBranchStatus("reco_mother",1);
+  T_PFeval_cv->SetBranchStatus("reco_id",1);
+  T_PFeval_cv->SetBranchStatus("reco_startXYZT",1);
+  T_PFeval_cv->SetBranchStatus("reco_endXYZT",1);
+  if(pfeval_cv.flag_PMT){
+    T_PFeval_cv->SetBranchStatus("PMT_Amp",1);
+    T_PFeval_cv->SetBranchStatus("PMT_ID",1);
+    T_PFeval_cv->SetBranchStatus("RWM_Time",1);
+    T_PFeval_cv->SetBranchStatus("PMT_Time",1);
+  }
+  if (pfeval_cv.flag_ns_time_cor){
+    T_PFeval_cv->SetBranchStatus("evtTimeNS_cor",1);
+    T_PFeval_cv->SetBranchStatus("cor_nu_deltatime",1);
+  }
   //
 
 
@@ -1322,6 +1338,22 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   if (pfeval_det.flag_nsbeam){
     T_PFeval_det->SetBranchStatus("evtDeltaTimeNS",1);
     T_PFeval_det->SetBranchStatus("evtTimeNS",1);
+  }
+  T_PFeval_det->SetBranchStatus("reco_Ntrack",1);
+  T_PFeval_det->SetBranchStatus("reco_startMomentum",1);
+  T_PFeval_det->SetBranchStatus("reco_mother",1);
+  T_PFeval_det->SetBranchStatus("reco_id",1);
+  T_PFeval_det->SetBranchStatus("reco_startXYZT",1);
+  T_PFeval_det->SetBranchStatus("reco_endXYZT",1);
+  if(pfeval_det.flag_PMT){
+    T_PFeval_det->SetBranchStatus("PMT_Amp",1);
+    T_PFeval_det->SetBranchStatus("PMT_ID",1);
+    T_PFeval_det->SetBranchStatus("RWM_Time",1);
+    T_PFeval_det->SetBranchStatus("PMT_Time",1);
+  }
+  if (pfeval_det.flag_ns_time_cor){
+    T_PFeval_det->SetBranchStatus("evtTimeNS_cor",1);
+    T_PFeval_det->SetBranchStatus("cor_nu_deltatime",1);
   }
   //
 
