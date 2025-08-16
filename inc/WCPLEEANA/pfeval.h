@@ -19,6 +19,7 @@ struct PFevalInfo{
   bool flag_ns_time_cor;
   bool flag_Phtot;
   bool flag_PMT;
+  bool flag_save_nstime_sps;
 
   Int_t run;
   Int_t subrun;
@@ -198,7 +199,12 @@ struct PFevalInfo{
   Float_t cor_nu_time_nospill;
   Float_t cor_nu_time_spill;
   Float_t cor_nu_deltatime;
-  
+  std::vector<float> *reco_sps_x;
+  std::vector<float> *reco_sps_y;
+  std::vector<float> *reco_sps_z;
+  std::vector<float> *reco_sps_e;
+  std::vector<float> *reco_sps_pdg;
+  std::vector<float> *reco_sps_id;  
 
 };
 
@@ -229,6 +235,13 @@ void LEEana::init_pointers(PFevalInfo& tagger_info){
   tagger_info.PMT_TimeDP = new std::vector<float>;
   tagger_info.PMT_TimeDL = new std::vector<float>;
   tagger_info.PMT_Sat = new std::vector<bool>;
+
+  tagger_info.reco_sps_x = new std::vector<float>;
+  tagger_info.reco_sps_y = new std::vector<float>;
+  tagger_info.reco_sps_z = new std::vector<float>;
+  tagger_info.reco_sps_e = new std::vector<float>;
+  tagger_info.reco_sps_pdg = new std::vector<float>;
+  tagger_info.reco_sps_id = new std::vector<float>;
 }
 
 void LEEana::del_pointers(PFevalInfo& tagger_info){
@@ -248,6 +261,13 @@ void LEEana::del_pointers(PFevalInfo& tagger_info){
   delete tagger_info.PMT_TimeDP;
   delete tagger_info.PMT_TimeDL;
   delete tagger_info.PMT_Sat;
+
+  delete tagger_info.reco_sps_x;
+  delete tagger_info.reco_sps_y;
+  delete tagger_info.reco_sps_z;
+  delete tagger_info.reco_sps_e;
+  delete tagger_info.reco_sps_pdg;
+  delete tagger_info.reco_sps_id;
 }
 
 
@@ -415,8 +435,12 @@ void LEEana::clear_pfeval_info(PFevalInfo& tagger_info){
   tagger_info.cor_nu_time_nospill = -9999.;
   tagger_info.cor_nu_time_spill = -9999.;
   tagger_info.cor_nu_deltatime = -9999.;
-  
-
+  tagger_info.reco_sps_x->clear();
+  tagger_info.reco_sps_y->clear();
+  tagger_info.reco_sps_z->clear();
+  tagger_info.reco_sps_e->clear();
+  tagger_info.reco_sps_pdg->clear();
+  tagger_info.reco_sps_id->clear();
 }
 
 void LEEana::set_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
@@ -439,7 +463,7 @@ void LEEana::set_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
   tagger_info.flag_ns_time_cor = false;
   tagger_info.flag_Phtot = false;
   tagger_info.flag_PMT = false;
-
+  tagger_info.flag_save_nstime_sps = false;
 
 
   tree0->SetBranchAddress("run", &tagger_info.run);
@@ -679,7 +703,15 @@ void LEEana::set_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
     tree0->SetBranchAddress("PMT_Sat",&tagger_info.PMT_Sat);
     tree0->SetBranchAddress("RWM_Time",&tagger_info.RWM_Time);
   }
-
+  if (tree0->GetBranch("reco_sps_x")){
+    tagger_info.flag_save_nstime_sps = true;
+    tree0->SetBranchAddress("reco_sps_x",&tagger_info.reco_sps_x);
+    tree0->SetBranchAddress("reco_sps_y",&tagger_info.reco_sps_y);
+    tree0->SetBranchAddress("reco_sps_z",&tagger_info.reco_sps_z);
+    tree0->SetBranchAddress("reco_sps_e",&tagger_info.reco_sps_e);
+    tree0->SetBranchAddress("reco_sps_pdg",&tagger_info.reco_sps_pdg);
+    tree0->SetBranchAddress("reco_sps_id",&tagger_info.reco_sps_id);
+  }
 
 }
 
@@ -902,7 +934,14 @@ void LEEana::put_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
     tree0->Branch("PMT_Sat",&tagger_info.PMT_Sat);
     tree0->Branch("RWM_Time",&tagger_info.RWM_Time,"RWM_Time/F");
   }
-  
+  if (tagger_info.flag_save_nstime_sps){
+    tree0->Branch("reco_sps_x",&tagger_info.reco_sps_x);
+    tree0->Branch("reco_sps_y",&tagger_info.reco_sps_y);
+    tree0->Branch("reco_sps_z",&tagger_info.reco_sps_z);
+    tree0->Branch("reco_sps_e",&tagger_info.reco_sps_e);
+    tree0->Branch("reco_sps_pdg",&tagger_info.reco_sps_pdg);
+    tree0->Branch("reco_sps_id",&tagger_info.reco_sps_id);
+  } 
 
 
   
