@@ -42,6 +42,7 @@ int main( int argc, char** argv )
   bool flag_config = false;
   std::string config_file_name="config.txt";
   char delimiter = ',';
+  bool override_pot = false;
   for (Int_t i=4;i!=argc;i++){
     switch(argv[i][1]){
     case 't':
@@ -50,6 +51,10 @@ int main( int argc, char** argv )
       break;
     case 'd':
         delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
+      break;
+    case 'p':
+        override_pot = &argv[i][2];
+        if(override_pot) std::cout<<"Overriding the pot of each subrun"<<std::endl;
       break;
     }
   }
@@ -849,6 +854,13 @@ int main( int argc, char** argv )
       pot_det.pot_tor875good *= ratio;
 
       common_pot += pot_cv.pot_tor875;
+
+      if(override_pot){
+        pot_cv.pot_tor875=5e18;
+        pot_cv.pot_tor875good=5e18;
+        pot_det.pot_tor875=5e18;
+        pot_det.pot_tor875good=5e18;
+      }
 
       t2_cv->Fill();
       t2_det->Fill();
