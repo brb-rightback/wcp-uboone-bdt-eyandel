@@ -35,8 +35,11 @@ namespace LEEana{
 
   double get_ssmE(TaggerInfo& tagger_info, bool flag_2track=false);
   bool is_kdar_presel(TaggerInfo& tagger_info,EvalInfo& eval);
-  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.1523, double hiE_cut=1.409);
-
+  //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.1523, double hiE_cut=1.409);
+  //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=0.69, double hiE_cut=1.57);
+  bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=-0.3, double hiE_cut=1.409);
+  //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=-0.3, double hiE_cut=1.02);
+  //bool is_kdar_bdtsel(TaggerInfo& tagger_info, double lowE_cut=-0.3, double hiE_cut=1.77);
   double get_oldflux_weight(EvalInfo& eval,PFevalInfo& pfeval);
 
   double recover_nsbeamtiming(PFevalInfo& pfeval, bool flag_data);
@@ -690,6 +693,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     TThelp = evtTimeNS-fShift+gap*0.5;
     double TT_merged = -9999.;
     if (evtTimeNS>0) TT_merged=(TThelp-(int((TThelp)/gap))*gap)-gap*0.5;
+//std::cout<<TT_merged<<" "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;
     return TT_merged;
 
   }else if (var_name == "reco_showerKE"){
@@ -3527,12 +3531,12 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp"
     || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
 
-    if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
-    if(ch_name == "kdar_bdtsel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
-    if(ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
-    if(ch_name == "kdar_bdtsel_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
-    if(ch_name == "kdar_bdtsel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
-    if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"|| ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+    if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train" || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
+    if(ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp" || ch_name == "kdar_bdtselns_sigNp" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
+    if(ch_name == "kdar_bdtsel_bck" || ch_name == "kdar_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_bdtsel_bckNp" || ch_name == "kdar_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
+    if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"|| ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp" || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train"|| ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
 
   }else if(ch_name == "kdar_presel_bck"  || ch_name == "kdar_presel_dirt" || ch_name == "kdar_presel_bckNp"
@@ -10624,7 +10628,7 @@ double LEEana::recover_nsbeamtiming(PFevalInfo& pfeval, bool flag_data){
   if(!flag_data){ 
     f_evtTimeNS = Med_TT3+pfeval.cor_nu_deltatime; 
   }
-
+  //if(!flag_data && f_evtTimeNS>0) std::cout<<f_evtTimeNS<<" "<<pfeval.evtTimeNS_cor<<" "<<pfeval.evtTimeNS+pfeval.cor_nu_deltatime<<" "<<pfeval.evtTimeNS<<std::endl;
   return f_evtTimeNS;
 
 }
