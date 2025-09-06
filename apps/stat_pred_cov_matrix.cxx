@@ -2,6 +2,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/Util.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -28,6 +29,7 @@ int main( int argc, char** argv )
   }
   int run = 1; // run 1 ...
   bool flag_osc = false;
+  bool flag_v2h=0;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':
@@ -35,6 +37,10 @@ int main( int argc, char** argv )
       break;
     case 'o':
       flag_osc = atoi(&argv[i][2]); // which run period
+      break;
+    case 'h':
+      flag_v2h = atoi(&argv[i][2]);
+      if(flag_v2h==1) std::cout<<"Will save histograms in addition to vectors"<<std::endl;
       break;
     }
   }
@@ -154,6 +160,15 @@ int main( int argc, char** argv )
   cov_mat_collapse.Write(Form("cov_mat_%d",run));
   vec_mean_collapse.Write(Form("vec_mean_%d",run));  
   
+  if(flag_v2h){
+    std::cout<<"Saving histograms in addition to vectors"<<std::endl;
+    int nbinx = cov_mat_collapse.GetNrows();
+    int nbiny = cov_mat_collapse.GetNcols();
+    TH2D* h_cov = new TH2D(Form("h_cov_%d",run), Form("h_cov_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H(cov_mat_collapse, h_cov);
+    h_cov->Write();
+   }
+
 
   for (auto it = map_covch_hist.begin(); it != map_covch_hist.end(); it++){
     int covch = it->first;

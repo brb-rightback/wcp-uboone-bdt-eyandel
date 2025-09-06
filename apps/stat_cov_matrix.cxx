@@ -2,6 +2,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/Util.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -27,10 +28,15 @@ int main( int argc, char** argv )
     std::cout << "./stat_cov_matrix -r[run period]" << std::endl;
   }
   int run = 1; // run 1 ...
+  bool flag_v2h = 0;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':
       run = atoi(&argv[i][2]); // which run period
+      break;
+    case 'h':
+      flag_v2h = atoi(&argv[i][2]);
+      if(flag_v2h==1) std::cout<<"Will save histograms in addition to vectors"<<std::endl;
       break;
     }
   }
@@ -134,6 +140,14 @@ int main( int argc, char** argv )
 
   frac_cov_mat->Write(Form("frac_cov_mat_%d",run));
   
+  if(flag_v2h){
+    std::cout<<"Saving histograms in addition to vectors"<<std::endl;
+    int nbinx = cov_mat->GetNrows();
+    int nbiny = cov_mat->GetNcols();
+    TH2D* h_cov = new TH2D(Form("h_cov_%d",run), Form("h_cov_%d",run), nbinx, 0, nbinx, nbiny, 0, nbiny);
+    M2H((*cov_mat), h_cov);
+    h_cov->Write();
+   }
 
   for (auto it = map_obsch_hist.begin(); it != map_obsch_hist.end(); it++){
     ((TH1F*)it->second)->SetDirectory(file);
