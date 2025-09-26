@@ -719,6 +719,24 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     return tagger.ssm_kdar_score_lowE;
   }else if (var_name == "kdar_score_hiE"){
     return tagger.ssm_kdar_score_hiE;
+
+  }else if (var_name == "ssm_nu_angle_target"){
+    if(std::isnan(tagger.ssm_nu_angle_target)) return -999;
+    return tagger.ssm_nu_angle_target;
+  }else if (var_name == "ssm_nu_angle_target_deg"){
+    if(std::isnan(tagger.ssm_nu_angle_target)) return -999;
+    if (tagger.ssm_nu_angle_target<0) return -999;
+    return tagger.ssm_nu_angle_target*180/3.14159;
+
+  }else if (var_name == "ssm_nu_angle_absorber"){
+    if(std::isnan(tagger.ssm_nu_angle_absorber)) return -999;
+    return tagger.ssm_nu_angle_absorber;
+  }else if (var_name == "ssm_nu_angle_absorber_deg"){
+    if(std::isnan(tagger.ssm_nu_angle_absorber)) return -999;
+    if (tagger.ssm_nu_angle_absorber<0) return -999;
+    return tagger.ssm_nu_angle_absorber*180/3.14159;
+
+
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
   }else if (var_name == "kine_reco_Eproton"){

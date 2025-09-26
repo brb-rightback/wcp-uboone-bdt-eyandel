@@ -242,6 +242,8 @@ int main( int argc, char** argv )
     T_BDTvars->SetBranchStatus("ssm_prim_track1_x_dir",1);
     T_BDTvars->SetBranchStatus("ssm_prim_track1_y_dir",1);
     T_BDTvars->SetBranchStatus("ssm_prim_track1_z_dir",1);
+    T_BDTvars->SetBranchStatus("ssm_nu_angle_absorber",1);
+    T_BDTvars->SetBranchStatus("ssm_nu_angle_target",1);
   }
   //
 
