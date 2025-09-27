@@ -3575,11 +3575,18 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   || ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_outFV_sig" || ch_name == "kdar_presel_sigNp"
   || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp" 
   || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp"
-  || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp")
+  || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
+
+  || ch_name == "kdar_ktagged_sig" || ch_name == "kdar_ktagged_outFV_sig" || ch_name == "kdar_ktagged_sigNp"
+  || ch_name == "kdar_ktaggedns_sig" || ch_name == "kdar_ktaggedns_outFV_sig" || ch_name == "kdar_ktaggedns_sigNp"
+  || ch_name == "kdar_ktagged_nuwro_train" || ch_name == "kdar_ktagged_gibuu_train" || ch_name == "kdar_ktagged_nuwro_trainNp" || ch_name == "kdar_ktagged_gibuu_trainNp"
+  || ch_name == "kdar_ktaggedns_nuwro_train" || ch_name == "kdar_ktaggedns_gibuu_train" || ch_name == "kdar_ktaggedns_nuwro_trainNp" || ch_name == "kdar_ktaggedns_gibuu_trainNp"
+
+  || ch_name == "kdar_bdtselNp_sig" || ch_name == "kdar_bdtselNpns_sig" || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_ktaggedNp_sig" || ch_name == "kdar_ktaggedNpns_sig")
   {flag_kdar_file=true;}
   double merge_time = 0;//
   if(!(ch_name=="kdar_sideband_overlap1_bck" || ch_name=="kdar_sideband_overlap2_bck" || ch_name=="kdar_sideband_overlap3_bck" || ch_name=="kdar_sideband_overlap4_bck" || ch_name == "kdar_bdtselns_nons_bck")) merge_time = get_kine_var(kine, eval, pfeval, tagger, flag_data, "merge_time_recover_numi",flag_kdar_file);
-  if(ch_name == "kdar_bdtselnsrand_dirt" || ch_name == "kdar_hiE_bdtselnsrand_dirt" || ch_name == "kdar_lowE_bdtselnsrand_dirt" || ch_name == "kdar_preselnsrand_dirt") merge_time = get_kine_var(kine, eval, pfeval, tagger, flag_data, "merge_time_random");
+  if(ch_name == "kdar_bdtselnsrand_dirt" || ch_name == "kdar_hiE_bdtselnsrand_dirt" || ch_name == "kdar_lowE_bdtselnsrand_dirt" || ch_name == "kdar_preselnsrand_dirt" || ch_name == "kdar_ktaggednsrand_dirt" || ch_name == "kdar_bdtselNpnsrand_dirt" || ch_name == "kdar_preselNprand_dirt" || ch_name == "kdar_ktaggedNpnsrand_dirt") merge_time = get_kine_var(kine, eval, pfeval, tagger, flag_data, "merge_time_random");
   //std::cout<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<" "<<merge_time<<std::endl;
 
 
@@ -3597,23 +3604,35 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   || ch_name == "kdar_bdtselns_bck"  || ch_name == "kdar_bdtselns_dirt" || ch_name == "kdar_bdtselnsrand_dirt" || ch_name == "kdar_bdtselns_bckNp" || ch_name == "kdar_bdtselns_nons_bck" || ch_name == "kdar_bdtselns_fake_bck"
   || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_outFV_sig" || ch_name == "kdar_bdtselns_sigNp"
   || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp"
-  || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext"){ 
+  || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext"
 
+  || ch_name == "kdar_bdtselNp_sig" || ch_name == "kdar_bdtselNp_bck" || ch_name == "kdar_bdtselNp_dirt" || ch_name == "kdar_bdtselNp_ext" || ch_name == "kdar_bdtselNp" 
+  || ch_name == "kdar_bdtselNpns_sig" || ch_name == "kdar_bdtselNpns_bck" || ch_name == "kdar_bdtselNpns_dirt" || ch_name == "kdar_bdtselNpns_ext" || ch_name == "kdar_bdtselNpns" || ch_name == "kdar_bdtselNpnsrand_dirt"){
     bool flag_pass = flag_kdar_bdtsel && flag_kdar_presel;
 
     if((ch_name == "kdar_bdtselns_bck"  || ch_name == "kdar_bdtselns_dirt" || ch_name == "kdar_bdtselnsrand_dirt" || ch_name == "kdar_bdtselns_bckNp" || ch_name == "kdar_bdtselns_nons_bck"
     || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_outFV_sig" || ch_name == "kdar_bdtselns_sigNp"
     || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp"
+    || ch_name == "kdar_bdtselNpns_dirt" || ch_name == "kdar_bdtselNpnsrand_dirt"
     //|| ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
     //|| ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_bdtselns" || ch_name == "kdar_bdtselns_ext" || ch_name == "kdar_bdtselns_fake_bck") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train" || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_bdtsel_sig" || ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train" || ch_name == "kdar_bdtselns_sig" || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train" || ch_name == "kdar_bdtselNp_sig" || ch_name == "kdar_bdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+
     if(ch_name == "kdar_bdtsel_outFV_sig" || ch_name == "kdar_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
+
     if(ch_name == "kdar_bdtsel_sigNp" || ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp" || ch_name == "kdar_bdtselns_sigNp" || ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
-    if(ch_name == "kdar_bdtsel_bck" || ch_name == "kdar_bdtselns_bck" || ch_name == "kdar_bdtselns_nons_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+
+    if(ch_name == "kdar_bdtsel_bck" || ch_name == "kdar_bdtselns_bck" || ch_name == "kdar_bdtselns_nons_bck" || ch_name == "kdar_bdtselNp_bck" || ch_name == "kdar_bdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+
     if(ch_name == "kdar_bdtsel_bckNp" || ch_name == "kdar_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
+
     if(ch_name == "kdar_bdtsel_nuwro_train" || ch_name == "kdar_bdtsel_gibuu_train"|| ch_name == "kdar_bdtsel_nuwro_trainNp" || ch_name == "kdar_bdtsel_gibuu_trainNp" || ch_name == "kdar_bdtselns_nuwro_train" || ch_name == "kdar_bdtselns_gibuu_train"|| ch_name == "kdar_bdtselns_nuwro_trainNp" || ch_name == "kdar_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+
+    if(ch_name == "kdar_bdtselNp_sig" || ch_name == "kdar_bdtselNp_bck" || ch_name == "kdar_bdtselNp_dirt" || ch_name == "kdar_bdtselNp_ext" || ch_name == "kdar_bdtselNp"        
+  || ch_name == "kdar_bdtselNpns_sig" || ch_name == "kdar_bdtselNpns_bck" || ch_name == "kdar_bdtselNpns_dirt" || ch_name == "kdar_bdtselNpns_ext" || ch_name == "kdar_bdtselNpns" || ch_name == "kdar_bdtselNpnsrand_dirt"){if(tagger.ssm_prim_track1_kine_energy_range<0) flag_pass=false;}
+
     return flag_pass;
 
 
@@ -3684,21 +3703,25 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   || ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp" || ch_name == "kdar_preselnsrand_dirt"
   || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
   || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
-  || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext"){
+  || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext"
+
+  || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNp_dirt" || ch_name == "kdar_preselNp_ext" || ch_name == "kdar_preselNp"
+  || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"){
 
     bool flag_pass = flag_kdar_presel;
 
     if((ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp" || ch_name == "kdar_preselnsrand_dirt"
     || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
     || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
+      || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"
     //|| ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
     || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
 
-    if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
     if(ch_name == "kdar_presel_sigNp" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
-    if(ch_name == "kdar_presel_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_presel_bck" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
     if(ch_name == "kdar_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
     if(ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train"|| ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
@@ -3755,6 +3778,82 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_sideband_overlap2_bck"  || ch_name == "kdar_sideband_overlap2_dirt" || ch_name == "kdar_sideband_overlap2_sig" || ch_name == "kdar_sideband_overlap2" || ch_name == "kdar_sideband_overlap2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
     if( (ch_name == "kdar_sideband_overlap3_bck"  || ch_name == "kdar_sideband_overlap3_dirt" || ch_name == "kdar_sideband_overlap3_sig" || ch_name == "kdar_sideband_overlap3" || ch_name == "kdar_sideband_overlap3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_sideband_overlap4_bck"  || ch_name == "kdar_sideband_overlap4_dirt" || ch_name == "kdar_sideband_overlap4_sig" || ch_name == "kdar_sideband_overlap4" || ch_name == "kdar_sideband_overlap4_ext") && reco_Enu<1000) flag_pass = false;
+    return flag_pass;
+
+
+
+
+  }else if(ch_name == "kdar_ktagged_bck"  || ch_name == "kdar_ktagged_dirt" || ch_name == "kdar_ktagged_bckNp"
+  || ch_name == "kdar_ktagged_sig" || ch_name == "kdar_ktagged_outFV_sig" || ch_name == "kdar_ktagged_sigNp"
+  || ch_name == "kdar_ktagged_nuwro_train" || ch_name == "kdar_ktagged_gibuu_train" || ch_name == "kdar_ktagged_nuwro_trainNp" || ch_name == "kdar_ktagged_gibuu_trainNp"
+  || ch_name == "kdar_ktagged" || ch_name == "kdar_ktagged_ext"
+
+  || ch_name == "kdar_ktaggedns_bck"  || ch_name == "kdar_ktaggedns_dirt" || ch_name == "kdar_ktaggedns_bckNp" || ch_name == "kdar_ktaggednsrand_dirt"
+  || ch_name == "kdar_ktaggedns_sig" || ch_name == "kdar_ktaggedns_outFV_sig" || ch_name == "kdar_ktaggedns_sigNp"
+  || ch_name == "kdar_ktaggedns_nuwro_train" || ch_name == "kdar_ktaggedns_gibuu_train" || ch_name == "kdar_ktaggedns_nuwro_trainNp" || ch_name == "kdar_ktaggedns_gibuu_trainNp"
+  || ch_name == "kdar_ktaggedns" || ch_name == "kdar_ktaggedns_ext"
+
+  || ch_name == "kdar_ktaggedNp_sig" || ch_name == "kdar_ktaggedNp_bck" || ch_name == "kdar_ktaggedNp_dirt" || ch_name == "kdar_ktaggedNp_ext" || ch_name == "kdar_ktaggedNp"
+  || ch_name == "kdar_ktaggedNpns_sig" || ch_name == "kdar_ktaggedNpns_bck" || ch_name == "kdar_ktaggedNpns_dirt" || ch_name == "kdar_ktaggedNpns_ext" || ch_name == "kdar_ktaggedNpns" || ch_name == "kdar_ktaggedNpnsrand_dirt"){
+
+    bool flag_pass = false;
+    if(tagger.ssm_kine_energy>0) flag_pass = true;
+
+    if((ch_name == "kdar_ktaggedns_bck"  || ch_name == "kdar_ktaggedns_dirt" || ch_name == "kdar_ktaggedns_bckNp" || ch_name == "kdar_ktaggednsrand_dirt"
+    || ch_name == "kdar_ktaggedns_sig" || ch_name == "kdar_ktaggedns_outFV_sig" || ch_name == "kdar_ktaggedns_sigNp"
+    || ch_name == "kdar_ktaggedns_nuwro_train" || ch_name == "kdar_ktaggedns_gibuu_train" || ch_name == "kdar_ktaggedns_nuwro_trainNp" || ch_name == "kdar_ktaggedns_gibuu_trainNp"
+      || ch_name == "kdar_ktaggedNpns_sig" || ch_name == "kdar_ktaggedNpns_bck" || ch_name == "kdar_ktaggedNpns_dirt" || ch_name == "kdar_ktaggedNpns_ext" || ch_name == "kdar_ktaggedNpns" || ch_name == "kdar_ktaggedNpnsrand_dirt"
+    //|| ch_name == "kdar_ktaggedns" || ch_name == "kdar_ktaggedns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
+    || ch_name == "kdar_ktaggedns" || ch_name == "kdar_ktaggedns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
+    //|| ch_name == "kdar_ktaggedns" || ch_name == "kdar_ktaggedns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
+
+    if(ch_name == "kdar_ktagged_sig" || ch_name == "kdar_ktagged_nuwro_train" || ch_name == "kdar_ktagged_gibuu_train" || ch_name == "kdar_ktaggedNp_sig" || ch_name == "kdar_ktaggedNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_ktagged_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
+    if(ch_name == "kdar_ktagged_sigNp" || ch_name == "kdar_ktagged_nuwro_trainNp" || ch_name == "kdar_ktagged_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
+    if(ch_name == "kdar_ktagged_bck" || ch_name == "kdar_ktaggedNp_bck" || ch_name == "kdar_ktaggedNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_ktagged_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
+    if(ch_name == "kdar_ktagged_nuwro_train" || ch_name == "kdar_ktagged_gibuu_train"|| ch_name == "kdar_ktagged_nuwro_trainNp" || ch_name == "kdar_ktagged_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+    return flag_pass;
+
+
+
+  }else if(ch_name == "kdar_antibdtsel_bck"  || ch_name == "kdar_antibdtsel_dirt" || ch_name == "kdar_antibdtsel_bckNp"
+  || ch_name == "kdar_antibdtsel_sig" || ch_name == "kdar_antibdtsel_outFV_sig" || ch_name == "kdar_antibdtsel_sigNp"
+  || ch_name == "kdar_antibdtsel_nuwro_train" || ch_name == "kdar_antibdtsel_gibuu_train" || ch_name == "kdar_antibdtsel_nuwro_trainNp" || ch_name == "kdar_antibdtsel_gibuu_trainNp"
+  || ch_name == "kdar_antibdtsel" || ch_name == "kdar_antibdtsel_ext"
+
+  || ch_name == "kdar_antibdtselns_bck"  || ch_name == "kdar_antibdtselns_dirt" || ch_name == "kdar_antibdtselnsrand_dirt" || ch_name == "kdar_antibdtselns_bckNp" || ch_name == "kdar_antibdtselns_nons_bck" || ch_name == "kdar_antibdtselns_fake_bck"
+  || ch_name == "kdar_antibdtselns_sig" || ch_name == "kdar_antibdtselns_outFV_sig" || ch_name == "kdar_antibdtselns_sigNp"
+  || ch_name == "kdar_antibdtselns_nuwro_train" || ch_name == "kdar_antibdtselns_gibuu_train" || ch_name == "kdar_antibdtselns_nuwro_trainNp" || ch_name == "kdar_antibdtselns_gibuu_trainNp"
+  || ch_name == "kdar_antibdtselns" || ch_name == "kdar_antibdtselns_ext"
+
+  || ch_name == "kdar_antibdtselNp_sig" || ch_name == "kdar_antibdtselNp_bck" || ch_name == "kdar_antibdtselNp_dirt" || ch_name == "kdar_antibdtselNp_ext" || ch_name == "kdar_antibdtselNp"
+  || ch_name == "kdar_antibdtselNpns_sig" || ch_name == "kdar_antibdtselNpns_bck" || ch_name == "kdar_antibdtselNpns_dirt" || ch_name == "kdar_antibdtselNpns_ext" || ch_name == "kdar_antibdtselNpns" || ch_name == "kdar_antibdtselNpnsrand_dirt"){
+    bool flag_pass = !(flag_kdar_bdtsel) && flag_kdar_presel;
+
+    if((ch_name == "kdar_antibdtselns_bck"  || ch_name == "kdar_antibdtselns_dirt" || ch_name == "kdar_antibdtselnsrand_dirt" || ch_name == "kdar_antibdtselns_bckNp" || ch_name == "kdar_antibdtselns_nons_bck"
+    || ch_name == "kdar_antibdtselns_sig" || ch_name == "kdar_antibdtselns_outFV_sig" || ch_name == "kdar_antibdtselns_sigNp"
+    || ch_name == "kdar_antibdtselns_nuwro_train" || ch_name == "kdar_antibdtselns_gibuu_train" || ch_name == "kdar_antibdtselns_nuwro_trainNp" || ch_name == "kdar_antibdtselns_gibuu_trainNp"
+    || ch_name == "kdar_antibdtselNpns_dirt" || ch_name == "kdar_antibdtselNpnsrand_dirt"
+    //|| ch_name == "kdar_antibdtselns" || ch_name == "kdar_antibdtselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
+    //|| ch_name == "kdar_antibdtselns" || ch_name == "kdar_antibdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
+    || ch_name == "kdar_antibdtselns" || ch_name == "kdar_antibdtselns_ext" || ch_name == "kdar_antibdtselns_fake_bck") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
+
+    if(ch_name == "kdar_antibdtsel_sig" || ch_name == "kdar_antibdtsel_nuwro_train" || ch_name == "kdar_antibdtsel_gibuu_train" || ch_name == "kdar_antibdtselns_sig" || ch_name == "kdar_antibdtselns_nuwro_train" || ch_name == "kdar_antibdtselns_gibuu_train" || ch_name == "kdar_antibdtselNp_sig" || ch_name == "kdar_antibdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+
+    if(ch_name == "kdar_antibdtsel_outFV_sig" || ch_name == "kdar_antibdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
+
+    if(ch_name == "kdar_antibdtsel_sigNp" || ch_name == "kdar_antibdtsel_nuwro_trainNp" || ch_name == "kdar_antibdtsel_gibuu_trainNp" || ch_name == "kdar_antibdtselns_sigNp" || ch_name == "kdar_antibdtselns_nuwro_trainNp" || ch_name == "kdar_antibdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
+
+    if(ch_name == "kdar_antibdtsel_bck" || ch_name == "kdar_antibdtselns_bck" || ch_name == "kdar_antibdtselns_nons_bck" || ch_name == "kdar_antibdtselNp_bck" || ch_name == "kdar_antibdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+
+    if(ch_name == "kdar_antibdtsel_bckNp" || ch_name == "kdar_antibdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
+
+    if(ch_name == "kdar_antibdtsel_nuwro_train" || ch_name == "kdar_antibdtsel_gibuu_train"|| ch_name == "kdar_antibdtsel_nuwro_trainNp" || ch_name == "kdar_antibdtsel_gibuu_trainNp" || ch_name == "kdar_antibdtselns_nuwro_train" || ch_name == "kdar_antibdtselns_gibuu_train"|| ch_name == "kdar_antibdtselns_nuwro_trainNp" || ch_name == "kdar_antibdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+
+    if(ch_name == "kdar_antibdtselNp_sig" || ch_name == "kdar_antibdtselNp_bck" || ch_name == "kdar_antibdtselNp_dirt" || ch_name == "kdar_antibdtselNp_ext" || ch_name == "kdar_antibdtselNp"
+  || ch_name == "kdar_antibdtselNpns_sig" || ch_name == "kdar_antibdtselNpns_bck" || ch_name == "kdar_antibdtselNpns_dirt" || ch_name == "kdar_antibdtselNpns_ext" || ch_name == "kdar_antibdtselNpns" || ch_name == "kdar_antibdtselNpnsrand_dirt"){if(tagger.ssm_prim_track1_kine_energy_range<0) flag_pass=false;}
+
     return flag_pass;
 
 
