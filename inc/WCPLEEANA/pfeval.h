@@ -7,6 +7,7 @@ struct PFevalInfo{
   bool flag_showerMomentum;
   bool flag_recoprotonMomentum;
   bool flag_pf_truth;
+  bool flag_endprocess;
   bool flag_pf_reco;
   bool flag_init_pointers;
   //Erin
@@ -116,6 +117,7 @@ struct PFevalInfo{
   Int_t truth_id[10000];  // track id; size == truth_Ntrack
   Int_t truth_pdg[10000];  // track particle pdg; size == truth_Ntrack
   std::vector<std::string > *truth_process;
+  std::vector<std::string > *truth_endprocess;
   Int_t truth_mother[10000];  // mother id of this track; size == truth_Ntrack
   Float_t truth_startXYZT[10000][4];  // start position of this track; size == truth_Ntrack
   Float_t truth_endXYZT[10000][4];  // end position of this track; size == truth_Ntrack
@@ -219,6 +221,7 @@ struct PFevalInfo{
 void LEEana::init_pointers(PFevalInfo& tagger_info){
 
   tagger_info.truth_process = new std::vector<std::string >;
+  tagger_info.truth_endprocess = new std::vector<std::string >;
   tagger_info.truth_daughters = new   std::vector<std::vector<Int_t> >;
   tagger_info.fMC_trackPosition = new TObjArray();
   tagger_info.fMC_trackPosition->SetOwner(kTRUE);
@@ -246,6 +249,7 @@ void LEEana::init_pointers(PFevalInfo& tagger_info){
 
 void LEEana::del_pointers(PFevalInfo& tagger_info){
   delete tagger_info.truth_process;
+  delete tagger_info.truth_endprocess;
   delete tagger_info.truth_daughters;
   delete tagger_info.fMC_trackPosition;
   delete tagger_info.reco_process;
@@ -276,6 +280,7 @@ void LEEana::clear_pfeval_info(PFevalInfo& tagger_info){
   tagger_info.flag_showerMomentum = false;
   tagger_info.flag_recoprotonMomentum = false;
   tagger_info.flag_pf_truth = false;
+  tagger_info.flag_endprocess = false;
   tagger_info.flag_pf_reco = false;
 
   if (!tagger_info.flag_init_pointers){
@@ -381,6 +386,7 @@ void LEEana::clear_pfeval_info(PFevalInfo& tagger_info){
   //PF ...
   tagger_info.truth_Ntrack = 0;  // number of tracks in MC
   tagger_info.truth_process->clear();
+  tagger_info.truth_endprocess->clear();
   tagger_info.truth_daughters->clear();  // daughters id of this track; vector
   tagger_info.fMC_trackPosition->Clear("");
 
@@ -454,6 +460,7 @@ void LEEana::set_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
   tagger_info.flag_showerMomentum = false;
   tagger_info.flag_recoprotonMomentum = false;
   tagger_info.flag_pf_truth = false;
+  tagger_info.flag_endprocess = false;
   tagger_info.flag_pf_reco = false;
   tagger_info.flag_init_pointers = false;
 
@@ -592,6 +599,10 @@ void LEEana::set_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
     tree0->SetBranchAddress("truth_id", &tagger_info.truth_id);
     tree0->SetBranchAddress("truth_pdg", &tagger_info.truth_pdg);
     tree0->SetBranchAddress("truth_process", &tagger_info.truth_process);
+    if(tree0->GetBranch("truth_endprocess")){
+      tagger_info.flag_endprocess = true;
+      tree0->SetBranchAddress("truth_endprocess", &tagger_info.truth_endprocess);
+    }
     tree0->SetBranchAddress("truth_mother", &tagger_info.truth_mother);
     tree0->SetBranchAddress("truth_startXYZT", &tagger_info.truth_startXYZT);
     tree0->SetBranchAddress("truth_endXYZT", &tagger_info.truth_endXYZT);
@@ -834,6 +845,9 @@ void LEEana::put_tree_address(TTree *tree0, PFevalInfo& tagger_info, int flag){
     tree0->Branch("truth_id", &tagger_info.truth_id, "truth_id[truth_Ntrack]/I");
     tree0->Branch("truth_pdg", &tagger_info.truth_pdg, "truth_pdg[truth_Ntrack]/I");
     tree0->Branch("truth_process", &tagger_info.truth_process);
+    if(tagger_info.flag_endprocess){
+      tree0->Branch("truth_endprocess", &tagger_info.truth_endprocess);
+    }
     tree0->Branch("truth_mother", &tagger_info.truth_mother, "truth_mother[truth_Ntrack]/I");
     tree0->Branch("truth_startXYZT", &tagger_info.truth_startXYZT, "truth_startXYZT[truth_Ntrack][4]/F");
     tree0->Branch("truth_endXYZT", &tagger_info.truth_endXYZT, "truth_endXYZT[truth_Ntrack][4]/F");
