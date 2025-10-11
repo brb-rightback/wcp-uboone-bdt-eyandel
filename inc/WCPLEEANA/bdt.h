@@ -134,7 +134,52 @@ float cal_tro_5_bdt(float default_val , TaggerInfo& tagger_info, TMVA::Reader& r
 		    float& tro_5_v_max_count,
 		    float& tro_5_v_energy);
 
+float cal_spacepoint_pi_veto(ParticleInfo& particle, TMVA::Reader& reader);
+float cal_spacepoint_mu_veto(ParticleInfo& particle, TMVA::Reader& reader);
+float cal_spacepoint_el_veto(ParticleInfo& particle, TMVA::Reader& reader);
+float cal_spacepoint_p_veto(ParticleInfo& particle, TMVA::Reader& reader);
+float cal_spacepoint_n_veto(ParticleInfo& particle, TMVA::Reader& reader);
+float cal_spacepoint_all_veto(ParticleInfo& particle, TMVA::Reader& reader);
+
 }
+
+float LEEana::cal_spacepoint_pi_veto(ParticleInfo& particle){
+  float val = -999;
+  double val1 = reader.EvaluateMVA("MyBDT");
+  val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
+  return val;
+}
+float LEEana::cal_spacepoint_mu_veto(ParticleInfo& particle, TMVA::Reader& reader){
+  float val = -999;
+  double val1 = reader.EvaluateMVA("MyBDT");
+  val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
+  return val;
+}
+float LEEana::cal_spacepoint_el_veto(ParticleInfo& particle, TMVA::Reader& reader){
+  float val = -999;
+  double val1 = reader.EvaluateMVA("MyBDT");
+  val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
+  return val;
+}
+float LEEana::cal_spacepoint_p_veto(ParticleInfo& particle, TMVA::Reader& reader){
+  float val = -999;
+  double val1 = reader.EvaluateMVA("MyBDT");
+  val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
+  return val;
+}
+float LEEana::cal_spacepoint_n_veto(ParticleInfo& particle, TMVA::Reader& reader){
+  float val = -999;
+  double val1 = reader.EvaluateMVA("MyBDT");
+  val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
+  return val;
+}
+float LEEana::cal_spacepoint_all_veto(ParticleInfo& particle, TMVA::Reader& reader){
+  float val = -999;
+  double val1 = reader.EvaluateMVA("MyBDT");
+  val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
+  return val;
+}
+
 
 // May 26th added by LEE
 // I removed the log conversion step, I think the way it is here should be within the range -20 to +10, matching what I've been using so far

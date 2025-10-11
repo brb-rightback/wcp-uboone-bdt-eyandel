@@ -35,8 +35,9 @@ using namespace LEEana;
 #include "WCPLEEANA/pot.h"
 #include "WCPLEEANA/pfeval.h"
 #include "WCPLEEANA/kine.h"
+#include "WCPLEEANA/space.h"
+#include "WCPLEEANA/particle.h"
 
-//#include "WCPLEEANA/Util.h"
 #include "WCPLEEANA/tree_wrangler.h"
 
 int main( int argc, char** argv )
@@ -191,6 +192,10 @@ int main( int argc, char** argv )
   TaggerInfo tagger;
   PFevalInfo pfeval;
   KineInfo kine;
+
+  SpaceInfo space_info;
+
+  ParticleInfo& particle_info;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
@@ -459,10 +464,16 @@ int main( int argc, char** argv )
   tagger.WCPMTInfoPeMeas = new std::vector<double>;
   tagger.WCPMTInfoPeMeasErr = new std::vector<double>;
 
+  particle_info.spacepoints_x = new std::vector<double>;
+  particle_info.spacepoints_y = new std::vector<double>;
+  particle_info.spacepoints_z = new std::vector<double>;
+  particle_info.spacepoints_q = new std::vector<double>;
+
   set_tree_address(T_BDTvars, tagger,2 );
   tagger.flag_nc_gamma_bdt = true;
   tagger.flag_nc_gamma_0track_bdt = true;
   tagger.saved_ssm_bdt_scores = true;
+  tagger.saved_pi_veto_scores = true;
   put_tree_address(t4, tagger,2);
 
   if (flag_data){
@@ -487,6 +498,8 @@ int main( int argc, char** argv )
   set_tree_address(T_KINEvars, kine);
   put_tree_address(t5, kine);
 
+  set_tree_address(T_spacepoints, space_info);
+  put_tree_address(new_T_spacepoints, space_info);
 
   //  bool match_isFC;
   //  T_eval->SetBranchAddress("match_isFC",&match_isFC);
@@ -3455,6 +3468,51 @@ int main( int argc, char** argv )
   reader_kdar_lowE.BookMVA( "MyBDT", "weights/kdar_lowE.xml");
   reader_kdar_hiE.BookMVA( "MyBDT", "weights/kdar_hiE.xml");
 
+  TMVA::Reader reader_pi_veto;
+  reader_pi_veto.AddVariable("spacepoints_q_0", &particle_info.spacepoints_q_0);
+  reader_pi_veto.AddVariable("spacepoints_q_1", &particle_info.spacepoints_q_1);
+  reader_pi_veto.AddVariable("spacepoints_q_2", &particle_info.spacepoints_q_2);
+  reader_pi_veto.AddVariable("spacepoints_q_3", &particle_info.spacepoints_q_3);
+  reader_pi_veto.AddVariable("spacepoints_q_4", &particle_info.spacepoints_q_4);
+  reader_pi_veto.AddVariable("spacepoints_q_5", &particle_info.spacepoints_q_5);
+  reader_pi_veto.AddVariable("spacepoints_q_6", &particle_info.spacepoints_q_6);
+  reader_pi_veto.AddVariable("spacepoints_q_7", &particle_info.spacepoints_q_7);
+  reader_pi_veto.AddVariable("spacepoints_q_8", &particle_info.spacepoints_q_8);
+  reader_pi_veto.AddVariable("spacepoints_q_9", &particle_info.spacepoints_q_9);
+  reader_pi_veto.AddVariable("spacepoints_q_10", &particle_info.spacepoints_q_10);
+  reader_pi_veto.AddVariable("spacepoints_q_11", &particle_info.spacepoints_q_11);
+  reader_pi_veto.AddVariable("spacepoints_q_12", &particle_info.spacepoints_q_12);
+  reader_pi_veto.AddVariable("spacepoints_q_13", &particle_info.spacepoints_q_13);
+  reader_pi_veto.AddVariable("spacepoints_q_14", &particle_info.spacepoints_q_14);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_0", &particle_info.spacepoints_q_bck_0);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_1", &particle_info.spacepoints_q_bck_1);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_2", &particle_info.spacepoints_q_bck_2);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_3", &particle_info.spacepoints_q_bck_3);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_4", &particle_info.spacepoints_q_bck_4);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_5", &particle_info.spacepoints_q_bck_5);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_6", &particle_info.spacepoints_q_bck_6);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_7", &particle_info.spacepoints_q_bck_7);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_8", &particle_info.spacepoints_q_bck_8);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_9", &particle_info.spacepoints_q_bck_9);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_10", &particle_info.spacepoints_q_bck_10);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_11", &particle_info.spacepoints_q_bck_11);
+  reader_pi_veto.AddVariable("spacepoints_q_bck_12", &particle_info.spacepoints_q_bck_12);
+  reader_pi_veto.AddVariable("spacepoints_q_med", &particle_info.)spacepoints_q_med;
+  reader_pi_veto.AddVariable("flag_has_daught", &particle_info.flag_has_daught);
+  reader_pi_veto.AddVariable("flag_has_daught_p", &particle_info.flag_has_daught_p);
+  reader_pi_veto.AddVariable("flag_has_daught_el", &particle_info.flag_has_daught_el);
+  reader_pi_veto.AddVariable("flag_has_daught_pi", &particle_info.flag_has_daught_pi);
+  reader_pi_veto.AddVariable("reco_larpid_pidScore_el", &particle_info.reco_larpid_pidScore_el);
+  reader_pi_veto.AddVariable("reco_larpid_pidScore_ph", &particle_info.reco_larpid_pidScore_ph);
+  reader_pi_veto.AddVariable("reco_larpid_pidScore_mu", &particle_info.reco_larpid_pidScore_mu);
+  reader_pi_veto.AddVariable("reco_larpid_pidScore_pr", &particle_info.reco_larpid_pidScore_pr);
+  reader_pi_veto.AddVariable("reco_larpid_pidScore_pi", &particle_info.reco_larpid_pidScore_pi);
+  reader_pi_veto.AddVariable("reco_larpid_proccess", &particle_info.reco_larpid_proccess);
+  reader_pi_veto.AddVariable("flag_is_contained", &particle_info.flag_is_contained);
+  reader_pi_veto.AddVariable("reco_pdg", &particle_info.reco_pdg);
+  reader_pi_veto.BookMVA( "MyBDT", "weights/pi_veto.xml");
+
+
   std::map<std::pair<int, int>, int> map_rs_n;
   std::map<std::pair<int, int>, std::set<int> > map_rs_f1p5; // Reco 1.5
   std::map<std::pair<int, int>, std::set<int> > map_rs_f2stm; // Reco2 stm
@@ -3687,6 +3745,17 @@ int main( int argc, char** argv )
     if (std::isnan(tagger.ssm_kine_pio_angle)) tagger.ssm_kine_pio_angle = 0;
     tagger.ssm_kdar_score_lowE = cal_kdar_lowE_bdt_xgboost(tagger, eval, reader_kdar_lowE);
     tagger.ssm_kdar_score_hiE = cal_kdar_hiE_bdt_xgboost(tagger, eval, reader_kdar_hiE);
+
+    tagger.pi_veto_score=-999;
+    tagger.pi_veto_prim_score=-999;
+    tagger.pi_veto_all_score=-999;
+    for(int part=0; part<reco_Ntrack; part++){
+      particle_info = create_particle(space_info, pfeval, particle_info, part);
+      double temp_pi_veto_score = cal_spacepoint_pi_veto(particle,reader_pi_veto);
+      if(temp_pi_veto_score>tagger.pi_all_veto_score) tagger.pi_veto_all_score = temp_pi_veto_all_score;
+      if(temp_pi_veto_score>tagger.pi_prim_veto_score && pfeval.reco_mother[part]==0) tagger.pi_veto_prim_score = temp_pi_veto_prim_score;
+      if(temp_pi_veto_score>tagger.pi_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==211) tagger.pi_veto_score = temp_pi_veto_score;
+    }
 
     // limit the cut val ...
     if (std::isnan(eval.weight_spline) || std::isinf(eval.weight_spline) ||
