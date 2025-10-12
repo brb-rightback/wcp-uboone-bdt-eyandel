@@ -195,7 +195,7 @@ int main( int argc, char** argv )
 
   SpaceInfo space_info;
 
-  ParticleInfo& particle_info;
+  ParticleInfo particle_info;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
@@ -464,10 +464,10 @@ int main( int argc, char** argv )
   tagger.WCPMTInfoPeMeas = new std::vector<double>;
   tagger.WCPMTInfoPeMeasErr = new std::vector<double>;
 
-  particle_info.spacepoints_x = new std::vector<double>;
-  particle_info.spacepoints_y = new std::vector<double>;
-  particle_info.spacepoints_z = new std::vector<double>;
-  particle_info.spacepoints_q = new std::vector<double>;
+  particle_info.spacepoints_x = new std::vector<float>;
+  particle_info.spacepoints_y = new std::vector<float>;
+  particle_info.spacepoints_z = new std::vector<float>;
+  particle_info.spacepoints_q = new std::vector<float>;
 
   set_tree_address(T_BDTvars, tagger,2 );
   tagger.flag_nc_gamma_bdt = true;
@@ -3496,8 +3496,7 @@ int main( int argc, char** argv )
   reader_pi_veto.AddVariable("spacepoints_q_bck_9", &particle_info.spacepoints_q_bck_9);
   reader_pi_veto.AddVariable("spacepoints_q_bck_10", &particle_info.spacepoints_q_bck_10);
   reader_pi_veto.AddVariable("spacepoints_q_bck_11", &particle_info.spacepoints_q_bck_11);
-  reader_pi_veto.AddVariable("spacepoints_q_bck_12", &particle_info.spacepoints_q_bck_12);
-  reader_pi_veto.AddVariable("spacepoints_q_med", &particle_info.)spacepoints_q_med;
+  reader_pi_veto.AddVariable("spacepoints_q_med", &particle_info.spacepoints_q_med);
   reader_pi_veto.AddVariable("flag_has_daught", &particle_info.flag_has_daught);
   reader_pi_veto.AddVariable("flag_has_daught_p", &particle_info.flag_has_daught_p);
   reader_pi_veto.AddVariable("flag_has_daught_el", &particle_info.flag_has_daught_el);
@@ -3749,11 +3748,11 @@ int main( int argc, char** argv )
     tagger.pi_veto_score=-999;
     tagger.pi_veto_prim_score=-999;
     tagger.pi_veto_all_score=-999;
-    for(int part=0; part<reco_Ntrack; part++){
-      particle_info = create_particle(space_info, pfeval, particle_info, part);
-      double temp_pi_veto_score = cal_spacepoint_pi_veto(particle,reader_pi_veto);
-      if(temp_pi_veto_score>tagger.pi_all_veto_score) tagger.pi_veto_all_score = temp_pi_veto_all_score;
-      if(temp_pi_veto_score>tagger.pi_prim_veto_score && pfeval.reco_mother[part]==0) tagger.pi_veto_prim_score = temp_pi_veto_prim_score;
+    for(int part=0; part<pfeval.reco_Ntrack; part++){
+      create_particle(space_info, pfeval, particle_info, part);
+      double temp_pi_veto_score = cal_spacepoint_pi_veto(particle_info,reader_pi_veto);
+      if(temp_pi_veto_score>tagger.pi_veto_all_score) tagger.pi_veto_all_score = temp_pi_veto_score;
+      if(temp_pi_veto_score>tagger.pi_veto_prim_score && pfeval.reco_mother[part]==0) tagger.pi_veto_prim_score = temp_pi_veto_score;
       if(temp_pi_veto_score>tagger.pi_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==211) tagger.pi_veto_score = temp_pi_veto_score;
     }
 

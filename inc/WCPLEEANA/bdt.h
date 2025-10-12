@@ -1,3 +1,5 @@
+#include "WCPLEEANA/particle.h"
+
 namespace LEEana{
 
   float cal_nc_delta_bdts_xgboost(TaggerInfo& tagger_info, TMVA::Reader& reader);
@@ -143,7 +145,7 @@ float cal_spacepoint_all_veto(ParticleInfo& particle, TMVA::Reader& reader);
 
 }
 
-float LEEana::cal_spacepoint_pi_veto(ParticleInfo& particle){
+float LEEana::cal_spacepoint_pi_veto(ParticleInfo& particle, TMVA::Reader& reader){
   float val = -999;
   double val1 = reader.EvaluateMVA("MyBDT");
   val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
