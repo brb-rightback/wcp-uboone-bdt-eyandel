@@ -3508,9 +3508,8 @@ int main( int argc, char** argv )
   reader_pi_veto.AddVariable("reco_larpid_pidScore_pi", &particle_info.reco_larpid_pidScore_pi);
   reader_pi_veto.AddVariable("reco_larpid_proccess", &particle_info.reco_larpid_proccess);
   reader_pi_veto.AddVariable("flag_is_contained", &particle_info.flag_is_contained);
-  reader_pi_veto.AddVariable("reco_pdg", &particle_info.reco_pdg);
+  reader_pi_veto.AddVariable("reco_pdg_list", &particle_info.reco_pdg);
   reader_pi_veto.BookMVA( "MyBDT", "weights/pi_veto.xml");
-
 
   std::map<std::pair<int, int>, int> map_rs_n;
   std::map<std::pair<int, int>, std::set<int> > map_rs_f1p5; // Reco 1.5
@@ -3605,14 +3604,16 @@ int main( int argc, char** argv )
 
   T_eval->SetBranchStatus("*",1);
   T_BDTvars->SetBranchStatus("*",1);
-
+  T_spacepoints->SetBranchStatus("*",1);
   //  for (int i=0;i!=100;i++){
+
   for (int i=0;i!=T_BDTvars->GetEntries();i++){
     eval.weight_change = false;
     T_BDTvars->GetEntry(i); temp_ssm_kine_pio_flag = tagger.ssm_kine_pio_flag;
     T_eval->GetEntry(i); tagger.match_isFC = eval.match_isFC;
     T_KINEvars->GetEntry(i); tagger.kine_reco_Enu = kine.kine_reco_Enu; temp_kine_pio_flag = kine.kine_pio_flag;
     T_PFeval->GetEntry(i);
+    T_spacepoints->GetEntry(i);
 
     if (remove_set.find(std::make_pair(eval.run, eval.subrun)) != remove_set.end()) continue;
 
@@ -3748,13 +3749,19 @@ int main( int argc, char** argv )
     tagger.pi_veto_score=-999;
     tagger.pi_veto_prim_score=-999;
     tagger.pi_veto_all_score=-999;
+    std::cout<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;
     for(int part=0; part<pfeval.reco_Ntrack; part++){
+      //std::cout<<"Chekcing particle with index "<<part<<std::endl;
       create_particle(space_info, pfeval, particle_info, part);
+      //std::cout<<"Set Particle"<<std::endl;
       double temp_pi_veto_score = cal_spacepoint_pi_veto(particle_info,reader_pi_veto);
+      std::cout<<temp_pi_veto_score<<"  pdg: "<<pfeval.reco_pdg[part]<<" "<<particle_info.reco_pdg<<"  px: "<<pfeval.reco_startMomentum[part][0]<<" "<<particle_info.reco_momentum_0<<"  mother: "<<pfeval.reco_mother[part]<<std::endl;
+      if(particle_info.reco_pdg<0) continue;
       if(temp_pi_veto_score>tagger.pi_veto_all_score) tagger.pi_veto_all_score = temp_pi_veto_score;
       if(temp_pi_veto_score>tagger.pi_veto_prim_score && pfeval.reco_mother[part]==0) tagger.pi_veto_prim_score = temp_pi_veto_score;
       if(temp_pi_veto_score>tagger.pi_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==211) tagger.pi_veto_score = temp_pi_veto_score;
     }
+    std::cout<<tagger.pi_veto_score<<" "<<tagger.pi_veto_prim_score<<" "<<tagger.pi_veto_all_score<<std::endl;
 
     // limit the cut val ...
     if (std::isnan(eval.weight_spline) || std::isinf(eval.weight_spline) ||
@@ -3798,7 +3805,7 @@ int main( int argc, char** argv )
     t3->Fill();
     t5->Fill();
 
-    T_spacepoints->GetEntry(i);
+    //T_spacepoints->GetEntry(i);
     new_T_spacepoints->Fill();
 
     for(auto tree_it=old_trees->begin(); tree_it!=old_trees->end(); tree_it++){
