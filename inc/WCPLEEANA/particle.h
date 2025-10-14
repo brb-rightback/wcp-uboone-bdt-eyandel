@@ -485,7 +485,7 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
 
 
   }
-  if(particle_info.reco_pdg>0) print_particle(particle_info);
+  //if(particle_info.reco_pdg>0) print_particle(particle_info);
 }
 
 void LEEana::reset_particle(ParticleInfo& particle_info){
