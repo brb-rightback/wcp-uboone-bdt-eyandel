@@ -3990,7 +3990,7 @@ int main( int argc, char** argv )
     tagger.n_veto_all_score=-999;
     tagger.all_veto_score=-999;
     tagger.VtxAct_bdt_score=-999;
-    std::cout<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;
+    //std::cout<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;
     int prim_mu_index = -1;
     flag_has_prim_tracks=0;
     reco_Emuon=0;
