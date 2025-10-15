@@ -499,7 +499,7 @@ int main( int argc, char** argv )
   put_tree_address(t5, kine);
 
   set_tree_address(T_spacepoints, space_info);
-  put_tree_address(new_T_spacepoints, space_info);
+  //put_tree_address(new_T_spacepoints, space_info);
 
   //  bool match_isFC;
   //  T_eval->SetBranchAddress("match_isFC",&match_isFC);
@@ -4006,52 +4006,59 @@ int main( int argc, char** argv )
       if(particle_info.reco_pdg<0) continue;
       //std::cout<<"Set Particle"<<std::endl;
       temp_pi_veto_score = cal_spacepoint_pi_veto(particle_info,reader_pi_veto);
-      std::cout<<temp_pi_veto_score<<"  pdg: "<<pfeval.reco_pdg[part]<<" "<<particle_info.reco_pdg<<"  px: "<<pfeval.reco_startMomentum[part][0]<<" "<<particle_info.reco_momentum_0<<"  mother: "<<pfeval.reco_mother[part]<<std::endl;
+      //std::cout<<temp_pi_veto_score<<"  pdg: "<<pfeval.reco_pdg[part]<<" "<<particle_info.reco_pdg<<"  px: "<<pfeval.reco_startMomentum[part][0]<<" "<<particle_info.reco_momentum_0<<"  mother: "<<pfeval.reco_mother[part]<<std::endl;
       if(temp_pi_veto_score>tagger.pi_veto_all_score) tagger.pi_veto_all_score = temp_pi_veto_score;
       if(temp_pi_veto_score>tagger.pi_veto_prim_score && pfeval.reco_mother[part]==0) tagger.pi_veto_prim_score = temp_pi_veto_score;
       if(temp_pi_veto_score>tagger.pi_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==211) tagger.pi_veto_score = temp_pi_veto_score;
 
       temp_mu_veto_score = cal_spacepoint_mu_veto(particle_info,reader_mu_veto);
-      std::cout<<temp_mu_veto_score<<std::endl;
+      //std::cout<<temp_mu_veto_score<<std::endl;
       if(temp_mu_veto_score>tagger.mu_veto_all_score) tagger.mu_veto_all_score = temp_mu_veto_score;
       if(temp_mu_veto_score>tagger.mu_veto_prim_score && pfeval.reco_mother[part]==0 && particle_info.flag_prim_mu==0) tagger.mu_veto_prim_score = temp_mu_veto_score;
       if(temp_mu_veto_score>tagger.mu_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==13 && particle_info.flag_prim_mu==0) tagger.mu_veto_score = temp_mu_veto_score;
 
       temp_el_veto_score = cal_spacepoint_el_veto(particle_info,reader_el_veto);
-      std::cout<<temp_el_veto_score<<std::endl;
+      //std::cout<<temp_el_veto_score<<std::endl;
       if(temp_el_veto_score>tagger.el_veto_all_score) tagger.el_veto_all_score = temp_el_veto_score;
       if(temp_el_veto_score>tagger.el_veto_prim_score && pfeval.reco_mother[part]==0) tagger.el_veto_prim_score = temp_el_veto_score;
       if(temp_el_veto_score>tagger.el_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==11) tagger.el_veto_score = temp_el_veto_score;
 
       temp_p_veto_score = cal_spacepoint_p_veto(particle_info,reader_p_veto);
-      std::cout<<temp_p_veto_score<<std::endl;
+      //std::cout<<temp_p_veto_score<<std::endl;
       if(temp_p_veto_score>tagger.p_veto_all_score) tagger.p_veto_all_score = temp_p_veto_score;
       if(temp_p_veto_score>tagger.p_veto_prim_score && pfeval.reco_mother[part]==0) tagger.p_veto_prim_score = temp_p_veto_score;
       if(temp_p_veto_score>tagger.p_veto_score && pfeval.reco_mother[part]==0 && pfeval.reco_pdg[part]==2212) tagger.p_veto_score = temp_p_veto_score;
 
       temp_n_veto_score = cal_spacepoint_n_veto(particle_info,reader_n_veto);
-      std::cout<<temp_n_veto_score<<std::endl;
+      //std::cout<<temp_n_veto_score<<std::endl;
       if(temp_n_veto_score>tagger.n_veto_all_score) tagger.n_veto_all_score = temp_n_veto_score;
       if(temp_n_veto_score>tagger.n_veto_nonprim_score && pfeval.reco_mother[part]!=0) tagger.n_veto_nonprim_score = temp_n_veto_score;
-      if(temp_n_veto_score>tagger.n_veto_score && pfeval.reco_mother[part]==0 && (particle_info.reco_is_g_induced==1 || particle_info.reco_is_n_induced==1)) tagger.n_veto_score = temp_n_veto_score;
-
+      if(temp_n_veto_score>tagger.n_veto_score && pfeval.reco_mother[part]!=0 && (particle_info.reco_is_g_induced==1 || particle_info.reco_is_n_induced==1)) tagger.n_veto_score = temp_n_veto_score; 
+      
       if(particle_info.flag_prim_mu==1){ prim_mu_index = part;}
       else{
+        temp_pi_veto_score +=-0.31411579999999995;
+        temp_mu_veto_score +=-0.42706789999999994;
+        temp_el_veto_score +=-0.6701050000000001;
+        temp_p_veto_score +=0.7942918999999999;
+        temp_n_veto_score +=-1.6840734000000004;
         temp_all_veto_score = cal_spacepoint_all_veto(particle_info,reader_all_veto);
-        std::cout<<temp_all_veto_score<<std::endl;
+        //std::cout<<temp_all_veto_score<<std::endl;
         if(temp_all_veto_score>tagger.all_veto_score) tagger.all_veto_score = temp_all_veto_score;
       }
 
       if(pfeval.reco_mother[part]==0 && (pfeval.reco_pdg[part]==2212 || pfeval.reco_pdg[part]==211) ) flag_has_prim_tracks=1;
-
+      //std::cout<<particle_info.reco_is_g_induced<<" "<<particle_info.reco_is_n_induced<<std::endl;
     }
-    std::cout<<tagger.pi_veto_score<<" "<<tagger.pi_veto_prim_score<<" "<<tagger.pi_veto_all_score<<std::endl;
+    //std::cout<<tagger.pi_veto_score<<" "<<tagger.pi_veto_prim_score<<" "<<tagger.pi_veto_all_score<<std::endl;
     if(prim_mu_index>=0){
       create_particle(space_info, pfeval, particle_info, prim_mu_index);
       reco_Emuon = (particle_info.reco_momentum_3+0.1057)*1000;
-      tagger.VtxAct_bdt_score = cal_VtxAct_bdt_score(particle_info,flag_has_prim_tracks,reader_VtxAct_bdt);
+      //print_particle(particle_info);
+      //std::cout<<reco_Emuon<<" "<<flag_has_prim_tracks<<std::endl;
+      tagger.VtxAct_bdt_score = cal_VtxAct_bdt_score(particle_info,reader_VtxAct_bdt);
     }
-    std::cout<<tagger.VtxAct_bdt_score<<std::endl;
+    //std::cout<<tagger.VtxAct_bdt_score<<std::endl;
 
 
     // limit the cut val ...

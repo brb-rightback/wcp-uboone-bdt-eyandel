@@ -142,7 +142,7 @@ float cal_spacepoint_el_veto(ParticleInfo& particle, TMVA::Reader& reader);
 float cal_spacepoint_p_veto(ParticleInfo& particle, TMVA::Reader& reader);
 float cal_spacepoint_n_veto(ParticleInfo& particle, TMVA::Reader& reader);
 float cal_spacepoint_all_veto(ParticleInfo& particle, TMVA::Reader& reader);
-float cal_VtxAct_bdt_score(ParticleInfo& particle, float flag_has_prim_tracks, TMVA::Reader& reader);
+float cal_VtxAct_bdt_score(ParticleInfo& particle, TMVA::Reader& reader);
 }
 
 float LEEana::cal_spacepoint_pi_veto(ParticleInfo& particle, TMVA::Reader& reader){
@@ -181,7 +181,7 @@ float LEEana::cal_spacepoint_all_veto(ParticleInfo& particle, TMVA::Reader& read
   val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
   return val;
 }
-float LEEana::cal_VtxAct_bdt_score(ParticleInfo& particle, float flag_has_prim_tracks, TMVA::Reader& reader){
+float LEEana::cal_VtxAct_bdt_score(ParticleInfo& particle, TMVA::Reader& reader){
   float val = -999;
   double val1 = reader.EvaluateMVA("MyBDT");
   val = TMath::Log( (1+val1)/(1-val1) )/2;//To match what comes out of xgboost logitraw
