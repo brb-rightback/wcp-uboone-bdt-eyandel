@@ -14,8 +14,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <variant>
-
 namespace LEEana{
 
   struct pot_tree_pair{
@@ -42,6 +40,8 @@ namespace LEEana{
 
     void grow_pot_arboretum();
 
+    void map_rs_to_entry(); 
+
     std::vector<int> get_low_lifetime_runs();
     std::vector<int> get_good_run_list();
     std::vector<int> get_low_neutrino_count_numi_run2RHC();
@@ -49,6 +49,7 @@ namespace LEEana{
     std::vector<TTree*>* new_trees;
     std::vector<TTree*>* old_trees;
     std::vector<pot_tree_pair*>* pot_arboretum;	
+    std::vector<std::map<std::pair<int, int>, std::pair<int, double> > > arboretum_map_rs_entry; 
 	    
   private:
     bool verbose;

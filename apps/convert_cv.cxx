@@ -590,6 +590,8 @@ int main( int argc, char** argv )
   wrangler_pot.grow_pot_arboretum();
 
   // Map out the relation between index and run-subrun for the non-WC POT trees
+  wrangler_pot.map_rs_to_entry();
+  /*
   std::vector<std::map<std::pair<int, int>, std::pair<int, double> > > arboretum_map_rs_entry_pot_cv;
   for(auto pot_tree_it=wrangler_pot.pot_arboretum->begin(); pot_tree_it!=wrangler_pot.pot_arboretum->end(); pot_tree_it++){
     std::map<std::pair<int, int>, std::pair<int, double> > temp_map_rs_entry_pot_cv;
@@ -600,7 +602,7 @@ int main( int argc, char** argv )
     }
     arboretum_map_rs_entry_pot_cv.push_back(temp_map_rs_entry_pot_cv);
   }
-
+  */
 
 
 
@@ -727,10 +729,10 @@ int main( int argc, char** argv )
 
     (*pot_tree_it)->new_pot_tree->Branch("pass_ratio",&pass_ratio,"pass_ratio/F");
 
-    nentries = arboretum_map_rs_entry_pot_cv.at(arb_index).size();
+    nentries = wrangler_pot.arboretum_map_rs_entry.at(arb_index).size();
     ientry=0;
     std::cout<<"Begin looping over "<<(*pot_tree_it)->old_pot_tree->GetName()<<" tree with "<<nentries<<" entries"<<std::endl;
-    for (auto it = arboretum_map_rs_entry_pot_cv.at(arb_index).begin(); it != arboretum_map_rs_entry_pot_cv.at(arb_index).end(); it++){
+    for (auto it = wrangler_pot.arboretum_map_rs_entry.at(arb_index).begin(); it != wrangler_pot.arboretum_map_rs_entry.at(arb_index).end(); it++){
 
       if (ientry%10000 == 0) std::cout << ientry/1000 << " k " << std::setprecision(3) << double(ientry)/nentries*100. << " %"<< std::endl;
       ientry++;

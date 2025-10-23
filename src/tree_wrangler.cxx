@@ -83,7 +83,7 @@ LEEana::tree_wrangler::~tree_wrangler(){}
 
 
 
-// Main three public functions //
+// Main four public functions //
 
 
 
@@ -183,11 +183,23 @@ void LEEana::tree_wrangler::set_new_trees(TFile* file, bool rename, TString TDir
 }
 
 
-// End main three public functions //
+void LEEana::tree_wrangler::map_rs_to_entry(){
+  arboretum_map_rs_entry.clear();
+  for(auto pot_tree_it=pot_arboretum->begin(); pot_tree_it!=pot_arboretum->end(); pot_tree_it++){
+    std::map<std::pair<int, int>, std::pair<int, double> > temp_map_rs_entry;
+    for (Int_t i=0;i!=(*pot_tree_it)->old_pot_tree->GetEntries();i++){
+      (*pot_tree_it)->old_pot_tree->GetEntry(i);
+      temp_map_rs_entry[std::make_pair((*pot_tree_it)->runNo,(*pot_tree_it)->subRunNo)] = std::make_pair(i, (*pot_tree_it)->pot());
+    }
+    arboretum_map_rs_entry.push_back(temp_map_rs_entry);
+  }
+}
+
+// End main four public functions //
 
 
- 
-// Private function called by the three main functions above //
+
+// Private function called by the four main functions above //
 
 
 
@@ -317,7 +329,7 @@ std::vector<TTree*>* LEEana::tree_wrangler::GetTrees(TDirectory *source, std::ve
 
 
 
-// End private function called by the three main functions above //
+// End private function called by the four main functions above //
 
 
 
