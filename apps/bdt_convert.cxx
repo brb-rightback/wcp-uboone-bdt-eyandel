@@ -142,10 +142,6 @@ int main( int argc, char** argv )
   TTree *T_spacepoints = (TTree*)file1->Get("wcpselection/T_spacepoints");
 
   //Load other trees from directories as specified by the config file
-  //std::vector<TTree*>* old_trees = new std::vector<TTree*>;
-  //old_trees = wrangler.get_old_trees(file1);
-  //std::vector<TTree*>* old_trees_pot = new std::vector<TTree*>;
-  //old_trees_pot = wrangler_pot.get_old_trees(file1);
   wrangler.get_old_trees(file1);
   wrangler_pot.get_old_trees(file1);
 
@@ -168,10 +164,6 @@ int main( int argc, char** argv )
   TFile *file2 = new TFile(out_file,"RECREATE");
 
   //Setup the directories specified in the config file
-  //std::vector<TTree*>* new_trees = new std::vector<TTree*>;
-  //new_trees = wrangler.set_new_trees(file2);
-  //std::vector<TTree*>* new_trees_pot = new std::vector<TTree*>;
-  //new_trees_pot = wrangler_pot.set_new_trees(file2);
   wrangler.set_new_trees(file2);
   wrangler_pot.set_new_trees(file2);
 
@@ -4157,15 +4149,11 @@ int main( int argc, char** argv )
   }
 
   // Now the other trees
-  std::cout<<"wrangler_pot.pot_arboretum->size() "<<wrangler_pot.pot_arboretum->size()<<std::endl;
   for(auto pot_tree_it=wrangler_pot.pot_arboretum->begin(); pot_tree_it!=wrangler_pot.pot_arboretum->end(); pot_tree_it++){
-    std::cout<<"(*pot_tree_it)->old_pot_tree->GetEntries() "<<(*pot_tree_it)->old_pot_tree->GetEntries()<<std::endl;
 
     for (Int_t i=0;i!=(*pot_tree_it)->old_pot_tree->GetEntries();i++){
 
       (*pot_tree_it)->old_pot_tree->GetEntry(i);
-
-//std::cout<<"(*pot_tree_it)->runNo "<<(*pot_tree_it)->runNo<<" (*pot_tree_it)->subrunNo "<< (*pot_tree_it)->subrunNo<<std::endl;
 
       // This is dropping run-subruns without and events, don't do this here.
       //if (remove_set.find(std::make_pair((*pot_tree_it).runNo, (*pot_tree_it).subRunNo)) != remove_set.end()) continue;
@@ -4199,8 +4187,6 @@ int main( int argc, char** argv )
 
   file2->Write("",TFile::kOverwrite);
   file2->Close();
-
-  if (!fail_percentage || flag_presel){}
 
   return 0;
 

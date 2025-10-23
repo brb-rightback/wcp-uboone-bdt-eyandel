@@ -21,9 +21,15 @@ namespace LEEana{
   struct pot_tree_pair{
     TTree* new_pot_tree;
     TTree* old_pot_tree;
+    bool isfloat;
     int runNo;
     int subRunNo;
-    std::variant<Double_t,Float_t> pot;
+    float fpot;
+    double dpot;
+    double pot(){ //load both the double and the float, this then returns the one that we need
+      if(isfloat) return fpot;
+      else return dpot;
+    };
   };
 
   class tree_wrangler{

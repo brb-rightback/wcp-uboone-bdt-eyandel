@@ -27,9 +27,9 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
       while(!config_file.eof()){
         std::string line;
         std::getline(config_file, line);
-        while(line.empty()) {std::getline(config_file, line);}//Skip empty lines
+        while(line.empty()) {std::getline(config_file, line);} // Skip empty lines
         if(set_flag_exclusive && first_pass){
-          while(line!="exclusive" && line!="Exclusive"){//Burn lines untill we get to the exclusive section when configured that way
+          while(line!="exclusive" && line!="Exclusive"){ // Burn lines untill we get to the exclusive section when configured that way
 	    if(line == "end" || line == "End") break;
 	    std::getline(config_file, line);
 	  }
@@ -37,22 +37,28 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
 	  std::getline(config_file, line);
 	}
 	if(line == "end" || line == "End") break;
-	if(!set_flag_exclusive && (line=="exclusive" || line=="Exclusive")) break; //Stop reading when you get to the exclusive section if not running in that mode
+	if(!set_flag_exclusive && (line=="exclusive" || line=="Exclusive")) break; // Stop reading when you get to the exclusive section if not running in that mode
         std::istringstream iss(line);
         std::string temp_dir;
         std::string temp_all_trees_to_skip;
         std::string temp_all_pot_vars;
 	std::vector<std::string> temp_trees_to_skip;
         std::vector<std::string> temp_pot_vars;
-	//std::vector<std::vector<std::string>> temp_pot_vars;
-	iss >> temp_dir >> temp_all_trees_to_skip;//Read the line
-        temp_trees_to_skip = splitString(temp_all_trees_to_skip, delimiter);//Break up the trees
+	iss >> temp_dir >> temp_all_trees_to_skip; // Read the line
+        temp_trees_to_skip = splitString(temp_all_trees_to_skip, delimiter); // Break up the trees
         if(set_flag_exclusive){
-	  iss >> temp_all_pot_vars;//Read the line to see if we have specified pot vars
+	  iss >> temp_all_pot_vars; // Read the line to see if we have specified pot vars
 	  if(!iss.fail()){
             temp_pot_vars = splitString(temp_all_pot_vars, delimiter);
-            // expand to handle multiple trees?
-            trees_wi_pot_var_names[temp_trees_to_skip.at(0)] = temp_pot_vars;
+            // Handle the case of multiple exlusive trees with a loop
+            for(int i=0; i<temp_trees_to_skip.size(); i++){
+              std::vector<std::string> three_temp_pot_vars(temp_pot_vars.begin()+3*i, temp_pot_vars.begin()+3*i+3);
+              if(   (three_temp_pot_vars.at(0)=="None" || three_temp_pot_vars.at(0)=="none" || three_temp_pot_vars.at(0)=="NONE") 
+                 && (three_temp_pot_vars.at(1)=="None" || three_temp_pot_vars.at(1)=="none" || three_temp_pot_vars.at(1)=="NONE") 
+                 && (three_temp_pot_vars.at(2)=="None" || three_temp_pot_vars.at(2)=="none" || three_temp_pot_vars.at(2)=="NONE") 
+                ) {continue;} // All dummy indicies, ignore the vars for this tree
+              trees_wi_pot_var_names[temp_trees_to_skip.at(i)] = three_temp_pot_vars;
+            }
 	  }
 	}
         if (directories_wi_trees_to_skip_names.find(temp_dir) != directories_wi_trees_to_skip_names.end()) {std::cout<<"LEEana::tree_wrangler::tree_wrangler: WARNING: Failed to open the config file, just loading WC"<<std::endl;}
@@ -71,40 +77,58 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
       }
     }else {std::cout<<"LEEana::tree_wrangler::tree_wrangler: Failed to open the config file: " <<config_file_name<<". Just loading WC"<<std::endl;}
   }//configure
-std::cout<<"Configuration sucess"<<std::endl;
 }
 
 LEEana::tree_wrangler::~tree_wrangler(){}
 
+
+
+// Main three public functions //
+
+
+
 void LEEana::tree_wrangler::grow_pot_arboretum(){
-  std::cout<<"Growing Arboretum "<<new_trees->size()<<" "<<old_trees->size()<<" "<<pot_var_names.size()<<std::endl;
+  std::cout<<"\n\nGrowing arboretum\n"<<std::endl;
   pot_arboretum = new std::vector<pot_tree_pair*>;
   for (Int_t i=0;i<new_trees->size();i++){
-    std::cout<<i<<" "<<pot_var_names.at(i).at(0)<<std::endl;
+    // Initialize and add the trees to the pot_tree_pair struct
     pot_tree_pair* pot_pair = new pot_tree_pair;
     pot_pair->old_pot_tree = old_trees->at(i);
     pot_pair->new_pot_tree = new_trees->at(i);
-    std::cout<<"pot_pair->old_pot_tree->GetEntries() "<<pot_pair->old_pot_tree->GetEntries()<<std::endl;
-    std::cout<<"pot_pair->new_pot_tree->GetEntries() "<<pot_pair->new_pot_tree->GetEntries()<<std::endl;
+    // Get the names of the vars for this tree
     std::string old_tree_name = pot_pair->old_pot_tree->GetName();
-    std::cout<<"old_tree_name "<<old_tree_name<<std::endl;
+    if (trees_wi_pot_var_names.count(old_tree_name) == 0) continue; // Don't add this tree to the arboretum becouse it is not associated with any names
+    if(trees_wi_pot_var_names[old_tree_name].size()==0) continue; // Don't add this tree to the arboretum becouse it is not associated with any names
+    std::cout<<"Adding "<<old_tree_name<<" to the arboretum"<<std::endl;
     std::string run_var_name = trees_wi_pot_var_names[old_tree_name].at(0);
     std::string sub_var_name = trees_wi_pot_var_names[old_tree_name].at(1);
     std::string pot_var_name = trees_wi_pot_var_names[old_tree_name].at(2);
-    std::cout<<run_var_name<<" "<<sub_var_name<<" "<<pot_var_name<<" "<<std::endl; 
-    pot_pair->old_pot_tree->SetBranchAddress(run_var_name.c_str(),&pot_pair->runNo);
-    pot_pair->old_pot_tree->SetBranchAddress(sub_var_name.c_str(),&pot_pair->subRunNo);
-    //std::cout<<" pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetLeaf(pot_var_name.c_str())->GetTypeName().c_str() "<<pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetLeaf(pot_var_name.c_str())->GetTypeName()<<std::endl;
-    //if(pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetLeaf(pot_var_name.c_str())->GetTypeName()=="Double_t"){
-    pot_pair->old_pot_tree->SetBranchAddress(pot_var_name.c_str(),&pot_pair->dpot);
-    //}
-    //else{
-    pot_pair->old_pot_tree->SetBranchAddress(pot_var_name.c_str(),&spot_pair->fpot);
-    //}
+    std::cout<<"and using variable names of "<<run_var_name<<" "<<sub_var_name<<" "<<pot_var_name<<"\n"<<std::endl; 
+    // Check if vars exist before adding them, allows you to use dummy names if you don't want these trees
+    if(pot_pair->old_pot_tree->GetBranch(sub_var_name.c_str())){
+      pot_pair->old_pot_tree->SetBranchAddress(run_var_name.c_str(),&pot_pair->runNo);
+    }
+    if(pot_pair->old_pot_tree->GetBranch(sub_var_name.c_str())){
+      pot_pair->old_pot_tree->SetBranchAddress(sub_var_name.c_str(),&pot_pair->subRunNo);
+    }
+    const char* branch_type = "";
+    if(pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())){
+      branch_type = pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetLeaf(pot_var_name.c_str())->GetTypeName();
+      // Load either the float of the double, depending on the type of the tree 
+      if( std::strcmp(branch_type,"Double_t")==0){
+        pot_pair->old_pot_tree->SetBranchAddress(pot_var_name.c_str(),&pot_pair->dpot);
+        pot_pair->isfloat=false;
+      }
+      else{
+        pot_pair->old_pot_tree->SetBranchAddress(pot_var_name.c_str(),&pot_pair->fpot);
+        pot_pair->isfloat=true;
+      }
+    }
     pot_arboretum->push_back(pot_pair);
   }
-  std::cout<<"Done growing arboretum of size "<<pot_arboretum->size()<<std::endl;  
+  std::cout<<"\n"<<std::endl;
 }
+
 
 void LEEana::tree_wrangler::get_old_trees(TFile* file){
    old_trees = new std::vector<TTree*>;
@@ -145,16 +169,11 @@ void LEEana::tree_wrangler::set_new_trees(TFile* file, bool rename, TString TDir
 }
 
 
+// End main three public functions //
 
 
-
-
-
-
-
-
-
-
+ 
+// Private function called by the three main functions above //
 
 
 
@@ -281,6 +300,10 @@ std::vector<TTree*>* LEEana::tree_wrangler::GetTrees(TDirectory *source, std::ve
   savdir->cd();
   return ttree_vec;
 }
+
+
+
+// End private function called by the three main functions above //
 
 
 
