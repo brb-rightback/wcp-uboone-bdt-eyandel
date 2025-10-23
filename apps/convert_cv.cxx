@@ -591,21 +591,6 @@ int main( int argc, char** argv )
 
   // Map out the relation between index and run-subrun for the non-WC POT trees
   wrangler_pot.map_rs_to_entry();
-  /*
-  std::vector<std::map<std::pair<int, int>, std::pair<int, double> > > arboretum_map_rs_entry_pot_cv;
-  for(auto pot_tree_it=wrangler_pot.pot_arboretum->begin(); pot_tree_it!=wrangler_pot.pot_arboretum->end(); pot_tree_it++){
-    std::map<std::pair<int, int>, std::pair<int, double> > temp_map_rs_entry_pot_cv;
-    for (Int_t i=0;i!=(*pot_tree_it)->old_pot_tree->GetEntries();i++){
-      (*pot_tree_it)->old_pot_tree->GetEntry(i);
-      if(((*pot_tree_it)->pot() == 0.) && !flag_data) continue;
-      temp_map_rs_entry_pot_cv[std::make_pair((*pot_tree_it)->runNo,(*pot_tree_it)->subRunNo)] = std::make_pair(i, (*pot_tree_it)->pot());
-    }
-    arboretum_map_rs_entry_pot_cv.push_back(temp_map_rs_entry_pot_cv);
-  }
-  */
-
-
-
 
 
   file3->mkdir("wcpselection");

@@ -763,31 +763,25 @@ int main( int argc, char** argv )
 
   // Map out the relation between index and run-subrun for the non-WC POT CV trees
   wrangler_pot_cv.map_rs_to_entry();
-  /*
-  std::vector<std::map<std::pair<int, int>, std::pair<int, double> > > arboretum_map_rs_entry_pot_cv;
-  for(auto pot_tree_it=wrangler_pot_cv.pot_arboretum->begin(); pot_tree_it!=wrangler_pot_cv.pot_arboretum->end(); pot_tree_it++){
-    std::map<std::pair<int, int>, std::pair<int, double> > temp_map_rs_entry_pot_cv;
-    for (Int_t i=0;i!=(*pot_tree_it)->old_pot_tree->GetEntries();i++){
-      (*pot_tree_it)->old_pot_tree->GetEntry(i);
-      temp_map_rs_entry_pot_cv[std::make_pair((*pot_tree_it)->runNo,(*pot_tree_it)->subRunNo)] = std::make_pair(i, (*pot_tree_it)->pot());
-    }
-    arboretum_map_rs_entry_pot_cv.push_back(temp_map_rs_entry_pot_cv);
-  }
-  */
-
   // Map out the relation between index and run-subrun for the non-WC POT DetVar trees
   wrangler_pot_det.map_rs_to_entry();
-/*
-  std::vector<std::map<std::pair<int, int>, std::pair<int, double> > > arboretum_map_rs_entry_pot_det;
-  for(auto pot_tree_it=wrangler_pot_det.pot_arboretum->begin(); pot_tree_it!=wrangler_pot_det.pot_arboretum->end(); pot_tree_it++){
-    std::map<std::pair<int, int>, std::pair<int, double> > temp_map_rs_entry_pot_det;
-    for (Int_t i=0;i!=(*pot_tree_it)->old_pot_tree->GetEntries();i++){
-      (*pot_tree_it)->old_pot_tree->GetEntry(i);
-      temp_map_rs_entry_pot_det[std::make_pair((*pot_tree_it)->runNo,(*pot_tree_it)->subRunNo)] = std::make_pair(i, (*pot_tree_it)->pot());
+  // Check that these are one to one
+  for(int arb_index=0; arb_index<wrangler_pot_cv.pot_arboretum->size(); arb_index++){
+    std::string tree_name_cv = wrangler_pot_cv.pot_arboretum->at(arb_index)->old_pot_tree->GetName();
+    std::string tree_name_det = wrangler_pot_det.pot_arboretum->at(arb_index)->old_pot_tree->GetName();
+    if(tree_name_cv!=tree_name_det){
+      std::cout<<"ERROR! Mismatch in pot trees"<<std::endl;
+      return 1;
     }
-    arboretum_map_rs_entry_pot_det.push_back(temp_map_rs_entry_pot_det);
+    tree_name_cv = wrangler_pot_cv.pot_arboretum->at(arb_index)->new_pot_tree->GetName();
+    tree_name_det = wrangler_pot_det.pot_arboretum->at(arb_index)->new_pot_tree->GetName();
+    removeSubstring(tree_name_cv, "_cv");
+    removeSubstring(tree_name_det, "_det");
+    if(tree_name_cv!=tree_name_det){
+      std::cout<<"ERROR! Mismatch in pot trees"<<std::endl;
+      return 1;
+    }
   }
-*/
 
    T_eval_cv->SetBranchStatus("*",1);
    T_PFeval_cv->SetBranchStatus("*",1);
@@ -951,7 +945,6 @@ int main( int argc, char** argv )
   common_pot = 0;
 
   // Now the other trees
-  // Should triple check that these are always going to be in the order we want them to be in
   for(int arb_index=0; arb_index<wrangler_pot_cv.pot_arboretum->size(); arb_index++){
 
     std::cout<<"Begin looping over WC pot tree checking "<<nentries<<" entries"<<std::endl;
