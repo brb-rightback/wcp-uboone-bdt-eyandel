@@ -1,6 +1,7 @@
 // cz: code modified from tutorials/tmva/TMVAClassification.C
 
 #include <cstdlib>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -3837,7 +3838,12 @@ int main( int argc, char** argv )
   T_spacepoints->SetBranchStatus("*",1);
   //  for (int i=0;i!=100;i++){
 
-  for (int i=0;i!=T_BDTvars->GetEntries();i++){
+  int nentries = T_BDTvars->GetEntries();
+  std::cout<<"Begin looping over "<<nentries<<" events"<<std::endl;
+  for (int i=0;i!=nentries;i++){
+
+    if (i%10000 == 0) std::cout << i/1000 << " k " << std::setprecision(3) << double(i)/nentries*100. << " %"<< std::endl;
+
     eval.weight_change = false;
     T_BDTvars->GetEntry(i); temp_ssm_kine_pio_flag = tagger.ssm_kine_pio_flag;
     T_eval->GetEntry(i); tagger.match_isFC = eval.match_isFC;
@@ -4122,7 +4128,12 @@ int main( int argc, char** argv )
 
   // Loop over each POT tree seperatly
   // Start with WireCell
-  for (Int_t i=0;i!=T_pot->GetEntries();i++){
+  nentries = T_pot->GetEntries();
+  std::cout<<"Begin looping over WC pot tree with "<<nentries<<" ntries"<<std::endl;
+  for (Int_t i=0;i!=nentries;i++){
+
+    if (i%10000 == 0) std::cout << i/1000 << " k " << std::setprecision(3) << double(i)/nentries*100. << " %"<< std::endl;
+
     T_pot->GetEntry(i);
 
     if (remove_set.find(std::make_pair(pot.runNo, pot.subRunNo)) != remove_set.end()) continue;
@@ -4151,7 +4162,11 @@ int main( int argc, char** argv )
   // Now the other trees
   for(auto pot_tree_it=wrangler_pot.pot_arboretum->begin(); pot_tree_it!=wrangler_pot.pot_arboretum->end(); pot_tree_it++){
 
-    for (Int_t i=0;i!=(*pot_tree_it)->old_pot_tree->GetEntries();i++){
+    std::cout<<"Begin looping over "<<(*pot_tree_it)->old_pot_tree->GetName()<<" tree with "<<nentries<<" entries"<<std::endl;
+    nentries = (*pot_tree_it)->old_pot_tree->GetEntries();
+    for (Int_t i=0;i!=nentries;i++){
+
+      if (i%10000 == 0) std::cout << i/1000 << " k " << std::setprecision(3) << double(i)/nentries*100. << " %"<< std::endl;
 
       (*pot_tree_it)->old_pot_tree->GetEntry(i);
 

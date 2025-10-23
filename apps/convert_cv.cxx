@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <map>
 #include <string>
 #include <set>
@@ -644,7 +645,14 @@ int main( int argc, char** argv )
   }
 
   //  for (auto it = map_re_entry_cv.begin(); it != map_re_entry_cv.end(); it++){
+  int nentries = read_list.size();
+  int ientry = 0;
+  std::cout<<"Begin looping over "<<nentries<<" events"<<std::endl;
   for (auto it = read_list.begin(); it != read_list.end(); it++){
+
+    if (ientry%10000 == 0) std::cout << ientry/1000 << " k " << std::setprecision(3) << double(ientry)/nentries*100. << " %"<< std::endl;
+    ientry++;
+
     T_eval_cv->GetEntry(*it);
     if (remove_set.find(std::make_pair(eval_cv.run, eval_cv.subrun)) != remove_set.end()) continue;
 
@@ -680,7 +688,14 @@ int main( int argc, char** argv )
 
   // Loop over each POT tree seperatly
   // Start with WireCell
+  nentries = map_rs_entry_pot_cv.size();
+  ientry=0;
+  std::cout<<"Begin looping over WC pot tree with "<<nentries<<" ntries"<<std::endl;
   for (auto it = map_rs_entry_pot_cv.begin(); it != map_rs_entry_pot_cv.end(); it++){
+
+    if (ientry%10000 == 0) std::cout << ientry/1000 << " k " << std::setprecision(3) << double(ientry)/nentries*100. << " %"<< std::endl;
+    ientry++;
+
     T_pot_cv->GetEntry(it->second.first);
     cv_pot += it->second.second;
 
@@ -712,7 +727,13 @@ int main( int argc, char** argv )
 
     (*pot_tree_it)->new_pot_tree->Branch("pass_ratio",&pass_ratio,"pass_ratio/F");
 
+    nentries = arboretum_map_rs_entry_pot_cv.at(arb_index).size();
+    ientry=0;
+    std::cout<<"Begin looping over "<<(*pot_tree_it)->old_pot_tree->GetName()<<" tree with "<<nentries<<" entries"<<std::endl;
     for (auto it = arboretum_map_rs_entry_pot_cv.at(arb_index).begin(); it != arboretum_map_rs_entry_pot_cv.at(arb_index).end(); it++){
+
+      if (ientry%10000 == 0) std::cout << ientry/1000 << " k " << std::setprecision(3) << double(ientry)/nentries*100. << " %"<< std::endl;
+      ientry++;
 
       (*pot_tree_it)->old_pot_tree->GetEntry(it->second.first); // it->second.first is index
       cv_pot += it->second.second; // it->second.second is the pot at the given index
