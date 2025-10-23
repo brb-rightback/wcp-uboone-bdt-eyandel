@@ -34,7 +34,7 @@ namespace LEEana{
 
   class tree_wrangler{
   public:
-    tree_wrangler(bool configure=true, std::string config_file_name="config.txt", char delimiter=',', bool set_flag_exclusive=false, bool set_verbose=true);
+    tree_wrangler(bool configure=true, std::string config_file_name="config.txt", char delimiter=',', bool set_flag_exclusive=false, bool set_verbose=false);
     ~tree_wrangler();
 
     void get_old_trees(TFile* file);

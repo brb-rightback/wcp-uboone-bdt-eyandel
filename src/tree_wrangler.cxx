@@ -88,7 +88,7 @@ LEEana::tree_wrangler::~tree_wrangler(){}
 
 
 void LEEana::tree_wrangler::grow_pot_arboretum(){
-  std::cout<<"\n\nGrowing arboretum\n"<<std::endl;
+  if(new_trees->size()>0) std::cout<<"\n\nGrowing arboretum\n"<<std::endl;
   pot_arboretum = new std::vector<pot_tree_pair*>;
   for (Int_t i=0;i<new_trees->size();i++){
     // Initialize and add the trees to the pot_tree_pair struct
@@ -148,6 +148,13 @@ void LEEana::tree_wrangler::get_old_trees(TFile* file){
       topdir->cd();
     }else{std::cout<<"LEEana::tree_wrangler::get_old_trees: Can't find the directory "<<directory_name<<" in the input file. Check the config."<<std::endl;}
   }
+  if(old_trees->size()>0){
+    std::cout<<"\ntree wrangler is grabbing the following trees from "<<file->GetName()<<std::endl;
+    for (Int_t i=0;i<old_trees->size();i++){
+          std::cout<<old_trees->at(i)->GetName()<<"  ";
+    }
+    std::cout<<"\n"<<std::endl;
+  }
 }
 
 
@@ -165,6 +172,13 @@ void LEEana::tree_wrangler::set_new_trees(TFile* file, bool rename, TString TDir
     temp_new_trees = CopyTrees(temp_input_directory,true,rename,TDirectory_extension,trees_to_skip_names);
     new_trees->insert(new_trees->end(), temp_new_trees->begin(), temp_new_trees->end());
     topdirout->cd();
+  }
+  if(new_trees->size()>0){
+    std::cout<<"\ntree wrangler is copying the following trees to "<<file->GetName()<<std::endl;
+    for (Int_t i=0;i<new_trees->size();i++){
+          std::cout<<new_trees->at(i)->GetName()<<"  ";
+    }
+    std::cout<<"\n"<<std::endl;
   }
 }
 

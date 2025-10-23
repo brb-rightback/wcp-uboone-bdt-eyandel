@@ -4129,7 +4129,7 @@ int main( int argc, char** argv )
   // Loop over each POT tree seperatly
   // Start with WireCell
   nentries = T_pot->GetEntries();
-  std::cout<<"Begin looping over WC pot tree with "<<nentries<<" ntries"<<std::endl;
+  std::cout<<"Begin looping over WC pot tree with "<<nentries<<" entries"<<std::endl;
   for (Int_t i=0;i!=nentries;i++){
 
     if (i%10000 == 0) std::cout << i/1000 << " k " << std::setprecision(3) << double(i)/nentries*100. << " %"<< std::endl;

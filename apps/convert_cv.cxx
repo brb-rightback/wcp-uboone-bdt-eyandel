@@ -690,7 +690,7 @@ int main( int argc, char** argv )
   // Start with WireCell
   nentries = map_rs_entry_pot_cv.size();
   ientry=0;
-  std::cout<<"Begin looping over WC pot tree with "<<nentries<<" ntries"<<std::endl;
+  std::cout<<"Begin looping over WC pot tree with "<<nentries<<" entries"<<std::endl;
   for (auto it = map_rs_entry_pot_cv.begin(); it != map_rs_entry_pot_cv.end(); it++){
 
     if (ientry%10000 == 0) std::cout << ientry/1000 << " k " << std::setprecision(3) << double(ientry)/nentries*100. << " %"<< std::endl;
@@ -752,7 +752,7 @@ int main( int argc, char** argv )
 
       (*pot_tree_it)->new_pot_tree->Fill();
 
-   } // it, end loop over pot tree enteries in the given pot tree
+    } // it, end loop over pot tree enteries in the given pot tree
 
     arb_index+=1;
     vec_cv_pot.push_back(cv_pot);
