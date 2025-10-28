@@ -929,10 +929,12 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
      	  temp_mat(n,m) += x[n] * x[m];
      	}
       }
-    } // i
 
     // Write the histogram for the universe and knob we just made
     if(flag_save_each_universe>0) x_vec->Write(Form("%s%d_%s%d", "knob",j,"x",i));
+
+
+    } // i
 
     if (nsize==2){  // second check
       temp_mat *= 1./sup_nsize;
@@ -1111,7 +1113,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     }
 
     // Write to the file where we are saving each universe
-    if(flag_save_each_universe>0)
+    if(flag_save_each_universe>0){
       x_ntarget->Write("x_ntarget_err");
       x_pot->Write("x_pot_err");
       t_knobs->Write();
