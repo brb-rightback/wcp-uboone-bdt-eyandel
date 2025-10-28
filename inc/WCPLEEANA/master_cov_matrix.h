@@ -93,7 +93,7 @@ namespace LEEana{
     void fill_pred_R_signal(int run, TMatrixD* mat_R, TVectorD* vec_signal,  std::map<int, double>& map_data_period_pot, std::map<TString, std::tuple<TH1F*, TH2F*, double> >& map_name_xs_hists);
 
     // Xs related
-    void gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists, TVectorD* vec_mean,  TMatrixD* cov_xf_mat, TVectorD* vec_signal, TMatrixD* mat_R);
+    void gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists, TVectorD* vec_mean,  TMatrixD* cov_xf_mat, TVectorD* vec_signal, TMatrixD* mat_R, int flag_save_each_universe);
     std::pair<std::vector<int>, std::vector<int> > get_events_weights_xs(TString input_filename, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::map<TString, double>& map_filename_pot, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos);
 
     void fill_xs_histograms(int num, int tot_num, int acc_no, int no, int tot_no, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists);
