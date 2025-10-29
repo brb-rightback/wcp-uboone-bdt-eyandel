@@ -925,6 +925,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
 
       // add covariance matrix ...
       for (size_t n = 0;n!=rows; n++){
+        (*x_vec)(n) = x[n];
      	for (size_t m =0; m!=rows;m++){
      	  temp_mat(n,m) += x[n] * x[m];
      	}
