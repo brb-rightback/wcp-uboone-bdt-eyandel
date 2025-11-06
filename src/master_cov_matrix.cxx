@@ -1,4 +1,4 @@
-#include "WCPLEEANA/master;_cov_matrix.h"
+#include "WCPLEEANA/master_cov_matrix.h"
 
 
 
@@ -1911,7 +1911,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_lantern->SetBranchStatus("subrun",1);
     T_lantern->SetBranchStatus("event",1);
 
-    T_lantern->SetBranchAddress("nTracks",1);
+    T_lantern->SetBranchStatus("nTracks",1);
 
     T_lantern->SetBranchStatus("trackIsSecondary",1);
     T_lantern->SetBranchStatus("trackPID",1);

@@ -863,7 +863,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     T_lantern->SetBranchStatus("subrun",1);
     T_lantern->SetBranchStatus("event",1);
 
-    T_lantern->SetBranchAddress("nTracks",1);
+    T_lantern->SetBranchStatus("nTracks",1);
 
     T_lantern->SetBranchStatus("trackIsSecondary",1);
     T_lantern->SetBranchStatus("trackPID",1);

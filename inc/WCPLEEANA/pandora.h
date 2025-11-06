@@ -19,13 +19,13 @@ struct PandoraInfo{
 
  void set_tree_address(TTree *tree0, PandoraInfo& pandora_info);
  void put_tree_address(TTree *tree0, PandoraInfo& pandora_info);
- void clear_pandora_info(PandoraInfo& space_info);
+ void clear_pandora_info(PandoraInfo& pandora_info);
  void init_pointers(PandoraInfo& pandora_info);
  void del_pointers(PandoraInfo& pandora_info);
 
 }
 
-vo_d LEEana::init_pointers(PandoraInfo& pandora_info) {
+void LEEana::init_pointers(PandoraInfo& pandora_info) {
   pandora_info.trk_llr_pid_score_v = new std::vector<float>;
   pandora_info.pfp_generation_v = new std::vector<unsigned int>;
   pandora_info.trk_score_v = new std::vector<float>;
@@ -41,7 +41,7 @@ void LEEana::del_pointers(PandoraInfo& pandora_info) {
   delete pandora_info.pfpdg;
 }
 
-void LEEana::clear_pandora_info(PandoraInfo& space_info) {
+void LEEana::clear_pandora_info(PandoraInfo& pandora_info) {
   pandora_info.trk_llr_pid_score_v->clear();
   pandora_info.pfp_generation_v->clear();
   pandora_info.trk_score_v->clear();

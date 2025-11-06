@@ -11,6 +11,9 @@
 #include "kine.h"
 #include "eval.h"
 #include "pfeval.h"
+#include "space.h"
+#include "pandora.h"
+#include "lantern.h"
 
 #include <map>
 #include <sstream>
@@ -30,20 +33,20 @@ namespace LEEana{
   double get_mass_MeV(int pdg);
 
   //truth==1 for truth, 0 for WC, else for LArPID, mother_check=-999 for all particles, mother_check=-9999 for all non-primary, which_p=0 for sum of all particles
-  double LEEana::get_KE(PFevalInfo& pfeval, int pdg, int truth, bool mother_check, int which_p, double threshold);
+  double get_KE(PFevalInfo& pfeval, int pdg, int truth, bool mother_check, int which_p, double threshold);
 
   bool check_is_FC(double x, double y, double z);
   bool is_pfeval_muon(PFevalInfo& pfeval,int index, double tolerance);
-  bool get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval)[2];
+  std::tuple<bool,bool> get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval);
 
   double get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool return_KE, bool return_MeV);
   double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons);
 
   int get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold);
 
-  std::vector<double> get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV)[4];
+  std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV);
 
-  get_pandora_proton_KE(PandoraInfo& pandora, double TRACK_SCORE_CUT, bool return_MeV);
+  std::vector<double> get_pandora_proton_KE(PandoraInfo& pandora, double TRACK_SCORE_CUT, bool return_MeV);
 
   // correct reco neutrino energy and reco shower energy
   double get_reco_Enu_corr(KineInfo& kine, bool flag_data);
@@ -231,24 +234,24 @@ double LEEana::get_KE(PFevalInfo& pfeval, int pdg, int truth, bool mother_check,
         int pdgcode = 0;
         double mass = 0;
         int mother = 0;
-        double Kp = 0;
+        double KE = 0;
         if(truth==1){
           pdgcode = pfeval.truth_pdg[i];
           mass = get_mass_MeV(pdgcode);
           mother = pfeval.truth_mother[i];
-          Kp = pfeval.truth_startMomentum[i][3]*1000-mass;
+          KE = pfeval.truth_startMomentum[i][3]*1000-mass;
         }
         else if(truth==0){
           pdgcode = pfeval.reco_pdg[i];
           mass = get_mass_MeV(pdgcode);
           mother = pfeval.reco_mother[i];
-          Kp = pfeval.reco_startMomentum[i][3]*1000-mass;
+          KE = pfeval.reco_startMomentum[i][3]*1000-mass;
         }
         else{
           pdgcode = pfeval.reco_larpid_pdg[i];
           mass = get_mass_MeV(pdgcode);
           mother = pfeval.reco_mother[i];
-          Kp = pfeval.reco_startMomentum[i][3]*1000-mass;
+          KE = pfeval.reco_startMomentum[i][3]*1000-mass;
         }
         if(mother!=mother_check && mother_check!=-999 && mother_check!=-9999) continue;
         if(mother==0 && mother_check==-9999) continue;
@@ -277,23 +280,23 @@ double LEEana::get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool
   if(pfeval.mcs_emu_tracklen>0 && pfeval.mcs_emu_tracklen<4 && flag_FC_lepton) E = pfeval.mcs_emu_tracklen;
   if(pfeval.mcs_emu_MCS>0 && pfeval.mcs_emu_MCS<4 && !flag_FC_lepton) E = pfeval.mcs_emu_MCS;
   if(return_KE) E = E-0.10566;
-  if(return_GeV) E = E*1000;
+  if(return_MeV) E = E*1000;
   return E;
 }
 
 double LEEana::get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons){
-  double E = get_reco_Enu_corr(KineInfo& kine, flag_data);
+  double E = get_reco_Enu_corr(kine, flag_data);
   if (E<0) return 0;
   double KEmuon_old = (pfeval.reco_muonMomentum[3]-0.10566)*1000;
-  double KEmuon_new = get_muon_energy_new(PFevalInfo& pfeval, flag_FC_lepton, true, true);
+  double KEmuon_new = get_muon_energy_new(pfeval, flag_FC_lepton, true, true);
   if(KEmuon_old>0 && KEmuon_new>0) E =  E - KEmuon_old + KEmuon_new;
   if(correct_protons){
-    std::vector<double> KEproton_new = get_range_proton_KE(pfeval, space, true)[1];
+    std::vector<double> KEproton_new = std::get<1>(get_range_proton_KE(pfeval, space, true));
     for(size_t i=0; i<kine.kine_energy_particle->size(); i++){
       int pdgcode = kine.kine_particle_type->at(i);
       if(abs(pdgcode)==2212) E=E-kine.kine_energy_particle->at(i);
     }
-    for(size_t i=0; i<KEproton_new->size(); i++){
+    for(size_t i=0; i<KEproton_new.size(); i++){
       E=E+KEproton_new.at(i);
     }
   }
@@ -319,10 +322,10 @@ bool LEEana::is_pfeval_muon(PFevalInfo& pfeval,int index, double tolerance){
       return flag_prim_mu;
 }
 
-bool LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval)[2]{
+std::tuple<bool,bool> LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval){
   bool flag_FC_lepton = 1;
-  bool flag_FC_hardon = 1;
-  bool result[2] = [flag_FC_lepton,flag_FC_hadron];
+  bool flag_FC_hadron = 1;
+  std::tuple<bool,bool> result = std::make_tuple(flag_FC_lepton,flag_FC_hadron);
   if(eval.match_isFC) return result;
   for(size_t i=0; i<pfeval.reco_Ntrack; i++){
     if(pfeval.reco_pdg[i]==22 || pfeval.reco_pdg[i]==2112) continue;
@@ -334,18 +337,18 @@ bool LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval)[2]{
     double z_end = pfeval.reco_endXYZT[i][2];
     bool is_FC = check_is_FC(x,y,z) * check_is_FC(x_end,y_end,z_end);
     if(is_pfeval_muon(pfeval,i,0.0001)) flag_FC_lepton = flag_FC_lepton*is_FC;
-    else flag_FC_hardon = flag_FC_hardon*is_FC;
+    else flag_FC_hadron = flag_FC_hadron*is_FC;
   }
-  result = [flag_FC_lepton,flag_FC_hadron];
+  result = std::make_tuple(flag_FC_lepton,flag_FC_hadron);
   return result;
 }
 
 
 int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold){
-  std::vector<double> result[4] = get_range_proton_KE(pfeval,space,true);  
-  double KE = result[0].at(0);
-  double KE_p = get_pandora_proton_KE(pandora).at(0);
-  double KE_l = result[3].at(0);
+  std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> result = get_range_proton_KE(pfeval,space,true);  
+  double KE = std::get<0>(result).at(0);
+  double KE_p = get_pandora_proton_KE(pandora,0.05,true).at(0);
+  double KE_l = std::get<3>(result).at(0);
   int bdt_bin=0;
   if(KE>=KE_threshold) bdt_bin=5;
   else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold) bdt_bin=4;
@@ -355,7 +358,7 @@ int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, Sp
   return bdt_bin;
 }
 
-std::vector<double> LEEana::get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV)[4]{
+std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> LEEana::get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV){
 
   std::vector<double> prim_proton_KEs;
   std::vector<double> proton_KEs;
@@ -371,8 +374,6 @@ std::vector<double> LEEana::get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& s
     if (pfeval.reco_pdg[i]!=2212) flag_wc=true;
     if (pfeval.reco_larpid_pdg[i]!=2212) flag_larpid=true;
     if(!flag_wc && !flag_larpid) continue;
-
-    int reco_id = pfeval.reco_id[i];
 
     double range_proton = 0; 
     double proton_KE = 0;
@@ -403,7 +404,7 @@ std::vector<double> LEEana::get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& s
     for(int bb=0; bb<nbb-1; bb++){
       if(proton_length_bins.at(bb)<=range_proton && proton_length_bins.at(bb+1)>range_proton){
         double m = (proton_energy_bins.at(bb+1)-proton_energy_bins.at(bb))/(proton_length_bins.at(bb+1)-proton_length_bins.at(bb));
-        double proton_KE = proton_energy_bins.at(bb) + m * (range_proton-proton_length_bins.at(bb))
+        proton_KE = proton_energy_bins.at(bb) + m * (range_proton-proton_length_bins.at(bb));
         break;
       }
     }
@@ -420,7 +421,7 @@ std::vector<double> LEEana::get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& s
   std::sort(proton_KEs.begin(), proton_KEs.end(), wayToSort);
   std::sort(prim_larpid_proton_KEs.begin(), prim_larpid_proton_KEs.end(), wayToSort);
   std::sort(larpid_proton_KEs.begin(), larpid_proton_KEs.end(), wayToSort);
-  std::vector<double> result[4] = [prim_proton_KEs,proton_KEs,prim_larpid_proton_KEs,larpid_proton_KEs];
+  std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> result = std::make_tuple(prim_proton_KEs,proton_KEs,prim_larpid_proton_KEs,larpid_proton_KEs);
   return result;
 
 }
@@ -448,20 +449,20 @@ std::vector<double> LEEana::get_pandora_proton_KE(PandoraInfo& pandora, double T
     return proton_KEs;
   }
 
-  for(size_t part=0; part<pandora.n_pfps part++){
+  for(size_t part=0; part<pandora.n_pfps; part++){
         
-    generation = pandora.pfp_generation_v.at(part);
+    int generation = pandora.pfp_generation_v->at(part);
     if(generation!=2) continue;
 
-    if(pfpdg.at(part)!=13) continue;
+    if(pandora.pfpdg->at(part)!=13) continue;
 
-    if(pandora.trk_llr_pid_score_v.at(part)>muon_trk_llr_pid_score_v) muon_trk_llr_pid_score_v = pandora.trk_llr_pid_score_v.at(part);
+    if(pandora.trk_llr_pid_score_v->at(part)>muon_trk_llr_pid_score_v) muon_trk_llr_pid_score_v = pandora.trk_llr_pid_score_v->at(part);
 
-    if(trk_llr_pid_score_v.at(part) < TRACK_SCORE_CUT){ proton_KEs.push_back(trk_energy_proton_v.at(part)); }
+    if(pandora.trk_llr_pid_score_v->at(part) < TRACK_SCORE_CUT){ proton_KEs.push_back(pandora.trk_energy_proton_v->at(part)); }
   }
 
   if(return_MeV){
-    for(size_t part=0; part<proton_KEs.size() part++){
+    for(size_t part=0; part<proton_KEs.size(); part++){
       proton_KEs.at(part) = proton_KEs.at(part)*1000;
     }
   }
@@ -786,7 +787,7 @@ double LEEana::get_truth_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval,
 }
 
 
-double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, bool flag_data, TString var_name){
+double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, bool flag_data, TString var_name, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
   //  if (var_name == "kine_reco_Enu"){
   //  return kine.kine_reco_Enu;
   //  }else
@@ -1243,8 +1244,8 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     return -10000;
   }
   else if (var_name == "muon_momentum_costheta"){
-    float muon_momentum = get_kine_var(kine, eval, pfeval, tagger, flag_data , "muon_momentum");
-    float costheta = get_kine_var(kine, eval, pfeval, tagger, flag_data , "muon_costheta");
+    float muon_momentum = get_kine_var(kine, eval, pfeval, tagger, flag_data , "muon_momentum", space, pandora, lantern);
+    float costheta = get_kine_var(kine, eval, pfeval, tagger, flag_data , "muon_costheta", space, pandora, lantern);
     int bin = alt_var_index("muon_momentum",muon_momentum, "costheta", costheta);
     return bin;
   }
@@ -1252,7 +1253,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     float Ehadron = -1000;
     if (pfeval.reco_muonMomentum[3]>0)
       Ehadron = get_reco_Enu_corr(kine, flag_data) - pfeval.reco_muonMomentum[3]*1000.;
-    float costheta = get_kine_var(kine, eval, pfeval, tagger, flag_data , "muon_costheta");
+    float costheta = get_kine_var(kine, eval, pfeval, tagger, flag_data , "muon_costheta", space, pandora, lantern);
     int bin = alt_var_index("Ehadron",Ehadron, "costheta", costheta);
     return bin;
   }

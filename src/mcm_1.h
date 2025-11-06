@@ -692,7 +692,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_lantern_cv->SetBranchStatus("subrun",1);
     T_lantern_cv->SetBranchStatus("event",1);
 
-    T_lantern_cv->SetBranchAddress("nTracks",1);
+    T_lantern_cv->SetBranchStatus("nTracks",1);
 
     T_lantern_cv->SetBranchStatus("trackIsSecondary",1);
     T_lantern_cv->SetBranchStatus("trackPID",1);
@@ -933,7 +933,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_lantern_det->SetBranchStatus("subrun",1);
     T_lantern_det->SetBranchStatus("event",1);
 
-    T_lantern_det->SetBranchAddress("nTracks",1);
+    T_lantern_det->SetBranchStatus("nTracks",1);
 
     T_lantern_det->SetBranchStatus("trackIsSecondary",1);
     T_lantern_det->SetBranchStatus("trackPID",1);
