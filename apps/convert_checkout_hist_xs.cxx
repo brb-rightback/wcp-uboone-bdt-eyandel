@@ -310,6 +310,10 @@ int main( int argc, char** argv )
     }
   }
 
+  if(T_PFeval->GetBranch("reco_larpid_pdg")){
+    T_PFeval->SetBranchStatus("reco_larpid_pdg",1);
+  }
+
   if(T_spacepoints){
     T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_x",1);
     T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_y",1);

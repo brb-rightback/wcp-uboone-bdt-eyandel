@@ -660,6 +660,10 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_PFeval_cv->SetBranchStatus("evtTimeNS",1);
   }
 
+  if(T_PFeval_cv->GetBranch("reco_larpid_pdg")){
+    T_PFeval_cv->SetBranchStatus("reco_larpid_pdg",1);
+  }
+
   if(T_spacepoints_cv){
     T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_x",1);
     T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_y",1);
@@ -895,6 +899,10 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   if (pfeval_det.flag_nsbeam){
     T_PFeval_det->SetBranchStatus("evtDeltaTimeNS",1);
     T_PFeval_det->SetBranchStatus("evtTimeNS",1);
+  }
+
+  if(T_PFeval_det->GetBranch("reco_larpid_pdg")){
+    T_PFeval_det->SetBranchStatus("reco_larpid_pdg",1);
   }
 
   if(T_spacepoints_det){
