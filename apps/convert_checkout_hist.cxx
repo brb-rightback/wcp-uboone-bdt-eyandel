@@ -12,6 +12,9 @@
 #include "WCPLEEANA/pot.h"
 #include "WCPLEEANA/pfeval.h"
 #include "WCPLEEANA/eval.h"
+#include "WCPLEEANA/space.h"
+#include "WCPLEEANA/pandora.h"
+#include "WCPLEEANA/lantern.h"
 
 using namespace std;
 using namespace LEEana;
@@ -46,7 +49,7 @@ int main( int argc, char** argv )
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
   TTree *T_PFeval = (TTree*)file->Get("wcpselection/T_PFeval");
   TTree *T_KINEvars = (TTree*)file->Get("wcpselection/T_KINEvars");
-  TTree *T_Spacepoints = (TTree*)file->Get("wcpselection/T_spacepoints");
+  TTree *T_spacepoints = (TTree*)file->Get("wcpselection/T_spacepoints");
   TTree *T_pandora = (TTree*)file->Get("nuselection/NeutrinoSelectionFilter");
   TTree *T_lantern = (TTree*)file->Get("lantern/EventTree");
 
@@ -73,6 +76,7 @@ int main( int argc, char** argv )
   }
   set_tree_address(T_pot, pot);
   set_tree_address(T_KINEvars, kine);
+  if(T_spacepoints) set_tree_address(T_spacepoints, space);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
 
@@ -375,40 +379,46 @@ int main( int argc, char** argv )
     }
   }
 
-  T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_x",1);
-  T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_y",1);
-  T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_z",1);
-  T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_q",1);
-  T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_id",1);
-  
-  T_pandora->SetBranchStatus("run",1);
-  T_pandora->SetBranchStatus("sub",1);
-  T_pandora->SetBranchStatus("evt",1);
+  if(T_spacepoints){
+    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_x",1);
+    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_y",1);
+    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_z",1);
+    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_q",1);
+    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_id",1);
+  }
 
-  T_pandora->SetBranchStatus("nslice",1);
-  T_pandora->SetBranchStatus("n_pfps",1);
+  if(T_pandora){
+    T_pandora->SetBranchStatus("run",1);
+    T_pandora->SetBranchStatus("sub",1);
+    T_pandora->SetBranchStatus("evt",1);
 
-  T_pandora->SetBranchStatus("trk_llr_pid_score_v",1);
-  T_pandora->SetBranchStatus("pfp_generation_v",1);
-  T_pandora->SetBranchStatus("trk_score_v",1);
-  T_pandora->SetBranchStatus("trk_energy_proton_v",1);
-  T_pandora->SetBranchStatus("pfpdg",1);
+    T_pandora->SetBranchStatus("nslice",1);
+    T_pandora->SetBranchStatus("n_pfps",1);
 
-  T_lantern->SetBranchStatus("run",1);
-  T_lantern->SetBranchStatus("subrun",1);
-  T_lantern->SetBranchStatus("event",1);
+    T_pandora->SetBranchStatus("trk_llr_pid_score_v",1);
+    T_pandora->SetBranchStatus("pfp_generation_v",1);
+    T_pandora->SetBranchStatus("trk_score_v",1);
+    T_pandora->SetBranchStatus("trk_energy_proton_v",1);
+    T_pandora->SetBranchStatus("pfpdg",1);
+  }
 
-  T_lantern->SetBranchAddress("nTracks",1);
+  if(T_lantern){
+    T_lantern->SetBranchStatus("run",1);
+    T_lantern->SetBranchStatus("subrun",1);
+    T_lantern->SetBranchStatus("event",1);
 
-  T_lantern->SetBranchStatus("trackIsSecondary",1);
-  T_lantern->SetBranchStatus("trackPID",1);
-  T_lantern->SetBranchStatus("trackMuScore",1);
-  T_lantern->SetBranchStatus("trackPrScore",1);
-  T_lantern->SetBranchStatus("trackPiScore",1);
-  T_lantern->SetBranchStatus("trackElScore",1);
-  T_lantern->SetBranchStatus("trackPhScore",1);
-  T_lantern->SetBranchStatus("trackRecoE",1);
-  T_lantern->SetBranchStatus("trackDistToVtx",1);
+    T_lantern->SetBranchAddress("nTracks",1);
+
+    T_lantern->SetBranchStatus("trackIsSecondary",1);
+    T_lantern->SetBranchStatus("trackPID",1);
+    T_lantern->SetBranchStatus("trackMuScore",1);
+    T_lantern->SetBranchStatus("trackPrScore",1);
+    T_lantern->SetBranchStatus("trackPiScore",1);
+    T_lantern->SetBranchStatus("trackElScore",1);
+    T_lantern->SetBranchStatus("trackPhScore",1);
+    T_lantern->SetBranchStatus("trackRecoE",1);
+    T_lantern->SetBranchStatus("trackDistToVtx",1);
+  }
 
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;
 
@@ -418,9 +428,9 @@ int main( int argc, char** argv )
     T_eval->GetEntry(i);
     T_KINEvars->GetEntry(i);
     T_PFeval->GetEntry(i);
-    T_spacepoints->GetEntry(i);
-    T_pandora->GetEntry(i);
-    T_lantern->GetEntry(i);
+    if(T_spacepoints) T_spacepoints->GetEntry(i);
+    if(T_pandora) T_pandora->GetEntry(i);
+    if(T_lantern) T_lantern->GetEntry(i);
 
     if (!is_preselection(eval)) continue;
 
@@ -437,9 +447,9 @@ int main( int argc, char** argv )
 
       htemp = map_histoname_hist[histoname];
       // get kinematics variable ...
-      double val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name);
+      double val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
       // get pass or not
-      bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, eval, pfeval, tagger, kine);
+      bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
 
       double osc_weight = 1.0;
 
