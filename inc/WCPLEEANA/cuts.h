@@ -47,6 +47,7 @@ namespace LEEana{
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV);
 
   std::vector<double> get_pandora_proton_KE(PandoraInfo& pandora, double TRACK_SCORE_CUT, bool return_MeV);
+  std::vector<double> get_lantern_KE(LanternInfo& lantern, int pdg, double vtx_cut, bool return_MeV);
 
   // correct reco neutrino energy and reco shower energy
   double get_reco_Enu_corr(KineInfo& kine, bool flag_data);
@@ -349,12 +350,13 @@ int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, Sp
   double KE = std::get<0>(result).at(0);
   double KE_p = get_pandora_proton_KE(pandora,0.05,true).at(0);
   double KE_l = std::get<3>(result).at(0);
+  double KE_ll = get_lantern_KE(lantern, 2212, 10, true).at(0);
   int bdt_bin=0;
   if(KE>=KE_threshold) bdt_bin=5;
-  else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold) bdt_bin=4;
+  else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold || KE_pl_threshold) bdt_bin=4;
   else if(tagger.all_veto_score>scat_bdt_threshold) bdt_bin=3;
   else if(tagger.VtxAct_bdt_score>vtxact_bdt_threshold) bdt_bin=2;
-  else if(KE<1 && KE_p<1 && KE_l<1) bdt_bin=1;
+  else if(KE<1 && KE_p<1 && KE_l<1 && KE_ll) bdt_bin=1;
   return bdt_bin;
 }
 
@@ -471,6 +473,30 @@ std::vector<double> LEEana::get_pandora_proton_KE(PandoraInfo& pandora, double T
   return proton_KEs;
 
 }
+
+std::vector<double> LEEana::get_lantern_KE(LanternInfo& lantern, int pdg, double vtx_cut, bool return_MeV){
+
+  std::vector<double> p_KEs;
+
+  for(size_t part=0; part<lantern.nTracks; part++){
+
+    if(lantern.trackPID[part]!=2212) continue;
+    if(lantern.trackIsSecondary[part]!=0) continue;
+    if(lantern.trackDistToVtx[part]>vtx_cut) continue;
+    p_KEs.push_back(lantern.trackRecoE[part]);
+  }
+
+  if(!return_MeV){
+    for(size_t part=0; part<p_KEs.size(); part++){
+      p_KEs.at(part) = p_KEs.at(part)/1000;
+    }
+  }
+
+  std::sort(p_KEs.begin(), p_KEs.end(), wayToSort);
+  return p_KEs;
+
+}
+
 
 double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data){
   double addtl_weight = 1.0;
