@@ -347,13 +347,13 @@ std::tuple<bool,bool> LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval){
 
 int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold){
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> result = get_range_proton_KE(pfeval,space,true); 
-  //std::cout<<std::get<0>(result).at(0)<<" "<<std::get<3>(result).at(0)<<std::endl; 
+  std::cout<<std::get<0>(result).at(0)<<" "<<std::get<3>(result).at(0)<<std::endl; 
   double KE = std::get<0>(result).at(0);
   double KE_p = get_pandora_proton_KE(pandora,0.05,true).at(0);
-  //std::cout<<KE_p<<std::endl;
+  std::cout<<KE_p<<std::endl;
   double KE_l = std::get<3>(result).at(0);
   double KE_ll = get_lantern_KE(lantern, 2212, 10, true).at(0);
-  //std::cout<<KE_ll<<std::endl;
+  std::cout<<KE_ll<<std::endl;
   int bdt_bin=1;
   if(KE>=KE_threshold) bdt_bin=5;
   else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold || KE_pl_threshold) bdt_bin=4;
@@ -830,6 +830,12 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
   //  }else
   if (var_name == "kine_reco_Enu"){
     return get_reco_Enu_corr(kine, flag_data);
+  }else if (var_name == "kine_reco_Enu_new"){
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval);
+    return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true);
+  }else if (var_name == "KE_muon_new"){
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval);
+    return get_muon_energy_new(pfeval, std::get<0>(result_part_FC), true, true);
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;
   }else if (var_name == "kine_reco_Eproton"){
@@ -3125,7 +3131,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
    ||ch_name == "numuCC_part_bdt_Trk0p_sig"  || ch_name == "numuCC_part_bdt_Trk0p_bck"  || ch_name == "numuCC_part_bdt_Trk0p_ext"  || ch_name == "numuCC_part_bdt_Trk0p_dirt"  || ch_name == "numuCC_part_bdt_Trk0p"
    ||ch_name == "numuCC_part_bdt_G0p_sig"    || ch_name == "numuCC_part_bdt_G0p_bck"    || ch_name == "numuCC_part_bdt_G0p_ext"    || ch_name == "numuCC_part_bdt_G0p_dirt"    || ch_name == "numuCC_part_bdt_G0p"){
 
-    //std::cout<<ch_name<<" "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<" "<<std::endl;
+    std::cout<<ch_name<<" "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<" "<<std::endl;
 
     if( (ch_name == "numuCC_part_bdt_Np_sig"    || ch_name == "numuCC_part_bdt_PorLNp_sig" || ch_name == "numuCC_part_bdt_Scat0p_sig" 
       || ch_name == "numuCC_part_bdt_Act0p_sig" || ch_name == "numuCC_part_bdt_Trk0p_sig"  || ch_name == "numuCC_part_bdt_G0p_sig") 
@@ -3140,7 +3146,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
     int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, 0, 0); 
 
-    //std::cout<<part_bin<<std::endl;
+    std::cout<<part_bin<<std::endl;
 
     if((ch_name == "numuCC_part_bdt_Np_sig" || ch_name == "numuCC_part_bdt_Np_bck" || ch_name == "numuCC_part_bdt_Np_ext" 
      || ch_name == "numuCC_part_bdt_Np_dirt" || ch_name == "numuCC_part_bdt_Np") && part_bin==0) return true;
