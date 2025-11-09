@@ -8,6 +8,7 @@ struct PandoraInfo{
   Int_t event;
 
   Int_t nslice;
+  Int_t slice_orig_pass_id;
   Int_t n_pfps;
 
   std::vector<float> *trk_llr_pid_score_v;
@@ -58,6 +59,7 @@ void LEEana::set_tree_address(TTree *tree0, PandoraInfo& pandora_info) {
   tree0->SetBranchAddress("evt", &pandora_info.event);
 
   tree0->SetBranchAddress("nslice", &pandora_info.nslice);
+  tree0->SetBranchAddress("slice_orig_pass_id", &pandora_info.slice_orig_pass_id);
   tree0->SetBranchAddress("n_pfps", &pandora_info.n_pfps);
 
   tree0->SetBranchAddress("trk_llr_pid_score_v", &pandora_info.trk_llr_pid_score_v);
@@ -73,6 +75,7 @@ void LEEana::put_tree_address(TTree *tree0, PandoraInfo& pandora_info) {
   tree0->Branch("event", &pandora_info.event, "event/I");
 
   tree0->Branch("nslice", &pandora_info.nslice);
+  tree0->Branch("slice_orig_pass_id", &pandora_info.slice_orig_pass_id);
   tree0->Branch("n_pfps", &pandora_info.n_pfps);
 
   tree0->Branch("trk_llr_pid_score_v", &pandora_info.trk_llr_pid_score_v);

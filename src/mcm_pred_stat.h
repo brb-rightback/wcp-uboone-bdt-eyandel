@@ -849,6 +849,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     T_pandora->SetBranchStatus("evt",1);
 
     T_pandora->SetBranchStatus("nslice",1);
+    T_pandora->SetBranchStatus("slice_orig_pass_id",1);
     T_pandora->SetBranchStatus("n_pfps",1);
 
     T_pandora->SetBranchStatus("trk_llr_pid_score_v",1);

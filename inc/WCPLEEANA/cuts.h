@@ -445,7 +445,7 @@ std::vector<double> LEEana::get_pandora_proton_KE(PandoraInfo& pandora, double T
   bool pandora_inclusive_flag = 0;
   double muon_trk_llr_pid_score_v = -1;
     
-  if (pandora.nslice != 1){
+  if (pandora.slice_orig_pass_id != 1){
     return proton_KEs;
   }
 

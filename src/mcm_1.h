@@ -678,6 +678,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_pandora_cv->SetBranchStatus("evt",1);
 
     T_pandora_cv->SetBranchStatus("nslice",1);
+    T_pandora_cv->SetBranchStatus("slice_orig_pass_id",1);
     T_pandora_cv->SetBranchStatus("n_pfps",1);
 
     T_pandora_cv->SetBranchStatus("trk_llr_pid_score_v",1);
@@ -919,6 +920,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_pandora_det->SetBranchStatus("evt",1);
 
     T_pandora_det->SetBranchStatus("nslice",1);
+    T_pandora_det->SetBranchStatus("slice_orig_pass_id",1);
     T_pandora_det->SetBranchStatus("n_pfps",1);
 
     T_pandora_det->SetBranchStatus("trk_llr_pid_score_v",1);
