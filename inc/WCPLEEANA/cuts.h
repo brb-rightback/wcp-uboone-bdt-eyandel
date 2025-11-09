@@ -351,12 +351,12 @@ int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, Sp
   double KE_p = get_pandora_proton_KE(pandora,0.05,true).at(0);
   double KE_l = std::get<3>(result).at(0);
   double KE_ll = get_lantern_KE(lantern, 2212, 10, true).at(0);
-  int bdt_bin=0;
+  int bdt_bin=1;
   if(KE>=KE_threshold) bdt_bin=5;
   else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold || KE_pl_threshold) bdt_bin=4;
   else if(tagger.all_veto_score>scat_bdt_threshold) bdt_bin=3;
   else if(tagger.VtxAct_bdt_score>vtxact_bdt_threshold) bdt_bin=2;
-  else if(KE<1 && KE_p<1 && KE_l<1 && KE_ll) bdt_bin=1;
+  else if(KE<1 && KE_p<1 && KE_l<1 && KE_ll<1) bdt_bin=0;
   return bdt_bin;
 }
 
@@ -2804,6 +2804,8 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   bool flag_truth_inside = false; // in the active volume
   if (eval.truth_vtxX > -1 && eval.truth_vtxX <= 254.3 &&  eval.truth_vtxY >-115.0 && eval.truth_vtxY<=117.0 && eval.truth_vtxZ > 0.6 && eval.truth_vtxZ <=1036.4) flag_truth_inside = true;
 
+  double true_proton_KE = get_KE(pfeval, 2212, 1, 0, 1, 0);
+
   // definition of additional cuts
   std::map<std::string, bool> map_cuts_flag;
   if(is_far_sideband(kine, tagger, flag_data)) map_cuts_flag["farsideband"] = true;
@@ -2848,6 +2850,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   // Xs related cuts ...
 
   map_cuts_flag["XsnumuCCinFV"] = eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1;
+
+
+  map_cuts_flag["XsnumuCCinFV0p"] = map_cuts_flag["XsnumuCCinFV"] && true_proton_KE<45;
+  map_cuts_flag["XsnumuCCinFVNp"] = map_cuts_flag["XsnumuCCinFV"] && true_proton_KE>=45;
 
   map_cuts_flag["Xs_Enu_numuCCinFV"] = eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && truth_muonMomentum[3]>0 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy > 200 && Pmuon > 0 && Pmuon <= 2500;
 
@@ -3099,7 +3105,49 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
+  
+
+  if(ch_name == "numuCC_part_bdt_Np_sig"     || ch_name == "numuCC_part_bdt_Np_bck"     || ch_name == "numuCC_part_bdt_Np_ext"     || ch_name == "numuCC_part_bdt_Np_dirt"     || ch_name == "numuCC_part_bdt_Np"
+   ||ch_name == "numuCC_part_bdt_PorLNp_sig" || ch_name == "numuCC_part_bdt_PorLNp_bck" || ch_name == "numuCC_part_bdt_PorLNp_ext" || ch_name == "numuCC_part_bdt_PorLNp_dirt" || ch_name == "numuCC_part_bdt_PorLNp"
+   ||ch_name == "numuCC_part_bdt_Scat0p_sig" || ch_name == "numuCC_part_bdt_Scat0p_bck" || ch_name == "numuCC_part_bdt_Scat0p_ext" || ch_name == "numuCC_part_bdt_Scat0p_dirt" || ch_name == "numuCC_part_bdt_Scat0p"
+   ||ch_name == "numuCC_part_bdt_Act0p_sig"  || ch_name == "numuCC_part_bdt_Act0p_bck"  || ch_name == "numuCC_part_bdt_Act0p_ext"  || ch_name == "numuCC_part_bdt_Act0p_dirt"  || ch_name == "numuCC_part_bdt_Act0p"
+   ||ch_name == "numuCC_part_bdt_Trk0p_sig"  || ch_name == "numuCC_part_bdt_Trk0p_bck"  || ch_name == "numuCC_part_bdt_Trk0p_ext"  || ch_name == "numuCC_part_bdt_Trk0p_dirt"  || ch_name == "numuCC_part_bdt_Trk0p"
+   ||ch_name == "numuCC_part_bdt_G0p_sig"    || ch_name == "numuCC_part_bdt_G0p_bck"    || ch_name == "numuCC_part_bdt_G0p_ext"    || ch_name == "numuCC_part_bdt_G0p_dirt"    || ch_name == "numuCC_part_bdt_G0p"){
+
+    if( (ch_name == "numuCC_part_bdt_Np_sig"    || ch_name == "numuCC_part_bdt_PorLNp_sig" || ch_name == "numuCC_part_bdt_Scat0p_sig" 
+      || ch_name == "numuCC_part_bdt_Act0p_sig" || ch_name == "numuCC_part_bdt_Trk0p_sig"  || ch_name == "numuCC_part_bdt_G0p_sig") 
+      && map_cuts_flag["XsnumuCCinFV"]==false) return false;
+
+    if( (ch_name == "numuCC_part_bdt_Np_bck" || ch_name == "numuCC_part_bdt_Np_dirt" || ch_name == "numuCC_part_bdt_PorLNp_bck" || ch_name == "numuCC_part_bdt_PorLNp_dirt"
+       ||ch_name == "numuCC_part_bdt_Scat0p_bck" || ch_name == "numuCC_part_bdt_Scat0p_dirt" || ch_name == "numuCC_part_bdt_Act0p_bck" || ch_name == "numuCC_part_bdt_Act0p_dirt"
+       ||ch_name == "numuCC_part_bdt_Trk0p_bck" || ch_name == "numuCC_part_bdt_Trk0p_dirt" || ch_name == "numuCC_part_bdt_G0p_bck" || ch_name == "numuCC_part_bdt_G0p_dirt") 
+        && map_cuts_flag["XsnumuCCinFV"]==true) return false; 
+
+    if(tagger.numu_score<0.9 || pfeval.reco_muonMomentum[3]<0) return false; 
+
+    int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, 0, 0); 
+
+    if((ch_name == "numuCC_part_bdt_Np_sig" || ch_name == "numuCC_part_bdt_Np_bck" || ch_name == "numuCC_part_bdt_Np_ext" 
+     || ch_name == "numuCC_part_bdt_Np_dirt" || ch_name == "numuCC_part_bdt_Np") && part_bin==0) return true;
+
+    if((ch_name == "numuCC_part_bdt_PorLNp_sig" || ch_name == "numuCC_part_bdt_PorLNp_bck" || ch_name == "numuCC_part_bdt_PorLNp_ext" 
+     || ch_name == "numuCC_part_bdt_PorLNp_dirt" || ch_name == "numuCC_part_bdt_PorLNp") && part_bin==1) return true;
+
+    if((ch_name == "numuCC_part_bdt_Scat0p_sig" || ch_name == "numuCC_part_bdt_Scat0p_bck" || ch_name == "numuCC_part_bdt_Scat0p_ext" 
+     || ch_name == "numuCC_part_bdt_Scat0p_dirt" || ch_name == "numuCC_part_bdt_Scat0p") && part_bin==2) return true;
+
+    if((ch_name == "numuCC_part_bdt_Act0p_sig" || ch_name == "numuCC_part_bdt_Act0p_bck" || ch_name == "numuCC_part_bdt_Act0p_ext" 
+     || ch_name == "numuCC_part_bdt_Act0p_dirt" || ch_name == "numuCC_part_bdt_Act0p") && part_bin==3) return true;
+
+    if((ch_name == "numuCC_part_bdt_Trk0p_sig" || ch_name == "numuCC_part_bdt_Trk0p_bck" || ch_name == "numuCC_part_bdt_Trk0p_ext" 
+     || ch_name == "numuCC_part_bdt_Trk0p_dirt" || ch_name == "numuCC_part_bdt_Trk0p") && part_bin==4) return true;
+
+    if((ch_name == "numuCC_part_bdt_0p_sig" || ch_name == "numuCC_part_bdt_0p_bck" || ch_name == "numuCC_part_bdt_0p_ext" 
+     || ch_name == "numuCC_part_bdt_0p_dirt" || ch_name == "numuCC_part_bdt_0p") && part_bin==5) return true;
+     
+    return false;
+
+  }else if (ch_name == "LEE_FC_nueoverlay"  || ch_name == "nueCC_FC_nueoverlay"){
     if (flag_nueCC && flag_FC && flag_truth_inside) return true;
     else return false;
   }else if (ch_name == "nueCC_FC_nueoverlay_numi"){
