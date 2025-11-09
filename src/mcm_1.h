@@ -669,7 +669,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_y",1);
     T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_z",1);
     T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_q",1);
-    T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_id",1);
+    T_spacepoints_cv->SetBranchStatus("Trecchargeblob_spacepoints_real_cluster_id",1);
   }
 
   if(T_pandora_cv){
@@ -911,7 +911,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_spacepoints_det->SetBranchStatus("Trecchargeblob_spacepoints_y",1);
     T_spacepoints_det->SetBranchStatus("Trecchargeblob_spacepoints_z",1);
     T_spacepoints_det->SetBranchStatus("Trecchargeblob_spacepoints_q",1);
-    T_spacepoints_det->SetBranchStatus("Trecchargeblob_spacepoints_id",1);
+    T_spacepoints_det->SetBranchStatus("Trecchargeblob_spacepoints_real_cluster_id",1);
   }
 
   if(T_pandora_det){

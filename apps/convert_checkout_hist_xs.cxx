@@ -319,7 +319,7 @@ int main( int argc, char** argv )
     T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_y",1);
     T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_z",1);
     T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_q",1);
-    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_id",1);
+    T_spacepoints->SetBranchStatus("Trecchargeblob_spacepoints_real_cluster_id",1);
   }
 
   if(T_pandora){
