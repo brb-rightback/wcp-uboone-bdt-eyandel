@@ -653,7 +653,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     set_tree_address(T_eval, eval);
     set_tree_address(T_PFeval, pfeval);
   }
-  if(T_spacepoints) set_tree_address(T_spacepoints, space);
+  if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
 

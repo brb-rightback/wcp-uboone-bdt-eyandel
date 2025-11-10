@@ -1670,7 +1670,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   set_tree_address(T_PFeval, pfeval);
   set_tree_address(T_pot, pot);
   set_tree_address(T_KINEvars, kine);
-  if(T_spacepoints) set_tree_address(T_spacepoints, space);
+  if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
 

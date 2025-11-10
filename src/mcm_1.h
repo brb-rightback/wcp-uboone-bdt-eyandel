@@ -431,7 +431,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   set_tree_address(T_PFeval_cv, pfeval_cv);
   set_tree_address(T_pot_cv, pot_cv);
   set_tree_address(T_KINEvars_cv, kine_cv);
-  if(T_spacepoints_cv) set_tree_address(T_spacepoints_cv, space_cv);
+  if(T_spacepoints_cv) set_tree_address(T_spacepoints_cv, space_cv, 0);
   if(T_pandora_cv) set_tree_address(T_pandora_cv, pandora_cv);
   if(T_lantern_cv) set_tree_address(T_lantern_cv, lantern_cv);
 
@@ -440,7 +440,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   set_tree_address(T_PFeval_det, pfeval_det);
   set_tree_address(T_pot_det, pot_det);
   set_tree_address(T_KINEvars_det, kine_det);
-  if(T_spacepoints_det) set_tree_address(T_spacepoints_det, space_det);
+  if(T_spacepoints_det) set_tree_address(T_spacepoints_det, space_det, 0);
   if(T_pandora_det) set_tree_address(T_pandora_det, pandora_det);
   if(T_lantern_det) set_tree_address(T_lantern_det, lantern_det);
 
