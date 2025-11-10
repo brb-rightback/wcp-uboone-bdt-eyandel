@@ -533,6 +533,11 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_BDTvars_cv->SetBranchStatus("shw_sp_length_total",1);
     T_BDTvars_cv->SetBranchStatus("shw_sp_n_vertex",1);
   }
+
+  if(tagger_cv.saved_pi_veto_scores){
+    T_BDTvars_cv->SetBranchStatus("all_veto_score",1);
+    T_BDTvars_cv->SetBranchStatus("VtxAct_bdt_score",1);
+  }
   //
 
 
@@ -789,6 +794,11 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     T_BDTvars_det->SetBranchStatus("shw_sp_pio_flag_pio",1);
     T_BDTvars_det->SetBranchStatus("shw_sp_length_total",1);
     T_BDTvars_det->SetBranchStatus("shw_sp_n_vertex",1);
+  }
+
+  if(tagger_det.saved_pi_veto_scores){
+    T_BDTvars_det->SetBranchStatus("all_veto_score",1);
+    T_BDTvars_det->SetBranchStatus("VtxAct_bdt_score",1);
   }
   //
 

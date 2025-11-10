@@ -4,15 +4,15 @@ namespace config_Lee
 
   TString spectra_file = "./merge.root";
   //Erin
-  TString time_file = "./merge_time.root";
+  TString time_file = "./merge.root";
   //
-  TString flux_Xs_directory = "/exp/uboone/data/users/eyandel/hist_rootfiles/XsFlux/";
-  TString detector_directory = "/exp/uboone/data/users/eyandel/hist_rootfiles/det/";
-  TString mc_directory = "/exp/uboone/data/users/eyandel/hist_rootfiles/mc_stat/";
+  TString flux_Xs_directory = "./hist_rootfiles/XsFlux/";
+  TString detector_directory = "./hist_rootfiles/DetVAr/";
+  TString mc_directory = "./hist_rootfiles/mc_stat/";
 
 
 
-  int channels_observation = 0;// data channels (=hdata_obsch_# in spectra_file above)
+  int channels_observation = 6;// data channels (=hdata_obsch_# in spectra_file above)
                                // which is equal to the channels after collapse
                                // NOTE: This value is not used in the lastest version
 
@@ -34,8 +34,8 @@ namespace config_Lee
 
   /////////////////////////////// separated Np and 0p strengthes: 2d strengthes
 
-  int array_LEE_Np_ch[1] = {0};// element value "0" will not be set to the LEE_ch
-  int array_LEE_0p_ch[1] = {0};// element value "0" will not be set to the LEE_ch
+  //int array_LEE_Np_ch[1] = {0};// element value "0" will not be set to the LEE_ch
+  //int array_LEE_0p_ch[1] = {0};// element value "0" will not be set to the LEE_ch
 
   //int array_LEE_Np_ch[1] = {0};
   //int array_LEE_0p_ch[1] = {0};
@@ -55,7 +55,7 @@ namespace config_Lee
   ////////// systematics flag
 
   bool flag_syst_flux_Xs    = true;
-  bool flag_syst_detector   = true;
+  bool flag_syst_detector   = false;
   bool flag_syst_additional = true;
   bool flag_syst_mc_stat    = true;
   bool flag_syst_reweight        = false;

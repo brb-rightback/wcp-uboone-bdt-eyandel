@@ -3187,8 +3187,8 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if((ch_name_string == "numuCC_part_bdt_Trk0p_sig" || ch_name_string == "numuCC_part_bdt_Trk0p_bck" || ch_name_string == "numuCC_part_bdt_Trk0p_ext" 
      || ch_name_string == "numuCC_part_bdt_Trk0p_dirt" || ch_name_string == "numuCC_part_bdt_Trk0p") && part_bin==1) return true;
 
-    if((ch_name_string == "numuCC_part_bdt_0p_sig" || ch_name_string == "numuCC_part_bdt_0p_bck" || ch_name_string == "numuCC_part_bdt_0p_ext" 
-     || ch_name_string == "numuCC_part_bdt_0p_dirt" || ch_name_string == "numuCC_part_bdt_0p") && part_bin==0) return true;
+    if((ch_name_string == "numuCC_part_bdt_G0p_sig" || ch_name_string == "numuCC_part_bdt_G0p_bck" || ch_name_string == "numuCC_part_bdt_G0p_ext" 
+     || ch_name_string == "numuCC_part_bdt_G0p_dirt" || ch_name_string == "numuCC_part_bdt_G0p") && part_bin==0) return true;
      
     return false;
 

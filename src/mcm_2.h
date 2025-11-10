@@ -687,6 +687,11 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("shw_sp_length_total",1);
     T_BDTvars->SetBranchStatus("shw_sp_n_vertex",1);
   }
+
+  if(tagger.saved_pi_veto_scores){
+    T_BDTvars->SetBranchStatus("all_veto_score",1);
+    T_BDTvars->SetBranchStatus("VtxAct_bdt_score",1);
+  }
   //
 
   T_eval->SetBranchStatus("*",0);

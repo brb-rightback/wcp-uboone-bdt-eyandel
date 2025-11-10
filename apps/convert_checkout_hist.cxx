@@ -24,7 +24,7 @@ int main( int argc, char** argv )
 
   TString input_filename = argv[1];
   TString out_filename = argv[2];
-
+  std::cout<<out_filename<<std::endl;
   bool flag_data = true;
 
   bool flag_osc = false;
@@ -118,11 +118,11 @@ int main( int argc, char** argv )
     TString add_cut = std::get<6>(*it);
     TString weight = std::get<7>(*it);
 
-    //    std::cout << std::get<0>( *it)  << " " << std::get<1>(*it) << " " << std::get<4>(*it) << " " << std::get<5>(*it) << " " << std::get<6>(*it) << " " << std::get<7>(*it) << std::endl;
+        std::cout << std::get<0>( *it)  << " " << std::get<1>(*it) << " " << std::get<4>(*it) << " " << std::get<5>(*it) << " " << std::get<6>(*it) << " " << std::get<7>(*it) << std::endl;
     htemp = new TH1F(histoname, histoname, nbin, llimit, hlimit);
     map_histoname_hist[histoname] = htemp;
   }
-  //  std::cout << std::endl;
+    std::cout <<map_histoname_hist.size() <<std::endl;
 
   std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos_err2 = cov.get_histograms(input_filename,1);
   std::copy(histo_infos_err2.begin(), histo_infos_err2.end(), std::back_inserter(all_histo_infos));
@@ -240,6 +240,10 @@ int main( int argc, char** argv )
     T_BDTvars->SetBranchStatus("shw_sp_pio_flag_pio",1);
     T_BDTvars->SetBranchStatus("shw_sp_length_total",1);
     T_BDTvars->SetBranchStatus("shw_sp_n_vertex",1);
+  }
+  if(tagger.saved_pi_veto_scores){
+    T_BDTvars->SetBranchStatus("all_veto_score",1);
+    T_BDTvars->SetBranchStatus("VtxAct_bdt_score",1);
   }
   //
 
@@ -449,6 +453,7 @@ int main( int argc, char** argv )
       TString add_cut = std::get<6>(*it);
       TString weight = std::get<7>(*it);
 
+      if(i<20) std::cout << std::get<0>( *it)  << " " << std::get<1>(*it) << " " << std::get<4>(*it) << " " << std::get<5>(*it) << " " << std::get<6>(*it) << " " << std::get<7>(*it) << std::endl;
 
       htemp = map_histoname_hist[histoname];
       // get kinematics variable ...
@@ -486,8 +491,11 @@ int main( int argc, char** argv )
   T->Branch("pot",&total_pot,"pot/D");
   T->Fill();
 
+  std::cout <<map_histoname_hist.size() <<std::endl;
+
+  std::cout<<out_filename<<std::endl;
   for (auto it = map_histoname_hist.begin(); it!= map_histoname_hist.end(); it++){
-    //std::cout<<"DEBUG: "<<it->first<<" "<<it->second->GetName()<<" "<<it->second->GetSum()<<"\n";
+    std::cout<<"DEBUG: "<<it->first<<" "<<it->second->GetName()<<" "<<it->second->GetSum()<<"\n";
     it->second->SetDirectory(file1);
   }
 
