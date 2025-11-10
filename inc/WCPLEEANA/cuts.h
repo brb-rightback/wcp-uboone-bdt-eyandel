@@ -3130,7 +3130,23 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
   int Enu_bin      = get_Enu_bin(reco_Enu);
 
-  
+  std::string sequence_to_find_FC = "numuCC_part_bdt";  
+  size_t pos = ch_name.find(sequence_to_find);
+  std::string sequence_to_find_FC = "_FC";
+  std::string sequence_to_find_PC = "_PC";
+  size_t posFC = ch_name.find(sequence_to_find_FC);
+  size_t posPC = ch_name.find(sequence_to_find_PC);
+  bool flag_allow_FC=true;
+  bool flag_allow_Pc=true;
+  if(pos != std::string::npos){
+    if (posFC != std::string::npos) {
+        ch_name.erase(posFC);
+        flag_allow_PC=false;
+    }else if(posPC != std::string::npos){
+        ch_name.erase(posPC);
+        flag_allow_FC=false;
+    }
+  }
 
   if(ch_name == "numuCC_part_bdt_Np_sig"     || ch_name == "numuCC_part_bdt_Np_bck"     || ch_name == "numuCC_part_bdt_Np_ext"     || ch_name == "numuCC_part_bdt_Np_dirt"     || ch_name == "numuCC_part_bdt_Np"
    ||ch_name == "numuCC_part_bdt_PorLNp_sig" || ch_name == "numuCC_part_bdt_PorLNp_bck" || ch_name == "numuCC_part_bdt_PorLNp_ext" || ch_name == "numuCC_part_bdt_PorLNp_dirt" || ch_name == "numuCC_part_bdt_PorLNp"
@@ -3147,6 +3163,9 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
        ||ch_name == "numuCC_part_bdt_Scat0p_bck" || ch_name == "numuCC_part_bdt_Scat0p_dirt" || ch_name == "numuCC_part_bdt_Act0p_bck" || ch_name == "numuCC_part_bdt_Act0p_dirt"
        ||ch_name == "numuCC_part_bdt_Trk0p_bck" || ch_name == "numuCC_part_bdt_Trk0p_dirt" || ch_name == "numuCC_part_bdt_G0p_bck" || ch_name == "numuCC_part_bdt_G0p_dirt") 
         && map_cuts_flag["XsnumuCCinFV"]==true) return false; 
+
+    if(eval.match_isFC==1 && flag_allow_FC==false) return false;
+    if(eval.match_isFC==0 && flag_allow_PC==false) return false;
 
     if(tagger.numu_score<0.9 || pfeval.reco_muonMomentum[3]<0) return false; 
 
