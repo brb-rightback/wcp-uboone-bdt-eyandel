@@ -127,7 +127,7 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
     if(pfeval.reco_id[reco_part]!=pfeval.reco_id[index]) continue;
     //std::cout<<"Found ID"<<std::endl;
     if(pfeval.reco_pdg[reco_part]==2112 || pfeval.reco_pdg[reco_part]==22 || pfeval.reco_pdg[reco_part]==111) continue;
-    if(pfeval.reco_truthMatch_pdg[reco_part]<=0 && !flag_data) continue;
+    //if(pfeval.reco_truthMatch_pdg[reco_part]<=0 && !flag_data) continue;
     //std::cout<<"Real particle and found amtch"<<std::endl;
 
     double part_x = pfeval.reco_startXYZT[reco_part][0];
