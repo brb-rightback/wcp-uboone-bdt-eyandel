@@ -361,7 +361,7 @@ int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, Sp
   double KE_ll = get_lantern_KE(lantern, 2212, 10, true).at(0);
   int bdt_bin=1;
   if(KE>=KE_threshold) bdt_bin=5;
-  else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold || KE_pl_threshold) bdt_bin=4;
+  else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold || KE_ll>KE_pl_threshold) bdt_bin=4;
   else if(tagger.all_veto_score>scat_bdt_threshold) bdt_bin=3;
   else if(tagger.VtxAct_bdt_score>vtxact_bdt_threshold) bdt_bin=2;
   else if(KE<1 && KE_p<1 && KE_l<1 && KE_ll<1) bdt_bin=0;
