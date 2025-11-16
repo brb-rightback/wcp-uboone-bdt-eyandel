@@ -3170,7 +3170,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
     if(tagger.numu_score<0.9 || pfeval.reco_muonMomentum[3]<0) return false; 
 
-    int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, 0, 0); 
+    int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, -0.65, 1.65); 
 
     if((ch_name_string == "numuCC_part_bdt_Np_sig" || ch_name_string == "numuCC_part_bdt_Np_bck" || ch_name_string == "numuCC_part_bdt_Np_ext" 
      || ch_name_string == "numuCC_part_bdt_Np_dirt" || ch_name_string == "numuCC_part_bdt_Np") && part_bin==5) return true;
