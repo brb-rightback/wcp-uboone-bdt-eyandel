@@ -2718,7 +2718,7 @@ void TLee::Set_Spectra_MatrixCov()
     map_Lee_ch[6] = 1; 
   }
 
-  int Np0p_constraints = 1;
+  int Np0p_constraints = 0;
 
   if (Np0p_constraints){
     map_Lee_ch[7] = 1;
@@ -2806,7 +2806,7 @@ void TLee::Set_Spectra_MatrixCov()
 
   for(int idx=syst_cov_flux_Xs_begin; idx<=syst_cov_flux_Xs_end; idx++) {
 
-	int disable_BR_uncertainty_2d = 1;
+	int disable_BR_uncertainty_2d = 0;
 	if (disable_BR_uncertainty_2d) {
 	  // See python_tools/BR_uncertainty_tool.ipynb for calculation using merge.root
 	  float num_true_signal_uncollapsed[6*2+16*12] = {

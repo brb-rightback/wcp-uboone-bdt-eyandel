@@ -7,8 +7,8 @@ namespace config_Lee
   TString time_file = "./merge.root";
   //
   TString flux_Xs_directory = "./hist_rootfiles/XsFlux/";
-  TString detector_directory = "./hist_rootfiles/DetVAr/";
-  TString mc_directory = "./hist_rootfiles/mc_stat/";
+  TString detector_directory = "./hist_rootfiles/DetVar/";
+  TString mc_directory = "./mcstat/";
 
 
 
@@ -20,13 +20,13 @@ namespace config_Lee
   int syst_cov_flux_Xs_end   = 17;//cov_18.root is uncorrelated reweighting and cov_19.root is correlated
 
   int syst_cov_mc_stat_begin = 0;// files in mc_directory above
-  int syst_cov_mc_stat_end   = 1;
+  int syst_cov_mc_stat_end   = 0;
 
 
   ///////////////////////////////
 
   //int array_LEE_ch[1] = {0};
-  int array_LEE_ch[3] = {4,5,6}; // for 1d strength. Pay attention to the setting.
+  //int array_LEE_ch[3] = {4,5,6}; // for 1d strength. Pay attention to the setting.
                              // Confict will happen if both the 1d and 2d(defined below) work.
                              // Three options: 1d works, 2d works, or neither works
 
@@ -98,15 +98,15 @@ namespace config_Lee
 
   ////////// Lee strength fitting -- data
 
-  bool flag_Lee_strength_data = true;
-  bool flag_Lee_scan_data     = true;
+  bool flag_Lee_strength_data = false;
+  bool flag_Lee_scan_data     = false;
 
   bool flag_GOF = true;
 
   ////////// MicroBooNE suggested
 
-  bool flag_chi2_data_H0 = 1;
-  bool flag_dchi2_H0toH1 = 1;
+  bool flag_chi2_data_H0 = 0;
+  bool flag_dchi2_H0toH1 = 0;
 
   ////////// Advanced tools
 

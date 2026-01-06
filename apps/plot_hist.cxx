@@ -967,6 +967,9 @@ int main( int argc, char** argv )
         TH1F* hXsecNumuCCinFV = (TH1F*)hdata->Clone("hXsecNumuCCinFV");
         TH1F* hXsecNumuCC0pinFV = (TH1F*)hdata->Clone("hXsecNumuCC0pinFV");
         TH1F* hXsecNumuCCNpinFV = (TH1F*)hdata->Clone("hXsecNumuCCNpinFV");
+        TH1F* hXsecNumuCCStub0pinFV = (TH1F*)hdata->Clone("hXsecNumuCCStub0pinFV");
+        TH1F* hXsecNumuCCStubinFV = (TH1F*)hdata->Clone("hXsecNumuCCStubinFV");
+        TH1F* hXsecNumuCCStubNpinFV = (TH1F*)hdata->Clone("hXsecNumuCCStubNpinFV");
         TH1F* hXsecNC = (TH1F*)hdata->Clone("hXsecNC");
         TH1F* hXsecBkgCC = (TH1F*)hdata->Clone("hXsecBkgCC");
         hbadmatch->Reset();
@@ -999,6 +1002,9 @@ int main( int argc, char** argv )
         hXsecNumuCCinFV->Reset();
         hXsecNumuCC0pinFV->Reset();
         hXsecNumuCCNpinFV->Reset();
+        hXsecNumuCCStub0pinFV->Reset();
+        hXsecNumuCCStubinFV->Reset();
+        hXsecNumuCCStubNpinFV->Reset();
         hXsecNC->Reset();
         hXsecBkgCC->Reset();
         bool flag_leeexist = false;
@@ -1173,6 +1179,23 @@ int main( int argc, char** argv )
                     hXsecNumuCCNpinFV->Add(htemp);
                     break;
                 }
+
+                if(line == "XsecNumuCCStub0pinFV") {
+                    std::cout<<"XsecNumuCCStub0pinFV"<<" "<<histname<<std::endl;
+                    hXsecNumuCCStub0pinFV->Add(htemp);
+                    break;
+                }
+                if(line == "XsecNumuCCStubinFV") {
+                    std::cout<<"XsecNumuCCStubinFV"<<" "<<histname<<std::endl;
+                    hXsecNumuCCStubinFV->Add(htemp);
+                    break;
+                }
+                if(line == "XsecNumuCCStubNpinFV") {
+                    std::cout<<"XsecNumuCCStubNpinFV"<<" "<<histname<<std::endl;
+                    hXsecNumuCCStubNpinFV->Add(htemp);
+                    break;
+                }
+
                 if(line == "XsecNC") {
                     std::cout<<"XsecNC"<<" "<<histname<<std::endl;
                     hXsecNC->Add(htemp);
@@ -1196,7 +1219,7 @@ int main( int argc, char** argv )
                 if(it->first>10) datapot_numi += it->second;
             }
         }else datapot = map_data_period_pot[run];
-
+datapot = 4.0e19;
         gr[obschannel-1] = new TGraphAsymmErrors();
         legend[obschannel-1]->SetNColumns(2);
         // numi channels
@@ -1488,6 +1511,66 @@ int main( int argc, char** argv )
         hXsecNumuCCNpinFV->SetLineWidth(1);
         // truth labels end
         }
+        if(flag_truthlabel==3){ // xsec style
+        // truth labels start
+        hstack[obschannel-1]->Add(hext);
+        legend[obschannel-1]->AddEntry(hext, Form("Beam-off, %.1f", hext->Integral()), "F");
+        hext->SetFillStyle(3004);
+        hext->SetFillColorAlpha(kOrange+3, 0.5);
+        hext->SetLineColor(kOrange+3);
+        hext->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hdirt);
+        legend[obschannel-1]->AddEntry(hdirt, Form("Dirt, %.1f", hdirt->Integral()), "F");
+        hdirt->SetFillStyle(3224);
+        hdirt->SetFillColorAlpha(kGray, 0.5);
+        hdirt->SetLineColor(kGray+2);
+        hdirt->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hXsecCosmic);
+        legend[obschannel-1]->AddEntry(hXsecCosmic, Form("Cosmic, %.1f", hXsecCosmic->Integral()), "F");
+        hXsecCosmic->SetFillStyle(3224);
+        hXsecCosmic->SetFillColorAlpha(kViolet+3, 0.5);
+        hXsecCosmic->SetLineColor(kViolet+3);
+        hXsecCosmic->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hXsecNC);
+        legend[obschannel-1]->AddEntry(hXsecNC, Form("NC,  %.1f", hXsecNC->Integral()), "F");
+        hXsecNC->SetFillStyle(1001);
+        hXsecNC->SetFillColorAlpha(kOrange+1, 0.5);
+        hXsecNC->SetLineColor(38);
+        hXsecNC->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hXsecBkgCC);
+        legend[obschannel-1]->AddEntry(hXsecBkgCC, Form("Other CC, %.1f", hXsecBkgCC->Integral()), "F");
+        hXsecBkgCC->SetFillStyle(1001);
+        hXsecBkgCC->SetFillColorAlpha(kGreen+1, 0.5);
+        hXsecBkgCC->SetLineColor(30);
+        hXsecBkgCC->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hXsecNumuCCStub0pinFV);
+        legend[obschannel-1]->AddEntry(hXsecNumuCCStub0pinFV, Form("#nu_{#mu} CC 0p in FV, %.1f", hXsecNumuCCStub0pinFV->Integral()), "F");
+        hXsecNumuCCStub0pinFV->SetFillStyle(1001);
+        hXsecNumuCCStub0pinFV->SetFillColorAlpha(kBlue, 0.5);
+        hXsecNumuCCStub0pinFV->SetLineColor(kBlue);
+        hXsecNumuCCStub0pinFV->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hXsecNumuCCStubinFV);
+        legend[obschannel-1]->AddEntry(hXsecNumuCCStubinFV, Form("#nu_{#mu} CC Stub in FV, %.1f", hXsecNumuCCStubinFV->Integral()), "F");
+        hXsecNumuCCStubinFV->SetFillStyle(1001);
+        hXsecNumuCCStubinFV->SetFillColorAlpha(kYellow-3, 0.5);
+        hXsecNumuCCStubinFV->SetLineColor(kYellow-3);
+        hXsecNumuCCStubinFV->SetLineWidth(1);
+
+        hstack[obschannel-1]->Add(hXsecNumuCCStubNpinFV);
+        legend[obschannel-1]->AddEntry(hXsecNumuCCStubNpinFV, Form("#nu_{#mu} CC Np in FV, %.1f", hXsecNumuCCStubNpinFV->Integral()), "F");
+        hXsecNumuCCStubNpinFV->SetFillStyle(1001);
+        hXsecNumuCCStubNpinFV->SetFillColorAlpha(kRed, 0.5);
+        hXsecNumuCCStubNpinFV->SetLineColor(kRed);
+        hXsecNumuCCStubNpinFV->SetLineWidth(1);
+        // truth labels end
+        }
+
 
         hmc->Sumw2();
         hmc->Scale(scalePOT);

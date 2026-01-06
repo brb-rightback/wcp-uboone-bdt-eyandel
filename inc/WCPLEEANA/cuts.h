@@ -2907,14 +2907,21 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   if(eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCinFV"] = true;
   else map_cuts_flag["XsecNumuCCinFV"] = false;
 
-  //if(true_proton_KE<15 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCC0pinFV"] = true;
+  if(true_proton_KE<15 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCC0pinFV"] = true;
   //else map_cuts_flag["XsecNumuCC0pinFV"] = false;
-  if(true_proton_KE<45 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCC0pinFV"] = true;
+  //if(true_proton_KE<45 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCC0pinFV"] = true;
   else map_cuts_flag["XsecNumuCC0pinFV"] = false;
-  //if(true_proton_KE>15 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCNpinFV"] = true;
+  if(true_proton_KE>15 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCNpinFV"] = true;
   //else map_cuts_flag["XsecNumuCCNpinFV"] = false;
-  if(true_proton_KE>45 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCNpinFV"] = true;
+ //if(true_proton_KE>45 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCNpinFV"] = true;
   else map_cuts_flag["XsecNumuCCNpinFV"] = false;
+
+  if(true_proton_KE<15 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCStub0pinFV"] = true;
+  else map_cuts_flag["XsecNumuCCStub0pinFV"] = false;
+  if(true_proton_KE>15 && true_proton_KE<45 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCStubinFV"] = true;
+  else map_cuts_flag["XsecNumuCCStubinFV"] = false;
+  if(true_proton_KE>45 && eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_nuPdg==14 && eval.truth_isCC==1 && eval.truth_vtxInside==1 && eval.truth_nuEnergy<=4000 && eval.truth_nuEnergy>200) map_cuts_flag["XsecNumuCCStubNpinFV"] = true;
+  else map_cuts_flag["XsecNumuCCStubNpinFV"] = false;
 
   if(eval.match_completeness_energy>0.1*eval.truth_energyInside && eval.truth_isCC==0) map_cuts_flag["XsecNC"] = true;
   else map_cuts_flag["XsecNC"] = false;
@@ -3173,7 +3180,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
    ||ch_name_string == "numuCC_part_bdt_Trk0p_sig"  || ch_name_string == "numuCC_part_bdt_Trk0p_bck"  || ch_name_string == "numuCC_part_bdt_Trk0p_ext"  || ch_name_string == "numuCC_part_bdt_Trk0p_dirt"  || ch_name_string == "numuCC_part_bdt_Trk0p"
    ||ch_name_string == "numuCC_part_bdt_G0p_sig"    || ch_name_string == "numuCC_part_bdt_G0p_bck"    || ch_name_string == "numuCC_part_bdt_G0p_ext"    || ch_name_string == "numuCC_part_bdt_G0p_dirt"    || ch_name_string == "numuCC_part_bdt_G0p"
    ||ch_name_string == "numuCC_part_bdt_sig"        || ch_name_string == "numuCC_part_bdt_bck"        || ch_name_string == "numuCC_part_bdt_ext"        || ch_name_string == "numuCC_part_bdt_dirt"        || ch_name_string == "numuCC_part_bdt"
-   ||ch_name_string == "numuCC_part_bdt_0p_sig"     || ch_name_string == "numuCC_part_bdt_0p_bck"     || ch_name_string == "numuCC_part_bdt_0p_ext"     || ch_name_string == "numuCC_part_bdt_0p_dirt"     || ch_name_string == "numuCC_part_bdt_0p"){
+   ||ch_name_string == "numuCC_part_bdt_0p_sig"     || ch_name_string == "numuCC_part_bdt_0p_bck"     || ch_name_string == "numuCC_part_bdt_0p_ext"     || ch_name_string == "numuCC_part_bdt_0p_dirt"     || ch_name_string == "numuCC_part_bdt_0p"
+   || ch_name_string == "numuCC_part_bdt_Np_open" || ch_name_string == "numuCC_part_bdt_PorLNp_open" || ch_name_string == "numuCC_part_bdt_Scat0p_open" || ch_name_string == "numuCC_part_bdt_Act0p_open" || ch_name_string == "numuCC_part_bdt_Trk0p_open" || ch_name_string == "numuCC_part_bdt_G0p_open" || ch_name_string == "numuCC_part_bdt_0p_open"){
+
+    if(pfeval.run<20700 && (ch_name_string == "numuCC_part_bdt_Np_open" || ch_name_string == "numuCC_part_bdt_PorLNp_open" || ch_name_string == "numuCC_part_bdt_Scat0p_open" || ch_name_string == "numuCC_part_bdt_Act0p_open" || ch_name_string == "numuCC_part_bdt_Trk0p_open" || ch_name_string == "numuCC_part_bdt_G0p_open" || ch_name_string == "numuCC_part_bdt_0p_open")) return false;
 
     if( (ch_name_string == "numuCC_part_bdt_Np_sig"    || ch_name_string == "numuCC_part_bdt_PorLNp_sig" || ch_name_string == "numuCC_part_bdt_Scat0p_sig" 
       || ch_name_string == "numuCC_part_bdt_Act0p_sig" || ch_name_string == "numuCC_part_bdt_Trk0p_sig"  || ch_name_string == "numuCC_part_bdt_G0p_sig" || ch_name_string == "numuCC_part_bdt_sig" || ch_name_string == "numuCC_part_bdt_0p_sig") 
@@ -3197,25 +3207,25 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, 0.65, 1.60);
 
     if((ch_name_string == "numuCC_part_bdt_Np_sig" || ch_name_string == "numuCC_part_bdt_Np_bck" || ch_name_string == "numuCC_part_bdt_Np_ext" 
-     || ch_name_string == "numuCC_part_bdt_Np_dirt" || ch_name_string == "numuCC_part_bdt_Np") && part_bin==5) return true;
+     || ch_name_string == "numuCC_part_bdt_Np_dirt" || ch_name_string == "numuCC_part_bdt_Np" || ch_name_string == "numuCC_part_bdt_Np_open") && part_bin==5) return true;
 
     if((ch_name_string == "numuCC_part_bdt_PorLNp_sig" || ch_name_string == "numuCC_part_bdt_PorLNp_bck" || ch_name_string == "numuCC_part_bdt_PorLNp_ext" 
-     || ch_name_string == "numuCC_part_bdt_PorLNp_dirt" || ch_name_string == "numuCC_part_bdt_PorLNp") && part_bin==4) return true;
+     || ch_name_string == "numuCC_part_bdt_PorLNp_dirt" || ch_name_string == "numuCC_part_bdt_PorLNp" || ch_name_string == "numuCC_part_bdt_PorLNp_open") && part_bin==4) return true;
 
     if((ch_name_string == "numuCC_part_bdt_Scat0p_sig" || ch_name_string == "numuCC_part_bdt_Scat0p_bck" || ch_name_string == "numuCC_part_bdt_Scat0p_ext" 
-     || ch_name_string == "numuCC_part_bdt_Scat0p_dirt" || ch_name_string == "numuCC_part_bdt_Scat0p") && part_bin==3) return true;
+     || ch_name_string == "numuCC_part_bdt_Scat0p_dirt" || ch_name_string == "numuCC_part_bdt_Scat0p" || ch_name_string == "numuCC_part_bdt_Scat0p_open") && part_bin==3) return true;
 
     if((ch_name_string == "numuCC_part_bdt_Act0p_sig" || ch_name_string == "numuCC_part_bdt_Act0p_bck" || ch_name_string == "numuCC_part_bdt_Act0p_ext" 
-     || ch_name_string == "numuCC_part_bdt_Act0p_dirt" || ch_name_string == "numuCC_part_bdt_Act0p") && part_bin==2) return true;
+     || ch_name_string == "numuCC_part_bdt_Act0p_dirt" || ch_name_string == "numuCC_part_bdt_Act0p" || ch_name_string == "numuCC_part_bdt_Act0p_open") && part_bin==2) return true;
 
     if((ch_name_string == "numuCC_part_bdt_Trk0p_sig" || ch_name_string == "numuCC_part_bdt_Trk0p_bck" || ch_name_string == "numuCC_part_bdt_Trk0p_ext" 
-     || ch_name_string == "numuCC_part_bdt_Trk0p_dirt" || ch_name_string == "numuCC_part_bdt_Trk0p") && part_bin==1) return true;
+     || ch_name_string == "numuCC_part_bdt_Trk0p_dirt" || ch_name_string == "numuCC_part_bdt_Trk0p" || ch_name_string == "numuCC_part_bdt_Trk0p_open") && part_bin==1) return true;
 
     if((ch_name_string == "numuCC_part_bdt_G0p_sig" || ch_name_string == "numuCC_part_bdt_G0p_bck" || ch_name_string == "numuCC_part_bdt_G0p_ext" 
-     || ch_name_string == "numuCC_part_bdt_G0p_dirt" || ch_name_string == "numuCC_part_bdt_G0p") && part_bin==0) return true;
+     || ch_name_string == "numuCC_part_bdt_G0p_dirt" || ch_name_string == "numuCC_part_bdt_G0p" || ch_name_string == "numuCC_part_bdt_G0p_open") && part_bin==0) return true;
      
     if((ch_name_string == "numuCC_part_bdt_0p_sig" || ch_name_string == "numuCC_part_bdt_0p_bck" || ch_name_string == "numuCC_part_bdt_0p_ext"
-     || ch_name_string == "numuCC_part_bdt_0p_dirt" || ch_name_string == "numuCC_part_bdt_0p") && part_bin<4) return true;
+     || ch_name_string == "numuCC_part_bdt_0p_dirt" || ch_name_string == "numuCC_part_bdt_0p" || ch_name_string == "numuCC_part_bdt_0p_open") && part_bin<4) return true;
 
     return false;
 
