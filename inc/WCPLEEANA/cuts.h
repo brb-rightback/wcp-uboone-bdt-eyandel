@@ -701,13 +701,37 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     double gap = 18.8305;
     double fShift=0.9378;
     if(flag_data){
-      if (eval.run<19855) fShift=0.9378-7.2836;
-      else if (eval.run>20800 && eval.run<20855) fShift=0.9378-1.0278;
-      else if (eval.run>20855 && eval.run<20870) fShift=0.9378-10.1;
-      else if (eval.run>20870 && eval.run<20890) fShift=0.9378-2.48;
-      else if (eval.run>20890 && eval.run<20915) fShift=0.9378-5.02;
-      else if (eval.run>20915 && eval.run<21000) fShift=0.9378+3.3475;
-      else if (eval.run>21000) fShift=0.9378-6.3796;
+      // run4a
+      if                        (eval.run<=19672) fShift=0.9378-3;
+      else if (eval.run>19672 && eval.run<=19683) fShift=0.9378-7;
+      else if (eval.run>19683 && eval.run<=19700) fShift=0.9378-3;
+      else if (eval.run>19700 && eval.run<=19730) fShift=0.9378-6.5;
+      else if (eval.run>19730 && eval.run<=19752) fShift=0.9378-5.5;
+      // run4b
+      else if (eval.run>19752 && eval.run<=19855) fShift=0.9378-7.2836;
+      else if (eval.run>20800 && eval.run<=20855) fShift=0.9378-1.0278;
+      else if (eval.run>20855 && eval.run<=20870) fShift=0.9378-10.1;
+      else if (eval.run>20870 && eval.run<=20890) fShift=0.9378-2.48;
+      else if (eval.run>20890 && eval.run<=20915) fShift=0.9378-5.02;
+      else if (eval.run>20915 && eval.run<=21000) fShift=0.9378+3.3475;
+      else if (eval.run>21000 && eval.run<=21286) fShift=0.9378-6.3796;
+      //run4c
+      else if (eval.run>21286 && eval.run<=22100) fShift=0.9378-6.3796;
+      else if (eval.run>22100 && eval.run<=22125) fShift=0.9378-7.7;
+      else if (eval.run>22125 && eval.run<=22140) fShift=0.9378-9.5;
+      else if (eval.run>22140 && eval.run<=22160) fShift=0.9378-6;
+      else if (eval.run>22160 && eval.run<=22190) fShift=0.9378-7.7;
+      else if (eval.run>22190 && eval.run<=22240) fShift=0.9378-10.4;
+      else if (eval.run>22240 && eval.run<=22269) fShift=0.9378-9.5;
+      //run4d
+      else if (eval.run>22269 && eval.run<=22290) fShift=0.9378-9.5;
+      else if (eval.run>22290 && eval.run<=22300) fShift=0.9378-2.5;
+      else if (eval.run>22300 && eval.run<=22320) fShift=0.9378-5.2;
+      else if (eval.run>22320 && eval.run<=22350) fShift=0.9378-4;
+      else if (eval.run>22350 && eval.run<=23150) fShift=0.9378-7.7;
+      else if (eval.run>23150 && eval.run<=24319) fShift=0.9378-3.9;
+      //run5
+      else if (eval.run>24319) fShift=0.9378+4.7;
     }else if (!temp_flag_kdar_file){fShift=7.1;}
     else{fShift=0;}
     TThelp = evtTimeNS-fShift+gap*0.5;
