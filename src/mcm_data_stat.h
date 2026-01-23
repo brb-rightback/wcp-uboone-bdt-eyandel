@@ -542,6 +542,9 @@ void LEEana::CovMatrix::get_data_events_info(TString input_filename, std::map<TS
     T_BDTvars->SetBranchStatus("ssm_prim_track1_z_dir",1);
     T_BDTvars->SetBranchStatus("ssm_nu_angle_absorber",1);
     T_BDTvars->SetBranchStatus("ssm_nu_angle_target",1);
+    T_BDTvars->SetBranchStatus("ssm_vtxX",1);
+    T_BDTvars->SetBranchStatus("ssm_vtxY",1);
+    T_BDTvars->SetBranchStatus("ssm_vtxZ",1);
   }
 
 

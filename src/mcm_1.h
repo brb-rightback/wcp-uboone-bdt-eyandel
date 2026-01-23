@@ -984,6 +984,9 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_cv->SetBranchStatus("ssm_prim_track1_z_dir",1);
     T_BDTvars_cv->SetBranchStatus("ssm_nu_angle_absorber",1);
     T_BDTvars_cv->SetBranchStatus("ssm_nu_angle_target",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_vtxX",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_vtxY",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_vtxZ",1);
   }
 
   T_eval_cv->SetBranchStatus("*",0);
@@ -1230,6 +1233,9 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_det->SetBranchStatus("ssm_prim_track1_z_dir",1);
     T_BDTvars_det->SetBranchStatus("ssm_nu_angle_absorber",1);
     T_BDTvars_det->SetBranchStatus("ssm_nu_angle_target",1);
+    T_BDTvars_det->SetBranchStatus("ssm_vtxX",1);
+    T_BDTvars_det->SetBranchStatus("ssm_vtxY",1);
+    T_BDTvars_det->SetBranchStatus("ssm_vtxZ",1);
   }
 
   T_eval_det->SetBranchStatus("*",0);

@@ -760,6 +760,12 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_nu_angle_absorber<0) return -999;
     return tagger.ssm_nu_angle_absorber*180/3.14159;
 
+  }else if (var_name=="ssm_vtxX"){
+    return tagger.ssm_vtxX;
+  }else if (var_name=="ssm_vtxY"){
+    return tagger.ssm_vtxY;
+  }else if (var_name=="ssm_vtxZ"){
+    return tagger.ssm_vtxZ;
 
   }else if (var_name == "reco_showerKE"){
     return get_reco_showerKE_corr(pfeval, flag_data) * 1000.;

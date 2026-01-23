@@ -704,6 +704,9 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_prim_track1_z_dir",1);
     T_BDTvars->SetBranchStatus("ssm_nu_angle_absorber",1);
     T_BDTvars->SetBranchStatus("ssm_nu_angle_target",1);
+    T_BDTvars->SetBranchStatus("ssm_vtxX",1);
+    T_BDTvars->SetBranchStatus("ssm_vtxY",1);
+    T_BDTvars->SetBranchStatus("ssm_vtxZ",1);
   }
 
 
