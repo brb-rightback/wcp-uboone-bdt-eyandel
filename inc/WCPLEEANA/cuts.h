@@ -3754,6 +3754,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if(ch_name == "kdar_presel_bck" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
     if(ch_name == "kdar_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
     if(ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train"|| ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+
+    if(ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNp_dirt" || ch_name == "kdar_preselNp_ext" || ch_name == "kdar_preselNp"
+  || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"){if(tagger.ssm_prim_track1_kine_energy_range<0) flag_pass=false;}
+
     return flag_pass;
 
 
@@ -3843,6 +3847,10 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if(ch_name == "kdar_ktagged_bck" || ch_name == "kdar_ktaggedNp_bck" || ch_name == "kdar_ktaggedNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
     if(ch_name == "kdar_ktagged_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
     if(ch_name == "kdar_ktagged_nuwro_train" || ch_name == "kdar_ktagged_gibuu_train"|| ch_name == "kdar_ktagged_nuwro_trainNp" || ch_name == "kdar_ktagged_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
+
+    if(ch_name == "kdar_ktaggedNp_sig" || ch_name == "kdar_ktaggedNp_bck" || ch_name == "kdar_ktaggedNp_dirt" || ch_name == "kdar_ktaggedNp_ext" || ch_name == "kdar_ktaggedNp"
+  || ch_name == "kdar_ktaggedNpns_sig" || ch_name == "kdar_ktaggedNpns_bck" || ch_name == "kdar_ktaggedNpns_dirt" || ch_name == "kdar_ktaggedNpns_ext" || ch_name == "kdar_ktaggedNpns" || ch_name == "kdar_ktaggedNpnsrand_dirt"){if(tagger.ssm_prim_track1_kine_energy_range<0) flag_pass=false;}
+
     return flag_pass;
 
 
