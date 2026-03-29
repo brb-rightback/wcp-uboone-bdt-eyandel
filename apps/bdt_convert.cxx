@@ -69,6 +69,8 @@ int main( int argc, char** argv )
 
   int remove_lantern_fails = true;
 
+  int flag_keep_only_bdt_train=false;
+
   for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
     case 'c':
@@ -97,27 +99,45 @@ int main( int argc, char** argv )
         delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
       break;
     case 'w':
-      flag_gibuu = &argv[i][2];
-      if (flag_gibuu) std::cout<<"GiBUU sample, overiding the weights"<<std::endl;
+      flag_gibuu = atoi(&argv[i][2]);
+      if (flag_gibuu) {
+        std::cout<<"GiBUU sample, overiding the weights"<<std::endl; 
+        std::cout<<std::endl;
+      }
       break;
     case 'p':
-      flag_spbdt = &argv[i][2];
-      if (flag_spbdt) std::cout<<"Particle level spacepoint BDTs will be included"<<std::endl;
+      flag_spbdt = atoi(&argv[i][2]);
       break;
     case 'r':
       remove_lantern_fails = atoi(&argv[i][2]);
       break;
+    case 'b':
+      flag_keep_only_bdt_train = atoi(&argv[i][2]);
+      break;
     }
   }
 
-  if (remove_lantern_fails==1) std::cout<<"Removing subruns where Lantern container failed"<<std::endl;
-  else std::cout<<"Will kepp subruns where Lantern container failed"<<std::endl;
+  if (flag_spbdt) { 
+    std::cout<<"Particle level spacepoint BDTs will be included"<<std::endl; 
+    std::cout<<std::endl;
+  }
+  else {
+    std::cout<<"No particle level spacepoint BDTs"<<std::endl; 
+    std::cout<<std::endl;
+  }
+
+  if (remove_lantern_fails==1){
+    std::cout<<"Removing subruns where Lantern container failed"<<std::endl;
+    std::cout<<"This has no effect the if Lantern tree is not loaded in the tree wrangler config"<<std::endl; 
+    std::cout<<std::endl;
+  } else {
+    std::cout<<"Will keep subruns where Lantern container failed"<<std::endl;
+    std::cout<<std::endl;
+  }
 
   bool flag_check_run_subrun = false;
   bool flag_use_global_file_type = false;
   if (global_file_type != "") flag_use_global_file_type = true;
-  
-
 
   std::map<string, std::set<std::pair<int, int> > > map_type_run_subrun;
   if (training_list != ""){
@@ -134,11 +154,20 @@ int main( int argc, char** argv )
     // return 0;
   }
 
+  if (flag_keep_only_bdt_train) {
+    std::cout<<"Only saving the run-subruns used to train Wire-Cell BDTs"<<std::endl; 
+    if(flag_check_run_subrun==0) std::cout<<"WARNING, flag_check_run_subrun=false, so flag_keep_only_bdt_train has no effect"<<std::endl;
+    std::cout<<std::endl;
+  }
 
-  if (skip_cut == 0)
-    std::cout << "Skip runs for BNB side " << std::endl;
-  else
+  if (skip_cut == 0) {
+    std::cout << "Skip runs for BNB side " << std::endl; 
+    std::cout<<std::endl;
+  }
+  else {
     std::cout << "Do not skip runs  " << std::endl;
+    std::cout<<std::endl;
+  }
 
   bool flag_data = true;
   //std::cout << input_file << " " << out_file << std::endl;
@@ -3810,12 +3839,23 @@ int main( int argc, char** argv )
       auto it1 = map_type_run_subrun.find(*eval.file_type);
 
       if (it1 != map_type_run_subrun.end()){
-
-	// hack for now ...
-	if (it1->second.find(std::make_pair(eval.run, eval.subrun)) != it1->second.end()) {
+	// removing run-subruns used to train the BDTs
+	if ( it1->second.find(std::make_pair(eval.run, eval.subrun)) != it1->second.end() && flag_keep_only_bdt_train==0 ) {
 	  remove_set.insert(std::make_pair(eval.run, eval.subrun));
 	  continue;
 	}
+        // removing run-subruns NOT used to train the BDTs
+        if ( it1->second.find(std::make_pair(eval.run, eval.subrun)) == it1->second.end() && flag_keep_only_bdt_train==1 ) {
+          remove_set.insert(std::make_pair(eval.run, eval.subrun));
+          continue;
+        }
+      }
+      // removing run-subruns NOT used to train the BDTs
+      else if(it1 == map_type_run_subrun.end() && flag_keep_only_bdt_train==1){
+        if (it1->second.find(std::make_pair(eval.run, eval.subrun)) != it1->second.end()) {
+          remove_set.insert(std::make_pair(eval.run, eval.subrun));
+          continue;
+        }
       }
 
       //      std::cout << flag_use_global_file_type << " " << *eval.file_type  << " " << eval.run << " " << eval.subrun << " " << remove_set.size() << std::endl;
@@ -4118,7 +4158,13 @@ int main( int argc, char** argv )
       // bnb run 3 high rate
       if (eval.run >=15369 && eval.run <= 15402) continue;
     }
-
+    if (skip_cut == 0){
+      // low lifetime, docdb 39787
+      if (eval.run >= 19753 && eval.run <= 19850) continue;
+      // low lifetime, docdb 40093
+      if (eval.run >= 25447 && eval.run <= 25512) continue;
+    }
+ 
     t4->Fill();
     t1->Fill();
     t3->Fill();
@@ -4170,6 +4216,12 @@ int main( int argc, char** argv )
       // bnb run 3 high rate
       if (pot.runNo >=15369 && pot.runNo <= 15402) continue;
     }
+    if (skip_cut == 0){
+      // low lifetime, docdb 39787
+      if (pot.runNo >= 19753 && pot.runNo <= 19850) continue;
+      // low lifetime, docdb 40093
+      if (pot.runNo >= 25447 && pot.runNo <= 25512) continue;
+    }
     t2->Fill();
   }
 
@@ -4201,6 +4253,12 @@ int main( int argc, char** argv )
         if ((*pot_tree_it)->runNo >= 8321 && (*pot_tree_it)->runNo <=8404) continue;
         // bnb run 3 high rate
         if ((*pot_tree_it)->runNo >=15369 && (*pot_tree_it)->runNo <= 15402) continue;
+      }
+      if (skip_cut == 0){
+        // low lifetime, docdb 39787
+        if ((*pot_tree_it)->runNo >= 19753 && (*pot_tree_it)->runNo <= 19850) continue;
+        // low lifetime, docdb 40093
+        if ((*pot_tree_it)->runNo >= 25447 && (*pot_tree_it)->runNo <= 25512) continue;
       }
       (*pot_tree_it)->new_pot_tree->Fill();
 
