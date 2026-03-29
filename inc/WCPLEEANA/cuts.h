@@ -10603,8 +10603,8 @@ double LEEana::get_ssmE(TaggerInfo& tagger_info, bool flag_2track){
   ssm_E+=tagger_info.ssm_kine_energy+105.7;
   if(tagger_info.ssm_prim_track1_kine_energy_range>0) ssm_E+=tagger_info.ssm_prim_track1_kine_energy_range;
   if(tagger_info.ssm_prim_track2_kine_energy_range>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_track2_kine_energy_range;
-  if(tagger_info.ssm_prim_shw1_kine_energy_range>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_shw1_kine_energy_best;
-  if(tagger_info.ssm_prim_shw2_kine_energy_range>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_shw2_kine_energy_best;
+  if(tagger_info.ssm_prim_shw1_kine_energy_best>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_shw1_kine_energy_best;
+  if(tagger_info.ssm_prim_shw2_kine_energy_best>0 && !flag_2track) ssm_E+=tagger_info.ssm_prim_shw2_kine_energy_best;
   return ssm_E;
 }
 
