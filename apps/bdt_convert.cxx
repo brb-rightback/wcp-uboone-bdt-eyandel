@@ -65,11 +65,14 @@ int main( int argc, char** argv )
 
   bool flag_gibuu = false;
 
-  bool flag_spbdt=false;
+  bool flag_spbdt = false;
 
-  int remove_lantern_fails = true;
+  int remove_lantern_fails = 1;
 
-  int flag_keep_only_bdt_train=false;
+  int flag_keep_only_bdt_train = 0;
+
+  int flag_set_samdef = 0;
+  TString samdef="";
 
   for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
@@ -113,6 +116,10 @@ int main( int argc, char** argv )
       break;
     case 'b':
       flag_keep_only_bdt_train = atoi(&argv[i][2]);
+      break;
+    case 'a':
+      flag_set_samdef = 1; 
+      samdef = &argv[i][2];
       break;
     }
   }
@@ -174,6 +181,7 @@ int main( int argc, char** argv )
 
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
+  if(flag_set_samdef) wrangler.set_samdef(flag_set_samdef, samdef);
   tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
 
   TFile *file1 = new TFile(input_file);
@@ -3903,6 +3911,11 @@ int main( int argc, char** argv )
   T_eval->SetBranchStatus("*",1);
   T_BDTvars->SetBranchStatus("*",1);
   T_spacepoints->SetBranchStatus("*",1);
+
+  if(flag_set_samdef){
+    t1->Branch("samdef", "TSring", &samdef);
+  }
+
   //  for (int i=0;i!=100;i++){
 
   int nentries = T_BDTvars->GetEntries();
