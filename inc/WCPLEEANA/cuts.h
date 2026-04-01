@@ -3773,6 +3773,30 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
 
+  }else if(ch_name == "kdar_RHC_sideband_bck"  || ch_name == "kdar_RHC_sideband_dirt" || ch_name == "kdar_RHC_sideband_sig" || ch_name == "kdar_RHC_sideband" || ch_name == "kdar_RHC_sideband_ext"
+     || ch_name == "kdar_RHC_sideband1_bck"  || ch_name == "kdar_RHC_sideband1_dirt" || ch_name == "kdar_RHC_sideband1_sig" || ch_name == "kdar_RHC_sideband1" || ch_name == "kdar_RHC_sideband1_ext"
+     || ch_name == "kdar_RHC_sideband2_bck"  || ch_name == "kdar_RHC_sideband2_dirt" || ch_name == "kdar_RHC_sideband2_sig" || ch_name == "kdar_RHC_sideband2" || ch_name == "kdar_RHC_sideband2_ext"
+     || ch_name == "kdar_RHC_sideband3_bck"  || ch_name == "kdar_RHC_sideband3_dirt" || ch_name == "kdar_RHC_sideband3_sig" || ch_name == "kdar_RHC_sideband3" || ch_name == "kdar_RHC_sideband3_ext"
+     || ch_name == "kdar_RHC_sideband4_bck"  || ch_name == "kdar_RHC_sideband4_dirt" || ch_name == "kdar_RHC_sideband4_sig" || ch_name == "kdar_RHC_sideband4" || ch_name == "kdar_RHC_sideband4_ext"){
+    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
+    if( (ch_name == "kdar_RHC_sideband1_bck"  || ch_name == "kdar_RHC_sideband1_dirt" || ch_name == "kdar_RHC_sideband1_sig" || ch_name == "kdar_RHC_sideband1" || ch_name == "kdar_RHC_sideband1_ext") && reco_Enu>400) flag_pass = false;
+    if( (ch_name == "kdar_RHC_sideband2_bck"  || ch_name == "kdar_RHC_sideband2_dirt" || ch_name == "kdar_RHC_sideband2_sig" || ch_name == "kdar_RHC_sideband2" || ch_name == "kdar_RHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
+    if( (ch_name == "kdar_RHC_sideband3_bck"  || ch_name == "kdar_RHC_sideband3_dirt" || ch_name == "kdar_RHC_sideband3_sig" || ch_name == "kdar_RHC_sideband3" || ch_name == "kdar_RHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
+    if( (ch_name == "kdar_RHC_sideband4_bck"  || ch_name == "kdar_RHC_sideband4_dirt" || ch_name == "kdar_RHC_sideband4_sig" || ch_name == "kdar_RHC_sideband4" || ch_name == "kdar_RHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
+    return flag_pass;
+
+  }else if(ch_name == "kdar_FHC_sideband_bck"  || ch_name == "kdar_FHC_sideband_dirt" || ch_name == "kdar_FHC_sideband_sig" || ch_name == "kdar_FHC_sideband" || ch_name == "kdar_FHC_sideband_ext"
+     || ch_name == "kdar_FHC_sideband1_bck"  || ch_name == "kdar_FHC_sideband1_dirt" || ch_name == "kdar_FHC_sideband1_sig" || ch_name == "kdar_FHC_sideband1" || ch_name == "kdar_FHC_sideband1_ext"
+     || ch_name == "kdar_FHC_sideband2_bck"  || ch_name == "kdar_FHC_sideband2_dirt" || ch_name == "kdar_FHC_sideband2_sig" || ch_name == "kdar_FHC_sideband2" || ch_name == "kdar_FHC_sideband2_ext"
+     || ch_name == "kdar_FHC_sideband3_bck"  || ch_name == "kdar_FHC_sideband3_dirt" || ch_name == "kdar_FHC_sideband3_sig" || ch_name == "kdar_FHC_sideband3" || ch_name == "kdar_FHC_sideband3_ext"
+     || ch_name == "kdar_FHC_sideband4_bck"  || ch_name == "kdar_FHC_sideband4_dirt" || ch_name == "kdar_FHC_sideband4_sig" || ch_name == "kdar_FHC_sideband4" || ch_name == "kdar_FHC_sideband4_ext"){
+    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
+    if( (ch_name == "kdar_FHC_sideband1_bck"  || ch_name == "kdar_FHC_sideband1_dirt" || ch_name == "kdar_FHC_sideband1_sig" || ch_name == "kdar_FHC_sideband1" || ch_name == "kdar_FHC_sideband1_ext") && reco_Enu>400) flag_pass = false;
+    if( (ch_name == "kdar_FHC_sideband2_bck"  || ch_name == "kdar_FHC_sideband2_dirt" || ch_name == "kdar_FHC_sideband2_sig" || ch_name == "kdar_FHC_sideband2" || ch_name == "kdar_FHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
+    if( (ch_name == "kdar_FHC_sideband3_bck"  || ch_name == "kdar_FHC_sideband3_dirt" || ch_name == "kdar_FHC_sideband3_sig" || ch_name == "kdar_FHC_sideband3" || ch_name == "kdar_FHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
+    if( (ch_name == "kdar_FHC_sideband4_bck"  || ch_name == "kdar_FHC_sideband4_dirt" || ch_name == "kdar_FHC_sideband4_sig" || ch_name == "kdar_FHC_sideband4" || ch_name == "kdar_FHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
+    return flag_pass;
+
 
   }else if(ch_name == "kdar_sideband_beam_bck"  || ch_name == "kdar_sideband_beam_dirt" || ch_name == "kdar_sideband_beam_sig" || ch_name == "kdar_sideband_beam" || ch_name == "kdar_sideband_beam_ext"
      || ch_name == "kdar_sideband_beam1_bck"  || ch_name == "kdar_sideband_beam1_dirt" || ch_name == "kdar_sideband_beam1_sig" || ch_name == "kdar_sideband_beam1" || ch_name == "kdar_sideband_beam1_ext"
