@@ -4026,6 +4026,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_sideband4_bck"  || ch_name == "kdar_sideband4_dirt" || ch_name == "kdar_sideband4_sig" || ch_name == "kdar_sideband4" || ch_name == "kdar_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
 
+/*
   }else if(ch_name == "kdar_RHC_sideband_bck"  || ch_name == "kdar_RHC_sideband_dirt" || ch_name == "kdar_RHC_sideband_sig" || ch_name == "kdar_RHC_sideband" || ch_name == "kdar_RHC_sideband_ext"
      || ch_name == "kdar_RHC_sideband1_bck"  || ch_name == "kdar_RHC_sideband1_dirt" || ch_name == "kdar_RHC_sideband1_sig" || ch_name == "kdar_RHC_sideband1" || ch_name == "kdar_RHC_sideband1_ext"
      || ch_name == "kdar_RHC_sideband2_bck"  || ch_name == "kdar_RHC_sideband2_dirt" || ch_name == "kdar_RHC_sideband2_sig" || ch_name == "kdar_RHC_sideband2" || ch_name == "kdar_RHC_sideband2_ext"
@@ -4049,7 +4050,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_FHC_sideband3_bck"  || ch_name == "kdar_FHC_sideband3_dirt" || ch_name == "kdar_FHC_sideband3_sig" || ch_name == "kdar_FHC_sideband3" || ch_name == "kdar_FHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_FHC_sideband4_bck"  || ch_name == "kdar_FHC_sideband4_dirt" || ch_name == "kdar_FHC_sideband4_sig" || ch_name == "kdar_FHC_sideband4" || ch_name == "kdar_FHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
-
+*/
 
   }else if(ch_name == "kdar_sideband_beam_bck"  || ch_name == "kdar_sideband_beam_dirt" || ch_name == "kdar_sideband_beam_sig" || ch_name == "kdar_sideband_beam" || ch_name == "kdar_sideband_beam_ext"
      || ch_name == "kdar_sideband_beam1_bck"  || ch_name == "kdar_sideband_beam1_dirt" || ch_name == "kdar_sideband_beam1_sig" || ch_name == "kdar_sideband_beam1" || ch_name == "kdar_sideband_beam1_ext"
@@ -4100,7 +4101,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_sidebandFCFP3_bck"  || ch_name == "kdar_sidebandFCFP3_dirt" || ch_name == "kdar_sidebandFCFP3_sig" || ch_name == "kdar_sidebandFCFP3" || ch_name == "kdar_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_sidebandFCFP4_bck"  || ch_name == "kdar_sidebandFCFP4_dirt" || ch_name == "kdar_sidebandFCFP4_sig" || ch_name == "kdar_sidebandFCFP4" || ch_name == "kdar_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
-
+/*
   }else if(ch_name == "kdar_RHC_sidebandFCFP_bck"  || ch_name == "kdar_RHC_sidebandFCFP_dirt" || ch_name == "kdar_RHC_sidebandFCFP_sig" || ch_name == "kdar_RHC_sidebandFCFP" || ch_name == "kdar_RHC_sidebandFCFP_ext"
      || ch_name == "kdar_RHC_sidebandFCFP1_bck"  || ch_name == "kdar_RHC_sidebandFCFP1_dirt" || ch_name == "kdar_RHC_sidebandFCFP1_sig" || ch_name == "kdar_RHC_sidebandFCFP1" || ch_name == "kdar_RHC_sidebandFCFP1_ext"
      || ch_name == "kdar_RHC_sidebandFCFP2_bck"  || ch_name == "kdar_RHC_sidebandFCFP2_dirt" || ch_name == "kdar_RHC_sidebandFCFP2_sig" || ch_name == "kdar_RHC_sidebandFCFP2" || ch_name == "kdar_RHC_sidebandFCFP2_ext"
@@ -4124,7 +4125,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_FHC_sidebandFCFP3_bck"  || ch_name == "kdar_FHC_sidebandFCFP3_dirt" || ch_name == "kdar_FHC_sidebandFCFP3_sig" || ch_name == "kdar_FHC_sidebandFCFP3" || ch_name == "kdar_FHC_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_FHC_sidebandFCFP4_bck"  || ch_name == "kdar_FHC_sidebandFCFP4_dirt" || ch_name == "kdar_FHC_sidebandFCFP4_sig" || ch_name == "kdar_FHC_sidebandFCFP4" || ch_name == "kdar_FHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
-
+*/
 
   }else if(ch_name == "kdar_sidebandFCFP_beam_bck"  || ch_name == "kdar_sidebandFCFP_beam_dirt" || ch_name == "kdar_sidebandFCFP_beam_sig" || ch_name == "kdar_sidebandFCFP_beam" || ch_name == "kdar_sidebandFCFP_beam_ext"
      || ch_name == "kdar_sidebandFCFP_beam1_bck"  || ch_name == "kdar_sidebandFCFP_beam1_dirt" || ch_name == "kdar_sidebandFCFP_beam1_sig" || ch_name == "kdar_sidebandFCFP_beam1" || ch_name == "kdar_sidebandFCFP_beam1_ext"
@@ -4250,7 +4251,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
 // Duiplicating all for RHC
 
-  if(ch_name == "kdar_RHC_bdtsel_bck"  || ch_name == "kdar_RHC_bdtsel_dirt" || ch_name == "kdar_RHC_bdtsel_bckNp"
+  }else if(ch_name == "kdar_RHC_bdtsel_bck"  || ch_name == "kdar_RHC_bdtsel_dirt" || ch_name == "kdar_RHC_bdtsel_bckNp"
   || ch_name == "kdar_RHC_bdtsel_sig" || ch_name == "kdar_RHC_bdtsel_outFV_sig" || ch_name == "kdar_RHC_bdtsel_sigNp"
   || ch_name == "kdar_RHC_bdtsel_nuwro_train" || ch_name == "kdar_RHC_bdtsel_gibuu_train" || ch_name == "kdar_RHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_bdtsel_gibuu_trainNp"
   || ch_name == "kdar_RHC_bdtsel" || ch_name == "kdar_RHC_bdtsel_ext"
@@ -4272,15 +4273,15 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_RHC_bdtselns" || ch_name == "kdar_RHC_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_RHC_bdtselns" || ch_name == "kdar_RHC_bdtselns_ext" || ch_name == "kdar_RHC_bdtselns_fake_bck") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_RHC_bdtsel_sig" || ch_name == "kdar_RHC_bdtsel_nuwro_train" || ch_name == "kdar_RHC_bdtsel_gibuu_train" || ch_name == "kdar_RHC_bdtselns_sig" || ch_name == "kdar_RHC_bdtselns_nuwro_train" || ch_name == "kdar_RHC_bdtselns_gibuu_train" || ch_name == "kdar_RHC_bdtselNp_sig" || ch_name == "kdar_RHC_bdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHC"];
+    if(ch_name == "kdar_RHC_bdtsel_sig" || ch_name == "kdar_RHC_bdtsel_nuwro_train" || ch_name == "kdar_RHC_bdtsel_gibuu_train" || ch_name == "kdar_RHC_bdtselns_sig" || ch_name == "kdar_RHC_bdtselns_nuwro_train" || ch_name == "kdar_RHC_bdtselns_gibuu_train" || ch_name == "kdar_RHC_bdtselNp_sig" || ch_name == "kdar_RHC_bdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
 
-    if(ch_name == "kdar_RHC_bdtsel_outFV_sig" || ch_name == "kdar_RHC_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCOutFV"];
+    if(ch_name == "kdar_RHC_bdtsel_outFV_sig" || ch_name == "kdar_RHC_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
 
-    if(ch_name == "kdar_RHC_bdtsel_sigNp" || ch_name == "kdar_RHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_bdtselns_sigNp" || ch_name == "kdar_RHC_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCNp"];
+    if(ch_name == "kdar_RHC_bdtsel_sigNp" || ch_name == "kdar_RHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_bdtselns_sigNp" || ch_name == "kdar_RHC_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
 
-    if(ch_name == "kdar_RHC_bdtsel_bck" || ch_name == "kdar_RHC_bdtselns_bck" || ch_name == "kdar_RHC_bdtselns_nons_bck" || ch_name == "kdar_RHC_bdtselNp_bck" || ch_name == "kdar_RHC_bdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_RHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHC"]; }
+    if(ch_name == "kdar_RHC_bdtsel_bck" || ch_name == "kdar_RHC_bdtselns_bck" || ch_name == "kdar_RHC_bdtselns_nons_bck" || ch_name == "kdar_RHC_bdtselNp_bck" || ch_name == "kdar_RHC_bdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
 
-    if(ch_name == "kdar_RHC_bdtsel_bckNp" || ch_name == "kdar_RHC_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_RHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHCNp"]; }
+    if(ch_name == "kdar_RHC_bdtsel_bckNp" || ch_name == "kdar_RHC_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
 
     if(ch_name == "kdar_RHC_bdtsel_nuwro_train" || ch_name == "kdar_RHC_bdtsel_gibuu_train"|| ch_name == "kdar_RHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_bdtselns_nuwro_train" || ch_name == "kdar_RHC_bdtselns_gibuu_train"|| ch_name == "kdar_RHC_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
@@ -4310,11 +4311,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_RHC_lowE_bdtselns" || ch_name == "kdar_RHC_lowE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_RHC_lowE_bdtselns" || ch_name == "kdar_RHC_lowE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5)) ){flag_pass=false;}
 
-    if(ch_name == "kdar_RHC_lowE_bdtsel_sig" || ch_name == "kdar_RHC_lowE_bdtsel_nuwro_train" || ch_name == "kdar_RHC_lowE_bdtsel_gibuu_train" || ch_name == "kdar_RHC_lowE_bdtselns_sig" || ch_name == "kdar_RHC_lowE_bdtselns_nuwro_train" || ch_name == "kdar_RHC_lowE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar_RHC"];
-    if(ch_name == "kdar_RHC_lowE_bdtsel_outFV_sig" || ch_name == "kdar_RHC_lowE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCOutFV"];
-    if(ch_name == "kdar_RHC_lowE_bdtsel_sigNp" || ch_name == "kdar_RHC_lowE_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_lowE_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_lowE_bdtselns_sigNp" || ch_name == "kdar_RHC_lowE_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_lowE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCNp"];
-    if(ch_name == "kdar_RHC_lowE_bdtsel_bck" || ch_name == "kdar_RHC_lowE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar_RHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHC"]; }
-    if(ch_name == "kdar_RHC_lowE_bdtsel_bckNp" || ch_name == "kdar_RHC_lowE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_RHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHCNp"]; }
+    if(ch_name == "kdar_RHC_lowE_bdtsel_sig" || ch_name == "kdar_RHC_lowE_bdtsel_nuwro_train" || ch_name == "kdar_RHC_lowE_bdtsel_gibuu_train" || ch_name == "kdar_RHC_lowE_bdtselns_sig" || ch_name == "kdar_RHC_lowE_bdtselns_nuwro_train" || ch_name == "kdar_RHC_lowE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_RHC_lowE_bdtsel_outFV_sig" || ch_name == "kdar_RHC_lowE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_RHC_lowE_bdtsel_sigNp" || ch_name == "kdar_RHC_lowE_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_lowE_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_lowE_bdtselns_sigNp" || ch_name == "kdar_RHC_lowE_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_lowE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_RHC_lowE_bdtsel_bck" || ch_name == "kdar_RHC_lowE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_RHC_lowE_bdtsel_bckNp" || ch_name == "kdar_RHC_lowE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_RHC_lowE_bdtsel_nuwro_train" || ch_name == "kdar_RHC_lowE_bdtsel_gibuu_train"|| ch_name == "kdar_RHC_lowE_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_lowE_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_lowE_bdtselns_nuwro_train" || ch_name == "kdar_RHC_lowE_bdtselns_gibuu_train"|| ch_name == "kdar_RHC_lowE_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_lowE_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
 
@@ -4340,11 +4341,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_RHC_hiE_bdtselns" || ch_name == "kdar_RHC_hiE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_RHC_hiE_bdtselns" || ch_name == "kdar_RHC_hiE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_RHC_hiE_bdtsel_sig" || ch_name == "kdar_RHC_hiE_bdtsel_nuwro_train" || ch_name == "kdar_RHC_hiE_bdtsel_gibuu_train" || ch_name == "kdar_RHC_hiE_bdtselns_sig" || ch_name == "kdar_RHC_hiE_bdtselns_nuwro_train" || ch_name == "kdar_RHC_hiE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar_RHC"];
-    if(ch_name == "kdar_RHC_hiE_bdtsel_outFV_sig" || ch_name == "kdar_RHC_hiE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCOutFV"];
-    if(ch_name == "kdar_RHC_hiE_bdtsel_sigNp" || ch_name == "kdar_RHC_hiE_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_hiE_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_hiE_bdtselns_sigNp" || ch_name == "kdar_RHC_hiE_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_hiE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCNp"];
-    if(ch_name == "kdar_RHC_hiE_bdtsel_bck" || ch_name == "kdar_RHC_hiE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar_RHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHC"]; }
-    if(ch_name == "kdar_RHC_hiE_bdtsel_bckNp" || ch_name == "kdar_RHC_hiE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_RHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHCNp"]; }
+    if(ch_name == "kdar_RHC_hiE_bdtsel_sig" || ch_name == "kdar_RHC_hiE_bdtsel_nuwro_train" || ch_name == "kdar_RHC_hiE_bdtsel_gibuu_train" || ch_name == "kdar_RHC_hiE_bdtselns_sig" || ch_name == "kdar_RHC_hiE_bdtselns_nuwro_train" || ch_name == "kdar_RHC_hiE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_RHC_hiE_bdtsel_outFV_sig" || ch_name == "kdar_RHC_hiE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_RHC_hiE_bdtsel_sigNp" || ch_name == "kdar_RHC_hiE_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_hiE_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_hiE_bdtselns_sigNp" || ch_name == "kdar_RHC_hiE_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_hiE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_RHC_hiE_bdtsel_bck" || ch_name == "kdar_RHC_hiE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_RHC_hiE_bdtsel_bckNp" || ch_name == "kdar_RHC_hiE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_RHC_hiE_bdtsel_nuwro_train" || ch_name == "kdar_RHC_hiE_bdtsel_gibuu_train"|| ch_name == "kdar_RHC_hiE_bdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_hiE_bdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_hiE_bdtselns_nuwro_train" || ch_name == "kdar_RHC_hiE_bdtselns_gibuu_train"|| ch_name == "kdar_RHC_hiE_bdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_hiE_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
 
@@ -4372,11 +4373,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     || ch_name == "kdar_RHC_preselns" || ch_name == "kdar_RHC_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_RHC_preselns" || ch_name == "kdar_RHC_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
 
-    if(ch_name == "kdar_RHC_presel_sig" || ch_name == "kdar_RHC_presel_nuwro_train" || ch_name == "kdar_RHC_presel_gibuu_train" || ch_name == "kdar_RHC_preselNp_sig" || ch_name == "kdar_RHC_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHC"];
-    if(ch_name == "kdar_RHC_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCOutFV"];
-    if(ch_name == "kdar_RHC_presel_sigNp" || ch_name == "kdar_RHC_presel_nuwro_trainNp" || ch_name == "kdar_RHC_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCNp"];
-    if(ch_name == "kdar_RHC_presel_bck" || ch_name == "kdar_RHC_preselNp_bck" || ch_name == "kdar_RHC_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_RHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHC"]; }
-    if(ch_name == "kdar_RHC_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdar_RHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHCNp"]; }
+    if(ch_name == "kdar_RHC_presel_sig" || ch_name == "kdar_RHC_presel_nuwro_train" || ch_name == "kdar_RHC_presel_gibuu_train" || ch_name == "kdar_RHC_preselNp_sig" || ch_name == "kdar_RHC_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_RHC_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_RHC_presel_sigNp" || ch_name == "kdar_RHC_presel_nuwro_trainNp" || ch_name == "kdar_RHC_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_RHC_presel_bck" || ch_name == "kdar_RHC_preselNp_bck" || ch_name == "kdar_RHC_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_RHC_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_RHC_presel_nuwro_train" || ch_name == "kdar_RHC_presel_gibuu_train"|| ch_name == "kdar_RHC_presel_nuwro_trainNp" || ch_name == "kdar_RHC_presel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
     if(ch_name == "kdar_RHC_preselNp_sig" || ch_name == "kdar_RHC_preselNp_bck" || ch_name == "kdar_RHC_preselNp_dirt" || ch_name == "kdar_RHC_preselNp_ext" || ch_name == "kdar_RHC_preselNp"
@@ -4395,30 +4396,6 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_RHC_sideband2_bck"  || ch_name == "kdar_RHC_sideband2_dirt" || ch_name == "kdar_RHC_sideband2_sig" || ch_name == "kdar_RHC_sideband2" || ch_name == "kdar_RHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
     if( (ch_name == "kdar_RHC_sideband3_bck"  || ch_name == "kdar_RHC_sideband3_dirt" || ch_name == "kdar_RHC_sideband3_sig" || ch_name == "kdar_RHC_sideband3" || ch_name == "kdar_RHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_RHC_sideband4_bck"  || ch_name == "kdar_RHC_sideband4_dirt" || ch_name == "kdar_RHC_sideband4_sig" || ch_name == "kdar_RHC_sideband4" || ch_name == "kdar_RHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_RHC_RHC_sideband_bck"  || ch_name == "kdar_RHC_RHC_sideband_dirt" || ch_name == "kdar_RHC_RHC_sideband_sig" || ch_name == "kdar_RHC_RHC_sideband" || ch_name == "kdar_RHC_RHC_sideband_ext"
-     || ch_name == "kdar_RHC_RHC_sideband1_bck"  || ch_name == "kdar_RHC_RHC_sideband1_dirt" || ch_name == "kdar_RHC_RHC_sideband1_sig" || ch_name == "kdar_RHC_RHC_sideband1" || ch_name == "kdar_RHC_RHC_sideband1_ext"
-     || ch_name == "kdar_RHC_RHC_sideband2_bck"  || ch_name == "kdar_RHC_RHC_sideband2_dirt" || ch_name == "kdar_RHC_RHC_sideband2_sig" || ch_name == "kdar_RHC_RHC_sideband2" || ch_name == "kdar_RHC_RHC_sideband2_ext"
-     || ch_name == "kdar_RHC_RHC_sideband3_bck"  || ch_name == "kdar_RHC_RHC_sideband3_dirt" || ch_name == "kdar_RHC_RHC_sideband3_sig" || ch_name == "kdar_RHC_RHC_sideband3" || ch_name == "kdar_RHC_RHC_sideband3_ext"
-     || ch_name == "kdar_RHC_RHC_sideband4_bck"  || ch_name == "kdar_RHC_RHC_sideband4_dirt" || ch_name == "kdar_RHC_RHC_sideband4_sig" || ch_name == "kdar_RHC_RHC_sideband4" || ch_name == "kdar_RHC_RHC_sideband4_ext"){
-    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_RHC_RHC_sideband1_bck"  || ch_name == "kdar_RHC_RHC_sideband1_dirt" || ch_name == "kdar_RHC_RHC_sideband1_sig" || ch_name == "kdar_RHC_RHC_sideband1" || ch_name == "kdar_RHC_RHC_sideband1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_RHC_RHC_sideband2_bck"  || ch_name == "kdar_RHC_RHC_sideband2_dirt" || ch_name == "kdar_RHC_RHC_sideband2_sig" || ch_name == "kdar_RHC_RHC_sideband2" || ch_name == "kdar_RHC_RHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_RHC_sideband3_bck"  || ch_name == "kdar_RHC_RHC_sideband3_dirt" || ch_name == "kdar_RHC_RHC_sideband3_sig" || ch_name == "kdar_RHC_RHC_sideband3" || ch_name == "kdar_RHC_RHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_RHC_sideband4_bck"  || ch_name == "kdar_RHC_RHC_sideband4_dirt" || ch_name == "kdar_RHC_RHC_sideband4_sig" || ch_name == "kdar_RHC_RHC_sideband4" || ch_name == "kdar_RHC_RHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_RHC_FHC_sideband_bck"  || ch_name == "kdar_RHC_FHC_sideband_dirt" || ch_name == "kdar_RHC_FHC_sideband_sig" || ch_name == "kdar_RHC_FHC_sideband" || ch_name == "kdar_RHC_FHC_sideband_ext"
-     || ch_name == "kdar_RHC_FHC_sideband1_bck"  || ch_name == "kdar_RHC_FHC_sideband1_dirt" || ch_name == "kdar_RHC_FHC_sideband1_sig" || ch_name == "kdar_RHC_FHC_sideband1" || ch_name == "kdar_RHC_FHC_sideband1_ext"
-     || ch_name == "kdar_RHC_FHC_sideband2_bck"  || ch_name == "kdar_RHC_FHC_sideband2_dirt" || ch_name == "kdar_RHC_FHC_sideband2_sig" || ch_name == "kdar_RHC_FHC_sideband2" || ch_name == "kdar_RHC_FHC_sideband2_ext"
-     || ch_name == "kdar_RHC_FHC_sideband3_bck"  || ch_name == "kdar_RHC_FHC_sideband3_dirt" || ch_name == "kdar_RHC_FHC_sideband3_sig" || ch_name == "kdar_RHC_FHC_sideband3" || ch_name == "kdar_RHC_FHC_sideband3_ext"
-     || ch_name == "kdar_RHC_FHC_sideband4_bck"  || ch_name == "kdar_RHC_FHC_sideband4_dirt" || ch_name == "kdar_RHC_FHC_sideband4_sig" || ch_name == "kdar_RHC_FHC_sideband4" || ch_name == "kdar_RHC_FHC_sideband4_ext"){
-    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_RHC_FHC_sideband1_bck"  || ch_name == "kdar_RHC_FHC_sideband1_dirt" || ch_name == "kdar_RHC_FHC_sideband1_sig" || ch_name == "kdar_RHC_FHC_sideband1" || ch_name == "kdar_RHC_FHC_sideband1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_RHC_FHC_sideband2_bck"  || ch_name == "kdar_RHC_FHC_sideband2_dirt" || ch_name == "kdar_RHC_FHC_sideband2_sig" || ch_name == "kdar_RHC_FHC_sideband2" || ch_name == "kdar_RHC_FHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_FHC_sideband3_bck"  || ch_name == "kdar_RHC_FHC_sideband3_dirt" || ch_name == "kdar_RHC_FHC_sideband3_sig" || ch_name == "kdar_RHC_FHC_sideband3" || ch_name == "kdar_RHC_FHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_FHC_sideband4_bck"  || ch_name == "kdar_RHC_FHC_sideband4_dirt" || ch_name == "kdar_RHC_FHC_sideband4_sig" || ch_name == "kdar_RHC_FHC_sideband4" || ch_name == "kdar_RHC_FHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
 
 
@@ -4470,30 +4447,6 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_RHC_sidebandFCFP2_bck"  || ch_name == "kdar_RHC_sidebandFCFP2_dirt" || ch_name == "kdar_RHC_sidebandFCFP2_sig" || ch_name == "kdar_RHC_sidebandFCFP2" || ch_name == "kdar_RHC_sidebandFCFP2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
     if( (ch_name == "kdar_RHC_sidebandFCFP3_bck"  || ch_name == "kdar_RHC_sidebandFCFP3_dirt" || ch_name == "kdar_RHC_sidebandFCFP3_sig" || ch_name == "kdar_RHC_sidebandFCFP3" || ch_name == "kdar_RHC_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_RHC_sidebandFCFP4_bck"  || ch_name == "kdar_RHC_sidebandFCFP4_dirt" || ch_name == "kdar_RHC_sidebandFCFP4_sig" || ch_name == "kdar_RHC_sidebandFCFP4" || ch_name == "kdar_RHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_RHC_RHC_sidebandFCFP_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP" || ch_name == "kdar_RHC_RHC_sidebandFCFP_ext"
-     || ch_name == "kdar_RHC_RHC_sidebandFCFP1_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP1_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP1_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP1" || ch_name == "kdar_RHC_RHC_sidebandFCFP1_ext"
-     || ch_name == "kdar_RHC_RHC_sidebandFCFP2_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP2_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP2_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP2" || ch_name == "kdar_RHC_RHC_sidebandFCFP2_ext"
-     || ch_name == "kdar_RHC_RHC_sidebandFCFP3_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP3_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP3_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP3" || ch_name == "kdar_RHC_RHC_sidebandFCFP3_ext"
-     || ch_name == "kdar_RHC_RHC_sidebandFCFP4_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP4_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP4_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP4" || ch_name == "kdar_RHC_RHC_sidebandFCFP4_ext"){
-    bool flag_pass = tagger.numu_score>0.9  && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_RHC_RHC_sidebandFCFP1_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP1_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP1_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP1" || ch_name == "kdar_RHC_RHC_sidebandFCFP1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_RHC_RHC_sidebandFCFP2_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP2_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP2_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP2" || ch_name == "kdar_RHC_RHC_sidebandFCFP2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_RHC_sidebandFCFP3_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP3_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP3_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP3" || ch_name == "kdar_RHC_RHC_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_RHC_sidebandFCFP4_bck"  || ch_name == "kdar_RHC_RHC_sidebandFCFP4_dirt" || ch_name == "kdar_RHC_RHC_sidebandFCFP4_sig" || ch_name == "kdar_RHC_RHC_sidebandFCFP4" || ch_name == "kdar_RHC_RHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_RHC_FHC_sidebandFCFP_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP" || ch_name == "kdar_RHC_FHC_sidebandFCFP_ext"
-     || ch_name == "kdar_RHC_FHC_sidebandFCFP1_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP1_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP1_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP1" || ch_name == "kdar_RHC_FHC_sidebandFCFP1_ext"
-     || ch_name == "kdar_RHC_FHC_sidebandFCFP2_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP2_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP2_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP2" || ch_name == "kdar_RHC_FHC_sidebandFCFP2_ext"
-     || ch_name == "kdar_RHC_FHC_sidebandFCFP3_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP3_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP3_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP3" || ch_name == "kdar_RHC_FHC_sidebandFCFP3_ext"
-     || ch_name == "kdar_RHC_FHC_sidebandFCFP4_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP4_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP4_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP4" || ch_name == "kdar_RHC_FHC_sidebandFCFP4_ext"){
-    bool flag_pass = tagger.numu_score>0.9  && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_RHC_FHC_sidebandFCFP1_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP1_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP1_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP1" || ch_name == "kdar_RHC_FHC_sidebandFCFP1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_RHC_FHC_sidebandFCFP2_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP2_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP2_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP2" || ch_name == "kdar_RHC_FHC_sidebandFCFP2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_FHC_sidebandFCFP3_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP3_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP3_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP3" || ch_name == "kdar_RHC_FHC_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_RHC_FHC_sidebandFCFP4_bck"  || ch_name == "kdar_RHC_FHC_sidebandFCFP4_dirt" || ch_name == "kdar_RHC_FHC_sidebandFCFP4_sig" || ch_name == "kdar_RHC_FHC_sidebandFCFP4" || ch_name == "kdar_RHC_FHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
 
 
@@ -4563,11 +4516,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     || ch_name == "kdar_RHC_ktaggedns" || ch_name == "kdar_RHC_ktaggedns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_RHC_ktaggedns" || ch_name == "kdar_RHC_ktaggedns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
 
-    if(ch_name == "kdar_RHC_ktagged_sig" || ch_name == "kdar_RHC_ktagged_nuwro_train" || ch_name == "kdar_RHC_ktagged_gibuu_train" || ch_name == "kdar_RHC_ktaggedNp_sig" || ch_name == "kdar_RHC_ktaggedNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHC"];
-    if(ch_name == "kdar_RHC_ktagged_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCOutFV"];
-    if(ch_name == "kdar_RHC_ktagged_sigNp" || ch_name == "kdar_RHC_ktagged_nuwro_trainNp" || ch_name == "kdar_RHC_ktagged_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCNp"];
-    if(ch_name == "kdar_RHC_ktagged_bck" || ch_name == "kdar_RHC_ktaggedNp_bck" || ch_name == "kdar_RHC_ktaggedNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_RHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHC"]; }
-    if(ch_name == "kdar_RHC_ktagged_bckNp")  { if(flag_pass && map_cuts_flag["kdar_RHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHCNp"]; }
+    if(ch_name == "kdar_RHC_ktagged_sig" || ch_name == "kdar_RHC_ktagged_nuwro_train" || ch_name == "kdar_RHC_ktagged_gibuu_train" || ch_name == "kdar_RHC_ktaggedNp_sig" || ch_name == "kdar_RHC_ktaggedNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_RHC_ktagged_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_RHC_ktagged_sigNp" || ch_name == "kdar_RHC_ktagged_nuwro_trainNp" || ch_name == "kdar_RHC_ktagged_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_RHC_ktagged_bck" || ch_name == "kdar_RHC_ktaggedNp_bck" || ch_name == "kdar_RHC_ktaggedNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_RHC_ktagged_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_RHC_ktagged_nuwro_train" || ch_name == "kdar_RHC_ktagged_gibuu_train"|| ch_name == "kdar_RHC_ktagged_nuwro_trainNp" || ch_name == "kdar_RHC_ktagged_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
     if(ch_name == "kdar_RHC_ktaggedNp_sig" || ch_name == "kdar_RHC_ktaggedNp_bck" || ch_name == "kdar_RHC_ktaggedNp_dirt" || ch_name == "kdar_RHC_ktaggedNp_ext" || ch_name == "kdar_RHC_ktaggedNp"
@@ -4599,15 +4552,15 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_RHC_antibdtselns" || ch_name == "kdar_RHC_antibdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_RHC_antibdtselns" || ch_name == "kdar_RHC_antibdtselns_ext" || ch_name == "kdar_RHC_antibdtselns_fake_bck") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_RHC_antibdtsel_sig" || ch_name == "kdar_RHC_antibdtsel_nuwro_train" || ch_name == "kdar_RHC_antibdtsel_gibuu_train" || ch_name == "kdar_RHC_antibdtselns_sig" || ch_name == "kdar_RHC_antibdtselns_nuwro_train" || ch_name == "kdar_RHC_antibdtselns_gibuu_train" || ch_name == "kdar_RHC_antibdtselNp_sig" || ch_name == "kdar_RHC_antibdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHC"];
+    if(ch_name == "kdar_RHC_antibdtsel_sig" || ch_name == "kdar_RHC_antibdtsel_nuwro_train" || ch_name == "kdar_RHC_antibdtsel_gibuu_train" || ch_name == "kdar_RHC_antibdtselns_sig" || ch_name == "kdar_RHC_antibdtselns_nuwro_train" || ch_name == "kdar_RHC_antibdtselns_gibuu_train" || ch_name == "kdar_RHC_antibdtselNp_sig" || ch_name == "kdar_RHC_antibdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
 
-    if(ch_name == "kdar_RHC_antibdtsel_outFV_sig" || ch_name == "kdar_RHC_antibdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCOutFV"];
+    if(ch_name == "kdar_RHC_antibdtsel_outFV_sig" || ch_name == "kdar_RHC_antibdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
 
-    if(ch_name == "kdar_RHC_antibdtsel_sigNp" || ch_name == "kdar_RHC_antibdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_antibdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_antibdtselns_sigNp" || ch_name == "kdar_RHC_antibdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_antibdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_RHCNp"];
+    if(ch_name == "kdar_RHC_antibdtsel_sigNp" || ch_name == "kdar_RHC_antibdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_antibdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_antibdtselns_sigNp" || ch_name == "kdar_RHC_antibdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_antibdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
 
-    if(ch_name == "kdar_RHC_antibdtsel_bck" || ch_name == "kdar_RHC_antibdtselns_bck" || ch_name == "kdar_RHC_antibdtselns_nons_bck" || ch_name == "kdar_RHC_antibdtselNp_bck" || ch_name == "kdar_RHC_antibdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_RHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHC"]; }
+    if(ch_name == "kdar_RHC_antibdtsel_bck" || ch_name == "kdar_RHC_antibdtselns_bck" || ch_name == "kdar_RHC_antibdtselns_nons_bck" || ch_name == "kdar_RHC_antibdtselNp_bck" || ch_name == "kdar_RHC_antibdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
 
-    if(ch_name == "kdar_RHC_antibdtsel_bckNp" || ch_name == "kdar_RHC_antibdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_RHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_RHCNp"]; }
+    if(ch_name == "kdar_RHC_antibdtsel_bckNp" || ch_name == "kdar_RHC_antibdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
 
     if(ch_name == "kdar_RHC_antibdtsel_nuwro_train" || ch_name == "kdar_RHC_antibdtsel_gibuu_train"|| ch_name == "kdar_RHC_antibdtsel_nuwro_trainNp" || ch_name == "kdar_RHC_antibdtsel_gibuu_trainNp" || ch_name == "kdar_RHC_antibdtselns_nuwro_train" || ch_name == "kdar_RHC_antibdtselns_gibuu_train"|| ch_name == "kdar_RHC_antibdtselns_nuwro_trainNp" || ch_name == "kdar_RHC_antibdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
@@ -4619,7 +4572,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
 //duplicating all for FHC
 
-  if(ch_name == "kdar_FHC_bdtsel_bck"  || ch_name == "kdar_FHC_bdtsel_dirt" || ch_name == "kdar_FHC_bdtsel_bckNp"
+  }else if(ch_name == "kdar_FHC_bdtsel_bck"  || ch_name == "kdar_FHC_bdtsel_dirt" || ch_name == "kdar_FHC_bdtsel_bckNp"
   || ch_name == "kdar_FHC_bdtsel_sig" || ch_name == "kdar_FHC_bdtsel_outFV_sig" || ch_name == "kdar_FHC_bdtsel_sigNp"
   || ch_name == "kdar_FHC_bdtsel_nuwro_train" || ch_name == "kdar_FHC_bdtsel_gibuu_train" || ch_name == "kdar_FHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_bdtsel_gibuu_trainNp"
   || ch_name == "kdar_FHC_bdtsel" || ch_name == "kdar_FHC_bdtsel_ext"
@@ -4641,15 +4594,15 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_FHC_bdtselns" || ch_name == "kdar_FHC_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_FHC_bdtselns" || ch_name == "kdar_FHC_bdtselns_ext" || ch_name == "kdar_FHC_bdtselns_fake_bck") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_FHC_bdtsel_sig" || ch_name == "kdar_FHC_bdtsel_nuwro_train" || ch_name == "kdar_FHC_bdtsel_gibuu_train" || ch_name == "kdar_FHC_bdtselns_sig" || ch_name == "kdar_FHC_bdtselns_nuwro_train" || ch_name == "kdar_FHC_bdtselns_gibuu_train" || ch_name == "kdar_FHC_bdtselNp_sig" || ch_name == "kdar_FHC_bdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHC"];
+    if(ch_name == "kdar_FHC_bdtsel_sig" || ch_name == "kdar_FHC_bdtsel_nuwro_train" || ch_name == "kdar_FHC_bdtsel_gibuu_train" || ch_name == "kdar_FHC_bdtselns_sig" || ch_name == "kdar_FHC_bdtselns_nuwro_train" || ch_name == "kdar_FHC_bdtselns_gibuu_train" || ch_name == "kdar_FHC_bdtselNp_sig" || ch_name == "kdar_FHC_bdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
 
-    if(ch_name == "kdar_FHC_bdtsel_outFV_sig" || ch_name == "kdar_FHC_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCOutFV"];
+    if(ch_name == "kdar_FHC_bdtsel_outFV_sig" || ch_name == "kdar_FHC_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
 
-    if(ch_name == "kdar_FHC_bdtsel_sigNp" || ch_name == "kdar_FHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_bdtselns_sigNp" || ch_name == "kdar_FHC_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCNp"];
+    if(ch_name == "kdar_FHC_bdtsel_sigNp" || ch_name == "kdar_FHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_bdtselns_sigNp" || ch_name == "kdar_FHC_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
 
-    if(ch_name == "kdar_FHC_bdtsel_bck" || ch_name == "kdar_FHC_bdtselns_bck" || ch_name == "kdar_FHC_bdtselns_nons_bck" || ch_name == "kdar_FHC_bdtselNp_bck" || ch_name == "kdar_FHC_bdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_FHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHC"]; }
+    if(ch_name == "kdar_FHC_bdtsel_bck" || ch_name == "kdar_FHC_bdtselns_bck" || ch_name == "kdar_FHC_bdtselns_nons_bck" || ch_name == "kdar_FHC_bdtselNp_bck" || ch_name == "kdar_FHC_bdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
 
-    if(ch_name == "kdar_FHC_bdtsel_bckNp" || ch_name == "kdar_FHC_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_FHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHCNp"]; }
+    if(ch_name == "kdar_FHC_bdtsel_bckNp" || ch_name == "kdar_FHC_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
 
     if(ch_name == "kdar_FHC_bdtsel_nuwro_train" || ch_name == "kdar_FHC_bdtsel_gibuu_train"|| ch_name == "kdar_FHC_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_bdtselns_nuwro_train" || ch_name == "kdar_FHC_bdtselns_gibuu_train"|| ch_name == "kdar_FHC_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
@@ -4679,11 +4632,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_FHC_lowE_bdtselns" || ch_name == "kdar_FHC_lowE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_FHC_lowE_bdtselns" || ch_name == "kdar_FHC_lowE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5)) ){flag_pass=false;}
 
-    if(ch_name == "kdar_FHC_lowE_bdtsel_sig" || ch_name == "kdar_FHC_lowE_bdtsel_nuwro_train" || ch_name == "kdar_FHC_lowE_bdtsel_gibuu_train" || ch_name == "kdar_FHC_lowE_bdtselns_sig" || ch_name == "kdar_FHC_lowE_bdtselns_nuwro_train" || ch_name == "kdar_FHC_lowE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar_FHC"];
-    if(ch_name == "kdar_FHC_lowE_bdtsel_outFV_sig" || ch_name == "kdar_FHC_lowE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCOutFV"];
-    if(ch_name == "kdar_FHC_lowE_bdtsel_sigNp" || ch_name == "kdar_FHC_lowE_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_lowE_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_lowE_bdtselns_sigNp" || ch_name == "kdar_FHC_lowE_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_lowE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCNp"];
-    if(ch_name == "kdar_FHC_lowE_bdtsel_bck" || ch_name == "kdar_FHC_lowE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar_FHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHC"]; }
-    if(ch_name == "kdar_FHC_lowE_bdtsel_bckNp" || ch_name == "kdar_FHC_lowE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_FHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHCNp"]; }
+    if(ch_name == "kdar_FHC_lowE_bdtsel_sig" || ch_name == "kdar_FHC_lowE_bdtsel_nuwro_train" || ch_name == "kdar_FHC_lowE_bdtsel_gibuu_train" || ch_name == "kdar_FHC_lowE_bdtselns_sig" || ch_name == "kdar_FHC_lowE_bdtselns_nuwro_train" || ch_name == "kdar_FHC_lowE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_FHC_lowE_bdtsel_outFV_sig" || ch_name == "kdar_FHC_lowE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_FHC_lowE_bdtsel_sigNp" || ch_name == "kdar_FHC_lowE_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_lowE_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_lowE_bdtselns_sigNp" || ch_name == "kdar_FHC_lowE_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_lowE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_FHC_lowE_bdtsel_bck" || ch_name == "kdar_FHC_lowE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_FHC_lowE_bdtsel_bckNp" || ch_name == "kdar_FHC_lowE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_FHC_lowE_bdtsel_nuwro_train" || ch_name == "kdar_FHC_lowE_bdtsel_gibuu_train"|| ch_name == "kdar_FHC_lowE_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_lowE_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_lowE_bdtselns_nuwro_train" || ch_name == "kdar_FHC_lowE_bdtselns_gibuu_train"|| ch_name == "kdar_FHC_lowE_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_lowE_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
 
@@ -4709,11 +4662,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_FHC_hiE_bdtselns" || ch_name == "kdar_FHC_hiE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_FHC_hiE_bdtselns" || ch_name == "kdar_FHC_hiE_bdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_FHC_hiE_bdtsel_sig" || ch_name == "kdar_FHC_hiE_bdtsel_nuwro_train" || ch_name == "kdar_FHC_hiE_bdtsel_gibuu_train" || ch_name == "kdar_FHC_hiE_bdtselns_sig" || ch_name == "kdar_FHC_hiE_bdtselns_nuwro_train" || ch_name == "kdar_FHC_hiE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar_FHC"];
-    if(ch_name == "kdar_FHC_hiE_bdtsel_outFV_sig" || ch_name == "kdar_FHC_hiE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCOutFV"];
-    if(ch_name == "kdar_FHC_hiE_bdtsel_sigNp" || ch_name == "kdar_FHC_hiE_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_hiE_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_hiE_bdtselns_sigNp" || ch_name == "kdar_FHC_hiE_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_hiE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCNp"];
-    if(ch_name == "kdar_FHC_hiE_bdtsel_bck" || ch_name == "kdar_FHC_hiE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar_FHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHC"]; }
-    if(ch_name == "kdar_FHC_hiE_bdtsel_bckNp" || ch_name == "kdar_FHC_hiE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_FHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHCNp"]; }
+    if(ch_name == "kdar_FHC_hiE_bdtsel_sig" || ch_name == "kdar_FHC_hiE_bdtsel_nuwro_train" || ch_name == "kdar_FHC_hiE_bdtsel_gibuu_train" || ch_name == "kdar_FHC_hiE_bdtselns_sig" || ch_name == "kdar_FHC_hiE_bdtselns_nuwro_train" || ch_name == "kdar_FHC_hiE_bdtselns_gibuu_train")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_FHC_hiE_bdtsel_outFV_sig" || ch_name == "kdar_FHC_hiE_bdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_FHC_hiE_bdtsel_sigNp" || ch_name == "kdar_FHC_hiE_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_hiE_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_hiE_bdtselns_sigNp" || ch_name == "kdar_FHC_hiE_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_hiE_bdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_FHC_hiE_bdtsel_bck" || ch_name == "kdar_FHC_hiE_bdtselns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_FHC_hiE_bdtsel_bckNp" || ch_name == "kdar_FHC_hiE_bdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_FHC_hiE_bdtsel_nuwro_train" || ch_name == "kdar_FHC_hiE_bdtsel_gibuu_train"|| ch_name == "kdar_FHC_hiE_bdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_hiE_bdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_hiE_bdtselns_nuwro_train" || ch_name == "kdar_FHC_hiE_bdtselns_gibuu_train"|| ch_name == "kdar_FHC_hiE_bdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_hiE_bdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
     return flag_pass;
 
@@ -4741,11 +4694,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     || ch_name == "kdar_FHC_preselns" || ch_name == "kdar_FHC_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_FHC_preselns" || ch_name == "kdar_FHC_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
 
-    if(ch_name == "kdar_FHC_presel_sig" || ch_name == "kdar_FHC_presel_nuwro_train" || ch_name == "kdar_FHC_presel_gibuu_train" || ch_name == "kdar_FHC_preselNp_sig" || ch_name == "kdar_FHC_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHC"];
-    if(ch_name == "kdar_FHC_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCOutFV"];
-    if(ch_name == "kdar_FHC_presel_sigNp" || ch_name == "kdar_FHC_presel_nuwro_trainNp" || ch_name == "kdar_FHC_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCNp"];
-    if(ch_name == "kdar_FHC_presel_bck" || ch_name == "kdar_FHC_preselNp_bck" || ch_name == "kdar_FHC_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_FHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHC"]; }
-    if(ch_name == "kdar_FHC_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdar_FHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHCNp"]; }
+    if(ch_name == "kdar_FHC_presel_sig" || ch_name == "kdar_FHC_presel_nuwro_train" || ch_name == "kdar_FHC_presel_gibuu_train" || ch_name == "kdar_FHC_preselNp_sig" || ch_name == "kdar_FHC_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_FHC_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_FHC_presel_sigNp" || ch_name == "kdar_FHC_presel_nuwro_trainNp" || ch_name == "kdar_FHC_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_FHC_presel_bck" || ch_name == "kdar_FHC_preselNp_bck" || ch_name == "kdar_FHC_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_FHC_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_FHC_presel_nuwro_train" || ch_name == "kdar_FHC_presel_gibuu_train"|| ch_name == "kdar_FHC_presel_nuwro_trainNp" || ch_name == "kdar_FHC_presel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
     if(ch_name == "kdar_FHC_preselNp_sig" || ch_name == "kdar_FHC_preselNp_bck" || ch_name == "kdar_FHC_preselNp_dirt" || ch_name == "kdar_FHC_preselNp_ext" || ch_name == "kdar_FHC_preselNp"
@@ -4764,30 +4717,6 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_FHC_sideband2_bck"  || ch_name == "kdar_FHC_sideband2_dirt" || ch_name == "kdar_FHC_sideband2_sig" || ch_name == "kdar_FHC_sideband2" || ch_name == "kdar_FHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
     if( (ch_name == "kdar_FHC_sideband3_bck"  || ch_name == "kdar_FHC_sideband3_dirt" || ch_name == "kdar_FHC_sideband3_sig" || ch_name == "kdar_FHC_sideband3" || ch_name == "kdar_FHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
     if( (ch_name == "kdar_FHC_sideband4_bck"  || ch_name == "kdar_FHC_sideband4_dirt" || ch_name == "kdar_FHC_sideband4_sig" || ch_name == "kdar_FHC_sideband4" || ch_name == "kdar_FHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_FHC_RHC_sideband_bck"  || ch_name == "kdar_FHC_RHC_sideband_dirt" || ch_name == "kdar_FHC_RHC_sideband_sig" || ch_name == "kdar_FHC_RHC_sideband" || ch_name == "kdar_FHC_RHC_sideband_ext"
-     || ch_name == "kdar_FHC_RHC_sideband1_bck"  || ch_name == "kdar_FHC_RHC_sideband1_dirt" || ch_name == "kdar_FHC_RHC_sideband1_sig" || ch_name == "kdar_FHC_RHC_sideband1" || ch_name == "kdar_FHC_RHC_sideband1_ext"
-     || ch_name == "kdar_FHC_RHC_sideband2_bck"  || ch_name == "kdar_FHC_RHC_sideband2_dirt" || ch_name == "kdar_FHC_RHC_sideband2_sig" || ch_name == "kdar_FHC_RHC_sideband2" || ch_name == "kdar_FHC_RHC_sideband2_ext"
-     || ch_name == "kdar_FHC_RHC_sideband3_bck"  || ch_name == "kdar_FHC_RHC_sideband3_dirt" || ch_name == "kdar_FHC_RHC_sideband3_sig" || ch_name == "kdar_FHC_RHC_sideband3" || ch_name == "kdar_FHC_RHC_sideband3_ext"
-     || ch_name == "kdar_FHC_RHC_sideband4_bck"  || ch_name == "kdar_FHC_RHC_sideband4_dirt" || ch_name == "kdar_FHC_RHC_sideband4_sig" || ch_name == "kdar_FHC_RHC_sideband4" || ch_name == "kdar_FHC_RHC_sideband4_ext"){
-    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_FHC_RHC_sideband1_bck"  || ch_name == "kdar_FHC_RHC_sideband1_dirt" || ch_name == "kdar_FHC_RHC_sideband1_sig" || ch_name == "kdar_FHC_RHC_sideband1" || ch_name == "kdar_FHC_RHC_sideband1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_FHC_RHC_sideband2_bck"  || ch_name == "kdar_FHC_RHC_sideband2_dirt" || ch_name == "kdar_FHC_RHC_sideband2_sig" || ch_name == "kdar_FHC_RHC_sideband2" || ch_name == "kdar_FHC_RHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_RHC_sideband3_bck"  || ch_name == "kdar_FHC_RHC_sideband3_dirt" || ch_name == "kdar_FHC_RHC_sideband3_sig" || ch_name == "kdar_FHC_RHC_sideband3" || ch_name == "kdar_FHC_RHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_RHC_sideband4_bck"  || ch_name == "kdar_FHC_RHC_sideband4_dirt" || ch_name == "kdar_FHC_RHC_sideband4_sig" || ch_name == "kdar_FHC_RHC_sideband4" || ch_name == "kdar_FHC_RHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_FHC_FHC_sideband_bck"  || ch_name == "kdar_FHC_FHC_sideband_dirt" || ch_name == "kdar_FHC_FHC_sideband_sig" || ch_name == "kdar_FHC_FHC_sideband" || ch_name == "kdar_FHC_FHC_sideband_ext"
-     || ch_name == "kdar_FHC_FHC_sideband1_bck"  || ch_name == "kdar_FHC_FHC_sideband1_dirt" || ch_name == "kdar_FHC_FHC_sideband1_sig" || ch_name == "kdar_FHC_FHC_sideband1" || ch_name == "kdar_FHC_FHC_sideband1_ext"
-     || ch_name == "kdar_FHC_FHC_sideband2_bck"  || ch_name == "kdar_FHC_FHC_sideband2_dirt" || ch_name == "kdar_FHC_FHC_sideband2_sig" || ch_name == "kdar_FHC_FHC_sideband2" || ch_name == "kdar_FHC_FHC_sideband2_ext"
-     || ch_name == "kdar_FHC_FHC_sideband3_bck"  || ch_name == "kdar_FHC_FHC_sideband3_dirt" || ch_name == "kdar_FHC_FHC_sideband3_sig" || ch_name == "kdar_FHC_FHC_sideband3" || ch_name == "kdar_FHC_FHC_sideband3_ext"
-     || ch_name == "kdar_FHC_FHC_sideband4_bck"  || ch_name == "kdar_FHC_FHC_sideband4_dirt" || ch_name == "kdar_FHC_FHC_sideband4_sig" || ch_name == "kdar_FHC_FHC_sideband4" || ch_name == "kdar_FHC_FHC_sideband4_ext"){
-    bool flag_pass = tagger.numu_score>0.9 && eval.match_isFC==1 && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_FHC_FHC_sideband1_bck"  || ch_name == "kdar_FHC_FHC_sideband1_dirt" || ch_name == "kdar_FHC_FHC_sideband1_sig" || ch_name == "kdar_FHC_FHC_sideband1" || ch_name == "kdar_FHC_FHC_sideband1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_FHC_FHC_sideband2_bck"  || ch_name == "kdar_FHC_FHC_sideband2_dirt" || ch_name == "kdar_FHC_FHC_sideband2_sig" || ch_name == "kdar_FHC_FHC_sideband2" || ch_name == "kdar_FHC_FHC_sideband2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_FHC_sideband3_bck"  || ch_name == "kdar_FHC_FHC_sideband3_dirt" || ch_name == "kdar_FHC_FHC_sideband3_sig" || ch_name == "kdar_FHC_FHC_sideband3" || ch_name == "kdar_FHC_FHC_sideband3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_FHC_sideband4_bck"  || ch_name == "kdar_FHC_FHC_sideband4_dirt" || ch_name == "kdar_FHC_FHC_sideband4_sig" || ch_name == "kdar_FHC_FHC_sideband4" || ch_name == "kdar_FHC_FHC_sideband4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
 
 
@@ -4841,29 +4770,6 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if( (ch_name == "kdar_FHC_sidebandFCFP4_bck"  || ch_name == "kdar_FHC_sidebandFCFP4_dirt" || ch_name == "kdar_FHC_sidebandFCFP4_sig" || ch_name == "kdar_FHC_sidebandFCFP4" || ch_name == "kdar_FHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
     return flag_pass;
 
-  }else if(ch_name == "kdar_FHC_RHC_sidebandFCFP_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP" || ch_name == "kdar_FHC_RHC_sidebandFCFP_ext"
-     || ch_name == "kdar_FHC_RHC_sidebandFCFP1_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP1_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP1_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP1" || ch_name == "kdar_FHC_RHC_sidebandFCFP1_ext"
-     || ch_name == "kdar_FHC_RHC_sidebandFCFP2_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP2_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP2_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP2" || ch_name == "kdar_FHC_RHC_sidebandFCFP2_ext"
-     || ch_name == "kdar_FHC_RHC_sidebandFCFP3_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP3_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP3_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP3" || ch_name == "kdar_FHC_RHC_sidebandFCFP3_ext"
-     || ch_name == "kdar_FHC_RHC_sidebandFCFP4_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP4_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP4_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP4" || ch_name == "kdar_FHC_RHC_sidebandFCFP4_ext"){
-    bool flag_pass = tagger.numu_score>0.9  && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_FHC_RHC_sidebandFCFP1_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP1_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP1_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP1" || ch_name == "kdar_FHC_RHC_sidebandFCFP1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_FHC_RHC_sidebandFCFP2_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP2_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP2_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP2" || ch_name == "kdar_FHC_RHC_sidebandFCFP2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_RHC_sidebandFCFP3_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP3_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP3_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP3" || ch_name == "kdar_FHC_RHC_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_RHC_sidebandFCFP4_bck"  || ch_name == "kdar_FHC_RHC_sidebandFCFP4_dirt" || ch_name == "kdar_FHC_RHC_sidebandFCFP4_sig" || ch_name == "kdar_FHC_RHC_sidebandFCFP4" || ch_name == "kdar_FHC_RHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
-
-  }else if(ch_name == "kdar_FHC_FHC_sidebandFCFP_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP" || ch_name == "kdar_FHC_FHC_sidebandFCFP_ext"
-     || ch_name == "kdar_FHC_FHC_sidebandFCFP1_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP1_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP1_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP1" || ch_name == "kdar_FHC_FHC_sidebandFCFP1_ext"
-     || ch_name == "kdar_FHC_FHC_sidebandFCFP2_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP2_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP2_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP2" || ch_name == "kdar_FHC_FHC_sidebandFCFP2_ext"
-     || ch_name == "kdar_FHC_FHC_sidebandFCFP3_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP3_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP3_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP3" || ch_name == "kdar_FHC_FHC_sidebandFCFP3_ext"
-     || ch_name == "kdar_FHC_FHC_sidebandFCFP4_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP4_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP4_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP4" || ch_name == "kdar_FHC_FHC_sidebandFCFP4_ext"){
-    bool flag_pass = tagger.numu_score>0.9  && !(flag_kdar_bdtsel && flag_kdar_presel);
-    if( (ch_name == "kdar_FHC_FHC_sidebandFCFP1_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP1_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP1_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP1" || ch_name == "kdar_FHC_FHC_sidebandFCFP1_ext") && reco_Enu>400) flag_pass = false;
-    if( (ch_name == "kdar_FHC_FHC_sidebandFCFP2_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP2_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP2_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP2" || ch_name == "kdar_FHC_FHC_sidebandFCFP2_ext") && (reco_Enu>700 || reco_Enu<400)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_FHC_sidebandFCFP3_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP3_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP3_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP3" || ch_name == "kdar_FHC_FHC_sidebandFCFP3_ext") && (reco_Enu>1000 || reco_Enu<700)) flag_pass = false;
-    if( (ch_name == "kdar_FHC_FHC_sidebandFCFP4_bck"  || ch_name == "kdar_FHC_FHC_sidebandFCFP4_dirt" || ch_name == "kdar_FHC_FHC_sidebandFCFP4_sig" || ch_name == "kdar_FHC_FHC_sidebandFCFP4" || ch_name == "kdar_FHC_FHC_sidebandFCFP4_ext") && reco_Enu<1000) flag_pass = false;
-    return flag_pass;
 
 
   }else if(ch_name == "kdar_FHC_sidebandFCFP_beam_bck"  || ch_name == "kdar_FHC_sidebandFCFP_beam_dirt" || ch_name == "kdar_FHC_sidebandFCFP_beam_sig" || ch_name == "kdar_FHC_sidebandFCFP_beam" || ch_name == "kdar_FHC_sidebandFCFP_beam_ext"
@@ -4932,11 +4838,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     || ch_name == "kdar_FHC_ktaggedns" || ch_name == "kdar_FHC_ktaggedns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_FHC_ktaggedns" || ch_name == "kdar_FHC_ktaggedns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
 
-    if(ch_name == "kdar_FHC_ktagged_sig" || ch_name == "kdar_FHC_ktagged_nuwro_train" || ch_name == "kdar_FHC_ktagged_gibuu_train" || ch_name == "kdar_FHC_ktaggedNp_sig" || ch_name == "kdar_FHC_ktaggedNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHC"];
-    if(ch_name == "kdar_FHC_ktagged_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCOutFV"];
-    if(ch_name == "kdar_FHC_ktagged_sigNp" || ch_name == "kdar_FHC_ktagged_nuwro_trainNp" || ch_name == "kdar_FHC_ktagged_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCNp"];
-    if(ch_name == "kdar_FHC_ktagged_bck" || ch_name == "kdar_FHC_ktaggedNp_bck" || ch_name == "kdar_FHC_ktaggedNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_FHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHC"]; }
-    if(ch_name == "kdar_FHC_ktagged_bckNp")  { if(flag_pass && map_cuts_flag["kdar_FHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHCNp"]; }
+    if(ch_name == "kdar_FHC_ktagged_sig" || ch_name == "kdar_FHC_ktagged_nuwro_train" || ch_name == "kdar_FHC_ktagged_gibuu_train" || ch_name == "kdar_FHC_ktaggedNp_sig" || ch_name == "kdar_FHC_ktaggedNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_FHC_ktagged_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
+    if(ch_name == "kdar_FHC_ktagged_sigNp" || ch_name == "kdar_FHC_ktagged_nuwro_trainNp" || ch_name == "kdar_FHC_ktagged_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
+    if(ch_name == "kdar_FHC_ktagged_bck" || ch_name == "kdar_FHC_ktaggedNp_bck" || ch_name == "kdar_FHC_ktaggedNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_FHC_ktagged_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
     if(ch_name == "kdar_FHC_ktagged_nuwro_train" || ch_name == "kdar_FHC_ktagged_gibuu_train"|| ch_name == "kdar_FHC_ktagged_nuwro_trainNp" || ch_name == "kdar_FHC_ktagged_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
     if(ch_name == "kdar_FHC_ktaggedNp_sig" || ch_name == "kdar_FHC_ktaggedNp_bck" || ch_name == "kdar_FHC_ktaggedNp_dirt" || ch_name == "kdar_FHC_ktaggedNp_ext" || ch_name == "kdar_FHC_ktaggedNp"
@@ -4968,15 +4874,15 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     //|| ch_name == "kdar_FHC_antibdtselns" || ch_name == "kdar_FHC_antibdtselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
     || ch_name == "kdar_FHC_antibdtselns" || ch_name == "kdar_FHC_antibdtselns_ext" || ch_name == "kdar_FHC_antibdtselns_fake_bck") && ((merge_time>-4.5 && merge_time<4.5) )){flag_pass=false;}
 
-    if(ch_name == "kdar_FHC_antibdtsel_sig" || ch_name == "kdar_FHC_antibdtsel_nuwro_train" || ch_name == "kdar_FHC_antibdtsel_gibuu_train" || ch_name == "kdar_FHC_antibdtselns_sig" || ch_name == "kdar_FHC_antibdtselns_nuwro_train" || ch_name == "kdar_FHC_antibdtselns_gibuu_train" || ch_name == "kdar_FHC_antibdtselNp_sig" || ch_name == "kdar_FHC_antibdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHC"];
+    if(ch_name == "kdar_FHC_antibdtsel_sig" || ch_name == "kdar_FHC_antibdtsel_nuwro_train" || ch_name == "kdar_FHC_antibdtsel_gibuu_train" || ch_name == "kdar_FHC_antibdtselns_sig" || ch_name == "kdar_FHC_antibdtselns_nuwro_train" || ch_name == "kdar_FHC_antibdtselns_gibuu_train" || ch_name == "kdar_FHC_antibdtselNp_sig" || ch_name == "kdar_FHC_antibdtselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
 
-    if(ch_name == "kdar_FHC_antibdtsel_outFV_sig" || ch_name == "kdar_FHC_antibdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCOutFV"];
+    if(ch_name == "kdar_FHC_antibdtsel_outFV_sig" || ch_name == "kdar_FHC_antibdtselns_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdar_OutFV"];
 
-    if(ch_name == "kdar_FHC_antibdtsel_sigNp" || ch_name == "kdar_FHC_antibdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_antibdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_antibdtselns_sigNp" || ch_name == "kdar_FHC_antibdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_antibdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_FHCNp"];
+    if(ch_name == "kdar_FHC_antibdtsel_sigNp" || ch_name == "kdar_FHC_antibdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_antibdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_antibdtselns_sigNp" || ch_name == "kdar_FHC_antibdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_antibdtselns_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdar_Np"];
 
-    if(ch_name == "kdar_FHC_antibdtsel_bck" || ch_name == "kdar_FHC_antibdtselns_bck" || ch_name == "kdar_FHC_antibdtselns_nons_bck" || ch_name == "kdar_FHC_antibdtselNp_bck" || ch_name == "kdar_FHC_antibdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar_FHC"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHC"]; }
+    if(ch_name == "kdar_FHC_antibdtsel_bck" || ch_name == "kdar_FHC_antibdtselns_bck" || ch_name == "kdar_FHC_antibdtselns_nons_bck" || ch_name == "kdar_FHC_antibdtselNp_bck" || ch_name == "kdar_FHC_antibdtselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
 
-    if(ch_name == "kdar_FHC_antibdtsel_bckNp" || ch_name == "kdar_FHC_antibdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_FHCNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_FHCNp"]; }
+    if(ch_name == "kdar_FHC_antibdtsel_bckNp" || ch_name == "kdar_FHC_antibdtselns_bckNp")  { if(flag_pass && map_cuts_flag["kdar_Np"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar_Np"]; }
 
     if(ch_name == "kdar_FHC_antibdtsel_nuwro_train" || ch_name == "kdar_FHC_antibdtsel_gibuu_train"|| ch_name == "kdar_FHC_antibdtsel_nuwro_trainNp" || ch_name == "kdar_FHC_antibdtsel_gibuu_trainNp" || ch_name == "kdar_FHC_antibdtselns_nuwro_train" || ch_name == "kdar_FHC_antibdtselns_gibuu_train"|| ch_name == "kdar_FHC_antibdtselns_nuwro_trainNp" || ch_name == "kdar_FHC_antibdtselns_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
