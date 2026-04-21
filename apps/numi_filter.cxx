@@ -76,7 +76,7 @@ int main( int argc, char** argv )
   TString outfile_name;
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
-  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,1);
 
   std::vector<int>good_run_list_vec = wrangler.get_good_run_list();
   std::set<int> good_runlist_set(good_run_list_vec.begin(), good_run_list_vec.end());

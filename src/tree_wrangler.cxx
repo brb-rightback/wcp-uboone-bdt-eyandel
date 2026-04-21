@@ -16,29 +16,53 @@
 
 using namespace LEEana;
 
-LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_name, char delimiter, bool set_flag_exclusive, bool set_verbose){
+LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_name, char delimiter, int set_flag_exclusive, bool set_verbose){
+
   verbose = set_verbose;
   flag_exclusive = set_flag_exclusive;
+
   if(configure){
+
     std::ifstream config_file(config_file_name);
+
     bool first_pass = true;
+
     if(config_file.is_open()){
+
       std::cout<<"LEEana::tree_wrangler::tree_wrangler: Loading directories and trees based off the configuration in "<<config_file_name<<std::endl;
+
       while(!config_file.eof()){
-        std::string line;
+
+      	std::string line;
         std::getline(config_file, line);
-        while(line.empty()) {std::getline(config_file, line);} // Skip empty lines
-        if(set_flag_exclusive && first_pass){
-          while(line!="exclusive" && line!="Exclusive"){ // Burn lines untill we get to the exclusive section when configured that way
+
+	while(line.empty()) {std::getline(config_file, line);} // Skip empty lines
+
+	if(set_flag_exclusive==1 && first_pass){
+          while(line!="exclusive" && line!="Exclusive" && line!="pot" && line!="POT"){ // Burn lines untill we get to the exclusive section when configured that way
 	    if(line == "end" || line == "End") break;
 	    std::getline(config_file, line);
 	  }
 	  first_pass = false;
 	  std::getline(config_file, line);
 	}
+
+	if(set_flag_exclusive==2 && first_pass){
+          while(line!="pick" && line!="Pick"){ // Burn lines untill we get to the tree picking selection
+            if(line == "end" || line == "End") break;
+            std::getline(config_file, line);
+          }
+          first_pass = false;
+          std::getline(config_file, line);
+        }
+
+        // Stop reading if you reach the end of the file or one of the other sections.
 	if(line == "end" || line == "End") break;
-	if(!set_flag_exclusive && (line=="exclusive" || line=="Exclusive")) break; // Stop reading when you get to the exclusive section if not running in that mode
-        std::istringstream iss(line);
+	if(set_flag_exclusive==0 && (line=="exclusive" || line=="Exclusive" || line=="pot" || line=="POT" || line=="pick" || line=="Pick")) break;
+        if(set_flag_exclusive==1 && (line=="pick" || line=="Pick")) break;
+        if(set_flag_exclusive==2 && (line=="exclusive" || line=="Exclusive" || line=="pot" || line=="POT")) break; 
+ 
+	std::istringstream iss(line);
         std::string temp_dir;
         std::string temp_all_trees_to_skip;
         std::string temp_all_pot_vars;
@@ -46,7 +70,8 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
         std::vector<std::string> temp_pot_vars;
 	iss >> temp_dir >> temp_all_trees_to_skip; // Read the line
         temp_trees_to_skip = splitString(temp_all_trees_to_skip, delimiter); // Break up the trees
-        if(set_flag_exclusive){
+
+	if(set_flag_exclusive==1){
 	  iss >> temp_all_pot_vars; // Read the line to see if we have specified pot vars
 	  if(!iss.fail()){
             temp_pot_vars = splitString(temp_all_pot_vars, delimiter);
@@ -61,22 +86,42 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
             }
 	  }
 	}
-        if (directories_wi_trees_to_skip_names.find(temp_dir) != directories_wi_trees_to_skip_names.end()) {std::cout<<"LEEana::tree_wrangler::tree_wrangler: WARNING: Failed to open the config file, just loading WC"<<std::endl;}
+
+        if(set_flag_exclusive==2){
+          for(int i=0; i<temp_trees_to_skip.size(); i++){
+            iss >> temp_all_pot_vars; // Read the line to see if we have specified pot vars
+            if(!iss.fail()){
+              temp_pot_vars = splitString(temp_all_pot_vars, delimiter);
+              trees_wi_pot_var_names[temp_trees_to_skip.at(i)] = temp_pot_vars;
+            }
+            else{
+              std::cout<<"WARNING, no branches were picked for "<<temp_trees_to_skip.at(i)<<" will fill all branches."<<std::endl;
+              temp_pot_vars={"all"};
+              trees_wi_pot_var_names[temp_trees_to_skip.at(i)] = temp_pot_vars;
+            }
+          }
+        }
+
+        if (directories_wi_trees_to_skip_names.find(temp_dir) != directories_wi_trees_to_skip_names.end()) {std::cout<<"LEEana::tree_wrangler::tree_wrangler: WARNING: Failed to open the config file"<<std::endl;}
         std::vector<std::string> sorted_temp_trees_to_skip = temp_trees_to_skip;
 	sort( sorted_temp_trees_to_skip.begin(), sorted_temp_trees_to_skip.end() );
         const bool hasDuplicates = std::adjacent_find(sorted_temp_trees_to_skip.begin(), sorted_temp_trees_to_skip.end()) != sorted_temp_trees_to_skip.end();
         if(hasDuplicates){
           std::cout<<"LEEana::tree_wrangler::tree_wrangler: Duplicates in trees to skip for "<<temp_dir<<". You should check the config file."<<std::endl;
-          //temp_trees_to_skip.erase( unique( temp_trees_to_skip.begin(), temp_trees_to_skip.end() ), temp_trees_to_skip.end() );
         }
         directories_wi_trees_to_skip_names[temp_dir] = temp_trees_to_skip;
-	if(set_flag_exclusive && !iss.fail()){
+
+	if(set_flag_exclusive==1 && !iss.fail()){
           directories_wi_pot_var_names[temp_dir] = temp_pot_vars;
 	  pot_var_names.push_back(temp_pot_vars);
         }
+
       }
-    }else {std::cout<<"LEEana::tree_wrangler::tree_wrangler: Failed to open the config file: " <<config_file_name<<". Just loading WC"<<std::endl;}
+
+    }else {std::cout<<"LEEana::tree_wrangler::tree_wrangler: Failed to open the config file: " <<config_file_name<<std::endl;}
+
   }//configure
+
 }
 
 LEEana::tree_wrangler::~tree_wrangler(){}
@@ -233,9 +278,11 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, bool blank_tree, std::ve
      } else if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        bool found_tree = 0;
+        int found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
-        if(found_tree!=flag_exclusive) continue;
+	int temp_flag_exclusive = flag_exclusive;
+	if(temp_flag_exclusive>1) temp_flag_exclusive=1;
+        if(found_tree!=temp_flag_exclusive) continue;
 	adir->cd();
         int nentry = -1;
         if (blank_tree){nentry=0;}
@@ -266,9 +313,11 @@ void LEEana::tree_wrangler::CopyDir(TDirectory *source, TString TDirectory_exten
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        bool found_tree = 0;
+        int found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
-        if(found_tree!=flag_exclusive) continue;
+	int temp_flag_exclusive = flag_exclusive;
+        if(temp_flag_exclusive>1) temp_flag_exclusive=1;
+        if(found_tree!=temp_flag_exclusive) continue;
 	savdir->cd();
         int nentry = -1;
         if (blank_tree){nentry=0;}
@@ -294,15 +343,31 @@ std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool b
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-        bool found_tree = 0;
+        int found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
-        if(found_tree!=flag_exclusive) continue;
+	int temp_flag_exclusive = flag_exclusive;
+        if(temp_flag_exclusive>1) temp_flag_exclusive=1;
+        if(found_tree!=temp_flag_exclusive) continue;
 	savdir->cd();
+
+        // Disable all but the trees we picked about for this setting
+        if(flag_exclusive==2){
+          T->SetBranchStatus("*", 0);
+          std::vector<std::string> branches_to_activate = trees_wi_pot_var_names[temp_name];
+          for(int b=0; b<branches_to_activate.size(); b++){
+            std::string branch_name = branches_to_activate.at(b);
+            if( (branch_name=="all" || branch_name=="All" || branch_name=="ALL") && branches_to_activate.size()==1 ){
+              T->SetBranchStatus("*", 1);
+            }
+            else { T->SetBranchStatus(branch_name.c_str(), 1); }
+          }
+        }
+
         int nentry = -1;
         if (blank_tree) {nentry=0;}
         TTree *newT = T->CloneTree(nentry,"fast");
         if (rename) {
-		newT->SetObject(key->GetName()+TDirectory_extension,key->GetName()+TDirectory_extension);
+	  newT->SetObject(key->GetName()+TDirectory_extension,key->GetName()+TDirectory_extension);
 	}
         if(flag_save_samdef){
           newT->Branch("samdef", "TString", &samdef);         
@@ -328,9 +393,11 @@ std::vector<TTree*>* LEEana::tree_wrangler::GetTrees(TDirectory *source, std::ve
      if (cl->InheritsFrom(TTree::Class())) {
         TTree *T = (TTree*)source->Get(key->GetName());
         std::string temp_name = T->GetName();
-	bool found_tree = 0;
+	int found_tree = 0;
         if (std::find(to_skip.begin(), to_skip.end(), temp_name) != to_skip.end()) found_tree = 1;
-        if(found_tree!=flag_exclusive) continue;
+	int temp_flag_exclusive = flag_exclusive;
+        if(temp_flag_exclusive>1) temp_flag_exclusive=1;
+        if(found_tree!=temp_flag_exclusive) continue;
 	ttree_vec->push_back(T);
     }
   }

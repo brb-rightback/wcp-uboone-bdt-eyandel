@@ -59,7 +59,7 @@ int main( int argc, char** argv )
    bool flag_data = true;
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
-  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,1);
 
   //Always load WC
   TFile *file1 = new TFile(input_file_cv);

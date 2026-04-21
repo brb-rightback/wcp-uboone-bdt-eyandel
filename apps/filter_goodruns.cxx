@@ -57,7 +57,7 @@ int main( int argc, char** argv )
   }
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
-  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,1);
 
   TFile *file1 = new TFile(input_file);
 

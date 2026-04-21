@@ -62,8 +62,8 @@ int main( int argc, char** argv )
 
   tree_wrangler wrangler_cv(flag_config, config_file_name, delimiter);
   tree_wrangler wrangler_det(flag_config, config_file_name, delimiter);
-  tree_wrangler wrangler_pot_cv(flag_config, config_file_name, delimiter,true);
-  tree_wrangler wrangler_pot_det(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot_cv(flag_config, config_file_name, delimiter,1);
+  tree_wrangler wrangler_pot_det(flag_config, config_file_name, delimiter,1);
 
   TFile *file1 = new TFile(input_file_cv);
   TTree *T_BDTvars_cv = (TTree*)file1->Get("wcpselection/T_BDTvars");

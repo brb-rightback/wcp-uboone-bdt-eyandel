@@ -71,7 +71,7 @@ int main( int argc, char** argv )
   }
   
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
-  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,1);
 
   auto CVfile = TFile::Open(path_to_CV.c_str());
   auto weightHistosFile = TFile::Open(path_to_weightHistos.c_str());

@@ -180,7 +180,7 @@ int main( int argc, char** argv )
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
   if(flag_set_samdef) wrangler.set_samdef(flag_set_samdef, samdef);
-  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
+  tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,1);
 
   TFile *file1 = new TFile(input_file);
   TTree *T_BDTvars = (TTree*)file1->Get("wcpselection/T_BDTvars");
