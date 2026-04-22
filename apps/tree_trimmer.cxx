@@ -14,6 +14,8 @@
 #include "TSystem.h"
 #include "TROOT.h"
 
+#include "WCPLEEANA/Util.h"
+
 #include "WCPLEEANA/eval.h"
 
 using namespace std;
@@ -37,6 +39,8 @@ int main( int argc, char** argv )
   char delimiter = ',';
 
   int flag_overwrite=0;
+
+  int flag_kill_duplicates=1;
 
   int max_events=std::numeric_limits<int>::max();
   int start_events=0;
@@ -64,6 +68,16 @@ int main( int argc, char** argv )
     case 'o':
       flag_overwrite = atoi(&argv[i][2]);
       break;
+    case 'k':
+      flag_kill_duplicates = atoi(&argv[i][2]);
+      if(flag_kill_duplicates==0) { std::cout<<"Allowing duplicates if found."<<'\n'<<std::endl; }
+      else if(flag_kill_duplicates==1) { std::cout<<"Will remove duplicates if found."<<'\n'<<std::endl; }
+      else if(flag_kill_duplicates==2) { std::cout<<"Will exit if duplicates are found."<<'\n'<<std::endl; }
+      else {
+        flag_kill_duplicates=1;
+        std::cout<<"Unknown -k option, setting to default flag_kill_duplicates=1"<<'\n'<<std::endl; 
+      }
+      break;
     case 'm':
       max_events = atoi(&argv[i][2]);
       if(max_events<0){
@@ -87,19 +101,36 @@ int main( int argc, char** argv )
       break;
     case 's':
       skip_cut = atoi(&argv[i][2]);
-      if(!skip_cut) std::cout<<"Will remove bad runs."<<'\n'<<std::endl;
+      if(skip_cut==0) { std::cout<<"Will keep runs not in the good runs list/."<<'\n'<<std::endl; }
+      else if(skip_cut==1) { std::cout<<"Will remove runs not in the good runs list."<<'\n'<<std::endl; }
+      else{
+        skip_cut=1;
+        std::cout<<"Unknown -s option, setting to default skip_cut=1"<<'\n'<<std::endl; 
+      }
       break;
     case 'n':
       flag_numi = atoi(&argv[i][2]);
-      if(flag_numi) std::cout<<"Bad runs for list will be the one for NuMI."<<'\n'<<std::endl;
+      if(flag_numi==0){ std::cout<<"Good runs list will be the one for BNB."<<'\n'<<std::endl; }
+      else if(flag_numi==1){ std::cout<<"Good runs list will be the one for NuMI."<<'\n'<<std::endl; }
+      else{
+        std::cout<<"Unknown -n option, setting to default flag_numi=0"<<'\n'<<std::endl; 
+      }
       break;
     case 'c':
       flag_data = atoi(&argv[i][2]);
-      if(flag_data) std::cout<<"Bad runs for list will be the one for Data."<<'\n'<<std::endl;
+      if(flag_data==0){ std::cout<<"Good runs for list will be the one for MC."<<'\n'<<std::endl; }
+      else if(flag_data==1){ std::cout<<"Good runs for list will be the one for Data."<<'\n'<<std::endl; }
+      else{
+        std::cout<<"Unknown -c option, setting to default flag_data=0"<<'\n'<<std::endl; 
+      }
       break;
     case 'r':
       remove_lantern_fails = atoi(&argv[i][2]);
-      if(remove_lantern_fails) std::cout<<"Removing subruns where Lantern container failed."<<'\n'<<std::endl;
+      if(remove_lantern_fails==0){ std::cout<<"Will Keep subruns where Lantern container failed."<<'\n'<<std::endl; }
+      else if(remove_lantern_fails==1){ std::cout<<"Removing subruns where Lantern container failed."<<'\n'<<std::endl; }
+      else{
+        std::cout<<"Unknown -r option, setting to default remove_lantern_fails=1"<<'\n'<<std::endl; 
+      }
       break;
     case 'l':
       training_list = &argv[i][2];
@@ -111,8 +142,12 @@ int main( int argc, char** argv )
       break;
     case 'b':
       flag_keep_only_bdt_train = atoi(&argv[i][2]);
-      if(flag_keep_only_bdt_train==0) std::cout<<"Only saving subruns that were not used for Wire-Cell BDT training."<<'\n'<<std::endl;
-      if(flag_keep_only_bdt_train==1) std::cout<<"Only saving subruns that WERE used for Wire-Cell BDT training."<<'\n'<<std::endl;
+      if(flag_keep_only_bdt_train==-1){ std::cout<<"Saving all runs regardless of Wire-Cell BDT training status."<<'\n'<<std::endl; }
+      else if(flag_keep_only_bdt_train==0){ std::cout<<"Only saving subruns that were not used for Wire-Cell BDT training."<<'\n'<<std::endl; }
+      else if(flag_keep_only_bdt_train==1){ std::cout<<"Only saving subruns that WERE used for Wire-Cell BDT training."<<'\n'<<std::endl; }
+      else{
+        std::cout<<"Unknown -b option, setting to default lag_keep_only_bdt_train=-1"<<'\n'<<std::endl; 
+      }
       break;
     case 'a':
       flag_set_samdef = 1;
@@ -133,7 +168,9 @@ int main( int argc, char** argv )
 
   // Initiate the tree wranglers
   tree_wrangler wrangler(true, config_file_name, delimiter);
+  if(flag_set_samdef) wrangler.set_samdef(flag_set_samdef, samdef);
   tree_wrangler wrangler_ex(true, config_file_name, delimiter,2);
+  if(flag_set_samdef) wrangler_ex.set_samdef(flag_set_samdef, samdef);
   tree_wrangler wrangler_pot(true, config_file_name, delimiter,1);
 
 
@@ -214,46 +251,51 @@ int main( int argc, char** argv )
   // Figure out which tree you can load for the rse map
   int run;
   int subrun;
+  int event;
   bool found_rse_tree;
   TTree *T_rse; 
   while(1){
   if(file1->GetDirectory("wcpselection")){ 
     T_rse=(TTree*)file1->Get("wcpselection/T_eval");
     if(T_rse){
-      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun")){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
         found_rse_tree=true;
 	T_rse->SetBranchAddress("run",&run);
 	T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
         std::cout<<'\n'<<"Using T_eval for the run-subrun tree"<<'\n'<<std::endl;
 	break;
       }
     } 
     T_rse=(TTree*)file1->Get("wcpselection/T_PFeval");
     if(T_rse){
-      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun")){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
         found_rse_tree=true;
 	T_rse->SetBranchAddress("run",&run);
         T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
         std::cout<<'\n'<<"Using T_PFeval for the run-subrun tree"<<'\n'<<std::endl;
 	break;
       }
     }
     T_rse=(TTree*)file1->Get("wcpselection/T_KINEvars");
     if(T_rse){
-      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun")){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
         found_rse_tree=true;
 	T_rse->SetBranchAddress("run",&run);
         T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
         std::cout<<'\n'<<"Using T_KINEvars for the run-subrun tree"<<'\n'<<std::endl;
 	break;
       }
     }
     T_rse=(TTree*)file1->Get("wcpselection/T_BDTvars");
     if(T_rse){
-      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun")){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
         found_rse_tree=true;
 	T_rse->SetBranchAddress("run",&run);
         T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
         std::cout<<'\n'<<"Using T_BDTvars for the run-subrun tree"<<'\n'<<std::endl;
 	break;
       }
@@ -262,23 +304,12 @@ int main( int argc, char** argv )
   if(file1->GetDirectory("nuselection")){
     T_rse=(TTree*)file1->Get("nuselection/NeutrinoSelectionFilter");
     if(T_rse){
-      if(T_rse->GetBranch("run") && T_rse->GetBranch("sub")){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("sub") && T_rse->GetBranch("evt")){
         found_rse_tree=true;
 	T_rse->SetBranchAddress("run",&run);
         T_rse->SetBranchAddress("sub",&subrun);
+        T_rse->SetBranchAddress("evt",&event);
         std::cout<<'\n'<<"Using NeutrinoSelectionFilter for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file1->GetDirectory("lantern")){
-    T_rse=(TTree*)file1->Get("lantern/EventTree");
-    if(T_rse){
-      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun")){
-        found_rse_tree=true;
-	T_rse->SetBranchAddress("run",&run);
-        T_rse->SetBranchAddress("subrun",&subrun);
-        std::cout<<'\n'<<"Using EventTree for the run-subrun tree"<<'\n'<<std::endl;
         break;
       }
     }
@@ -286,11 +317,25 @@ int main( int argc, char** argv )
   if(file1->GetDirectory("singlephotonana")){
     T_rse=(TTree*)file1->Get("singlephotonana/vertex_tree");
     if(T_rse){
-      if(T_rse->GetBranch("run_number") && T_rse->GetBranch("subrun_number")){
+      if(T_rse->GetBranch("run_number") && T_rse->GetBranch("subrun_number") && T_rse->GetBranch("event_number")){
         found_rse_tree=true;
         T_rse->SetBranchAddress("run_number",&run);
         T_rse->SetBranchAddress("subrun_number",&subrun);
+        T_rse->SetBranchAddress("event_number",&event);
         std::cout<<'\n'<<"Using vertex_tree for the run-subrun tree"<<'\n'<<std::endl;
+        break;
+      }
+    }
+  }
+  if(file1->GetDirectory("lantern")){
+    T_rse=(TTree*)file1->Get("lantern/EventTree");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        found_rse_tree=true;
+	T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using EventTree for the run-subrun tree"<<'\n'<<std::endl;
         break;
       }
     }
@@ -306,7 +351,7 @@ int main( int argc, char** argv )
 
   // Create run-subrun-index map and exlude and bad subruns.
 
-  std::set<std::tuple<int, int, int>> run_sub_entry;
+  std::set<std::tuple<int, int, int, int>> run_sub_event_entry;
 
   int nentry = T_rse->GetEntries();
 
@@ -346,12 +391,14 @@ int main( int argc, char** argv )
       }
     }
 
-    run_sub_entry.insert(std::make_tuple(run, subrun, i));
+    run_sub_event_entry.insert(std::make_tuple(run, subrun, event, i));
 
   }
 
 
   // Copy all the event level trees to the new file. 
+
+  std::set<std::tuple<int, int, int, int>> run_sub_event_entry_drain = run_sub_event_entry;
 
   if(start_events>>T_rse->GetEntries()){
     std::cout<<'\n'<<"start_events>T_rse->GetEntries(). Exiting."<<std::endl;
@@ -370,12 +417,25 @@ int main( int argc, char** argv )
   int final_run=-1;
   int final_subrun=-1;
 
-  for (auto it = run_sub_entry.begin(); it != run_sub_entry.end(); it++){
+  for (auto it = run_sub_event_entry.begin(); it != run_sub_event_entry.end(); it++){
+
+    // If equality, we already removed it, meaning its a duplicate.
+    if( count_matches(run_sub_event_entry,std::get<0>(*it),std::get<1>(*it),std::get<2>(*it)) > 1 ){
+      std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
+      if(flag_kill_duplicates==1){
+        std::cout<<"Removing Duplicate"<<std::endl;
+        continue;
+      }
+      if(flag_kill_duplicates==2){
+        std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
+        return 1;
+      }
+    }
 
     if (index_counter%10000 == 0) std::cout << " seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
 
     // Get the right tree entry from the map
-    int index = std::get<2>(*it); 
+    int index = std::get<3>(*it); 
 
     T_rse->GetEntry(index);
 
@@ -413,19 +473,21 @@ int main( int argc, char** argv )
 
     // Now fill all the trees.
     for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
-        (*tree_it)->GetEntry(index);
+      (*tree_it)->GetEntry(index);
     }
     for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
-        (*tree_it)->Fill();
+      (*tree_it)->Fill();
     }
     for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
-        (*tree_it)->GetEntry(index);
+      (*tree_it)->GetEntry(index);
     }
     for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
-        (*tree_it)->Fill();
+      (*tree_it)->Fill();
     }
 
     event_counter+=1;
+
+    run_sub_event_entry_drain.erase(std::make_tuple(run, subrun, event, index));
 
     if( (first_run>run) || (first_run==run && first_subrun>subrun) ){
       first_run=run;
@@ -444,14 +506,47 @@ int main( int argc, char** argv )
 
   }
 
-  // Saving the whole file, so just overwrite these
+  // If saving the whole file overwrite limits, otherwise recover the events from the first subrun we started at if that is not complete.
   if(max_events>T_rse->GetEntries() && stop_run>last_run && start_events==0 && start_run==0){
     first_run=-1;
     first_subrun=-1;
     last_run=std::numeric_limits<int>::max();
     last_subrun=std::numeric_limits<int>::max();
+  } 
+  else{
+    auto lower = run_sub_event_entry_drain.lower_bound({first_run, first_subrun, std::numeric_limits<int>::min(),std::numeric_limits<int>::min()});
+    auto upper = run_sub_event_entry_drain.upper_bound({first_run, first_subrun, std::numeric_limits<int>::max(),std::numeric_limits<int>::max()});
+    for (auto it = lower; it != upper; ++it) {
+      std::cout<<"Adding run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<" from the starting subrun."<<std::endl;
+      if( count_matches(run_sub_event_entry_drain,std::get<0>(*it),std::get<1>(*it),std::get<2>(*it)) > 1 ){
+        std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
+        if(flag_kill_duplicates==1){
+          std::cout<<"Removing Duplicate"<<std::endl;
+          continue;
+        }
+        if(flag_kill_duplicates==2){
+          std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
+          return 1;
+        }
+      }
+      // Get the right tree entry from the map
+      int index = std::get<3>(*it);
+      // Now fill all the trees.
+      for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
+        (*tree_it)->GetEntry(index);
+      }
+      for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
+        (*tree_it)->Fill();
+      }
+      for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
+        (*tree_it)->GetEntry(index);
+      }
+      for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
+        (*tree_it)->Fill();
+      }
+      event_counter+=1;
+    }
   }
-
 
   // Loop over each POT tree seperatly
 
