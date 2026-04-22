@@ -353,14 +353,21 @@ std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool b
         // Disable all but the trees we picked about for this setting
         if(flag_exclusive==2){
           T->SetBranchStatus("*", 0);
+          std::cout<<"Only enabling picked trees in "<<temp_name<<". These are:"<<std::endl;
           std::vector<std::string> branches_to_activate = trees_wi_pot_var_names[temp_name];
           for(int b=0; b<branches_to_activate.size(); b++){
             std::string branch_name = branches_to_activate.at(b);
             if( (branch_name=="all" || branch_name=="All" || branch_name=="ALL") && branches_to_activate.size()==1 ){
               T->SetBranchStatus("*", 1);
+              std::cout<<"all: re-enabling all trees in "<<temp_name<<std::endl;
             }
-            else { T->SetBranchStatus(branch_name.c_str(), 1); }
+            else { 
+              T->SetBranchStatus(branch_name.c_str(), 1); 
+              std::cout<<branch_name<<", ";
+            }
           }
+          std::cout<<std::endl;
+          std::cout<<std::endl;
         }
 
         int nentry = -1;
