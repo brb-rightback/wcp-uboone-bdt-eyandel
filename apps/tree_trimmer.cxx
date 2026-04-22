@@ -398,9 +398,9 @@ int main( int argc, char** argv )
 
   // Copy all the event level trees to the new file. 
 
-  std::set<std::tuple<int, int, int, int>> run_sub_event_entry_drain = run_sub_event_entry;
+  std::set<std::tuple<int, int, int>> run_sub_event_entry_first_subrun;
 
-  if(start_events>>T_rse->GetEntries()){
+  if(start_events>T_rse->GetEntries()){
     std::cout<<'\n'<<"start_events>T_rse->GetEntries(). Exiting."<<std::endl;
     return 1;
   }
@@ -429,27 +429,6 @@ int main( int argc, char** argv )
     int index = std::get<3>(*it);
 
     T_rse->GetEntry(index);
-
-    // Checking for duplicates.
-    if( counts[std::make_tuple(run, subrun, event)] !=1 ){
-      if(counts[std::make_tuple(run, subrun, event)]<1){
-        std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
-        if(flag_kill_duplicates==1){
-          std::cout<<"Removing Duplicate."<<std::endl;
-          continue;
-        }
-      }
-      if(flag_kill_duplicates==2){
-        std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
-        return 1;
-      }
-      // First time seeing the event, set the counts to -1 so we know about it when we come back around.
-      counts[std::make_tuple(run, subrun, event)]=-1;
-    }
-
-
-    if (index_counter%10000 == 0) std::cout << " seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
-
 
     // Exit when we have finished the last subrun
     if(final_run>=0 && final_subrun>=0 && (final_run!=run || final_subrun!=subrun)) break;
@@ -483,6 +462,25 @@ int main( int argc, char** argv )
     index_counter+=1;
     if(index_counter<=start_events) continue;
 
+    // Checking for duplicates.
+    if( counts[std::make_tuple(run, subrun, event)] !=1 ){
+      if(counts[std::make_tuple(run, subrun, event)]<1){
+        std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
+        if(flag_kill_duplicates==1){
+          std::cout<<"Removing Duplicate."<<std::endl;
+          continue;
+        }
+      }
+      if(flag_kill_duplicates==2){
+        std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
+        return 1;
+      }
+      // First time seeing the event, set the counts to -1 so we know about it when we come back around.
+      counts[std::make_tuple(run, subrun, event)]=-1;
+    }
+
+    if (index_counter%10000 == 0) std::cout << " seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
+
     // Now fill all the trees.
     for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
       (*tree_it)->GetEntry(index);
@@ -499,11 +497,15 @@ int main( int argc, char** argv )
 
     event_counter+=1;
 
-    run_sub_event_entry_drain.erase(std::make_tuple(run, subrun, event, index));
-
-    if( (first_run>run) || (first_run==run && first_subrun>subrun) ){
+    if(first_run==run && first_subrun==subrun){
+      run_sub_event_entry_first_subrun.insert(std::make_tuple(run, subrun, event));
+    }
+    else if( (first_run>run) || (first_run==run && first_subrun>subrun) ){
       first_run=run;
       first_subrun=subrun;
+      // Reset the first run
+      run_sub_event_entry_first_subrun.clear();
+      run_sub_event_entry_first_subrun.insert(std::make_tuple(run, subrun, event));   
     }
     if( (last_run<run) || (last_run==run && last_subrun<subrun) ){
       last_run=run;
@@ -526,32 +528,47 @@ int main( int argc, char** argv )
     last_subrun=std::numeric_limits<int>::max();
   } 
   else{
-    auto lower = run_sub_event_entry_drain.lower_bound({first_run, first_subrun, std::numeric_limits<int>::min(),std::numeric_limits<int>::min()});
-    auto upper = run_sub_event_entry_drain.upper_bound({first_run, first_subrun, std::numeric_limits<int>::max(),std::numeric_limits<int>::max()});
-    for (auto it = lower; it != upper; ++it) {
-      std::cout<<"Adding run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<" from the starting subrun."<<std::endl;
-      if( count_matches(run_sub_event_entry_drain,std::get<0>(*it),std::get<1>(*it),std::get<2>(*it)) > 1 ){
-        std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
-        if(flag_kill_duplicates==1){
-          std::cout<<"Removing Duplicate"<<std::endl;
-          continue;
+    auto lower = run_sub_event_entry.lower_bound({first_run, first_subrun, std::numeric_limits<int>::min(),std::numeric_limits<int>::min()});
+    auto upper = run_sub_event_entry.upper_bound({first_run, first_subrun, std::numeric_limits<int>::max(),std::numeric_limits<int>::max()});
+    for (auto it = lower; it != upper; it++) {
+
+      int this_run = std::get<0>(*it);
+      int this_subrun = std::get<1>(*it);
+      int this_event = std::get<2>(*it);
+      int this_index = std::get<3>(*it);
+
+      // Check to see if we already added this event in the main loop.
+      if(run_sub_event_entry_first_subrun.find(std::make_tuple(this_run,this_subrun,this_event))!=run_sub_event_entry_first_subrun.end()) {
+        std::cout<<"Found event"<<" "<<this_run<<" "<<this_subrun<<" "<<this_event<<std::endl; 
+        continue;
+      }
+      
+      // Checking for duplicates.
+      if( counts[std::make_tuple(this_run, this_subrun, this_event)] !=1 ){
+        if(counts[std::make_tuple(this_run, this_subrun, this_event)]<1){
+          std::cout<<"Found duplicate event: run,subrun,event = "<<this_run<<", "<<this_subrun<<", "<<this_event<<std::endl;
+          if(flag_kill_duplicates==1){
+            std::cout<<"Removing Duplicate."<<std::endl;
+            continue;
+          }
         }
         if(flag_kill_duplicates==2){
           std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
           return 1;
         }
+        // First time seeing the event, set the counts to -1 so we know about it when we come back around.
+        counts[std::make_tuple(this_run, this_subrun, this_event)]=-1;
       }
-      // Get the right tree entry from the map
-      int index = std::get<3>(*it);
+
       // Now fill all the trees.
       for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
-        (*tree_it)->GetEntry(index);
+        (*tree_it)->GetEntry(this_index);
       }
       for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
         (*tree_it)->Fill();
       }
       for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
-        (*tree_it)->GetEntry(index);
+        (*tree_it)->GetEntry(this_index);
       }
       for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
         (*tree_it)->Fill();
