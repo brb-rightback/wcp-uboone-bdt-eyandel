@@ -417,27 +417,39 @@ int main( int argc, char** argv )
   int final_run=-1;
   int final_subrun=-1;
 
+  std::map<std::tuple<int,int,int>, int> counts;
+
+  for (const auto& t : run_sub_event_entry) {
+    counts[std::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t))]++;
+  }
+
   for (auto it = run_sub_event_entry.begin(); it != run_sub_event_entry.end(); it++){
 
-    // If equality, we already removed it, meaning its a duplicate.
-    if( count_matches(run_sub_event_entry,std::get<0>(*it),std::get<1>(*it),std::get<2>(*it)) > 1 ){
-      std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
-      if(flag_kill_duplicates==1){
-        std::cout<<"Removing Duplicate"<<std::endl;
-        continue;
+    // Get the right tree entry from the map
+    int index = std::get<3>(*it);
+
+    T_rse->GetEntry(index);
+
+    // Checking for duplicates.
+    if( counts[std::make_tuple(run, subrun, event)] !=1 ){
+      if(counts[std::make_tuple(run, subrun, event)]<1){
+        std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
+        if(flag_kill_duplicates==1){
+          std::cout<<"Removing Duplicate."<<std::endl;
+          continue;
+        }
       }
       if(flag_kill_duplicates==2){
         std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
         return 1;
       }
+      // First time seeing the event, set the counts to -1 so we know about it when we come back around.
+      counts[std::make_tuple(run, subrun, event)]=-1;
     }
+
 
     if (index_counter%10000 == 0) std::cout << " seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
 
-    // Get the right tree entry from the map
-    int index = std::get<3>(*it); 
-
-    T_rse->GetEntry(index);
 
     // Exit when we have finished the last subrun
     if(final_run>=0 && final_subrun>=0 && (final_run!=run || final_subrun!=subrun)) break;
