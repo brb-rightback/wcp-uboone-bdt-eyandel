@@ -1,23 +1,18 @@
 // cz: code modified from tutorials/tmva/TMVAClassification.C
 
-//#include <cstdlib>
-//#include <iomanip>
 #include <iostream>
-//#include <fstream>
+#include <fstream>
 #include <map>
 #include <string>
 #include <set>
 #include <limits>
 
-//#include "TChain.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"
 #include "TObjString.h"
 #include "TSystem.h"
 #include "TROOT.h"
-//#include "TMath.h"
-//#include "TKey.h"
 
 #include "WCPLEEANA/eval.h"
 
@@ -64,7 +59,7 @@ int main( int argc, char** argv )
   for (Int_t i=4;i!=argc;i++){
     switch(argv[i][1]){
     case 'd':
-        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
+      delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
       break;
     case 'o':
       flag_overwrite = atoi(&argv[i][2]);
@@ -92,33 +87,47 @@ int main( int argc, char** argv )
       break;
     case 's':
       skip_cut = atoi(&argv[i][2]);
-      std::cout<<"Will remove bad runs."<<'\n'<<std::endl;
+      if(!skip_cut) std::cout<<"Will remove bad runs."<<'\n'<<std::endl;
       break;
     case 'n':
       flag_numi = atoi(&argv[i][2]);
-      std::cout<<"Will remove bad runs for NuMI."<<'\n'<<std::endl;
+      if(flag_numi) std::cout<<"Bad runs for list will be the one for NuMI."<<'\n'<<std::endl;
       break;
     case 'c':
-      flag_numi = atoi(&argv[i][2]);
-      std::cout<<"Will remove bad runs for Data."<<'\n'<<std::endl;
+      flag_data = atoi(&argv[i][2]);
+      if(flag_data) std::cout<<"Bad runs for list will be the one for Data."<<'\n'<<std::endl;
       break;
     case 'r':
       remove_lantern_fails = atoi(&argv[i][2]);
+      if(remove_lantern_fails) std::cout<<"Removing subruns where Lantern container failed."<<'\n'<<std::endl;
       break;
     case 'l':
       training_list = &argv[i][2];
+      std::cout<<"Loading Wire-Cell training list from "<<training_list<<'\n'<<std::endl;
       break;
     case 'g':
       global_file_type = &argv[i][2];
+      std::cout<<"Setting Wire-Cell BDT training file type to "<<global_file_type<<'\n'<<std::endl;
       break;
     case 'b':
       flag_keep_only_bdt_train = atoi(&argv[i][2]);
+      if(flag_keep_only_bdt_train==0) std::cout<<"Only saving subruns that were not used for Wire-Cell BDT training."<<'\n'<<std::endl;
+      if(flag_keep_only_bdt_train==1) std::cout<<"Only saving subruns that WERE used for Wire-Cell BDT training."<<'\n'<<std::endl;
       break;
     case 'a':
       flag_set_samdef = 1;
       samdef = &argv[i][2];
+      std::cout<<"Saving the following samdef to trees: "<<samdef<<'\n'<<std::endl;
       break;
     }
+  }
+
+
+  if( (training_list=="" || global_file_type=="") && flag_keep_only_bdt_train>=0){
+    std::cout<<"Have flag_keep_only_bdt_train>=0, but no file list of file type set."<<std::endl; 
+    std::cout<<"Please set -b-1 or add a file list and file type with -l and -g"<<std::endl;
+    std::cout<<"Exiting."<<std::endl;
+    return 1;
   }
 
 
@@ -154,6 +163,10 @@ int main( int argc, char** argv )
   if(flag_keep_only_bdt_train>=0){
     if (training_list != ""){
       ifstream infile(training_list);
+      if (!infile.good()) {
+        std::cout<<"Unable to open Wire-Cell BDT training list. Exiting"<<std::endl;
+        return 1;
+      }
       string tmp_type;
       int run, subrun;
       while(!infile.eof()){
@@ -171,7 +184,7 @@ int main( int argc, char** argv )
         std::cout<<'\n'<< "File exists. Exiting." << std::endl;
         f->Close();
         std::cout<<"Outputfile file "<<out_file<<" already exists and overwrite not set."<<std::endl;
-        std::cout<<"Pick a new file name or use -o to force and overwrite of existing file."<<std::endl;
+        std::cout<<"Pick a new file name or use -o to force and overwrite of existing file."<<'\n'<<std::endl;
         return 1;
     }
   }
@@ -194,7 +207,9 @@ int main( int argc, char** argv )
   int haveReco;
   TTree *T_lantern = (TTree*)file1->Get("lantern/EventTree");
   if(T_lantern && remove_lantern_fails==1) T_lantern->SetBranchAddress("haveReco",&haveReco);
-
+  if(!T_lantern && remove_lantern_fails==1){
+    std::cout<<"WARNING: remove_lantern_fails==1, but Lantern tree not found."<<'\n'<<std::endl;
+  }
 
   // Figure out which tree you can load for the rse map
   int run;
@@ -347,19 +362,25 @@ int main( int argc, char** argv )
 
   int index_counter=0;
   int event_counter=0;
-  int first_run=-1;
-  int first_subrun=-1;
+  int first_run=std::numeric_limits<int>::max();
+  int first_subrun=std::numeric_limits<int>::max();
   int last_run=0;
   int last_subrun=0;
 
+  int final_run=-1;
+  int final_subrun=-1;
+
   for (auto it = run_sub_entry.begin(); it != run_sub_entry.end(); it++){
 
-    if (event_counter%10000 == 0) std::cout << event_counter/1000 << " k " << std::endl;
+    if (index_counter%10000 == 0) std::cout << " seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
 
     // Get the right tree entry from the map
     int index = std::get<2>(*it); 
 
     T_rse->GetEntry(index);
+
+    // Exit when we have finished the last subrun
+    if(final_run>=0 && final_subrun>=0 && (final_run!=run || final_subrun!=subrun)) break;
 
     if(run>=stop_run){ 
       std::cout<<"Reached the specified maximum run of "<<stop_run<<". Exiting event loop having saved "<<event_counter<<" events."<<'\n'<<std::endl;
@@ -415,8 +436,20 @@ int main( int argc, char** argv )
       last_subrun=subrun;
     }
 
-    if(event_counter>=max_events) break;
+    // Set loop to exit when you finish the subrun
+    if(event_counter>=max_events) {
+      final_run=run;
+      final_subrun=subrun;
+    }
 
+  }
+
+  // Saving the whole file, so just overwrite these
+  if(max_events>T_rse->GetEntries() && stop_run>last_run && start_events==0 && start_run==0){
+    first_run=-1;
+    first_subrun=-1;
+    last_run=std::numeric_limits<int>::max();
+    last_subrun=std::numeric_limits<int>::max();
   }
 
 
@@ -428,15 +461,12 @@ int main( int argc, char** argv )
     std::cout<<'\n'<<"Begin looping over "<<(*pot_tree_it)->old_pot_tree->GetName()<<" tree with "<<nentries<<" entries"<<std::endl;
     for (Int_t i=0;i!=nentries;i++){
 
-      if (i%10000 == 0) std::cout << i/1000 << " k " << std::endl;
+      if (i%10000 == 0) std::cout << " seen: "<<i<<"    saved: "  << (*pot_tree_it)->new_pot_tree->GetEntries()<< std::endl; 
 
       (*pot_tree_it)->old_pot_tree->GetEntry(i);
 
       if( ( (*pot_tree_it)->runNo<first_run ) || ( (*pot_tree_it)->runNo==first_run && (*pot_tree_it)->subRunNo<first_subrun) ) continue;
       if( ( (*pot_tree_it)->runNo>last_run  ) || ( (*pot_tree_it)->runNo==last_run  && (*pot_tree_it)->subRunNo>last_subrun ) ) continue;
-//	std::cout<<"Passed the last run-subrun seen by the event tree. Done saving from this POT tree."<<std::endl;
-      //  break;
-      //}
 
       // Remove bad run-subruns if the flag is set.
       if (flag_data && skip_cut == 0){
