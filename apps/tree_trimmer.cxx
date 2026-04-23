@@ -23,10 +23,108 @@ using namespace LEEana;
 
 #include "WCPLEEANA/tree_wrangler.h"
 
+
+struct PairHash {
+    std::size_t operator()(const std::pair<int,int>& p) const {
+        return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
+    }
+};
+using Key = std::pair<int,int>;
+using Value = std::pair< bool, std::unordered_map<int,std::vector<int>> >;
+
+// Custom hash for saving lanter runs that failed.
+struct pair_hash {
+    std::size_t operator()(const std::pair<int,int>& p) const {
+        // Simple but decent hash combine
+        return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
+    }
+};
+
+// Function that checks all conditions where we might fail a sunrun.
+bool keep_subrun(int run, int subrun,
+                 int start_run, int start_subrun, int stop_run, int stop_subrun,
+                 int remove_lantern_fails, bool haveReco, 
+                 int flag_keep_only_bdt_train, std::string global_file_type, std::map<string, std::set<std::pair<int, int> > > map_type_run_subrun,
+                 int skip_cut, int flag_data, int flag_numi,
+                 std::set<int> good_runlist_set, std::set<int> low_lifetime_set, std::set<int> low_neutrino_count_numi_run2RHC_set) {
+
+  bool flag_keep_subrun = false;
+
+  if ( ( run<start_run ) || ( run==start_run && subrun<start_subrun) ) {
+      return flag_keep_subrun;
+  } 
+  if ( ( run>stop_run  ) || ( run==stop_run  && subrun>stop_subrun ) ) {
+      return flag_keep_subrun;
+  } 
+
+  // check if the lantern container failed on this subrun
+  if (remove_lantern_fails == 1 && haveReco == 0) {
+      return flag_keep_subrun;
+  }
+
+  // Cutting or including WireCell BDT training subruns
+  if (flag_keep_only_bdt_train >= 0) {
+      auto filetype_it = map_type_run_subrun.find(global_file_type);
+      if (filetype_it != map_type_run_subrun.end()) {
+          auto rs_it = filetype_it->second.find(std::make_pair(run, subrun));
+          if (rs_it != filetype_it->second.end() && flag_keep_only_bdt_train == 0) {
+              return flag_keep_subrun;
+          }
+          if (rs_it == filetype_it->second.end() && flag_keep_only_bdt_train == 1) {
+              return flag_keep_subrun;
+          }
+      } else if (flag_keep_only_bdt_train == 1) {
+          return flag_keep_subrun;
+      }
+  }
+
+  // Remove bad run-subruns if the flag is set.
+  if (flag_data == 1 && skip_cut == 0) {
+      if (good_runlist_set.find(run) == good_runlist_set.end()) {
+          return flag_keep_subrun;
+      }
+      if (low_lifetime_set.find(run) != low_lifetime_set.end()) {
+          return flag_keep_subrun;
+      }
+      if (flag_numi == 1 && low_neutrino_count_numi_run2RHC_set.find(run) != low_neutrino_count_numi_run2RHC_set.end()) {
+          return flag_keep_subrun;
+      }
+      if (run >= 7004 && run <= 7070) {
+          return flag_keep_subrun;
+      }
+      if (run >= 8321 && run <= 8404) {
+          return flag_keep_subrun;
+      }
+      if (run >= 15369 && run <= 15402) {
+          return flag_keep_subrun;
+      }
+  }
+
+  if (skip_cut == 0) {
+      if (run >= 19753 && run <= 19850) {
+          return flag_keep_subrun;
+      }
+      if (run >= 25447 && run <= 25512) {
+          return flag_keep_subrun;
+      }
+  }
+
+
+  flag_keep_subrun = true;
+  return flag_keep_subrun;
+
+}
+
+
 int main( int argc, char** argv )
 {
-  if (argc < 3) {
+  if(argc==2 && argv[1][1]=='h'){
+    std::cout<<"TODO: MAKE HELP";
+    return 0;
+  }
+  else if (argc < 4) {
     std::cout << "tree_trimmer #input_file #output_file #config.txt" << std::endl;
+    std::cout << "tree_trimmer -h for further help and instructions." << std::endl;
     return -1;
   }
 
@@ -45,7 +143,9 @@ int main( int argc, char** argv )
   int max_events=std::numeric_limits<int>::max();
   int start_events=0;
   int start_run=0;
+  int start_subrun=0;
   int stop_run=std::numeric_limits<int>::max();
+  int stop_subrun=std::numeric_limits<int>::max();
 
   int skip_cut = 1;
   int flag_numi = 0;
@@ -59,6 +159,9 @@ int main( int argc, char** argv )
 
   int flag_set_samdef = 0;
   TString samdef="";
+
+  int set_verbose=10000;
+  int set_verbose_pot=1000;
 
   for (Int_t i=4;i!=argc;i++){
     switch(argv[i][1]){
@@ -90,6 +193,14 @@ int main( int argc, char** argv )
       start_events = atoi(&argv[i][2]);
       std::cout<<"Will start saving to the output file at event "<<start_events<<std::endl;
       std::cout<<"Note that this will ''round down'' to the nearest subrun in order to ensure the POT is correct."<<'\n'<<std::endl;
+      break;
+    case 'w':
+      start_subrun = atoi(&argv[i][2]);
+      std::cout<<"Will start saving to the output file at subrun "<<start_subrun<<'\n'<<std::endl;
+      break;
+    case 'x':
+      stop_subrun = atoi(&argv[i][2]);
+      std::cout<<"Will stop saving to the output file at subrun "<<stop_subrun<<'\n'<<std::endl;
       break;
     case 'y':
       start_run = atoi(&argv[i][2]);
@@ -153,6 +264,12 @@ int main( int argc, char** argv )
       flag_set_samdef = 1;
       samdef = &argv[i][2];
       std::cout<<"Saving the following samdef to trees: "<<samdef<<'\n'<<std::endl;
+      break;
+    case 'v':
+      if(atoi(&argv[i][2])>0) set_verbose = atoi(&argv[i][2]);
+      break;
+    case 'u':
+      if(atoi(&argv[i][2])>0) set_verbose_pot = atoi(&argv[i][2]);      
       break;
     }
   }
@@ -344,181 +461,175 @@ int main( int argc, char** argv )
   return 1;
   }
 
+  int nentry = T_rse->GetEntries();
+  if(start_events>nentry){
+    std::cout<<'\n'<<"start_events>T_rse->GetEntries(). Exiting."<<std::endl;
+    return 1;
+  }
+
 
   // Map out the relation between index and run-subrun for POT trees
   wrangler_pot.map_rs_to_entry();
 
 
+  // List of runs where Lantern container failed.
+  std::unordered_set<std::pair<int,int>, pair_hash> lantern_fail;
+
+
   // Create run-subrun-index map and exlude and bad subruns.
-
-  std::set<std::tuple<int, int, int, int>> run_sub_event_entry;
-
-  int nentry = T_rse->GetEntries();
+  // Key is run, subrun pair, each holds a pair, first being if its flagged as a good run, second being a vecotr of pairs of event,tree index.
+  std::unordered_map<Key, Value, PairHash> run_sub_event_entry;
 
   std::cout<<"Starting first pass loop to order run-subruns. Will pass over "<<nentry<<" entries."<<std::endl;
 
+  int verbose_counter=0;
+  int event_counter=0;
+
   for (Int_t i=0;i!=nentry;i++){
 
-    if (i%10000 == 0) std::cout << i/1000 << " k " << double(i)/nentry*100. << " %"<< std::endl;
+    if ((i-verbose_counter)%set_verbose == 0) {
+      std::cout << "    seen: "<<i<<"    passed: "  << event_counter << std::endl;
+      verbose_counter=(int(int(i)/int(set_verbose)))*set_verbose;
+    }
 
     T_rse->GetEntry(i);
 
-    if(run>=stop_run) continue;
-    if(run<start_run) continue;
+    std::pair<int, int> run_subrun_pair = std::make_pair(run,subrun);
 
-    // Check if the Lantern container failed on this event, if so throw out the subrun if the flag is set.
-    if(T_lantern) T_lantern->GetEntry(i);
-    if(remove_lantern_fails==1 && haveReco==0){
+    // Already seen this run-subrun pair, no need to re-check it.
+    if(run_sub_event_entry.find(run_subrun_pair)!=run_sub_event_entry.end()){
+      //std::unordered_map<int, std::vector<int>> event_index_map = run_sub_event_entry[run_subrun_pair].second;
+      auto& event_index_map = run_sub_event_entry[run_subrun_pair].second;
+      // Event already exists, duplicate so append the index.
+      if(event_index_map.find(event)!=event_index_map.end()){   
+        std::cout<<"Found duplicate event: run,subrun,event = "<<run<<", "<<subrun<<", "<<event<<std::endl;
+        if(flag_kill_duplicates==2){
+          std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
+          return 1;
+        }
+        run_sub_event_entry[run_subrun_pair].second[event].push_back(i);
+        if(run_sub_event_entry[run_subrun_pair].first) event_counter++;
+        continue;
+      }        
+      std::vector<int> index_vector = {i};
+      run_sub_event_entry[run_subrun_pair].second[event] = index_vector;
+      if(run_sub_event_entry[run_subrun_pair].first) event_counter++;
       continue;
     }
 
-    // Cutting or including WireCell BDT training subruns, if the flag is set.
-    if (flag_keep_only_bdt_train>=0){
-      auto it1 = map_type_run_subrun.find(global_file_type);
-      if (it1 != map_type_run_subrun.end()){
-        // removing run-subruns used to train the BDTs
-        if ( it1->second.find(std::make_pair(run, subrun)) != it1->second.end() && flag_keep_only_bdt_train==0 ) {
-          continue;
-	}
-        // removing run-subruns NOT used to train the BDTs
-        if ( it1->second.find(std::make_pair(run, subrun)) == it1->second.end() && flag_keep_only_bdt_train==1 ) {
-          continue;
-	}
-      }
-      // removing run-subruns NOT used to train the BDTs
-      else if(it1 == map_type_run_subrun.end() && flag_keep_only_bdt_train==1){
-        continue;
-      }
-    }
+                                          std::vector<int>                                                                                  indcies = {i};
+                   std::unordered_map<int,std::vector<int>>                                                       event_index_map = {{event,indcies}};
+    std::pair<bool,std::unordered_map<int,std::vector<int> >> pair_goodrun_event_index_map = std::make_pair(false,event_index_map);
 
-    run_sub_event_entry.insert(std::make_tuple(run, subrun, event, i));
+    if(T_lantern) T_lantern->GetEntry(i);
+    else haveReco=1;
+    if (haveReco==0){
+      lantern_fail.insert(std::make_pair(run,subrun));
+    }
+    pair_goodrun_event_index_map.first =   keep_subrun(run, subrun, 
+                                                       start_run, start_subrun, stop_run, stop_subrun,
+                                                       remove_lantern_fails, haveReco, 
+                                                       flag_keep_only_bdt_train, global_file_type, map_type_run_subrun,
+                                                       skip_cut, flag_data, flag_numi,
+                                                       good_runlist_set, low_lifetime_set, low_neutrino_count_numi_run2RHC_set);
+
+    run_sub_event_entry[run_subrun_pair] = pair_goodrun_event_index_map; 
+
+    if(pair_goodrun_event_index_map.first) event_counter++;
 
   }
+  
+  std::cout << "    seen: "<<nentry<<"    passed: "  << event_counter << std::endl;
+
+
+  // Turn the map into an ordered map
+  std::map<Key, Value> run_sub_event_entry_first_subrun(run_sub_event_entry.begin(), run_sub_event_entry.end());
 
 
   // Copy all the event level trees to the new file. 
 
-  std::set<std::tuple<int, int, int>> run_sub_event_entry_first_subrun;
+  std::cout<<'\n'<<'\n'<<"Begin looping over "<<nentry<<" events to fill trees."<<std::endl;
 
-  if(start_events>T_rse->GetEntries()){
-    std::cout<<'\n'<<"start_events>T_rse->GetEntries(). Exiting."<<std::endl;
-    return 1;
-  }
-
-  std::cout<<'\n'<<'\n'<<"Begin looping over "<<T_rse->GetEntries()<<" events"<<std::endl;
-
-  int index_counter=0;
-  int event_counter=0;
   int first_run=std::numeric_limits<int>::max();
   int first_subrun=std::numeric_limits<int>::max();
   int last_run=0;
   int last_subrun=0;
 
-  int final_run=-1;
-  int final_subrun=-1;
+  int index_counter=0;
+  event_counter=0;
+  verbose_counter=0;
 
-  std::map<std::tuple<int,int,int>, int> counts;
+  for (auto rs_it = run_sub_event_entry_first_subrun.begin(); rs_it != run_sub_event_entry_first_subrun.end(); rs_it++){
 
-  for (const auto& t : run_sub_event_entry) {
-    counts[std::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t))]++;
-  }
+    if ((index_counter-verbose_counter)%set_verbose == 0) {
+      std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
+      verbose_counter=(int(int(index_counter)/int(set_verbose)))*set_verbose;
+    }
 
-  for (auto it = run_sub_event_entry.begin(); it != run_sub_event_entry.end(); it++){
+    int this_run = (*rs_it).first.first;
+    int this_subrun = (*rs_it).first.second;
+    bool good_subrun = (*rs_it).second.first;
+    //std::unordered_map<int,std::vector<int>> event_index_map = (*rs_it).second.second;
+    auto& event_index_map = (*rs_it).second.second;
 
-    // Get the right tree entry from the map
-    int index = std::get<3>(*it);
+    index_counter+=event_index_map.size();
+    if(index_counter<=start_events) continue;
 
-    T_rse->GetEntry(index);
+    // Skip event if the run-subrun got flagged as bad.
+    if(!good_subrun){
+      continue;
+    }
 
-    // Exit when we have finished the last subrun
-    if(final_run>=0 && final_subrun>=0 && (final_run!=run || final_subrun!=subrun)) break;
+    // Begin loop over events in this subrun
+    for (auto e_it = event_index_map.begin(); e_it != event_index_map.end(); e_it++){
 
-    if(run>=stop_run){ 
-      std::cout<<"Reached the specified maximum run of "<<stop_run<<". Exiting event loop having saved "<<event_counter<<" events."<<'\n'<<std::endl;
+      int this_event = (*e_it).first;
+      std::vector<int> index_vector = (*e_it).second; 
+     
+      // If allowing duplicates, loop over all duplicates of this event.
+      for (int i_it=0; i_it<index_vector.size(); i_it++){
+        if(flag_kill_duplicates==1 && i_it>0){
+          std::cout<<"Removing Duplicat: run,subrun,event = "<<this_run<<", "<<this_subrun<<", "<<this_event<<"."<<std::endl;
+          continue;
+        }
+        event_counter++;
+        int this_index = index_vector.at(i_it);
+        // Now fill all the trees.
+        for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
+          (*tree_it)->GetEntry(this_index);
+        }
+        for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
+          (*tree_it)->Fill();
+        }
+        for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
+          (*tree_it)->GetEntry(this_index);
+        }
+        for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
+          (*tree_it)->Fill();
+        }
+      } // i_it, loop over duplicates of the event.
+
+    } // e_it, loop over all events in the run-subrun.
+
+    // Make sure you have the first and last run-subrun set as such
+    if( (first_run>this_run) || (first_run==this_run && first_subrun>this_subrun) ){
+      first_run=this_run;
+      first_subrun=this_subrun;
+    }
+    if( (last_run<this_run) || (last_run==this_run && last_subrun<this_subrun) ){
+      last_run=this_run;
+      last_subrun=this_subrun;
+    }
+
+    // End the loop when you have enough events
+    if(event_counter>=max_events){
       break;
     }
 
-    if(run<start_run) continue;
+  } // rs_it, loop over all run-subruns
 
-    // Remove bad run-subruns if the flag is set.
-    if (flag_data && skip_cut == 0){
-      if (good_runlist_set.find(run) == good_runlist_set.end()) continue;
-      if (low_lifetime_set.find(run) != low_lifetime_set.end()) continue;
-      if (flag_numi && low_neutrino_count_numi_run2RHC_set.find(run) != low_neutrino_count_numi_run2RHC_set.end()) continue;
-      // ext bnb in run 1, high rate
-      if (run>=7004 && run <=7070) continue;
-      // bnb run 2 high rate
-      if (run >= 8321 && run <=8404) continue;
-      // bnb run 3 high rate
-      if (run >=15369 && run <= 15402) continue;
-    }
-    if (skip_cut == 0){
-      // low lifetime, docdb 39787
-      if (run >= 19753 && run <= 19850) continue;
-      // low lifetime, docdb 40093
-      if (run >= 25447 && run <= 25512) continue;
-    }
+  std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
 
-    index_counter+=1;
-    if(index_counter<=start_events) continue;
-
-    // Checking for duplicates.
-    if( counts[std::make_tuple(run, subrun, event)] !=1 ){
-      if(counts[std::make_tuple(run, subrun, event)]<1){
-        std::cout<<"Found duplicate event: run,subrun,event = "<<std::get<0>(*it)<<", "<<std::get<1>(*it)<<", "<<std::get<2>(*it)<<std::endl;
-        if(flag_kill_duplicates==1){
-          std::cout<<"Removing Duplicate."<<std::endl;
-          continue;
-        }
-      }
-      if(flag_kill_duplicates==2){
-        std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
-        return 1;
-      }
-      // First time seeing the event, set the counts to -1 so we know about it when we come back around.
-      counts[std::make_tuple(run, subrun, event)]=-1;
-    }
-
-    if (index_counter%10000 == 0) std::cout << " seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
-
-    // Now fill all the trees.
-    for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
-      (*tree_it)->GetEntry(index);
-    }
-    for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
-      (*tree_it)->Fill();
-    }
-    for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
-      (*tree_it)->GetEntry(index);
-    }
-    for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
-      (*tree_it)->Fill();
-    }
-
-    event_counter+=1;
-
-    if(first_run==run && first_subrun==subrun){
-      run_sub_event_entry_first_subrun.insert(std::make_tuple(run, subrun, event));
-    }
-    else if( (first_run>run) || (first_run==run && first_subrun>subrun) ){
-      first_run=run;
-      first_subrun=subrun;
-      // Reset the first run
-      run_sub_event_entry_first_subrun.clear();
-      run_sub_event_entry_first_subrun.insert(std::make_tuple(run, subrun, event));   
-    }
-    if( (last_run<run) || (last_run==run && last_subrun<subrun) ){
-      last_run=run;
-      last_subrun=subrun;
-    }
-
-    // Set loop to exit when you finish the subrun
-    if(event_counter>=max_events) {
-      final_run=run;
-      final_subrun=subrun;
-    }
-
-  }
 
   // If saving the whole file overwrite limits, otherwise recover the events from the first subrun we started at if that is not complete.
   if(max_events>T_rse->GetEntries() && stop_run>last_run && start_events==0 && start_run==0){
@@ -527,99 +638,59 @@ int main( int argc, char** argv )
     last_run=std::numeric_limits<int>::max();
     last_subrun=std::numeric_limits<int>::max();
   } 
-  else{
-    auto lower = run_sub_event_entry.lower_bound({first_run, first_subrun, std::numeric_limits<int>::min(),std::numeric_limits<int>::min()});
-    auto upper = run_sub_event_entry.upper_bound({first_run, first_subrun, std::numeric_limits<int>::max(),std::numeric_limits<int>::max()});
-    for (auto it = lower; it != upper; it++) {
 
-      int this_run = std::get<0>(*it);
-      int this_subrun = std::get<1>(*it);
-      int this_event = std::get<2>(*it);
-      int this_index = std::get<3>(*it);
-
-      // Check to see if we already added this event in the main loop.
-      if(run_sub_event_entry_first_subrun.find(std::make_tuple(this_run,this_subrun,this_event))!=run_sub_event_entry_first_subrun.end()) {
-        std::cout<<"Found event"<<" "<<this_run<<" "<<this_subrun<<" "<<this_event<<std::endl; 
-        continue;
-      }
-      
-      // Checking for duplicates.
-      if( counts[std::make_tuple(this_run, this_subrun, this_event)] !=1 ){
-        if(counts[std::make_tuple(this_run, this_subrun, this_event)]<1){
-          std::cout<<"Found duplicate event: run,subrun,event = "<<this_run<<", "<<this_subrun<<", "<<this_event<<std::endl;
-          if(flag_kill_duplicates==1){
-            std::cout<<"Removing Duplicate."<<std::endl;
-            continue;
-          }
-        }
-        if(flag_kill_duplicates==2){
-          std::cout<<"Exiting. Can overide this by re-running with -k0"<<std::endl;
-          return 1;
-        }
-        // First time seeing the event, set the counts to -1 so we know about it when we come back around.
-        counts[std::make_tuple(this_run, this_subrun, this_event)]=-1;
-      }
-
-      // Now fill all the trees.
-      for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
-        (*tree_it)->GetEntry(this_index);
-      }
-      for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
-        (*tree_it)->Fill();
-      }
-      for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
-        (*tree_it)->GetEntry(this_index);
-      }
-      for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
-        (*tree_it)->Fill();
-      }
-      event_counter+=1;
-    }
-  }
 
   // Loop over each POT tree seperatly
 
+  int rs_counter=0;
+
   for(auto pot_tree_it=wrangler_pot.pot_arboretum->begin(); pot_tree_it!=wrangler_pot.pot_arboretum->end(); pot_tree_it++){
 
-    int nentries = (*pot_tree_it)->old_pot_tree->GetEntries();
-    std::cout<<'\n'<<"Begin looping over "<<(*pot_tree_it)->old_pot_tree->GetName()<<" tree with "<<nentries<<" entries"<<std::endl;
-    for (Int_t i=0;i!=nentries;i++){
+    int nentry_pot = (*pot_tree_it)->old_pot_tree->GetEntries();
+    std::cout<<'\n'<<"Begin looping over "<<(*pot_tree_it)->old_pot_tree->GetName()<<" tree with "<<nentry_pot<<" entries"<<std::endl;
 
-      if (i%10000 == 0) std::cout << " seen: "<<i<<"    saved: "  << (*pot_tree_it)->new_pot_tree->GetEntries()<< std::endl; 
+    verbose_counter=0;
+    rs_counter=0;
+
+    for (Int_t i=0;i!=nentry_pot;i++){
+
+      if ((i-verbose_counter)%set_verbose_pot == 0) {
+        std::cout << "    seen: "<<i<<"    saved: "  << rs_counter<< std::endl;
+        verbose_counter=(int(int(i)/int(set_verbose)))*set_verbose_pot;
+      }
 
       (*pot_tree_it)->old_pot_tree->GetEntry(i);
+      
+      bool temp_haveReco=1;
+      if (lantern_fail.find(std::make_pair((*pot_tree_it)->runNo,(*pot_tree_it)->subRunNo)) != lantern_fail.end()) {
+        temp_haveReco=0;
+      } 
 
-      if( ( (*pot_tree_it)->runNo<first_run ) || ( (*pot_tree_it)->runNo==first_run && (*pot_tree_it)->subRunNo<first_subrun) ) continue;
-      if( ( (*pot_tree_it)->runNo>last_run  ) || ( (*pot_tree_it)->runNo==last_run  && (*pot_tree_it)->subRunNo>last_subrun ) ) continue;
+      bool flag_keep_run =   keep_subrun((*pot_tree_it)->runNo, (*pot_tree_it)->subRunNo,
+                                                         first_run, first_subrun, last_run, last_subrun, 
+                                                         remove_lantern_fails, temp_haveReco, 
+                                                         flag_keep_only_bdt_train, global_file_type, map_type_run_subrun,
+                                                         skip_cut, flag_data, flag_numi,
+                                                         good_runlist_set, low_lifetime_set, low_neutrino_count_numi_run2RHC_set);
 
-      // Remove bad run-subruns if the flag is set.
-      if (flag_data && skip_cut == 0){
-        if (good_runlist_set.find((*pot_tree_it)->runNo) == good_runlist_set.end()) continue;
-        if (low_lifetime_set.find((*pot_tree_it)->runNo) != low_lifetime_set.end()) continue;
-        if (flag_numi && low_neutrino_count_numi_run2RHC_set.find((*pot_tree_it)->runNo) != low_neutrino_count_numi_run2RHC_set.end()) continue;
-        // ext bnb in run 1, high rate
-        if ((*pot_tree_it)->runNo >=7004 && (*pot_tree_it)->runNo <=7070) continue;
-        // bnb run 2 high rate
-        if ((*pot_tree_it)->runNo >= 8321 && (*pot_tree_it)->runNo <=8404) continue;
-        // bnb run 3 high rate
-        if ((*pot_tree_it)->runNo >=15369 && (*pot_tree_it)->runNo <= 15402) continue;
-      }
-      if (skip_cut == 0){
-        // low lifetime, docdb 39787
-        if ((*pot_tree_it)->runNo >= 19753 && (*pot_tree_it)->runNo <= 19850) continue;
-        // low lifetime, docdb 40093
-        if ((*pot_tree_it)->runNo >= 25447 && (*pot_tree_it)->runNo <= 25512) continue;
-      }
+      if(!flag_keep_run) continue;
 
       (*pot_tree_it)->new_pot_tree->Fill();
 
+      rs_counter+=1;
+
     }//i, loop over events in a given pot tree set
+
+    std::cout << "    seen: "<<nentry_pot<<"    saved: "  << rs_counter << std::endl;
 
   }//pot_trees_it, loop over sets of pot trees
 
 
   file2->Write("",TFile::kOverwrite);
   file2->Close();
+
+
+  std::cout<<'\n'<<"Saving output file: "<<out_file<<'\n'<<std::endl;
 
 
   return 0;
