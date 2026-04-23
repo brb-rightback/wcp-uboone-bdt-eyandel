@@ -33,20 +33,20 @@ using Key = std::pair<int,int>;
 using Value = std::pair< bool, std::unordered_map<int,std::vector<int>> >;
 
 // Custom hash for saving lanter runs that failed.
-struct pair_hash {
-    std::size_t operator()(const std::pair<int,int>& p) const {
-        // Simple but decent hash combine
-        return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
-    }
-};
+//struct pair_hash {
+//    std::size_t operator()(const std::pair<int,int>& p) const {
+//        // Simple but decent hash combine
+//        return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
+//    }
+//};
 
 // Function that checks all conditions where we might fail a sunrun.
 bool keep_subrun(int run, int subrun,
                  int start_run, int start_subrun, int stop_run, int stop_subrun,
                  int remove_lantern_fails, bool haveReco, 
-                 int flag_keep_only_bdt_train, std::string global_file_type, std::map<string, std::set<std::pair<int, int> > > map_type_run_subrun,
+                 int flag_keep_only_bdt_train, const std::string& global_file_type, const std::map<string, std::set<std::pair<int, int>>>& map_type_run_subrun,
                  int skip_cut, int flag_data, int flag_numi,
-                 std::set<int> good_runlist_set, std::set<int> low_lifetime_set, std::set<int> low_neutrino_count_numi_run2RHC_set) {
+                 const std::set<int>& good_runlist_set, const std::set<int>& low_lifetime_set, const std::set<int>& low_neutrino_count_numi_run2RHC_set) {
 
   bool flag_keep_subrun = false;
 
@@ -323,8 +323,7 @@ int main( int argc, char** argv )
       }
       string tmp_type;
       int run, subrun;
-      while(!infile.eof()){
-        infile >> tmp_type >> run >> subrun;
+      while(infile >> tmp_type >> run >> subrun){
         map_type_run_subrun[tmp_type].insert(std::make_pair(run, subrun));
       }
     }
@@ -473,7 +472,7 @@ int main( int argc, char** argv )
 
 
   // List of runs where Lantern container failed.
-  std::unordered_set<std::pair<int,int>, pair_hash> lantern_fail;
+  std::unordered_set<std::pair<int,int>, PairHash> lantern_fail;
 
 
   // Create run-subrun-index map and exlude and bad subruns.
@@ -498,7 +497,6 @@ int main( int argc, char** argv )
 
     // Already seen this run-subrun pair, no need to re-check it.
     if(run_sub_event_entry.find(run_subrun_pair)!=run_sub_event_entry.end()){
-      //std::unordered_map<int, std::vector<int>> event_index_map = run_sub_event_entry[run_subrun_pair].second;
       auto& event_index_map = run_sub_event_entry[run_subrun_pair].second;
       // Event already exists, duplicate so append the index.
       if(event_index_map.find(event)!=event_index_map.end()){   
@@ -517,25 +515,27 @@ int main( int argc, char** argv )
       continue;
     }
 
-                                          std::vector<int>                                                                                  indcies = {i};
-                   std::unordered_map<int,std::vector<int>>                                                       event_index_map = {{event,indcies}};
-    std::pair<bool,std::unordered_map<int,std::vector<int> >> pair_goodrun_event_index_map = std::make_pair(false,event_index_map);
+    //                                      std::vector<int>                                                                                  indcies = {i};
+    //               std::unordered_map<int,std::vector<int>>                                                       event_index_map = {{event,indcies}};
+    //std::pair<bool,std::unordered_map<int,std::vector<int> >> pair_goodrun_event_index_map = std::make_pair(false,event_index_map);
 
     if(T_lantern) T_lantern->GetEntry(i);
     else haveReco=1;
     if (haveReco==0){
       lantern_fail.insert(std::make_pair(run,subrun));
     }
-    pair_goodrun_event_index_map.first =   keep_subrun(run, subrun, 
-                                                       start_run, start_subrun, stop_run, stop_subrun,
-                                                       remove_lantern_fails, haveReco, 
-                                                       flag_keep_only_bdt_train, global_file_type, map_type_run_subrun,
-                                                       skip_cut, flag_data, flag_numi,
-                                                       good_runlist_set, low_lifetime_set, low_neutrino_count_numi_run2RHC_set);
+    bool temp_keep_subrun = keep_subrun(run, subrun, 
+                                        start_run, start_subrun, stop_run, stop_subrun,
+                                        remove_lantern_fails, haveReco, 
+                                        flag_keep_only_bdt_train, global_file_type, map_type_run_subrun,
+                                        skip_cut, flag_data, flag_numi,
+                                        good_runlist_set, low_lifetime_set, low_neutrino_count_numi_run2RHC_set);
 
-    run_sub_event_entry[run_subrun_pair] = pair_goodrun_event_index_map; 
+    auto& entry = run_sub_event_entry[run_subrun_pair];
+    entry.first = temp_keep_subrun;
+    entry.second[event].push_back(i);
 
-    if(pair_goodrun_event_index_map.first) event_counter++;
+    if(temp_keep_subrun) event_counter++;
 
   }
   
@@ -569,7 +569,6 @@ int main( int argc, char** argv )
     int this_run = (*rs_it).first.first;
     int this_subrun = (*rs_it).first.second;
     bool good_subrun = (*rs_it).second.first;
-    //std::unordered_map<int,std::vector<int>> event_index_map = (*rs_it).second.second;
     auto& event_index_map = (*rs_it).second.second;
 
     index_counter+=event_index_map.size();
@@ -584,7 +583,7 @@ int main( int argc, char** argv )
     for (auto e_it = event_index_map.begin(); e_it != event_index_map.end(); e_it++){
 
       int this_event = (*e_it).first;
-      std::vector<int> index_vector = (*e_it).second; 
+      auto& index_vector = (*e_it).second; 
      
       // If allowing duplicates, loop over all duplicates of this event.
       for (int i_it=0; i_it<index_vector.size(); i_it++){
