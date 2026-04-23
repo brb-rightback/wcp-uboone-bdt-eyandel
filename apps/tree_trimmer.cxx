@@ -32,15 +32,308 @@ struct PairHash {
 using Key = std::pair<int,int>;
 using Value = std::pair< bool, std::unordered_map<int,std::vector<int>> >;
 
-// Custom hash for saving lanter runs that failed.
-//struct pair_hash {
-//    std::size_t operator()(const std::pair<int,int>& p) const {
-//        // Simple but decent hash combine
-//        return std::hash<int>()(p.first) ^ (std::hash<int>()(p.second) << 1);
-//    }
-//};
 
-// Function that checks all conditions where we might fail a sunrun.
+void print_help() {
+  std::cout << R"(
+
+========================================
+ tree_trimmer : Help
+========================================
+
+Overview:
+---------
+tree_trimmer reads a ROOT file containing multiple directories and TTrees and produces a
+filtered output file. It organizes events by (run, subrun, event), removes
+duplicates (optionally), applies data-quality and selection cuts, and ensures
+POT consistency by operating at the subrun level.
+
+The program:
+  - Loads trees defined in a config file (run tree_trimmer -H for more info)
+  - Optionally filters based on Wire-Cell BDT training lists
+  - Removes bad runs and detector-quality failures
+  - Writes a trimmed ROOT file with consistent POT accounting
+
+Usage:
+------
+  tree_trimmer <input_file> <output_file> <config.txt> [options]
+
+Required arguments:
+-------------------
+  input_file     Input ROOT file
+  output_file    Output ROOT file
+  config.txt     Tree configuration file
+
+Options:
+--------
+
+  -h
+      Show this help message and exit
+
+  -H
+      Show help message for configuration file and exit
+
+  -d<char>
+      Set delimiter used in config file (default: ',')
+
+  -o<int>
+      Overwrite output file if it exists
+        0 = do not overwrite (default)
+        1 = overwrite
+
+  -k<int>
+      Duplicate handling:
+        0 = allow duplicates
+        1 = remove duplicates (default)
+        2 = exit if duplicates are found
+
+  -m<int>
+      Maximum number of events to save
+      (rounded up to nearest subrun for correct POT)
+
+  -e<int>
+      Start saving from this event index
+      (rounded down to nearest subrun)
+
+  -y<int>
+      Start saving events at this run number
+
+  -z<int>
+      Stop saving events at this run number
+
+  -w<int>
+      Start saving events at this subrun number (within the starting run)
+
+  -x<int>
+      Stop saving events at this subrun number (within the stopping run)
+
+  -s<int>
+      Skip data-quality cuts:
+        0 = keep all runs (ignore good run list)
+        1 = apply good run list cuts (default)
+
+  -n<int>
+      Beam selection:
+        0 = BNB (default)
+        1 = NuMI
+
+  -c<int>
+      Data type:
+        0 = MC (default)
+        1 = Data
+
+  -r<int>
+      Lantern failure handling:
+        0 = keep subruns where Lantern failed
+        1 = remove subruns where Lantern failed (default)
+
+  -l<string>
+      Path to Wire-Cell BDT training list file
+
+  -g<string>
+      Global file type label used with training list
+
+  -b<int>
+      Filter based on BDT training usage:
+        -1 = keep all subruns (default)
+         0 = keep only subruns NOT used in training
+         1 = keep only subruns used in training
+
+      NOTE: Requires both -l and -g
+
+  -a<string>
+      Set SAM definition string to be stored in output trees
+
+  -v<int>
+      Verbosity level for event loop (default: 10000)
+
+  -u<int>
+      Verbosity level for POT loop (default: 1000)
+
+Configuration File:
+-------------------
+run tree_trimmer -H for more info
+
+Examples:
+---------
+
+  Basic usage:
+    tree_trimmer input.root output.root config.txt
+
+  Overwrite output and limit to 10000 events:
+    tree_trimmer input.root output.root config.txt -o1 -m10000
+
+  Keep only BDT training subruns:
+    tree_trimmer input.root output.root config.txt -ltrain.txt -gmytype -b1
+
+  Run on data with quality cuts:
+    tree_trimmer input.root output.root config.txt -c1 -s1
+
+Notes:
+------
+- Event selection is applied at the subrun level to preserve POT consistency.
+- Duplicate events are identified via (run, subrun, event).
+- Some run ranges are hard-coded as bad and will always be removed unless -s0.
+
+)";
+}
+
+
+void print_help_config() {
+  std::cout << R"(
+
+Configuration File:
+-------------------
+
+The configuration file controls:
+  - Which directories and TTrees are processed
+  - Which trees are skipped
+  - Which branches (variables) are copied
+
+The file is read line-by-line and divided into sections. Each line
+generally has the format:
+
+  <directory> <tree_list> [additional_fields...]
+
+Where:
+  directory   = ROOT directory name
+  tree_list   = comma-separated list (delimiter configurable with -d)
+
+------------------------------------------------------------
+Sections:
+------------------------------------------------------------
+
+The configuration file can contain up to three sections:
+
+  (1) Default section (top of file)
+  (2) exclusive / pot section
+  (3) pick section
+
+The parser stops or switches behavior when encountering:
+
+  exclusive / Exclusive / pot / POT
+  pick / Pick
+  end / End
+
+----------------------------------------
+1. Default section
+----------------------------------------
+
+Copies all trees in the specified directory. 
+The only ones that are skipped are the ones specified in the file.
+These trees should all have the same number of events across reconstructions.
+
+Format:
+  <directory> <trees_to_skip>
+
+Example:
+  nuselection SubRun
+
+Meaning:
+  - Load all trees in "nuselection"
+  - Skip the tree named "SubRun"
+
+----------------------------------------
+2. "exclusive" (or "POT") section
+----------------------------------------
+
+This is used for POT trees. These will be looped over seprate by the code.
+This accounts for the fact that POT trees can have different number of entries across reconstructions.
+Able to specify which barnches will be used to load run/subrun/event information.
+
+Format:
+  <directory> <trees> <pot_variables>
+
+Where:
+  trees          = list of tree names
+  pot_variables  = grouped in triples:
+                   (run, subrun, POT) per tree
+
+Example:
+  nuselection SubRun run,subRun,POT
+
+Meaning:
+  - Use only the specified trees
+  - Associate POT information via the listed branches
+  - Each tree can have its own (run, subrun, POT) triplet
+
+Special case:
+  If "None,None,None" is provided, POT variables are ignored for that tree.
+
+----------------------------------------
+3. "pick" section
+----------------------------------------
+
+Copies only the specified trees and branches in the specified directory. 
+These are otherwise reated the same as the nominal section.
+
+
+This section is used when:
+  tree_wrangler(..., set_flag_exclusive=2)
+
+Format:
+  <directory> <trees> <branch_list_per_tree...>
+
+Example:
+  wcpselection T_BDTvars,T_eval kine_reco_Enu,event run,subrun,event
+
+Meaning:
+  - Only the listed trees are processed
+  - For each tree, only selected branches are copied
+
+Important:
+  - Each tree must have a corresponding branch list
+  - If no branch list is provided, ALL branches are copied (with warning)
+
+----------------------------------------
+General Notes:
+----------------------------------------
+
+- The delimiter for lists (trees, branches, variables) defaults to ','
+  but can be changed with the -d option.
+
+- Empty lines are ignored.
+
+- Duplicate tree names in a line will trigger a warning.
+
+- Parsing stops when "end" or "End" is encountered.
+
+------------------------------------------------------------
+Example Configuration:
+------------------------------------------------------------
+
+nuselection SubRun
+
+exclusive
+nuselection SubRun run,subRun,pot
+
+pick
+wcpselection T_BDTvars,T_eval kine_reco_Enu,event run,subrun,event
+end
+
+Explanation:
+
+1. Default section:
+   - In directory "nuselection", skip the "SubRun" tree, but copy all other trees and branches
+
+2. Exclusive section:
+   - For "nuselection", explicitly process "SubRun" as a POT tree
+   - Use branches (run, subRun, pot) for POT accounting
+
+3. Pick section:
+   - In "wcpselection", process only:
+       T_BDTvars and T_eval
+   - From T_BDTvars keep on the following branches: kine_reco_Enu, event
+   - From T_eval keep on the following branche: run, subrun, event
+
+------------------------------------------------------------
+
+
+========================================
+
+)";
+}
+
+
 bool keep_subrun(int run, int subrun,
                  int start_run, int start_subrun, int stop_run, int stop_subrun,
                  int remove_lantern_fails, bool haveReco, 
@@ -119,7 +412,11 @@ bool keep_subrun(int run, int subrun,
 int main( int argc, char** argv )
 {
   if(argc==2 && argv[1][1]=='h'){
-    std::cout<<"TODO: MAKE HELP";
+    print_help();
+    return 0;
+  }
+  else if(argc==2 && argv[1][1]=='H'){
+    print_help_config();
     return 0;
   }
   else if (argc < 4) {
