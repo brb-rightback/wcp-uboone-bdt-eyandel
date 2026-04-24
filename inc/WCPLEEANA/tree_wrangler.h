@@ -52,7 +52,9 @@ namespace LEEana{
     std::vector<std::map<std::pair<int, int>, std::pair<int, double> > > arboretum_map_rs_entry; 
 
     void set_samdef(bool f_flag_save_samdef, TString f_samdef);
-	    
+
+    std::map<std::string, std::tuple<TDirectory*,std::vector<TTree*>*>> names_wi_directories_and_trees;
+ 
   private:
     bool verbose;
     int flag_exclusive;
@@ -60,7 +62,6 @@ namespace LEEana{
     std::map<std::string,std::vector<std::string>> directories_wi_pot_var_names;
     std::map<std::string,std::vector<std::string>> trees_wi_pot_var_names;
     std::vector<std::vector<std::string>> pot_var_names;
-    std::map<std::string, std::tuple<TDirectory*,std::vector<TTree*>*>> names_wi_directories_and_trees;
 
     void CopyDir(TDirectory *source, bool blank_tree=false, std::vector<std::string> to_skip={});
     void CopyDir(TDirectory *source, TString TDirectory_extension, bool blank_tree=false, std::vector<std::string> to_skip={});

@@ -474,8 +474,8 @@ int main( int argc, char** argv )
       else if(flag_kill_duplicates==1) { std::cout<<"Will remove duplicates if found."<<'\n'<<std::endl; }
       else if(flag_kill_duplicates==2) { std::cout<<"Will exit if duplicates are found."<<'\n'<<std::endl; }
       else {
-        flag_kill_duplicates=1;
         std::cout<<"Unknown -k option, setting to default flag_kill_duplicates=1"<<'\n'<<std::endl; 
+        flag_kill_duplicates=1;
       }
       break;
     case 'm':
@@ -512,8 +512,8 @@ int main( int argc, char** argv )
       if(skip_cut==0) { std::cout<<"Will keep runs not in the good runs list/."<<'\n'<<std::endl; }
       else if(skip_cut==1) { std::cout<<"Will remove runs not in the good runs list."<<'\n'<<std::endl; }
       else{
-        skip_cut=1;
         std::cout<<"Unknown -s option, setting to default skip_cut=1"<<'\n'<<std::endl; 
+        skip_cut=1;
       }
       break;
     case 'n':
@@ -522,6 +522,7 @@ int main( int argc, char** argv )
       else if(flag_numi==1){ std::cout<<"Good runs list will be the one for NuMI."<<'\n'<<std::endl; }
       else{
         std::cout<<"Unknown -n option, setting to default flag_numi=0"<<'\n'<<std::endl; 
+        flag_numi=0;
       }
       break;
     case 'c':
@@ -530,6 +531,7 @@ int main( int argc, char** argv )
       else if(flag_data==1){ std::cout<<"Good runs for list will be the one for Data."<<'\n'<<std::endl; }
       else{
         std::cout<<"Unknown -c option, setting to default flag_data=0"<<'\n'<<std::endl; 
+        flag_data=0;
       }
       break;
     case 'r':
@@ -538,6 +540,7 @@ int main( int argc, char** argv )
       else if(remove_lantern_fails==1){ std::cout<<"Removing subruns where Lantern container failed."<<'\n'<<std::endl; }
       else{
         std::cout<<"Unknown -r option, setting to default remove_lantern_fails=1"<<'\n'<<std::endl; 
+        remove_lantern_fails=1;
       }
       break;
     case 'l':
@@ -555,6 +558,7 @@ int main( int argc, char** argv )
       else if(flag_keep_only_bdt_train==1){ std::cout<<"Only saving subruns that WERE used for Wire-Cell BDT training."<<'\n'<<std::endl; }
       else{
         std::cout<<"Unknown -b option, setting to default lag_keep_only_bdt_train=-1"<<'\n'<<std::endl; 
+        flag_keep_only_bdt_train=-1;
       }
       break;
     case 'a':
@@ -564,9 +568,15 @@ int main( int argc, char** argv )
       break;
     case 'v':
       if(atoi(&argv[i][2])>0) set_verbose = atoi(&argv[i][2]);
+      else{
+        std::cout<<"Bad -v optioion, must be greater than 0. Leaving at 10000."<<'\n'<<std::endl;
+      }
       break;
     case 'u':
       if(atoi(&argv[i][2])>0) set_verbose_pot = atoi(&argv[i][2]);      
+      else{
+        std::cout<<"Bad -u optioion, must be greater than 0. Leaving at 1000."<<'\n'<<std::endl;
+      } 
       break;
     }
   }
