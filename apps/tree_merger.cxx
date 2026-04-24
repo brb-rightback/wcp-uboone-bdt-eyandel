@@ -411,10 +411,10 @@ int main( int argc, char** argv )
 
   TFile *fileout = new TFile(out_file,"RECREATE");
 
-  std::vector<TTree*>* new_trees;
+  std::vector<TTree*>* new_trees = new std::vector<TTree*>;
 
-  build_output_trees(wrangler1, wrangler1, new_trees, fileout);
-  build_output_trees(wrangler_ex2, wrangler_ex2, new_trees, fileout);
+  build_output_trees(wrangler1, wrangler2, new_trees, fileout);
+  build_output_trees(wrangler_ex1, wrangler_ex2, new_trees, fileout);
 
 
   // Build RSE map for file 1
@@ -550,10 +550,12 @@ int main( int argc, char** argv )
 
     // Get the trees only in one file or another
     if (t1) {
-      out_tree = t1->CloneTree(0);
+      out_tree = t1->CloneTree(-1);
     } else if (t2) {
-      out_tree = t2->CloneTree(0);
+      out_tree = t2->CloneTree(-1);
     }
+
+    out_tree->Write("",TTree::kOverwrite);
 
   }
 
