@@ -157,7 +157,8 @@ void LEEana::tree_wrangler::grow_pot_arboretum(){
     }
     const char* branch_type = "";
     if(pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())){
-      branch_type = pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetLeaf(pot_var_name.c_str())->GetTypeName();
+      auto leafname = pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetListOfLeaves()->At(0)->GetName();
+      branch_type = pot_pair->old_pot_tree->GetBranch(pot_var_name.c_str())->GetLeaf(leafname)->GetTypeName();
       // Load either the float of the double, depending on the type of the tree 
       if( std::strcmp(branch_type,"Double_t")==0){
         pot_pair->old_pot_tree->SetBranchAddress(pot_var_name.c_str(),&pot_pair->dpot);
