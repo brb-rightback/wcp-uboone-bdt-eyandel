@@ -178,160 +178,6 @@ Notes:
 }
 
 
-void print_help_config() {
-  std::cout << R"(
-
-Configuration File:
--------------------
-
-The configuration file controls:
-  - Which directories and TTrees are processed
-  - Which trees are skipped
-  - Which branches (variables) are copied
-
-The file is read line-by-line and divided into sections. Each line
-generally has the format:
-
-  <directory> <tree_list> [additional_fields...]
-
-Where:
-  directory   = ROOT directory name
-  tree_list   = comma-separated list (delimiter configurable with -d)
-
-------------------------------------------------------------
-Sections:
-------------------------------------------------------------
-
-The configuration file can contain up to three sections:
-
-  (1) Default section (top of file)
-  (2) exclusive / pot section
-  (3) pick section
-
-The parser stops or switches behavior when encountering:
-
-  exclusive / Exclusive / pot / POT
-  pick / Pick
-  end / End
-
-----------------------------------------
-1. Default section
-----------------------------------------
-
-Copies all trees in the specified directory. 
-The only ones that are skipped are the ones specified in the file.
-These trees should all have the same number of events across reconstructions.
-
-Format:
-  <directory> <trees_to_skip>
-
-Example:
-  nuselection SubRun
-
-Meaning:
-  - Load all trees in "nuselection"
-  - Skip the tree named "SubRun"
-
-----------------------------------------
-2. "exclusive" (or "POT") section
-----------------------------------------
-
-This is used for POT trees. These will be looped over seprate by the code.
-This accounts for the fact that POT trees can have different number of entries across reconstructions.
-Able to specify which barnches will be used to load run/subrun/event information.
-
-Format:
-  <directory> <trees> <pot_variables>
-
-Where:
-  trees          = list of tree names
-  pot_variables  = grouped in triples:
-                   (run, subrun, POT) per tree
-
-Example:
-  nuselection SubRun run,subRun,POT
-
-Meaning:
-  - Use only the specified trees
-  - Associate POT information via the listed branches
-  - Each tree can have its own (run, subrun, POT) triplet
-
-Special case:
-  If "None,None,None" is provided, POT variables are ignored for that tree.
-
-----------------------------------------
-3. "pick" section
-----------------------------------------
-
-Copies only the specified trees and branches in the specified directory. 
-These are otherwise reated the same as the nominal section.
-
-
-This section is used when:
-  tree_wrangler(..., set_flag_exclusive=2)
-
-Format:
-  <directory> <trees> <branch_list_per_tree...>
-
-Example:
-  wcpselection T_BDTvars,T_eval kine_reco_Enu,event run,subrun,event
-
-Meaning:
-  - Only the listed trees are processed
-  - For each tree, only selected branches are copied
-
-Important:
-  - Each tree must have a corresponding branch list
-  - If no branch list is provided, ALL branches are copied (with warning)
-
-----------------------------------------
-General Notes:
-----------------------------------------
-
-- The delimiter for lists (trees, branches, variables) defaults to ','
-  but can be changed with the -d option.
-
-- Empty lines are ignored.
-
-- Duplicate tree names in a line will trigger a warning.
-
-- Parsing stops when "end" or "End" is encountered.
-
-------------------------------------------------------------
-Example Configuration:
-------------------------------------------------------------
-
-nuselection SubRun
-
-exclusive
-nuselection SubRun run,subRun,pot
-
-pick
-wcpselection T_BDTvars,T_eval kine_reco_Enu,event run,subrun,event
-end
-
-Explanation:
-
-1. Default section:
-   - In directory "nuselection", skip the "SubRun" tree, but copy all other trees and branches
-
-2. Exclusive section:
-   - For "nuselection", explicitly process "SubRun" as a POT tree
-   - Use branches (run, subRun, pot) for POT accounting
-
-3. Pick section:
-   - In "wcpselection", process only:
-       T_BDTvars and T_eval
-   - From T_BDTvars keep on the following branches: kine_reco_Enu, event
-   - From T_eval keep on the following branche: run, subrun, event
-
-------------------------------------------------------------
-
-
-========================================
-
-)";
-}
 
 
 bool keep_subrun(int run, int subrun,
@@ -416,7 +262,7 @@ int main( int argc, char** argv )
     return 0;
   }
   else if(argc==2 && argv[1][1]=='H'){
-    print_help_config();
+    print_help_wrangler_config(true);
     return 0;
   }
   else if (argc < 4) {
@@ -609,13 +455,13 @@ int main( int argc, char** argv )
 
   // Load good runs lists
 
-  std::vector<int>good_run_list_vec = wrangler.get_good_run_list();
+  std::vector<int>good_run_list_vec = get_good_run_list();
   std::set<int> good_runlist_set(good_run_list_vec.begin(), good_run_list_vec.end());
 
-  std::vector<int> low_lifetime_runs = wrangler.get_low_lifetime_runs();
+  std::vector<int> low_lifetime_runs = get_low_lifetime_runs();
   std::set<int> low_lifetime_set(low_lifetime_runs.begin(), low_lifetime_runs.end());
 
-  std::vector<int> low_neutrino_count_numi_run2RHC = wrangler.get_low_neutrino_count_numi_run2RHC();
+  std::vector<int> low_neutrino_count_numi_run2RHC = get_low_neutrino_count_numi_run2RHC();
   std::set<int> low_neutrino_count_numi_run2RHC_set(low_neutrino_count_numi_run2RHC.begin(), low_neutrino_count_numi_run2RHC.end());
 
 

@@ -78,10 +78,10 @@ int main( int argc, char** argv )
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
   tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,1);
 
-  std::vector<int>good_run_list_vec = wrangler.get_good_run_list();
+  std::vector<int>good_run_list_vec = get_good_run_list();
   std::set<int> good_runlist_set(good_run_list_vec.begin(), good_run_list_vec.end());
    
-  std::vector<int> low_lifetime_runs = wrangler.get_low_lifetime_runs();
+  std::vector<int> low_lifetime_runs = get_low_lifetime_runs();
   std::set<int> low_lifetime_set(low_lifetime_runs.begin(), low_lifetime_runs.end());
   
   

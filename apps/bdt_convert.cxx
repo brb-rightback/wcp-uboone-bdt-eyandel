@@ -199,13 +199,13 @@ int main( int argc, char** argv )
   wrangler.get_old_trees(file1);
   wrangler_pot.get_old_trees(file1);
 
-  std::vector<int>good_run_list_vec = wrangler.get_good_run_list();
+  std::vector<int>good_run_list_vec = get_good_run_list();
   std::set<int> good_runlist_set(good_run_list_vec.begin(), good_run_list_vec.end());
 
-  std::vector<int> low_lifetime_runs = wrangler.get_low_lifetime_runs();
+  std::vector<int> low_lifetime_runs = get_low_lifetime_runs();
   std::set<int> low_lifetime_set(low_lifetime_runs.begin(), low_lifetime_runs.end());
   
-  std::vector<int> low_neutrino_count_numi_run2RHC = wrangler.get_low_neutrino_count_numi_run2RHC();
+  std::vector<int> low_neutrino_count_numi_run2RHC = get_low_neutrino_count_numi_run2RHC();
   std::set<int> low_neutrino_count_numi_run2RHC_set(low_neutrino_count_numi_run2RHC.begin(), low_neutrino_count_numi_run2RHC.end());
   
   

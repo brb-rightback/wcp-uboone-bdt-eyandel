@@ -110,7 +110,7 @@ int main( int argc, char** argv )
     return 0;
   }
   else if(argc==2 && argv[1][1]=='H'){
-    std::cout<<"TODO"<<std::endl;
+    print_help_wrangler_config(true);
     return 0;
   }
   else if (argc < 6) {
