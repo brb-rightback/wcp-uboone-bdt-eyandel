@@ -42,6 +42,8 @@ namespace LEEana{
 
     void map_rs_to_entry(); 
 
+    //int get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &event);
+
     std::vector<int> get_low_lifetime_runs();
     std::vector<int> get_good_run_list();
     std::vector<int> get_low_neutrino_count_numi_run2RHC();
@@ -72,6 +74,9 @@ namespace LEEana{
     bool flag_save_samdef = false;
     TString samdef = "";
   };
+
+  int get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &event);
+
 }
 
 #endif

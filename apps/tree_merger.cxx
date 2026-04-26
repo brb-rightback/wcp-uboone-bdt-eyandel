@@ -199,192 +199,22 @@ int main( int argc, char** argv )
   int run1;
   int subrun1;
   int event1;
-  bool found_rse_tree1;
-  TTree *T_rse1;
-  while(1){
-  if(file1->GetDirectory("wcpselection")){
-    T_rse1=(TTree*)file1->Get("wcpselection/T_eval");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run") && T_rse1->GetBranch("subrun") && T_rse1->GetBranch("event")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run",&run1);
-        T_rse1->SetBranchAddress("subrun",&subrun1);
-        T_rse1->SetBranchAddress("event",&event1);
-        std::cout<<'\n'<<"Using T_eval for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-    T_rse1=(TTree*)file1->Get("wcpselection/T_PFeval");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run") && T_rse1->GetBranch("subrun") && T_rse1->GetBranch("event")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run",&run1);
-        T_rse1->SetBranchAddress("subrun",&subrun1);
-        T_rse1->SetBranchAddress("event",&event1);
-        std::cout<<'\n'<<"Using T_PFeval for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-    T_rse1=(TTree*)file1->Get("wcpselection/T_KINEvars");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run") && T_rse1->GetBranch("subrun") && T_rse1->GetBranch("event")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run",&run1);
-        T_rse1->SetBranchAddress("subrun",&subrun1);
-        T_rse1->SetBranchAddress("event",&event1);
-        std::cout<<'\n'<<"Using T_KINEvars for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-    T_rse1=(TTree*)file1->Get("wcpselection/T_BDTvars");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run") && T_rse1->GetBranch("subrun") && T_rse1->GetBranch("event")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run",&run1);
-        T_rse1->SetBranchAddress("subrun",&subrun1);
-        T_rse1->SetBranchAddress("event",&event1);
-        std::cout<<'\n'<<"Using T_BDTvars for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file1->GetDirectory("nuselection")){
-    T_rse1=(TTree*)file1->Get("nuselection/NeutrinoSelectionFilter");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run") && T_rse1->GetBranch("sub") && T_rse1->GetBranch("evt")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run",&run1);
-        T_rse1->SetBranchAddress("sub",&subrun1);
-        T_rse1->SetBranchAddress("evt",&event1);
-        std::cout<<'\n'<<"Using NeutrinoSelectionFilter for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file1->GetDirectory("singlephotonana")){
-    T_rse1=(TTree*)file1->Get("singlephotonana/vertex_tree");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run_number") && T_rse1->GetBranch("subrun_number") && T_rse1->GetBranch("event_number")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run_number",&run1);
-        T_rse1->SetBranchAddress("subrun_number",&subrun1);
-        T_rse1->SetBranchAddress("event_number",&event1);
-        std::cout<<'\n'<<"Using vertex_tree for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file1->GetDirectory("lantern")){
-    T_rse1=(TTree*)file1->Get("lantern/EventTree");
-    if(T_rse1){
-      if(T_rse1->GetBranch("run") && T_rse1->GetBranch("subrun") && T_rse1->GetBranch("event")){
-        found_rse_tree1=true;
-        T_rse1->SetBranchAddress("run",&run1);
-        T_rse1->SetBranchAddress("subrun",&subrun1);
-        T_rse1->SetBranchAddress("event",&event1);
-        std::cout<<'\n'<<"Using EventTree for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  std::cout<<'\n'<<"Could not find RS tree in file1. Exiting."<<std::endl;
-  return 1;
+  TTree *T_rse1 = nullptr;
+  int found_rse_tree1 = get_T_rse(file1, T_rse1, run1, subrun1, event1);
+  if(!found_rse_tree1){
+    std::cout<<'\n'<<"Could not find RSE tree for file1. Exiting."<<std::endl;
+    return 1;
   }
 
   // Figure out which tree we can load RSE from for file2
   int run2;
   int subrun2;
   int event2;
-  bool found_rse_tree2;
-  TTree *T_rse2;
-  while(1){
-  if(file2->GetDirectory("wcpselection")){
-    T_rse2=(TTree*)file2->Get("wcpselection/T_eval");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run") && T_rse2->GetBranch("subrun") && T_rse2->GetBranch("event")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run",&run2);
-        T_rse2->SetBranchAddress("subrun",&subrun2);
-        T_rse2->SetBranchAddress("event",&event2);
-        std::cout<<'\n'<<"Using T_eval for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-    T_rse2=(TTree*)file2->Get("wcpselection/T_PFeval");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run") && T_rse2->GetBranch("subrun") && T_rse2->GetBranch("event")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run",&run2);
-        T_rse2->SetBranchAddress("subrun",&subrun2);
-        T_rse2->SetBranchAddress("event",&event2);
-        std::cout<<'\n'<<"Using T_PFeval for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-    T_rse2=(TTree*)file2->Get("wcpselection/T_KINEvars");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run") && T_rse2->GetBranch("subrun") && T_rse2->GetBranch("event")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run",&run2);
-        T_rse2->SetBranchAddress("subrun",&subrun2);
-        T_rse2->SetBranchAddress("event",&event2);
-        std::cout<<'\n'<<"Using T_KINEvars for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-    T_rse2=(TTree*)file2->Get("wcpselection/T_BDTvars");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run") && T_rse2->GetBranch("subrun") && T_rse2->GetBranch("event")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run",&run2);
-        T_rse2->SetBranchAddress("subrun",&subrun2);
-        T_rse2->SetBranchAddress("event",&event2);
-        std::cout<<'\n'<<"Using T_BDTvars for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file2->GetDirectory("nuselection")){
-    T_rse2=(TTree*)file2->Get("nuselection/NeutrinoSelectionFilter");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run") && T_rse2->GetBranch("sub") && T_rse2->GetBranch("evt")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run",&run2);
-        T_rse2->SetBranchAddress("sub",&subrun2);
-        T_rse2->SetBranchAddress("evt",&event2);
-        std::cout<<'\n'<<"Using NeutrinoSelectionFilter for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file2->GetDirectory("singlephotonana")){
-    T_rse2=(TTree*)file2->Get("singlephotonana/vertex_tree");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run_number") && T_rse2->GetBranch("subrun_number") && T_rse2->GetBranch("event_number")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run_number",&run2);
-        T_rse2->SetBranchAddress("subrun_number",&subrun2);
-        T_rse2->SetBranchAddress("event_number",&event2);
-        std::cout<<'\n'<<"Using vertex_tree for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  if(file1->GetDirectory("lantern")){
-    T_rse2=(TTree*)file1->Get("lantern/EventTree");
-    if(T_rse2){
-      if(T_rse2->GetBranch("run") && T_rse2->GetBranch("subrun") && T_rse2->GetBranch("event")){
-        found_rse_tree2=true;
-        T_rse2->SetBranchAddress("run",&run2);
-        T_rse2->SetBranchAddress("subrun",&subrun2);
-        T_rse2->SetBranchAddress("event",&event2);
-        std::cout<<'\n'<<"Using EventTree for the run-subrun tree"<<'\n'<<std::endl;
-        break;
-      }
-    }
-  }
-  std::cout<<'\n'<<"Could not find RS tree in file1. Exiting."<<std::endl;
-  return 1;
+  TTree *T_rse2 = nullptr;
+  int found_rse_tree2 = get_T_rse(file2, T_rse2, run2, subrun2, event2);
+  if(!found_rse_tree2){
+    std::cout<<'\n'<<"Could not find RSE tree for file2. Exiting."<<std::endl;
+    return 1;
   }
 
   // Check entry numbers make sense.

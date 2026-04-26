@@ -131,6 +131,115 @@ LEEana::tree_wrangler::~tree_wrangler(){}
 // Main four public functions //
 
 
+//int LEEana::tree_wrangler::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &event){
+int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &event){
+
+  if(file1->GetDirectory("wcpselection")){ 
+    T_rse=(TTree*)file1->Get("wcpselection/T_eval");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("subrun",1);
+        T_rse->SetBranchStatus("event",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using T_eval for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    } 
+    T_rse=(TTree*)file1->Get("wcpselection/T_PFeval");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("subrun",1);
+        T_rse->SetBranchStatus("event",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using T_PFeval for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+    T_rse=(TTree*)file1->Get("wcpselection/T_KINEvars");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("subrun",1);
+        T_rse->SetBranchStatus("event",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using T_KINEvars for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+    T_rse=(TTree*)file1->Get("wcpselection/T_BDTvars");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("subrun",1);
+        T_rse->SetBranchStatus("event",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using T_BDTvars for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+  }
+  if(file1->GetDirectory("nuselection")){
+    T_rse=(TTree*)file1->Get("nuselection/NeutrinoSelectionFilter");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("sub") && T_rse->GetBranch("evt")){
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("sub",1);
+        T_rse->SetBranchStatus("evt",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("sub",&subrun);
+        T_rse->SetBranchAddress("evt",&event);
+        std::cout<<'\n'<<"Using NeutrinoSelectionFilter for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+  }
+  if(file1->GetDirectory("singlephotonana")){
+    T_rse=(TTree*)file1->Get("singlephotonana/vertex_tree");
+    if(T_rse){
+      if(T_rse->GetBranch("run_number") && T_rse->GetBranch("subrun_number") && T_rse->GetBranch("event_number")){
+        T_rse->SetBranchStatus("run_number",1);
+        T_rse->SetBranchStatus("subrun_number",1);
+        T_rse->SetBranchStatus("event_number",1);
+        T_rse->SetBranchAddress("run_number",&run);
+        T_rse->SetBranchAddress("subrun_number",&subrun);
+        T_rse->SetBranchAddress("event_number",&event);
+        std::cout<<'\n'<<"Using vertex_tree for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+  }
+  if(file1->GetDirectory("lantern")){
+    T_rse=(TTree*)file1->Get("lantern/EventTree");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("subrun",1);
+        T_rse->SetBranchStatus("event",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using EventTree for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+  }
+
+  std::cout<<'\n'<<"Could not find RS tree. Exiting."<<std::endl;
+  T_rse=nullptr;
+  return 0;
+
+};
+
 
 void LEEana::tree_wrangler::grow_pot_arboretum(){
   if(new_trees->size()>0) std::cout<<"\n\nGrowing arboretum\n"<<std::endl;
@@ -363,7 +472,7 @@ std::vector<TTree*>* LEEana::tree_wrangler::CopyTrees(TDirectory *source, bool b
             }
             else { 
               T->SetBranchStatus(branch_name.c_str(), 1); 
-              std::cout<<branch_name<<", ";
+              std::cout<<branch_name<<"  ";
             }
           }
           std::cout<<std::endl;
