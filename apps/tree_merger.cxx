@@ -103,10 +103,66 @@ void build_output_trees(tree_wrangler& w1, tree_wrangler& w2, std::vector<TTree*
 }
 
 
+void print_help() {
+  std::cout << R"(
+
+========================================
+ tree_merger : ROOT TTree merging tool
+========================================
+
+USAGE:
+  tree_merger <input_file1> <input_file2> <output_file> <config1.txt> <config2.txt> [options]
+
+DESCRIPTION:
+  Merges TTrees from two ROOT files based on matching (run, subrun, event).
+  Trees are matched and combined according to configuration files.
+  Output file will contain merged trees and copied POT trees.
+  This is usefull in recovering or adding branches or trees to a file which has been trimmed.
+  It can also be used to add new custom variables without needing to re-do other proscessing.
+
+REQUIRED ARGUMENTS:
+  input_file1     First ROOT input file (reference file)
+  input_file2     Second ROOT input file (must contain matching or superset of events, need -m1 for the latter)
+  output_file     Output ROOT file to write merged trees
+  config1.txt     Configuration file for input_file1, tell what trees and banches will be in the output file
+  config2.txt     Configuration file for input_file2, tell what trees and banches will be in the output file
+
+OPTIONS:
+  -h              Print this help message and exit
+  -H              Print extended configuration help
+  -d<char>        Set delimiter used in config files (default: ',')
+  -o<int>         Overwrite output file if it exists (1 = overwrite, default: 0)
+  -m<int>         Mismatch handling mode:
+                    0 = Fail if event counts differ (default)
+                    1 = Allow file2 to have extra events (they will be dropped)
+  -v<int>         Verbosity for event loop printing (default: 10000)
+  -u<int>         Verbosity for POT loop printing (default: 1000)
+
+BEHAVIOR NOTES:
+  - file1 is treated as the reference dataset.
+  - file2 must contain the same events present in file1
+    - Using -m1 allows file2 to have more events, but file1 must still be a subset of file2.
+  - Trees present in only one file are copied directly.
+  - Trees present in both files are merged branch-wise.
+  - POT trees are copied with priority given to file1.
+
+Configuration File:
+run tree_trimmer -H for more info
+
+EXAMPLES:
+  tree_merger file1.root file2.root output.root cfg1.txt cfg2.txt
+  tree_merger file1.root file2.root output.root cfg1.txt cfg2.txt -o1 -m1
+
+
+========================================
+
+)";
+}
+
 int main( int argc, char** argv )
 {
   if(argc==2 && argv[1][1]=='h'){
-    std::cout<<"TODO"<<std::endl;
+    print_help();
     return 0;
   }
   else if(argc==2 && argv[1][1]=='H'){
