@@ -134,6 +134,7 @@ int main( int argc, char** argv )
   int flag_mismatch_events=0;
 
   int set_verbose=10000;
+  int set_verbose_pot=1000;
 
   for (Int_t i=4;i!=argc;i++){
     switch(argv[i][1]){
@@ -154,6 +155,15 @@ int main( int argc, char** argv )
       break;
     case 'v':
       if(atoi(&argv[i][2])>0) set_verbose = atoi(&argv[i][2]);
+      else{
+        std::cout<<"Bad -v optioion, must be greater than 0. Leaving at 10000."<<'\n'<<std::endl;
+      }
+      break;
+    case 'u':
+      if(atoi(&argv[i][2])>0) set_verbose_pot = atoi(&argv[i][2]);
+      else{
+        std::cout<<"Bad -u optioion, must be greater than 0. Leaving at 1000."<<'\n'<<std::endl;
+      }
       break;
     }
   }
@@ -193,6 +203,11 @@ int main( int argc, char** argv )
   wrangler2.get_old_trees(file2);
   wrangler_ex2.get_old_trees(file2);
   wrangler_pot2.get_old_trees(file2);
+
+
+  // Build the pairs of pot trees, only need this for file2
+  wrangler_pot2.new_trees = wrangler_pot2.old_trees; 
+  wrangler_pot2.grow_pot_arboretum();
 
 
   // Figure out which tree we can load RSE from for file 1
@@ -264,13 +279,14 @@ int main( int argc, char** argv )
     index_counter=index_counter+1;
     event_counter=event_counter+1;
   }
+  std::cout << "    seen: "<<nentry1<<"    passed: "  << event_counter << std::endl;
 
   // Build RSE map for file 2
   // Map out the relation between run -> subrun -> (event,index) for file 2
   verbose_counter=0;
   index_counter=0;
   event_counter=0;
-  std::cout<<"Starting first pass loop over file1. Will pass over "<<nentry2<<" entries."<<std::endl;
+  std::cout<<"Starting first pass loop over file2. Will pass over "<<nentry2<<" entries."<<std::endl;
   std::unordered_map<int, std::unordered_map<int, std::unordered_map<int,int > > > run_subrun_event_index_file2;
   for (Int_t i=0;i!=nentry2;i++){
     if ((i-verbose_counter)%set_verbose == 0) {
@@ -282,9 +298,9 @@ int main( int argc, char** argv )
     index_counter=index_counter+1;
     event_counter=event_counter+1;
   }
+  std::cout << "    seen: "<<nentry2<<"    passed: "  << event_counter << std::endl;
 
-
-  fileout->cd();
+  //fileout->cd();
 
 
   // Loop over file 1 and do the filling
@@ -317,10 +333,10 @@ int main( int argc, char** argv )
           std::cout<<"file 2 is missing run,subrun,event = "<<this_run<<", "<<this_subrun<<", "<<this_event<<". Exiting."<<std::endl;
           return 1;
         }
-
+        
         int this_index1 = (*e_it).second;
         int this_index2 = run_subrun_event_index_file2[this_run][this_subrun][this_event];
-
+        
         // Now fill all the trees.
         for(auto tree_it=wrangler1.old_trees->begin(); tree_it!=wrangler1.old_trees->end(); tree_it++){
           (*tree_it)->GetEntry(this_index1);
@@ -337,7 +353,7 @@ int main( int argc, char** argv )
         for(auto tree_it=new_trees->begin(); tree_it!=new_trees->end(); tree_it++){
           (*tree_it)->Fill();
         }
-      
+
         if ((index_counter-verbose_counter)%set_verbose == 0) {
           std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
           verbose_counter=(int(int(index_counter)/int(set_verbose)))*set_verbose;
@@ -350,10 +366,13 @@ int main( int argc, char** argv )
     } // s_it
 
   } // r_it
+  std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
 
 
   // Directly copy POT trees from file1, then file2.
   // Prioritize file1, if both trees contain a tree, it is taken from file1
+
+  std::cout<<"\n"<<"\n"<<"Begin saving POT trees"<<std::endl;
 
   auto map1 = build_tree_map(wrangler_pot1);
   auto map2 = build_tree_map(wrangler_pot2);
@@ -381,8 +400,87 @@ int main( int argc, char** argv )
     // Get the trees only in one file or another
     if (t1) {
       out_tree = t1->CloneTree(-1);
-    } else if (t2) {
+    } else if (t2 && nentry1==nentry2) {
       out_tree = t2->CloneTree(-1);
+    } else if (t2) {
+
+      // Now we gotta get fancy to get the POT correct becouse file2 can have more entries than file1
+      std::cout<<"\n"<<"\n"<<"Attempting to cull pot tree named "<<name<<std::endl;
+
+      out_tree = t2->CloneTree(0);
+
+      auto arb_pot_tree_it=wrangler_pot2.pot_arboretum->begin();
+      // find corresponding tree in the pot arboretum
+      for(auto pot_tree_it=wrangler_pot2.pot_arboretum->begin(); pot_tree_it!=wrangler_pot2.pot_arboretum->end(); pot_tree_it++){
+        std::string this_pot_tree_name = (*pot_tree_it)->old_pot_tree->GetName();
+        if(this_pot_tree_name==t2->GetName()){
+          arb_pot_tree_it=pot_tree_it;
+          break;
+        }
+      }  
+
+      // First pass loop to map out RS
+      verbose_counter=0;
+      index_counter=0;
+      event_counter=0;
+      int nentry_pot = t2->GetEntries();
+      std::cout<<'\n'<<"Starting first pass loop over "<<name<<" in file2. Will pass over "<<nentry_pot<<" entries."<<std::endl;
+      std::unordered_map<int, std::unordered_map<int, int > > run_subrun_index_file2;
+      for (Int_t i=0;i!=nentry_pot;i++){
+        if ((i-verbose_counter)%set_verbose == 0) {
+          std::cout << "    seen: "<<i<<"    passed: "  << event_counter << std::endl;
+          verbose_counter=(int(int(i)/int(set_verbose_pot)))*set_verbose_pot;
+        }
+        t2->GetEntry(i);
+        int this_run = (*arb_pot_tree_it)->runNo;
+        int this_subrun = (*arb_pot_tree_it)->subRunNo;
+        run_subrun_index_file2[this_run][this_subrun] = i;
+        index_counter=index_counter+1;
+        event_counter=event_counter+1;
+      }
+      std::cout << "    seen: "<<nentry_pot<<"    passed: "  << event_counter << std::endl;
+
+      // Second pass loop to fill the output trees
+
+      std::cout<<"Begin looping over "<<name<<" with "<<nentry_pot<<" events to fill POT tree only in file2"<<std::endl;
+      verbose_counter=0;
+      index_counter=0;
+      event_counter=0;
+
+      for (auto r_it = run_subrun_event_index_file1.begin(); r_it != run_subrun_event_index_file1.end(); r_it++){
+
+        int this_run = (*r_it).first;
+        if (run_subrun_event_index_file2.find(this_run) == run_subrun_event_index_file2.end()) {
+          std::cout<<"file 2 is missing run = "<<this_run<<". Exiting."<<std::endl;
+          return 1;
+        }
+
+        for (auto s_it = (*r_it).second.begin(); s_it != (*r_it).second.end(); s_it++){
+
+          int this_subrun = (*s_it).first;
+          if (run_subrun_event_index_file2[this_run].find(this_subrun) == run_subrun_event_index_file2[this_run].end()) {
+            std::cout<<"file 2 is missing run,subrun = "<<this_run<<", "<<this_subrun<<". Exiting."<<std::endl;
+            return 1;
+          }
+
+          int this_index = run_subrun_index_file2[this_run][this_subrun];
+
+          // Now fill all the trees.
+          t2->GetEntry(this_index);
+          out_tree->Fill();
+
+          if ((index_counter-verbose_counter)%set_verbose_pot == 0) {
+            std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
+            verbose_counter=(int(int(index_counter)/int(set_verbose_pot)))*set_verbose_pot;
+          }
+          index_counter=index_counter+1;
+          event_counter=event_counter+1;
+
+        } // s_it
+
+      } // r_it
+      std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
+
     }
 
     out_tree->Write("",TTree::kOverwrite);
@@ -394,7 +492,7 @@ int main( int argc, char** argv )
   fileout->Close();
 
 
-  std::cout<<'\n'<<"Saving output file: "<<out_file<<'\n'<<std::endl;
+  std::cout<<'\n'<<'\n'<<"Saving output file: "<<out_file<<'\n'<<std::endl;
 
 
   return 0;

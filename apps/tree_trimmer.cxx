@@ -508,7 +508,6 @@ int main( int argc, char** argv )
   // Build the pairs of pot trees
   wrangler_pot.grow_pot_arboretum();
 
-
   // Map out the relation between index and run-subrun for POT trees
   wrangler_pot.map_rs_to_entry();
 
