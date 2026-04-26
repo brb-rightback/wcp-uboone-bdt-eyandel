@@ -32,7 +32,15 @@ using namespace LEEana;
 
 int main( int argc, char** argv )
 {
-  if (argc < 4) {
+  if(argc==2 && argv[1][1]=='h'){
+    std::cout<<"TODO"<<std::endl;
+    return 0;
+  }
+  else if(argc==2 && argv[1][1]=='H'){
+    print_help_wrangler_config(true);
+    return 0;
+  }
+  else if (argc < 4) {
     std::cout << "merge_det #input_file_cv #input_file_det #output_file " << std::endl;
     return -1;
   }
@@ -62,6 +70,8 @@ int main( int argc, char** argv )
 
   tree_wrangler wrangler_cv(flag_config, config_file_name, delimiter);
   tree_wrangler wrangler_det(flag_config, config_file_name, delimiter);
+  tree_wrangler wrangler_ex_cv(flag_config, config_file_name, delimiter,2);
+  tree_wrangler wrangler_ex_det(flag_config, config_file_name, delimiter,2);
   tree_wrangler wrangler_pot_cv(flag_config, config_file_name, delimiter,1);
   tree_wrangler wrangler_pot_det(flag_config, config_file_name, delimiter,1);
 
@@ -84,6 +94,8 @@ int main( int argc, char** argv )
   //Load other trees from directories as specified by the config file
   wrangler_cv.get_old_trees(file1);
   wrangler_det.get_old_trees(file2);
+  wrangler_ex_cv.get_old_trees(file1);
+  wrangler_ex_det.get_old_trees(file2);
   wrangler_pot_cv.get_old_trees(file1);
   wrangler_pot_det.get_old_trees(file2);
 
@@ -92,6 +104,8 @@ int main( int argc, char** argv )
   //Setup the directories specified in the config file
   wrangler_cv.set_new_trees(file3,true,"_cv");
   wrangler_det.set_new_trees(file3,true,"_det");
+  wrangler_ex_cv.set_new_trees(file3,true,"_cv");
+  wrangler_ex_det.set_new_trees(file3,true,"_det");
   wrangler_pot_cv.set_new_trees(file3,true,"_cv");
   wrangler_pot_det.set_new_trees(file3,true,"_det");
 
@@ -834,7 +848,12 @@ int main( int argc, char** argv )
       for(auto tree_it=wrangler_det.old_trees->begin(); tree_it!=wrangler_det.old_trees->end(); tree_it++){
           (*tree_it)->GetEntry(it->second);
       }
-
+      for(auto tree_it=wrangler_ex_cv.old_trees->begin(); tree_it!=wrangler_ex_cv.old_trees->end(); tree_it++){
+          (*tree_it)->GetEntry(it->first);
+      }
+      for(auto tree_it=wrangler_ex_det.old_trees->begin(); tree_it!=wrangler_ex_det.old_trees->end(); tree_it++){
+          (*tree_it)->GetEntry(it->second);
+      }
 
       map_rs_re_common[std::make_pair(eval_cv.run, eval_cv.subrun)].insert(std::make_pair(eval_cv.run, eval_cv.event));
 
@@ -866,6 +885,12 @@ int main( int argc, char** argv )
           (*tree_it)->Fill();
       }
       for(auto tree_it=wrangler_det.new_trees->begin(); tree_it!=wrangler_det.new_trees->end(); tree_it++){
+          (*tree_it)->Fill();
+      }
+      for(auto tree_it=wrangler_ex_cv.new_trees->begin(); tree_it!=wrangler_ex_cv.new_trees->end(); tree_it++){
+          (*tree_it)->Fill();
+      }
+      for(auto tree_it=wrangler_ex_det.new_trees->begin(); tree_it!=wrangler_ex_det.new_trees->end(); tree_it++){
           (*tree_it)->Fill();
       }
 
