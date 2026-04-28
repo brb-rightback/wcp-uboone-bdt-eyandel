@@ -41,10 +41,149 @@ using namespace LEEana;
 
 #include "WCPLEEANA/tree_wrangler.h"
 
+
+void print_help() {
+  std::cout << R"(
+
+========================================
+ bdt_convert : Help
+========================================
+
+Overview:
+---------
+bdt_convert reads a Wire-Cell ROOT file and evaluates a large suite of
+BDT-based classification scores for each event. It applies run/subrun-level
+filtering, removes problematic subruns (e.g. Lantern failures or training
+samples), enforces data-quality selections, and writes out a new ROOT file
+with updated BDT variables and consistent POT handling.
+
+The program:
+  - Computes Wire-Cell BDT scores and related tagger variables
+  - Removes subruns based on Lantern failures or training list selection
+  - Applies data-quality and run-based filtering
+  - Optionally overrides or rescales event weights
+  - Copies additional trees using the tree_wrangler infrastructure
+  - Produces a consistent output file with updated event-level information
+
+Usage:
+------
+  bdt_convert <input_file> <output_file> [options]
+
+Required arguments:
+-------------------
+  input_file     Input ROOT file
+  output_file    Output ROOT file
+
+Options:
+--------
+
+  -h
+      Show this help message and exit
+
+  -H
+      Show help message for configuration file and exit
+
+  -c<float>
+      Maximum allowed weight (weight_cv * weight_spline)
+      Events exceeding this are reset to weight = 1
+      (default: 30)
+
+  -f<float>
+      (Reserved / legacy) failure percentage threshold
+      (default: 0.15)
+
+  -l<string>
+      Path to Wire-Cell BDT training list file
+      Format: <type> <run> <subrun>
+
+  -g<string>
+      Global file type label used with training list
+
+  -b<int>
+      Filter based on BDT training usage:
+        0 = remove training subruns (default)
+        1 = keep only training subruns
+
+      NOTE: Requires -l (and optionally -g)
+
+  -s<int>
+      Skip data-quality cuts:
+        0 = apply run quality cuts (default)
+        1 = keep all runs
+
+  -n<int>
+      Beam selection:
+        0 = BNB (default)
+        1 = NuMI
+
+  -r<int>
+      Lantern failure handling:
+        0 = keep subruns where Lantern failed
+        1 = remove subruns where Lantern failed (default)
+
+  -w<int>
+      GiBUU mode:
+        0 = normal handling (default)
+        1 = override weights using truth timing information
+
+  -p<int>
+      Enable particle-level spacepoint BDTs:
+        0 = disabled (default)
+        1 = enabled
+
+  -t<string>
+      Configuration file for additional trees (default: config.txt)
+
+  -d<char>
+      Delimiter used in configuration file (default: ',')
+
+  -a<string>
+      Set SAM definition string to be stored in output trees
+
+Configuration File:
+-------------------
+run bdt_convert -H for more info
+
+Examples:
+---------
+
+  Basic usage:
+    bdt_convert input.root output.root
+
+  Apply stricter weight cut:
+    bdt_convert input.root output.root -c20
+
+  Remove training subruns:
+    bdt_convert input.root output.root -ltrain.txt -b0
+
+  Keep only training subruns:
+    bdt_convert input.root output.root -ltrain.txt -b1
+
+  Enable spacepoint BDTs:
+    bdt_convert input.root output.root -p1
+
+  Keep all runs (skip quality cuts):
+    bdt_convert input.root output.root -s1
+
+Notes:
+------
+- Event filtering is applied at the subrun level to maintain consistency.
+- Subruns may be removed due to:
+    * Lantern reconstruction failures
+    * Presence (or absence) in BDT training lists
+    * Data-quality run selections
+- BDT scores are recomputed for every event and stored in the output trees.
+- Weight handling protects against invalid or extreme values.
+- Additional trees are copied using tree_wrangler configuration.
+
+)";
+}
+
+
 int main( int argc, char** argv )
 {
   if(argc==2 && argv[1][1]=='h'){
-    std::cout<<"TODO"<<std::endl;
+    print_help;
     return 0;
   }
   else if(argc==2 && argv[1][1]=='H'){

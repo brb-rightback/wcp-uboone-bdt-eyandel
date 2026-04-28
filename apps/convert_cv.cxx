@@ -30,10 +30,103 @@ using namespace LEEana;
 #include "WCPLEEANA/kine.h"
 
 
+void print_help() {
+  std::cout << R"(
+
+========================================
+ convert_cv : Help
+========================================
+
+Overview:
+---------
+convert_cv processes Wire-Cell ROOT files and produces a cleaned,
+analysis-ready output file. It applies event-level quality filtering,
+removes problematic subruns, eliminates duplicates, and ensures
+consistent POT accounting.
+
+The program:
+  - Filters events with corrupted or missing reconstruction information
+  - Removes duplicate (run, subrun, event) entries
+  - Rejects subruns with high failure rates
+  - Rescales POT based on surviving events
+  - Writes a clean output file with consistent structure
+  - Optionally copies additional trees via config file (see -H)
+
+Usage:
+------
+  convert_cv <input_file> <output_file> [options]
+
+Required arguments:
+-------------------
+  input_file     Input ROOT file (Wire-Cell format)
+  output_file    Output ROOT file
+
+Options:
+--------
+
+  -h
+      Show this help message and exit
+
+  -H
+      Show help message for configuration file and exit
+
+  -f<float>
+      Maximum allowed fraction of failed events per subrun
+      (default: 0.2)
+
+  -t<string>
+      Configuration file for tree selection
+      (default: config.txt)
+
+  -d<char>
+      Delimiter used in config file
+      (default: ',')
+
+Processing Details:
+-------------------
+
+  Event Filtering:
+    Removes events failing consistency checks (corrupted or missing data).
+    Duplicate events are also removed during processing.
+
+  Subrun Rejection:
+    Subruns are removed entirely if the fraction of failed events exceeds
+    the threshold set by -f.
+
+  POT Handling:
+    - POT is tracked per subrun
+    - Scaled by fraction of surviving events
+    - Output includes a 'pass_ratio' branch
+
+  Data vs MC:
+    Automatically detected from input file and handled accordingly
+    (branch usage, weights, truth information).
+
+Configuration File:
+-------------------
+Controls which additional trees are copied and how they are filtered.
+Run:
+  convert_cv -H
+for full details.
+
+If no config file is used:
+  Only Wire-Cell trees under 'wcpselection' are written.
+
+
+Notes:
+------
+- Options must be passed without spaces (e.g. -f0.3, not -f 0.3)
+- Event selection is applied at the subrun level to preserve POT consistency
+- Duplicate handling is automatic and not user-configurable
+
+)";
+}
+
+
 int main( int argc, char** argv )
 {
   if(argc==2 && argv[1][1]=='h'){
-    std::cout<<"TODO"<<std::endl;
+    print_help();
     return 0;
   }
   else if(argc==2 && argv[1][1]=='H'){
@@ -41,7 +134,7 @@ int main( int argc, char** argv )
     return 0;
   }
   else if (argc < 3) {
-    std::cout << "merge_det #input_file_cv #output_file " << std::endl;
+    std::cout << "convert_cv #input_file_cv #output_file " << std::endl;
     return -1;
   }
   TString input_file_cv = argv[1];
