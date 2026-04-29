@@ -227,7 +227,8 @@ int main( int argc, char** argv )
 
   // Check if the output file exists if overwrite is not set.
   if(flag_overwrite!=1){
-    TFile *f = TFile::Open(out_file, "READ");
+    TFile *f = nullptr;
+    if (!gSystem->AccessPathName(out_file)) TFile::Open(out_file, "READ");
     if (f && !f->IsZombie()) {
         std::cout<<'\n'<< "File exists. Exiting." << std::endl;
         f->Close();

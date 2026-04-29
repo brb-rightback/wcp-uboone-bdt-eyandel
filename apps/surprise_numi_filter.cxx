@@ -6,7 +6,6 @@
 #include <map>
 #include <string>
 #include <set>
-#include <filesystem>
 
 #include "TChain.h"
 #include "TFile.h"
@@ -93,7 +92,7 @@ int main( int argc, char** argv )
   // Check if the output file exists if overwrite is not set.
   if(flag_overwrite!=1){
     TFile *f = nullptr;
-    if (std::filesystem::exists(outfile_name)) f = TFile::Open(outfile_name.c_str(), "READ");
+    if (!gSystem->AccessPathName(outfile_name.c_str())) f = TFile::Open(outfile_name.c_str(), "READ");
     if (f && !f->IsZombie()) {
         std::cout<<'\n'<< "File exists. Exiting." << std::endl;
         f->Close();
