@@ -139,25 +139,57 @@ int main( int argc, char** argv )
   }
   TString input_file_cv = argv[1];
   TString out_file = argv[2];
+
   bool flag_config = false;
   std::string config_file_name="config.txt";
+
   char delimiter = ',';
+
   float fail_percentage = 0.2;
-   for (Int_t i=3;i!=argc;i++){
-    switch(argv[i][1]){
-    case 'f'://Note switched the flag here
-      fail_percentage = atof(&argv[i][2]);
+
+  for (Int_t i = 3; i < argc; ++i) {
+
+    // Skip non-flags
+    if (argv[i][0] != '-') continue;
+
+    char flag = argv[i][1];
+    char* value_ptr = nullptr;
+
+    // Case 1: attached value (-xVALUE)
+    if (argv[i][2] != '\0') {
+      value_ptr = &argv[i][2];
+    }
+    // Case 2: separate value (-x VALUE)
+    else if (i + 1 < argc && argv[i+1][0] != '-') {
+      value_ptr = argv[i + 1];
+      ++i; // consume next argument
+    }
+
+    // Guard against missing values
+    if (!value_ptr) {
+      std::cerr << "Missing value for -" << flag << std::endl;
+      continue;
+    }
+
+    switch(flag){
+
+    case 'f': // Note switched the flag here
+      fail_percentage = atof(value_ptr);
       break;
+
     case 't':
-       config_file_name = &argv[i][2];
-       flag_config = true;
+      config_file_name = value_ptr;
+      flag_config = true;
       break;
+
     case 'd':
-        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
+      delimiter = value_ptr[0];
       break;
     }
-   }
-   bool flag_data = true;
+
+  }
+
+  bool flag_data = true;
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
   tree_wrangler wrangler_ex(flag_config, config_file_name, delimiter,2);

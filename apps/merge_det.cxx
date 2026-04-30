@@ -47,26 +47,62 @@ int main( int argc, char** argv )
 
   TString input_file_cv = argv[1];
   TString input_file_det = argv[2];
+
   TString out_file = argv[3];
+
   bool flag_config = false;
   std::string config_file_name="config.txt";
+
   char delimiter = ',';
+
   bool override_pot = false;
-  for (Int_t i=4;i!=argc;i++){
-    switch(argv[i][1]){
-    case 't':
-       config_file_name = &argv[i][2];
-       flag_config = true;
-      break;
-    case 'd':
-        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
-      break;
-    case 'p':
-        override_pot = &argv[i][2];
-        if(override_pot) std::cout<<"Overriding the pot of each subrun"<<std::endl;
-      break;
+
+for (Int_t i = 4; i < argc; ++i) {
+
+    // Skip non-flags
+    if (argv[i][0] != '-') continue;
+
+    char flag = argv[i][1];
+    char* value_ptr = nullptr;
+
+    // Case 1: attached value (-xVALUE)
+    if (argv[i][2] != '\0') {
+      value_ptr = &argv[i][2];
     }
+    // Case 2: separate value (-x VALUE)
+    else if (i + 1 < argc && argv[i+1][0] != '-') {
+      value_ptr = argv[i + 1];
+      ++i; // consume next argument
+    }
+
+    // Guard against missing values
+    if (!value_ptr) {
+      std::cerr << "Missing value for -" << flag << std::endl;
+      continue;
+    }
+
+    switch(flag){
+
+    case 't':
+      config_file_name = value_ptr;
+      flag_config = true;
+      break;
+
+    case 'd':
+      delimiter = value_ptr[0];
+      break;
+
+    case 'p':
+      override_pot = value_ptr;
+      if (override_pot) {
+        std::cout<<"Overriding the pot of each subrun"<<std::endl;
+      }
+      break;
+
+    }
+
   }
+
 
   tree_wrangler wrangler_cv(flag_config, config_file_name, delimiter);
   tree_wrangler wrangler_det(flag_config, config_file_name, delimiter);

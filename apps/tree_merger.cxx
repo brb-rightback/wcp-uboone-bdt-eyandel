@@ -193,36 +193,73 @@ int main( int argc, char** argv )
   int set_verbose=10000;
   int set_verbose_pot=1000;
 
-  for (Int_t i=4;i!=argc;i++){
-    switch(argv[i][1]){
-    case 'd':
-      delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
-      break;
-    case 'o':
-      flag_overwrite = atoi(&argv[i][2]);
-      break;
-    case 'm':
-      flag_mismatch_events = atoi(&argv[i][2]);
-      if(flag_mismatch_events==0){ std::cout<<"Fail if file1 and file2 have a different number of events."<<'\n'<<std::endl; }
-      else if(flag_mismatch_events==1){ std::cout<<"Try to drop events from file2 if it has more events than file1"<<'\n'<<std::endl; }
-      else{
-        std::cout<<"Unknown -m option, setting to default flag_mismatch_events=0"<<'\n'<<std::endl;
-        flag_mismatch_events=0;
-      }
-      break;
-    case 'v':
-      if(atoi(&argv[i][2])>0) set_verbose = atoi(&argv[i][2]);
-      else{
-        std::cout<<"Bad -v optioion, must be greater than 0. Leaving at 10000."<<'\n'<<std::endl;
-      }
-      break;
-    case 'u':
-      if(atoi(&argv[i][2])>0) set_verbose_pot = atoi(&argv[i][2]);
-      else{
-        std::cout<<"Bad -u optioion, must be greater than 0. Leaving at 1000."<<'\n'<<std::endl;
-      }
-      break;
+  for (Int_t i = 4; i < argc; ++i) {
+
+    // Skip anything that isn't a flag
+    if (argv[i][0] != '-') continue;
+
+    char flag = argv[i][1];
+    char* value_ptr = nullptr;
+
+    // Case 1: value is attached (e.g. -o1)
+    if (argv[i][2] != '\0') {
+      value_ptr = &argv[i][2];
     }
+    // Case 2: value is in next argument (e.g. -o 1)
+    else if (i + 1 < argc) {
+      value_ptr = argv[i + 1];
+      ++i; // consume next argument
+    }
+
+    if (!value_ptr) {
+      std::cerr << "WARNING: Missing value for -" << flag << std::endl;
+    }
+
+    switch(flag) {
+
+    case 'd':
+      if (value_ptr) delimiter = value_ptr[0];
+      break;
+
+    case 'o':
+      if (value_ptr) flag_overwrite = atoi(value_ptr);
+      break;
+
+    case 'm':
+      if (value_ptr) {
+        flag_mismatch_events = atoi(value_ptr);
+
+        if(flag_mismatch_events == 0){
+          std::cout << "Fail if file1 and file2 have a different number of events.\n\n";
+        }
+        else if(flag_mismatch_events == 1){
+          std::cout << "Try to drop events from file2 if it has more events than file1\n\n";
+        }
+        else{
+          std::cout << "Unknown -m option, setting to default flag_mismatch_events=0\n\n";
+          flag_mismatch_events = 0;
+        }
+    }
+    break;
+
+    case 'v':
+      if (value_ptr && atoi(value_ptr) > 0) {
+        set_verbose = atoi(value_ptr);
+      } else {
+        std::cout << "Bad -v option, must be greater than 0. Leaving at 10000.\n\n";
+      }
+      break;
+
+    case 'u':
+      if (value_ptr && atoi(value_ptr) > 0) {
+        set_verbose_pot = atoi(value_ptr);
+      } else {
+        std::cout << "Bad -u option, must be greater than 0. Leaving at 1000.\n\n";
+      }
+      break;
+
+    }
+
   }
 
 

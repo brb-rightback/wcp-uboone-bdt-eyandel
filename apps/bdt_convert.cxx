@@ -221,54 +221,100 @@ int main( int argc, char** argv )
   int flag_set_samdef = 0;
   TString samdef="";
 
-  for (Int_t i=3;i!=argc;i++){
-    switch(argv[i][1]){
+for (Int_t i = 3; i < argc; ++i) {
+
+    // Skip non-flags
+    if (argv[i][0] != '-') continue;
+
+    char flag = argv[i][1];
+    char* value_ptr = nullptr;
+
+    // Case 1: attached value (-xVALUE)
+    if (argv[i][2] != '\0') {
+      value_ptr = &argv[i][2];
+    }
+    // Case 2: separate value (-x VALUE)
+    else if (i + 1 < argc && argv[i+1][0] != '-') {
+      value_ptr = argv[i + 1];
+      ++i; // consume next argument
+    }
+
+    // Guard against missing values
+    if (!value_ptr && flag != 'a') {
+      std::cerr << "Missing value for -" << flag << std::endl;
+      continue;
+    }
+
+    switch(flag){
+
     case 'c':
-      weight_cut_val = atof(&argv[i][2]);
+      if (value_ptr) weight_cut_val = atof(value_ptr);
       break;
+
     case 'f':
-      fail_percentage = atof(&argv[i][2]);//Note, changed from previouse code
+      if (value_ptr) fail_percentage = atof(value_ptr);
       break;
+
     case 'l':
-      training_list = &argv[i][2];
+      if (value_ptr) training_list = value_ptr;
       break;
+
     case 'g':
-      global_file_type = &argv[i][2];
+      if (value_ptr) global_file_type = value_ptr;
       break;
+
     case 's':
-      skip_cut = atoi(&argv[i][2]);
+      if (value_ptr) skip_cut = atoi(value_ptr);
       break;
+
     case 'n':
-      flag_numi = atoi(&argv[i][2]);
+      if (value_ptr) flag_numi = atoi(value_ptr);
       break;
+
     case 't':
-       config_file_name = &argv[i][2];
-       flag_config = true;
-      break;
-    case 'd':
-        delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
-      break;
-    case 'w':
-      flag_gibuu = atoi(&argv[i][2]);
-      if (flag_gibuu) {
-        std::cout<<"GiBUU sample, overiding the weights"<<std::endl; 
-        std::cout<<std::endl;
+      if (value_ptr) {
+        config_file_name = value_ptr;
+        flag_config = true;
       }
       break;
+
+    case 'd':
+      if (value_ptr) delimiter = value_ptr[0];
+      break;
+
+    case 'w':
+      if (value_ptr) {
+        flag_gibuu = atoi(value_ptr);
+        if (flag_gibuu) {
+          std::cout<<"GiBUU sample, overiding the weights"<<std::endl;
+          std::cout<<std::endl;
+        }
+      }
+      break;
+
     case 'p':
-      flag_spbdt = atoi(&argv[i][2]);
+      if (value_ptr) flag_spbdt = atoi(value_ptr);
       break;
+
     case 'r':
-      remove_lantern_fails = atoi(&argv[i][2]);
+      if (value_ptr) remove_lantern_fails = atoi(value_ptr);
       break;
+
     case 'b':
-      flag_keep_only_bdt_train = atoi(&argv[i][2]);
+      if (value_ptr) flag_keep_only_bdt_train = atoi(value_ptr);
       break;
+
     case 'a':
-      flag_set_samdef = 1; 
-      samdef = &argv[i][2];
+      if (value_ptr) {
+        flag_set_samdef = 1;
+        samdef = value_ptr;
+      } else {
+        std::cerr << "Missing value for -a" << std::endl;
+      }
       break;
+
     }
+
   }
 
   if (flag_spbdt) { 

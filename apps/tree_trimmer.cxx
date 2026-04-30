@@ -307,127 +307,202 @@ int main( int argc, char** argv )
   int set_verbose=10000;
   int set_verbose_pot=1000;
 
-  for (Int_t i=4;i!=argc;i++){
-    switch(argv[i][1]){
-    case 'd':
-      delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
-      break;
-    case 'o':
-      flag_overwrite = atoi(&argv[i][2]);
-      break;
-    case 'k':
-      flag_kill_duplicates = atoi(&argv[i][2]);
-      if(flag_kill_duplicates==0) { std::cout<<"Allowing duplicates if found."<<'\n'<<std::endl; }
-      else if(flag_kill_duplicates==1) { std::cout<<"Will remove duplicates if found."<<'\n'<<std::endl; }
-      else if(flag_kill_duplicates==2) { std::cout<<"Will exit if duplicates are found."<<'\n'<<std::endl; }
-      else {
-        std::cout<<"Unknown -k option, setting to default flag_kill_duplicates=1"<<'\n'<<std::endl; 
-        flag_kill_duplicates=1;
-      }
-      break;
-    case 'm':
-      max_events = atoi(&argv[i][2]);
-      if(max_events<0){
-        max_events=0;
-      }
-      std::cout<<"Will be saving at most "<<max_events<<" events to the output file."<<std::endl;
-      std::cout<<"Note that this will ''round up'' to the nearest subrun in order to ensure the POT is correct."<<'\n'<<std::endl;
-      break;
-    case 'e':
-      start_events = atoi(&argv[i][2]);
-      std::cout<<"Will start saving to the output file at event "<<start_events<<std::endl;
-      std::cout<<"Note that this will ''round down'' to the nearest subrun in order to ensure the POT is correct."<<'\n'<<std::endl;
-      break;
-    case 'w':
-      start_subrun = atoi(&argv[i][2]);
-      std::cout<<"Will start saving to the output file at subrun "<<start_subrun<<'\n'<<std::endl;
-      break;
-    case 'x':
-      stop_subrun = atoi(&argv[i][2]);
-      std::cout<<"Will stop saving to the output file at subrun "<<stop_subrun<<'\n'<<std::endl;
-      break;
-    case 'y':
-      start_run = atoi(&argv[i][2]);
-      std::cout<<"Will start saving to the output file at run "<<start_run<<'\n'<<std::endl;
-      break;
-    case 'z':
-      stop_run = atoi(&argv[i][2]);
-      std::cout<<"Will stop saving to the output file at run "<<stop_run<<'\n'<<std::endl;
-      break;
-    case 's':
-      skip_cut = atoi(&argv[i][2]);
-      if(skip_cut==0) { std::cout<<"Will keep runs not in the good runs list/."<<'\n'<<std::endl; }
-      else if(skip_cut==1) { std::cout<<"Will remove runs not in the good runs list."<<'\n'<<std::endl; }
-      else{
-        std::cout<<"Unknown -s option, setting to default skip_cut=1"<<'\n'<<std::endl; 
-        skip_cut=1;
-      }
-      break;
-    case 'n':
-      flag_numi = atoi(&argv[i][2]);
-      if(flag_numi==0){ std::cout<<"Good runs list will be the one for BNB."<<'\n'<<std::endl; }
-      else if(flag_numi==1){ std::cout<<"Good runs list will be the one for NuMI."<<'\n'<<std::endl; }
-      else{
-        std::cout<<"Unknown -n option, setting to default flag_numi=0"<<'\n'<<std::endl; 
-        flag_numi=0;
-      }
-      break;
-    case 'c':
-      flag_data = atoi(&argv[i][2]);
-      if(flag_data==0){ std::cout<<"Good runs for list will be the one for MC."<<'\n'<<std::endl; }
-      else if(flag_data==1){ std::cout<<"Good runs for list will be the one for Data."<<'\n'<<std::endl; }
-      else{
-        std::cout<<"Unknown -c option, setting to default flag_data=0"<<'\n'<<std::endl; 
-        flag_data=0;
-      }
-      break;
-    case 'r':
-      remove_lantern_fails = atoi(&argv[i][2]);
-      if(remove_lantern_fails==0){ std::cout<<"Will Keep subruns where Lantern container failed."<<'\n'<<std::endl; }
-      else if(remove_lantern_fails==1){ std::cout<<"Removing subruns where Lantern container failed."<<'\n'<<std::endl; }
-      else{
-        std::cout<<"Unknown -r option, setting to default remove_lantern_fails=1"<<'\n'<<std::endl; 
-        remove_lantern_fails=1;
-      }
-      break;
-    case 'l':
-      training_list = &argv[i][2];
-      std::cout<<"Loading Wire-Cell training list from "<<training_list<<'\n'<<std::endl;
-      break;
-    case 'g':
-      global_file_type = &argv[i][2];
-      std::cout<<"Setting Wire-Cell BDT training file type to "<<global_file_type<<'\n'<<std::endl;
-      break;
-    case 'b':
-      flag_keep_only_bdt_train = atoi(&argv[i][2]);
-      if(flag_keep_only_bdt_train==-1){ std::cout<<"Saving all runs regardless of Wire-Cell BDT training status."<<'\n'<<std::endl; }
-      else if(flag_keep_only_bdt_train==0){ std::cout<<"Only saving subruns that were not used for Wire-Cell BDT training."<<'\n'<<std::endl; }
-      else if(flag_keep_only_bdt_train==1){ std::cout<<"Only saving subruns that WERE used for Wire-Cell BDT training."<<'\n'<<std::endl; }
-      else{
-        std::cout<<"Unknown -b option, setting to default lag_keep_only_bdt_train=-1"<<'\n'<<std::endl; 
-        flag_keep_only_bdt_train=-1;
-      }
-      break;
-    case 'a':
-      flag_set_samdef = 1;
-      samdef = &argv[i][2];
-      std::cout<<"Saving the following samdef to trees: "<<samdef<<'\n'<<std::endl;
-      break;
-    case 'v':
-      if(atoi(&argv[i][2])>0) set_verbose = atoi(&argv[i][2]);
-      else{
-        std::cout<<"Bad -v optioion, must be greater than 0. Leaving at 10000."<<'\n'<<std::endl;
-      }
-      break;
-    case 'u':
-      if(atoi(&argv[i][2])>0) set_verbose_pot = atoi(&argv[i][2]);      
-      else{
-        std::cout<<"Bad -u optioion, must be greater than 0. Leaving at 1000."<<'\n'<<std::endl;
-      } 
-      break;
-    }
-  }
+  for (Int_t i = 4; i < argc; ++i) {
 
+    // Skip non-flags
+    if (argv[i][0] != '-') continue;
+
+    char flag = argv[i][1];
+    char* value_ptr = nullptr;
+
+    // Case 1: attached value (-o1)
+    if (argv[i][2] != '\0') {
+      value_ptr = &argv[i][2];
+    }
+    // Case 2: separate value (-o 1)
+    else if (i + 1 < argc && argv[i+1][0] != '-') {
+      value_ptr = argv[i + 1];
+      ++i; // consume next argument
+    }
+
+    // Guard against missing values
+    if (!value_ptr && flag != 'a') {
+      std::cerr << "Missing value for -" << flag << std::endl;
+      continue;
+    }
+
+    switch(flag){
+
+    case 'd':
+      delimiter = value_ptr ? value_ptr[0] : delimiter;
+      break;
+
+    case 'o':
+      if (value_ptr) flag_overwrite = atoi(value_ptr);
+      break;
+
+    case 'k':
+      if (value_ptr) {
+        flag_kill_duplicates = atoi(value_ptr);
+        if(flag_kill_duplicates==0) { std::cout<<"Allowing duplicates if found.\n\n"; }
+        else if(flag_kill_duplicates==1) { std::cout<<"Will remove duplicates if found.\n\n"; }
+        else if(flag_kill_duplicates==2) { std::cout<<"Will exit if duplicates are found.\n\n"; }
+        else {
+          std::cout<<"Unknown -k option, setting to default flag_kill_duplicates=1\n\n";
+          flag_kill_duplicates=1;
+        }
+      }
+      break;
+
+    case 'm':
+      if (value_ptr) {
+        max_events = atoi(value_ptr);
+        if(max_events < 0) max_events = 0;
+        std::cout<<"Will be saving at most "<<max_events<<" events to the output file.\n";
+        std::cout<<"Note that this will ''round up'' to the nearest subrun in order to ensure the POT is correct.\n\n";
+      }
+      break;
+
+    case 'e':
+      if (value_ptr) {
+        start_events = atoi(value_ptr);
+        std::cout<<"Will start saving to the output file at event "<<start_events<<"\n";
+        std::cout<<"Note that this will ''round down'' to the nearest subrun in order to ensure the POT is correct.\n\n";
+      }
+      break;
+
+    case 'w':
+      if (value_ptr) {
+        start_subrun = atoi(value_ptr);
+        std::cout<<"Will start saving to the output file at subrun "<<start_subrun<<"\n\n";
+      }
+      break;
+
+    case 'x':
+      if (value_ptr) {
+        stop_subrun = atoi(value_ptr);
+        std::cout<<"Will stop saving to the output file at subrun "<<stop_subrun<<"\n\n";
+      }
+      break;
+
+    case 'y':
+      if (value_ptr) {
+        start_run = atoi(value_ptr);
+        std::cout<<"Will start saving to the output file at run "<<start_run<<"\n\n";
+      }
+      break;
+
+    case 'z':
+      if (value_ptr) {
+        stop_run = atoi(value_ptr);
+        std::cout<<"Will stop saving to the output file at run "<<stop_run<<"\n\n";
+      }
+      break;
+
+    case 's':
+      if (value_ptr) {
+        skip_cut = atoi(value_ptr);
+        if(skip_cut==0) { std::cout<<"Will keep runs not in the good runs list.\n\n"; }
+        else if(skip_cut==1) { std::cout<<"Will remove runs not in the good runs list.\n\n"; }
+        else{
+          std::cout<<"Unknown -s option, setting to default skip_cut=1\n\n";
+          skip_cut=1;
+        }
+      }
+      break;
+
+    case 'n':
+      if (value_ptr) {
+        flag_numi = atoi(value_ptr);
+        if(flag_numi==0){ std::cout<<"Good runs list will be the one for BNB.\n\n"; }
+        else if(flag_numi==1){ std::cout<<"Good runs list will be the one for NuMI.\n\n"; }
+        else{
+          std::cout<<"Unknown -n option, setting to default flag_numi=0\n\n";
+          flag_numi=0;
+        }
+      }
+      break;
+
+    case 'c':
+      if (value_ptr) {
+        flag_data = atoi(value_ptr);
+        if(flag_data==0){ std::cout<<"Good runs for list will be the one for MC.\n\n"; }
+        else if(flag_data==1){ std::cout<<"Good runs for list will be the one for Data.\n\n"; }
+        else{
+          std::cout<<"Unknown -c option, setting to default flag_data=0\n\n";
+          flag_data=0;
+        }
+      }
+      break;
+
+    case 'r':
+      if (value_ptr) {
+        remove_lantern_fails = atoi(value_ptr);
+        if(remove_lantern_fails==0){ std::cout<<"Will Keep subruns where Lantern container failed.\n\n"; }
+        else if(remove_lantern_fails==1){ std::cout<<"Removing subruns where Lantern container failed.\n\n"; }
+        else{
+          std::cout<<"Unknown -r option, setting to default remove_lantern_fails=1\n\n";
+          remove_lantern_fails=1;
+        }
+      }
+      break;
+
+    case 'l':
+      if (value_ptr) {
+        training_list = value_ptr;
+        std::cout<<"Loading Wire-Cell training list from "<<training_list<<"\n\n";
+      }
+      break;
+
+    case 'g':
+      if (value_ptr) {
+        global_file_type = value_ptr;
+        std::cout<<"Setting Wire-Cell BDT training file type to "<<global_file_type<<"\n\n";
+      }
+      break;
+
+    case 'b':
+      if (value_ptr) {
+        flag_keep_only_bdt_train = atoi(value_ptr);
+        if(flag_keep_only_bdt_train==-1){ std::cout<<"Saving all runs regardless of Wire-Cell BDT training status.\n\n"; }
+        else if(flag_keep_only_bdt_train==0){ std::cout<<"Only saving subruns that were not used for Wire-Cell BDT training.\n\n"; }
+        else if(flag_keep_only_bdt_train==1){ std::cout<<"Only saving subruns that WERE used for Wire-Cell BDT training.\n\n"; }
+        else{
+          std::cout<<"Unknown -b option, setting to default flag_keep_only_bdt_train=-1\n\n";
+          flag_keep_only_bdt_train=-1;
+        }
+      }
+      break;
+
+    case 'a':
+      if (value_ptr) {
+        flag_set_samdef = 1;
+        samdef = value_ptr;
+        std::cout<<"Saving the following samdef to trees: "<<samdef<<"\n\n";
+      } else {
+        std::cerr << "Missing value for -a" << std::endl;
+      }
+      break;
+
+    case 'v':
+      if (value_ptr && atoi(value_ptr) > 0) {
+        set_verbose = atoi(value_ptr);
+      } else {
+        std::cout<<"Bad -v option, must be greater than 0. Leaving at 10000.\n\n";
+      }
+      break;
+
+    case 'u':
+      if (value_ptr && atoi(value_ptr) > 0) {
+        set_verbose_pot = atoi(value_ptr);
+      } else {
+        std::cout<<"Bad -u option, must be greater than 0. Leaving at 1000.\n\n";
+      }
+      break;
+
+    }
+
+  }
 
   if( (training_list=="" || global_file_type=="") && flag_keep_only_bdt_train>=0){
     std::cout<<"Have flag_keep_only_bdt_train>=0, but no file list of file type set."<<std::endl; 

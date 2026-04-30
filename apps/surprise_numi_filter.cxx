@@ -66,19 +66,45 @@ int main( int argc, char** argv )
 
   char delimiter = ',';
 
-  for (Int_t i=3;i!=argc;i++){
-    switch(argv[i][1]){
-    case 'o':
-      flag_overwrite = atoi(&argv[i][2]);
-      break;
-    case 'd':
-      delimiter = argv[i][2];//In case you want to change what character you use to sperate your trees in the config
-      break;
+  for (Int_t i = 3; i < argc; ++i) {
+
+    // Skip non-flags
+    if (argv[i][0] != '-') continue;
+
+    char flag = argv[i][1];
+    char* value_ptr = nullptr;
+
+    // Case 1: attached value (-xVALUE)
+    if (argv[i][2] != '\0') {
+      value_ptr = &argv[i][2];
     }
+    // Case 2: separate value (-x VALUE)
+    else if (i + 1 < argc && argv[i+1][0] != '-') {
+      value_ptr = argv[i + 1];
+      ++i; // consume next argument
+    }
+
+    // Guard against missing values
+    if (!value_ptr) {
+      std::cerr << "Missing value for -" << flag << std::endl;
+      continue;
+    }
+
+    switch(flag){
+
+    case 'o':
+      flag_overwrite = atoi(value_ptr);
+      break;
+
+    case 'd':
+      delimiter = value_ptr[0];
+      break;
+
+    }
+
   }
 
-
-  std::string outfile_name;
+  std::string  outfile_name;
 
   if (filter_level == 1){
     std::cout << "FHC mode" << std::endl;
