@@ -4468,12 +4468,6 @@ for (Int_t i = 3; i < argc; ++i) {
       // bnb run 3 high rate
       if (pot.runNo >=15369 && pot.runNo <= 15402) continue;
     }
-    if (skip_cut == 0){
-      // low lifetime, docdb 39787
-      if (pot.runNo >= 19753 && pot.runNo <= 19850) continue;
-      // low lifetime, docdb 40093
-      if (pot.runNo >= 25447 && pot.runNo <= 25512) continue;
-    }
     t2->Fill();
   }
 
@@ -4505,12 +4499,6 @@ for (Int_t i = 3; i < argc; ++i) {
         if ((*pot_tree_it)->runNo >= 8321 && (*pot_tree_it)->runNo <=8404) continue;
         // bnb run 3 high rate
         if ((*pot_tree_it)->runNo >=15369 && (*pot_tree_it)->runNo <= 15402) continue;
-      }
-      if (skip_cut == 0){
-        // low lifetime, docdb 39787
-        if ((*pot_tree_it)->runNo >= 19753 && (*pot_tree_it)->runNo <= 19850) continue;
-        // low lifetime, docdb 40093
-        if ((*pot_tree_it)->runNo >= 25447 && (*pot_tree_it)->runNo <= 25512) continue;
       }
       (*pot_tree_it)->new_pot_tree->Fill();
 

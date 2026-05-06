@@ -260,16 +260,6 @@ bool keep_subrun(int run, int subrun,
       }
   }
 
-  if (skip_cut == 0) {
-      if (run >= 19753 && run <= 19850) {
-          return flag_keep_subrun;
-      }
-      if (run >= 25447 && run <= 25512) {
-          return flag_keep_subrun;
-      }
-  }
-
-
   flag_keep_subrun = true;
   return flag_keep_subrun;
 
