@@ -1,4 +1,5 @@
 #include "WCPLEEANA/TLee.h"
+#include "WCPLEEANA/Configure_Lee.h"
 
 #include "draw.icc"
 
@@ -651,8 +652,10 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
   TH1D *h1_lambda_absigma_dis = new TH1D(TString::Format("h1_lambda_absigma_dis_%d_%s", index, ffstr.Data()), "", 10, 0, 10);
   TH1D *h1_lambda_sigma_iii = new TH1D(TString::Format("h1_lambda_sigma_iii_%d_%s", index, ffstr.Data()), "", rows, 0, rows);
 
-  map<int, double>map_above3sigma;
+  map<int, double>map_above3sigma;//Misnomer, treating as 2 sigma
   vector<double>vec_above3sigma;
+  vector<double>p_values;
+  double largest_chi = 0;
 
   for(int ibin=1; ibin<=rows; ibin++) {
 	double pred_val = matrix_pred_temp(0, ibin-1);
@@ -671,6 +674,9 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
 	double meas_lambda_val = matrix_lambda_meas(0, ibin-1);
 	double delta_lambda_val = matrix_delta_lambda(0, ibin-1);
 	double relerr_lambda = delta_lambda_val/pred_lambda_err;
+
+        p_values.push_back( TMath::Prob( pow(relerr_lambda ,2) , 1 ) );
+        std::cout<<"p_values "<<p_values.back()<<" relerr_lambda "<<relerr_lambda<<std::endl;
 
 	gh_fake_meas->SetPoint( ibin-1, h1_fake_meas->GetBinCenter(ibin), meas_val );
 	gh_fake_meas->SetPointError( ibin-1, h1_fake_meas->GetBinWidth(ibin)*0.5, sqrt(meas_val) );
@@ -692,11 +698,11 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
 	}
 	h1_lambda_sigma_iii->SetBinContent( ibin, mod_relerr_lambda );
 
-	if( fabs(relerr_lambda)>=3 ) {
+	if( fabs(relerr_lambda)>=2 ) {
 	  map_above3sigma[ibin] = fabs(relerr_lambda);
 	  vec_above3sigma.push_back( fabs(relerr_lambda) );
 	}
-
+        if(fabs(relerr_lambda)>largest_chi) largest_chi = fabs(relerr_lambda);
   }
 
   cout<<endl;
@@ -877,6 +883,7 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
   //double sigma_global_BB = 0;
   double sum_AA = 0;
 
+/*
   if( (int)(map_above3sigma.size())>=1 ) {
 	if( (int)(map_above3sigma.size())==1 ) {
 	  double chi2_local = pow(map_above3sigma.begin()->second, 2);
@@ -899,6 +906,37 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
 	  sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global_AA, 1 ) );
 	}
   }
+*/
+
+  if( (int)(map_above3sigma.size())>=1 ) {
+    if( (int)(map_above3sigma.size())==1 ) {
+      double chi2_local = pow(map_above3sigma.begin()->second, 2);
+      double pvalue_local = TMath::Prob( chi2_local, 1 );
+      pvalue_global = 1 - pow(1-pvalue_local, rows);
+      sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global, 1 ) );
+      sum_AA = chi2_local;
+      std::cout<<"\n\n"<<"pvalue_global:  "<<pvalue_global<<"   pvalue_default: "<<pvalue_default<<std::endl;
+    }
+    else {
+      int user_vec_size = vec_above3sigma.size();
+      sum_AA = 0;
+      for(int idx=0; idx<user_vec_size; idx++) {
+        sum_AA += pow( vec_above3sigma.at(idx), 2 );
+      }
+      double pvalue_local_AA = TMath::Prob( sum_AA, user_vec_size );
+
+      double coeff = TMath::Factorial(rows)/TMath::Factorial(rows-user_vec_size)/TMath::Factorial(user_vec_size);
+      double pvalue_global_AA = coeff*pvalue_local_AA;
+      pvalue_global_AA = coeff*pvalue_local_AA; //this is using the approximation
+      sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global_AA, 1 ) );
+      std::cout<<"\n\n"<<"pvalue_global:  "<<pvalue_global_AA<<"   pvalue_default: "<<pvalue_default<<std::endl;
+    }
+  }
+  double pvalue_local_largest_chi = TMath::Prob( pow(largest_chi,2) , 1 );
+  double pvalue_global_largest_chi = 1 - pow(1-pvalue_local_largest_chi, rows);
+  double sigma_global_largest_chi = sqrt( TMath::ChisquareQuantile( 1-pvalue_global_largest_chi, 1 ) );
+  std::cout<<"\n single bin 2 \n"<<"pvalue_local_largest_chi "<<pvalue_local_largest_chi<<"  pvalue_global_largest_chi:  "<<pvalue_global_largest_chi<<"   sigma_global_largest_chi: "<<sigma_global_largest_chi<<std::endl;
+
 
   lg_lambda_sigma->AddEntry("", TString::Format("#color[%d]{%3.1f#sigma:        overall #chi^{2}/dof: %3.1f/%d}", kBlue, sigma_default, chi2, rows), "");
   if( lambda_sigma_3p>=1 ) {
@@ -2097,6 +2135,9 @@ void TLee::Plotting_systematics()
   int color_reweight   = kYellow+1;
   int color_reweight_cor = kYellow-9;
   int color_time       = kPink+1;
+  int color_geant = kViolet-6;
+  int color_t = kCyan;
+  int color_pot = kOrange-3;
 
   int rows = bins_newworld;
   int num_ch = map_data_spectrum_ch_bin.size();
@@ -2130,8 +2171,11 @@ void TLee::Plotting_systematics()
   TH1D *h1_detector_relerr = new TH1D("h1_detector_relerr", "", rows, 0, rows);
   TH1D *h1_mc_stat_relerr = new TH1D("h1_mc_stat_relerr", "", rows, 0, rows);
   TH1D *h1_additional_relerr = new TH1D("h1_additional_relerr", "", rows, 0, rows);
+  TH1D *h1_geant_relerr = new TH1D("h1_geant_relerr", "", rows, 0, rows);
   TH1D *h1_reweight_relerr = new TH1D("h1_reweight_relerr", "", rows, 0, rows);
   TH1D *h1_reweight_cor_relerr = new TH1D("h1_reweight_cor_relerr", "", rows, 0, rows);
+  TH1D *h1_pot_relerr = new TH1D("h1_pot_relerr", "", rows, 0, rows);
+  TH1D *h1_t_relerr = new TH1D("h1_t_relerr", "", rows, 0, rows);
   //Erin
   TH1D *h1_time_relerr = new TH1D("h1_time_relerr", "", rows, 0, rows);
   //
@@ -2145,6 +2189,9 @@ void TLee::Plotting_systematics()
   TH1D *h1_additional_fraction = new TH1D("h1_additional_fraction", "", rows, 0, rows);
   TH1D *h1_reweight_fraction = new TH1D("h1_reweight_fraction", "", rows, 0, rows);
   TH1D *h1_reweight_cor_fraction = new TH1D("h1_reweight_cor_fraction", "", rows, 0, rows);
+  TH1D *h1_geant_fraction = new TH1D("h1_geant_fraction", "", rows, 0, rows);
+  TH1D *h1_pot_fraction = new TH1D("h1_pot_fraction", "", rows, 0, rows);
+  TH1D *h1_t_fraction = new TH1D("h1_t_fraction", "", rows, 0, rows);
   //Erin
   TH1D *h1_time_fraction = new TH1D("h1_time_fraction", "", rows, 0, rows);
   //
@@ -2175,44 +2222,81 @@ void TLee::Plotting_systematics()
 		double cov_additional = matrix_absolute_additional_cov_newworld(ibin-1, ibin-1);
 		double cov_reweight   = matrix_absolute_reweight_cov_newworld(ibin-1, ibin-1);
 		double cov_reweight_cor   = matrix_absolute_reweight_cor_cov_newworld(ibin-1, ibin-1);
+                double cov_geant = matrix_absolute_geant_cov_newworld(ibin-1, ibin-1);
 		//Erin
 		double cov_time       = matrix_absolute_time_cov_newworld(ibin-1, ibin-1);
 		//
 
 		//cout << "lhagaman debug, cov_reweight_cor = " << cov_reweight_cor << "\n";
 
-		if(val_cv!=0) {
-		  h1_total_relerr->SetBinContent( ibin, sqrt( cov_total )/val_cv );
-		  h1_flux_relerr->SetBinContent( ibin, sqrt( cov_flux )/val_cv );
-		  h1_Xs_relerr->SetBinContent( ibin, sqrt(cov_Xs  )/val_cv );
-		  h1_detector_relerr->SetBinContent( ibin, sqrt( cov_detector )/val_cv );
-		  h1_mc_stat_relerr->SetBinContent( ibin, sqrt( cov_mc_stat )/val_cv );
-		  h1_additional_relerr->SetBinContent( ibin, sqrt( cov_additional )/val_cv );
-		  h1_reweight_relerr->SetBinContent( ibin, sqrt( cov_reweight )/val_cv );
-		  h1_reweight_cor_relerr->SetBinContent( ibin, sqrt( cov_reweight_cor )/val_cv );
-		  //Erin
-		  h1_time_relerr->SetBinContent( ibin, sqrt( cov_time )/val_cv );
-		  //
-		}
+        if(!(flag_syst_flux_Xs)){
+          cov_Xs = 0;
+          cov_flux = 0;
+        }
+        if(!(flag_syst_detector)) cov_detector = 0;
+        if(!(flag_syst_additional)) cov_additional = 0;
+        if(!(flag_syst_mc_stat) && !(flag_syst_mc_stat_cor)) cov_mc_stat = 0;
+        if(!(flag_syst_reweight)) cov_reweight = 0;
+        if(!(flag_syst_reweight_cor)) cov_reweight_cor = 0;
+        if(!(flag_split_geant)) cov_geant = 0;
+        if(!flag_syst_time) cov_time = 0;
 
-		if( cov_total!=0 ) {
-		  h1_flux_fraction->SetBinContent(ibin, cov_flux*100./cov_total );
-		  h1_Xs_fraction->SetBinContent(ibin, cov_Xs*100./cov_total );
-		  h1_detector_fraction->SetBinContent(ibin, cov_detector*100./cov_total );
-		  h1_mc_stat_fraction->SetBinContent(ibin, cov_mc_stat*100./cov_total );
-		  h1_additional_fraction->SetBinContent(ibin, cov_additional*100./cov_total );
-		  h1_reweight_fraction->SetBinContent(ibin, cov_reweight*100./cov_total );
-		  h1_reweight_cor_fraction->SetBinContent(ibin, cov_reweight_cor*100./cov_total );
-		  //Erin
-		  h1_time_fraction->SetBinContent(ibin, cov_time*100./cov_total );
-		  //
-		}
+        if(val_cv!=0) {
+          h1_total_relerr->SetBinContent( ibin, sqrt( cov_total )/val_cv );
+          if(flag_split_geant){
+            h1_flux_relerr->SetBinContent( ibin, sqrt( cov_flux - cov_geant )/val_cv );
+            h1_geant_relerr->SetBinContent( ibin, sqrt( cov_geant )/val_cv );
+          }
+          else{ h1_flux_relerr->SetBinContent( ibin, sqrt( cov_flux )/val_cv );}
+          if(!flag_split_pot_t){ h1_Xs_relerr->SetBinContent( ibin, sqrt(cov_Xs  )/val_cv ); }
+          else{
+            h1_Xs_relerr->SetBinContent( ibin, sqrt(cov_Xs)/val_cv - 0.01 - 0.02);
+            h1_pot_relerr->SetBinContent( ibin, 0.02);
+            h1_t_relerr->SetBinContent( ibin, 0.01);
+          }
+          h1_detector_relerr->SetBinContent( ibin, sqrt( cov_detector )/val_cv );
+          h1_mc_stat_relerr->SetBinContent( ibin, sqrt( cov_mc_stat )/val_cv );
+          h1_additional_relerr->SetBinContent( ibin, sqrt( cov_additional )/val_cv );
+          if(one_rw){ h1_reweight_relerr->SetBinContent( ibin, sqrt( cov_reweight + cov_reweight_cor)/val_cv ); }
+          else{
+            h1_reweight_relerr->SetBinContent( ibin, sqrt( cov_reweight )/val_cv );
+            h1_reweight_cor_relerr->SetBinContent( ibin, sqrt( cov_reweight_cor )/val_cv );
+          }
+          //Erin
+          h1_time_relerr->SetBinContent( ibin, sqrt( cov_time )/val_cv );
+          //
+        }
 
-		h1_pred_totalsyst->SetBinContent( ibin, val_cv ); h1_pred_totalsyst->SetBinError( ibin, sqrt(cov_total) );
-		h1_meas->SetBinContent( ibin, matrix_data_newworld(0, ibin-1) );
+        if( cov_total!=0 ) {
+          if(flag_split_geant){
+            h1_flux_fraction->SetBinContent(ibin, (cov_flux-cov_geant)*100./cov_total );
+            h1_geant_fraction->SetBinContent(ibin, cov_geant*100./cov_total );
+          }
+          else{ h1_flux_fraction->SetBinContent(ibin, cov_flux*100./cov_total ); }
+          if(!flag_split_pot_t){ h1_Xs_fraction->SetBinContent(ibin, cov_Xs*100./cov_total ); }
+          else{
+            h1_Xs_fraction->SetBinContent(ibin, (cov_Xs*100. - val_cv*0.02*val_cv*0.02 - val_cv*0.01*val_cv*0.01)/cov_total );
+            h1_pot_fraction->SetBinContent(ibin, val_cv*0.02*val_cv*0.02/cov_total );
+            h1_t_fraction->SetBinContent(ibin, val_cv*0.01*val_cv*0.01/cov_total );
+          }
+          h1_detector_fraction->SetBinContent(ibin, cov_detector*100./cov_total );
+          h1_mc_stat_fraction->SetBinContent(ibin, cov_mc_stat*100./cov_total );
+          h1_additional_fraction->SetBinContent(ibin, cov_additional*100./cov_total );
+          if(one_rw){ h1_reweight_fraction->SetBinContent(ibin, (cov_reweight+cov_reweight_cor)*100./cov_total );}
+          else{
+            h1_reweight_fraction->SetBinContent(ibin, cov_reweight*100./cov_total );
+            h1_reweight_cor_fraction->SetBinContent(ibin, cov_reweight_cor*100./cov_total );
+          }
+          //Erin
+          h1_time_fraction->SetBinContent(ibin, cov_time*100./cov_total );
+          //
+        }
 
-	  }// ibin==jbin
-	}// jbin
+        h1_pred_totalsyst->SetBinContent( ibin, val_cv ); h1_pred_totalsyst->SetBinError( ibin, sqrt(cov_total) );
+        h1_meas->SetBinContent( ibin, matrix_data_newworld(0, ibin-1) );
+
+      }// ibin==jbin
+    }// jbin
   }// ibin
 
   ///////////////////////
@@ -2251,18 +2335,19 @@ void TLee::Plotting_systematics()
   if(flag_syst_time) h1_time_relerr->Draw("same hist");
 	h1_time_relerr->SetLineColor(color_time);
   //
-  h1_additional_relerr->Draw("same hist"); h1_additional_relerr->SetLineColor(color_additional);
-  h1_mc_stat_relerr->Draw("same hist"); h1_mc_stat_relerr->SetLineColor(color_mc_stat);
-  h1_flux_relerr->Draw("same hist"); h1_flux_relerr->SetLineColor(color_flux);
-  h1_Xs_relerr->Draw("same hist"); h1_Xs_relerr->SetLineColor(color_Xs);
-  if(flag_syst_reweight) h1_reweight_relerr->Draw("same hist");
-	h1_reweight_relerr->SetLineColor(color_reweight);
-  if(flag_syst_reweight_cor) h1_reweight_cor_relerr->Draw("same hist");
-	h1_reweight_cor_relerr->SetLineColor(color_reweight_cor);
-  h1_detector_relerr->Draw("same hist");
-	h1_detector_relerr->SetLineColor(color_detector);
+  if(flag_syst_additional) h1_additional_relerr->Draw("same hist"); h1_additional_relerr->SetLineColor(color_additional);
+  if(flag_syst_mc_stat || flag_syst_mc_stat_cor)h1_mc_stat_relerr->Draw("same hist"); h1_mc_stat_relerr->SetLineColor(color_mc_stat);
+  if(flag_syst_flux_Xs) h1_flux_relerr->Draw("same hist"); h1_flux_relerr->SetLineColor(color_flux);
+  if(flag_syst_flux_Xs) h1_Xs_relerr->Draw("same hist"); h1_Xs_relerr->SetLineColor(color_Xs);
+  if(flag_syst_reweight) h1_reweight_relerr->Draw("same hist"); h1_reweight_relerr->SetLineColor(color_reweight);
+  if(flag_syst_reweight_cor && !one_rw) h1_reweight_cor_relerr->Draw("same hist"); h1_reweight_cor_relerr->SetLineColor(color_reweight_cor);
+  if(flag_syst_detector) h1_detector_relerr->Draw("same hist"); h1_detector_relerr->SetLineColor(color_detector);
+  if(flag_split_geant) h1_geant_relerr->Draw("same hist"); h1_geant_relerr->SetLineColor(color_geant);
+  if(flag_split_pot_t) h1_pot_relerr->Draw("same hist"); h1_pot_relerr->SetLineColor(color_pot);
+  if(flag_split_pot_t) h1_t_relerr->Draw("same hist"); h1_t_relerr->SetLineColor(color_t);
 
-  bool print_category_errors = 1;
+/*
+  bool print_category_errors = 0;
   if (print_category_errors) {
 
 	int num_bins = h1_total_relerr->GetNbinsX();
@@ -2287,20 +2372,23 @@ void TLee::Plotting_systematics()
 
 
   }
+*/
 
   for(int idx=1; idx<num_ch; idx++) {
 	line_root_xx[idx]->Draw(); line_root_xx[idx]->SetLineStyle(7); line_root_xx[idx]->SetY2(2.5);
   }
 
   TLegend *lg_relerr_total = new TLegend(0.81, 0.5, 0.98, 0.89);
-  lg_relerr_total->AddEntry(h1_total_relerr, "Total", "l");
-  lg_relerr_total->AddEntry(h1_flux_relerr, "Flux", "l");
-  lg_relerr_total->AddEntry(h1_Xs_relerr, "Xs", "l");
+  if(flag_syst_mc_stat || flag_syst_mc_stat_cor) lg_relerr_total->AddEntry(h1_mc_stat_relerr, "MC stat", "l");
+  if(flag_syst_additional) lg_relerr_total->AddEntry(h1_additional_relerr, "Dirt", "l");
+  if(flag_syst_flux_Xs) lg_relerr_total->AddEntry(h1_flux_relerr, "Flux", "l");
+  if(flag_split_pot_t){ lg_relerr_total->AddEntry(h1_pot_relerr, "POT", "l"); }
+  if(flag_syst_detector) lg_relerr_total->AddEntry(h1_detector_relerr, "Detector", "l");
+  if(flag_split_geant) lg_relerr_total->AddEntry(h1_geant_relerr, "Reint", "l");
+  if(flag_split_pot_t){ lg_relerr_total->AddEntry(h1_t_relerr, "Target", "l"); }
+  if(flag_syst_flux_Xs) lg_relerr_total->AddEntry(h1_Xs_relerr, "XS", "l");
   if(flag_syst_reweight) lg_relerr_total->AddEntry(h1_reweight_relerr, "Reweight", "l");
-  if(flag_syst_reweight_cor) lg_relerr_total->AddEntry(h1_reweight_cor_relerr, "Reweight cor", "l");
-  lg_relerr_total->AddEntry(h1_detector_relerr, "Detector", "l");
-  lg_relerr_total->AddEntry(h1_mc_stat_relerr, "MC stat", "l");
-  lg_relerr_total->AddEntry(h1_additional_relerr, "Dirt", "l");
+  if(flag_syst_reweight_cor && !one_rw) lg_relerr_total->AddEntry(h1_reweight_cor_relerr, "Reweight cor", "l");
   //Erin
   if(flag_syst_time) lg_relerr_total->AddEntry(h1_time_relerr, "Time/Scaling", "l");
   //
@@ -2313,25 +2401,47 @@ void TLee::Plotting_systematics()
   /////////////////////////
 
   THStack *h1_stack_fraction = new THStack("h1_stack_fraction", "");
-  h1_stack_fraction->Add(h1_flux_fraction);
-  h1_flux_fraction->SetFillColor(color_flux); h1_flux_fraction->SetLineColor(kBlack);
-  h1_stack_fraction->Add(h1_Xs_fraction);
-  h1_Xs_fraction->SetFillColor(color_Xs); h1_Xs_fraction->SetLineColor(kBlack);
+  if(flag_syst_mc_stat || flag_syst_mc_stat_cor){
+    h1_stack_fraction->Add(h1_mc_stat_fraction);
+    h1_mc_stat_fraction->SetFillColor(color_mc_stat); h1_mc_stat_fraction->SetLineColor(color_mc_stat);//h1_mc_stat_fraction->SetLineColor(kBlack);
+  }
+  if(flag_syst_additional){
+    h1_stack_fraction->Add(h1_additional_fraction);
+    h1_additional_fraction->SetFillColor(color_additional); h1_additional_fraction->SetLineColor(color_additional);//h1_additional_fraction->SetLineColor(kBlack);
+  }
+  if(flag_syst_flux_Xs){
+    h1_stack_fraction->Add(h1_flux_fraction);
+    h1_flux_fraction->SetFillColor(color_flux); h1_flux_fraction->SetLineColor(color_flux);//h1_flux_fraction->SetLineColor(kBlack);
+  }
+  if(flag_split_pot_t){
+    h1_stack_fraction->Add(h1_pot_fraction);
+    h1_pot_fraction->SetFillColor(color_pot); h1_pot_fraction->SetLineColor(color_pot);//h1_pot_fraction->SetLineColor(kBlack);
+  }
+  if(flag_syst_detector){
+    h1_stack_fraction->Add(h1_detector_fraction);
+    h1_detector_fraction->SetFillColor(color_detector); h1_detector_fraction->SetLineColor(color_detector);//h1_detector_fraction->SetLineColor(kBlack);
+  }
+  if(flag_split_geant){
+    h1_stack_fraction->Add(h1_geant_fraction);
+    h1_geant_fraction->SetFillColor(color_geant-1);h1_geant_fraction->SetLineColor(color_geant-1);//h1_geant_fraction->SetLineColor(kBlack);
+  }
+  if(flag_split_pot_t){
+      h1_stack_fraction->Add(h1_t_fraction);
+      h1_t_fraction->SetFillColor(color_t); h1_t_fraction->SetLineColor(color_t);//h1_t_fraction->SetLineColor(kBlack);
+  }
 
-  if(flag_syst_reweight) {
-	h1_stack_fraction->Add(h1_reweight_fraction);
-	h1_reweight_fraction->SetFillColor(color_reweight); h1_reweight_fraction->SetLineColor(kBlack);
+  if(flag_syst_flux_Xs){
+    h1_stack_fraction->Add(h1_Xs_fraction);
+    h1_Xs_fraction->SetFillColor(color_Xs); h1_Xs_fraction->SetLineColor(color_Xs);//h1_Xs_fraction->SetLineColor(kBlack);
   }
-  if(flag_syst_reweight_cor) {
-	h1_stack_fraction->Add(h1_reweight_cor_fraction);
-	h1_reweight_cor_fraction->SetFillColor(color_reweight_cor); h1_reweight_cor_fraction->SetLineColor(kBlack);
+  if(flag_syst_reweight){
+    h1_stack_fraction->Add(h1_reweight_fraction);
+    h1_reweight_fraction->SetFillColor(color_reweight); h1_reweight_fraction->SetLineColor(color_reweight);//h1_reweight_fraction->SetLineColor(kBlack);
   }
-  h1_stack_fraction->Add(h1_detector_fraction);
-  h1_detector_fraction->SetFillColor(color_detector); h1_detector_fraction->SetLineColor(kBlack);
-  h1_stack_fraction->Add(h1_mc_stat_fraction);
-  h1_mc_stat_fraction->SetFillColor(color_mc_stat); h1_mc_stat_fraction->SetLineColor(kBlack);
-  h1_stack_fraction->Add(h1_additional_fraction);
-  h1_additional_fraction->SetFillColor(color_additional); h1_additional_fraction->SetLineColor(kBlack);
+  if(flag_syst_reweight_cor && !one_rw){
+    h1_stack_fraction->Add(h1_reweight_cor_fraction);
+    h1_reweight_cor_fraction->SetFillColor(color_reweight_cor); h1_reweight_cor_fraction->SetLineColor(color_reweight_cor);//h1_reweight_cor_fraction->SetLineColor(kBlack);
+  }
   //Erin
   if(flag_syst_time) {
 	h1_stack_fraction->Add(h1_time_fraction);
@@ -2357,13 +2467,16 @@ void TLee::Plotting_systematics()
   }
 
   TLegend *lg_fraction_total = new TLegend(0.81, 0.55, 0.98, 0.89);
-  lg_fraction_total->AddEntry(h1_flux_fraction, "Flux", "f");
-  lg_fraction_total->AddEntry(h1_Xs_fraction, "Xs", "f");
+  if(flag_syst_mc_stat || flag_syst_mc_stat_cor)lg_fraction_total->AddEntry(h1_mc_stat_fraction, "MC stat", "f");
+  if(flag_syst_additional) lg_fraction_total->AddEntry(h1_additional_fraction, "Dirt", "f");
+  if(flag_syst_flux_Xs) lg_fraction_total->AddEntry(h1_flux_fraction, "Flux", "f");
+  if(flag_split_pot_t) lg_fraction_total->AddEntry(h1_pot_fraction, "POT", "f");
+  if(flag_syst_flux_Xs) lg_fraction_total->AddEntry(h1_Xs_fraction, "Xs", "f");
+  if(flag_syst_detector) lg_fraction_total->AddEntry(h1_detector_fraction, "Detector", "f");
+  if(flag_split_geant) lg_fraction_total->AddEntry(h1_geant_fraction, "Reint", "f");
+  if(flag_split_pot_t) lg_fraction_total->AddEntry(h1_t_fraction, "Target", "f");
   if(flag_syst_reweight) lg_fraction_total->AddEntry(h1_reweight_fraction, "Reweight", "f");
-  if(flag_syst_reweight_cor) lg_fraction_total->AddEntry(h1_reweight_cor_fraction, "Reweight cor", "f");
-  lg_fraction_total->AddEntry(h1_detector_fraction, "Detector", "f");
-  lg_fraction_total->AddEntry(h1_mc_stat_fraction, "MC stat", "f");
-  lg_fraction_total->AddEntry(h1_additional_fraction, "Dirt", "f");
+  if(flag_syst_reweight_cor && !one_rw) lg_fraction_total->AddEntry(h1_reweight_cor_fraction, "Reweight cor", "f");
   //Erin
   if(flag_syst_time) lg_fraction_total->AddEntry(h1_time_fraction, "Time/Scaling", "f");
   //
@@ -2435,6 +2548,50 @@ void TLee::Set_Collapse()
   matrix_absolute_cov_oldworld.Clear();
   matrix_absolute_cov_oldworld.ResizeTo( bins_oldworld, bins_oldworld );
 
+  TMatrixD matrix_absolute_data_stat_cov(bins_newworld, bins_newworld);
+  TMatrixD matrix_absolute_pred_stat_cov(bins_newworld, bins_newworld);
+
+  if( flag_syst_mc_stat_cor ) {
+    for(int idx=0; idx<bins_newworld; idx++) {
+      for(int jdx=0; jdx<bins_newworld; jdx++) {
+        double array_pred_protect[11] = {0, 0.461, 0.916, 1.382, 1.833, 2.298, 2.767, 3.225, 3.669, 4.141, 4.599};
+        /// Data_stat
+        double data_sigma_i = sqrt( matrix_pred_newworld(0, idx) );
+        double val_data_i = sqrt( matrix_data_newworld(0, idx) );
+        int int_data_i = (int)(val_data_i+0.1);
+        if( int_data_i>=1 && val_data_i<=10) {
+          if( data_sigma_i<array_pred_protect[int_data_i] ) {
+            double numerator = pow(data_sigma_i-val_data_i, 2);
+            double denominator = 2*( data_sigma_i - val_data_i + val_data_i*log(val_data_i/data_sigma_i) );
+            data_sigma_i = numerator/denominator;
+          }
+         }
+        double data_sigma_j = sqrt( matrix_pred_newworld(0, jdx) );
+        double val_data_j = sqrt( matrix_data_newworld(0, jdx) );
+        int int_data_j = (int)(val_data_j+0.1);
+        if( int_data_j>=1 && val_data_j<=10) {
+          if( data_sigma_j<array_pred_protect[int_data_j] ) {
+            double numerator = pow(data_sigma_j-val_data_j, 2);
+            double denominator = 2*( data_sigma_j - val_data_j + val_data_j*log(val_data_j/data_sigma_j) );
+            data_sigma_j = numerator/denominator;
+          }
+         }
+        double data_correlation = matrix_data_MCstat_correlation(idx, jdx);
+        double data_stat_cov = data_correlation * data_sigma_i * data_sigma_j;
+
+        /// MC_stat
+        double pred_sigma_i = sqrt( gh_mc_stat_bin[idx]->Eval( scaleF_Lee ) );
+        double pred_sigma_j = sqrt( gh_mc_stat_bin[jdx]->Eval( scaleF_Lee ) );
+        double pred_correlation = matrix_pred_MCstat_correlation(idx, jdx);
+        double pred_stat_cov = pred_correlation * pred_sigma_i * pred_sigma_j;
+
+        if(idx==jdx){ matrix_absolute_data_stat_cov(idx, jdx) = 0; }
+        else{ matrix_absolute_data_stat_cov(idx, jdx) = data_stat_cov; }
+        matrix_absolute_pred_stat_cov(idx, jdx) = pred_stat_cov;
+      }
+    }
+  }
+
   if( flag_syst_flux_Xs || flag_syst_reweight || flag_syst_reweight_cor) matrix_absolute_cov_oldworld += matrix_input_cov_flux_Xs;
   if( flag_syst_detector ) matrix_absolute_cov_oldworld += matrix_input_cov_detector;
   if( flag_syst_additional) matrix_absolute_cov_oldworld += matrix_input_cov_additional;
@@ -2448,6 +2605,10 @@ void TLee::Set_Collapse()
   matrix_absolute_cov_newworld.ResizeTo(bins_newworld, bins_newworld);
   matrix_absolute_cov_newworld = matrix_transform_Lee_T * matrix_absolute_cov_oldworld * matrix_transform_Lee;
 
+  if(flag_syst_mc_stat_cor){
+    matrix_absolute_cov_newworld += matrix_absolute_data_stat_cov;
+    matrix_absolute_cov_newworld += matrix_absolute_pred_stat_cov;
+  }
   if( flag_syst_mc_stat ) {
 	for(int ibin=0; ibin<bins_newworld; ibin++) {
 	  double val_mc_stat_cov = gh_mc_stat_bin[ibin]->Eval( scaleF_Lee );
@@ -2458,7 +2619,7 @@ void TLee::Set_Collapse()
   }
 
   ////////////////////////////////////////
-/*
+
    for( auto it_sub=matrix_sub_flux_geant4_Xs_oldworld.begin(); it_sub!=matrix_sub_flux_geant4_Xs_oldworld.end(); it_sub++ ) {
     int index = it_sub->first;
     int rows = matrix_sub_flux_geant4_Xs_oldworld[index].GetNrows();
@@ -2475,7 +2636,7 @@ void TLee::Set_Collapse()
     matrix_sub_flux_geant4_Xs_newworld[index].ResizeTo(bins_newworld, bins_newworld);
     matrix_sub_flux_geant4_Xs_newworld[index] = matrix_transform_Lee_T * matrix_sub_flux_geant4_Xs_oldworld[index] * matrix_transform_Lee;
    }
- */
+ 
 
   ////////////////////////////////////////
 
@@ -2492,6 +2653,7 @@ void TLee::Set_Collapse()
 	matrix_absolute_additional_cov_newworld.Clear();
 	matrix_absolute_reweight_cov_newworld.Clear();
 	matrix_absolute_reweight_cor_cov_newworld.Clear();
+        matrix_absolute_geant_cov_newworld.Clear();//plotting only
 	//Erin
 	matrix_absolute_time_cov_newworld.Clear();
 	//
@@ -2503,6 +2665,7 @@ void TLee::Set_Collapse()
 	matrix_absolute_additional_cov_newworld.ResizeTo( bins_newworld, bins_newworld );
 	matrix_absolute_reweight_cov_newworld.ResizeTo( bins_newworld, bins_newworld );
 	matrix_absolute_reweight_cor_cov_newworld.ResizeTo( bins_newworld, bins_newworld );
+        matrix_absolute_geant_cov_newworld.ResizeTo( bins_newworld, bins_newworld );//plotting only  
 	//Erin
 	matrix_absolute_time_cov_newworld.ResizeTo( bins_newworld, bins_newworld );
 	//
@@ -2520,6 +2683,7 @@ void TLee::Set_Collapse()
 	matrix_absolute_additional_cov_newworld = matrix_transform_Lee_T * matrix_input_cov_additional * matrix_transform_Lee;
 	matrix_absolute_reweight_cov_newworld = matrix_transform_Lee_T * matrix_input_cov_reweight * matrix_transform_Lee;
 	matrix_absolute_reweight_cor_cov_newworld = matrix_transform_Lee_T * matrix_input_cov_reweight_cor * matrix_transform_Lee;
+        matrix_absolute_geant_cov_newworld = matrix_transform_Lee_T * matrix_input_cov_geant * matrix_transform_Lee;//plotting only
 	//Erin
 	matrix_absolute_time_cov_newworld = matrix_transform_Lee_T * matrix_input_cov_time * matrix_transform_Lee;
 	//
@@ -2591,6 +2755,7 @@ void TLee::Set_POT_implement()
 	  matrix_input_cov_additional(ibin, jbin) *= scaleF_POT2;
 	  matrix_input_cov_reweight(ibin, jbin) *= scaleF_POT2;
 	  matrix_input_cov_reweight_cor(ibin, jbin) *= scaleF_POT2;
+          matrix_input_cov_geant(ibin, jbin) *= scaleF_POT2;//plotting only
 	  //Erin
 	  matrix_input_cov_time(ibin, jbin) *= scaleF_POT2;
 	  //
@@ -2705,6 +2870,7 @@ void TLee::Set_Spectra_MatrixCov()
   ////////////////////
   ////////////////////
 
+/*
   // added lhagaman 2023_07_01, must be disabled for systematic plots, must be enabled for 1d LEE fitting
   // 2d LEE fitting is handled in a different set of files
   // Erin: must be on for correct handling of systematics if using separate LEE channel (preferred)
@@ -2741,6 +2907,7 @@ void TLee::Set_Spectra_MatrixCov()
     map_Lee_ch[15] = 1;
     map_Lee_ch[16] = 1;
   }
+*/
 
   /*map_Lee_ch[2] = 1;
   map_Lee_ch[4] = 1;
@@ -2804,8 +2971,12 @@ void TLee::Set_Spectra_MatrixCov()
   TMatrixD matrix_reweight_frac(bins_oldworld, bins_oldworld);
   TMatrixD matrix_reweight_cor_frac(bins_oldworld, bins_oldworld);
 
+  TMatrixD matrix_geant_frac(bins_oldworld, bins_oldworld);//for plotting only
+  matrix_geant_frac.Zero();
+
   for(int idx=syst_cov_flux_Xs_begin; idx<=syst_cov_flux_Xs_end; idx++) {
 
+/*
 	int disable_BR_uncertainty_2d = 0;
 	if (disable_BR_uncertainty_2d) {
 	  // See python_tools/BR_uncertainty_tool.ipynb for calculation using merge.root
@@ -2848,7 +3019,7 @@ void TLee::Set_Spectra_MatrixCov()
 		}
 	  }
 	}
-
+*/
 
 
 
@@ -2878,6 +3049,10 @@ void TLee::Set_Spectra_MatrixCov()
 
 	matrix_flux_Xs_frac += (*map_matrix_flux_Xs_frac[idx]);
 
+       if( idx==14 || idx==15 || idx==16 ) {// geant for plotting stuff only so must be if not if else
+         matrix_geant_frac += (*map_matrix_flux_Xs_frac[idx]);
+       }
+
 	if( idx<=16 ) {// flux
 	  matrix_flux_frac += (*map_matrix_flux_Xs_frac[idx]);
 	}else if( idx==17 ) {// interaction
@@ -2886,7 +3061,7 @@ void TLee::Set_Spectra_MatrixCov()
 	  matrix_reweight_frac += (*map_matrix_flux_Xs_frac[idx]);
 	}else if( idx==19 ) {//reweight cor
 	  //cout << "lhagaman debug, matrix_reweight_cor_frac = " << (*map_matrix_flux_Xs_frac[idx]) << "\n";
-	  cout << "lhagaman debug, adding to reweight_cor_frac\n";
+	  //cout << "lhagaman debug, adding to reweight_cor_frac\n";
 	  matrix_reweight_cor_frac += (*map_matrix_flux_Xs_frac[idx]);
 	}
   }
@@ -2934,7 +3109,7 @@ void TLee::Set_Spectra_MatrixCov()
   }
   cout<<endl;
 
-
+/*
   if( 0 ) {
 	cout<<endl<<" testestest "<<endl<<endl;
 
@@ -2969,7 +3144,7 @@ void TLee::Set_Spectra_MatrixCov()
 	  }// for(int jdx=0; jdx<user_rows; jdx++)
 	}//for(int idx=0; idx<user_rows; idx++)
   }
-
+*/
 
   ////////////////////////////////////////// additional
 
@@ -2996,6 +3171,7 @@ void TLee::Set_Spectra_MatrixCov()
   matrix_input_cov_additional.Clear();
   matrix_input_cov_reweight.Clear();
   matrix_input_cov_reweight_cor.Clear();
+  matrix_input_cov_geant.Clear();//for plotting only
   //Erin
   matrix_input_cov_time.Clear();
   //
@@ -3007,6 +3183,7 @@ void TLee::Set_Spectra_MatrixCov()
   matrix_input_cov_additional.ResizeTo( bins_oldworld, bins_oldworld );
   matrix_input_cov_reweight.ResizeTo(bins_oldworld, bins_oldworld);
   matrix_input_cov_reweight_cor.ResizeTo(bins_oldworld, bins_oldworld);
+  matrix_input_cov_geant.ResizeTo(bins_oldworld, bins_oldworld);//for plotting only
   //Erin
   matrix_input_cov_time.ResizeTo( bins_oldworld, bins_oldworld );
   //
@@ -3041,6 +3218,9 @@ void TLee::Set_Spectra_MatrixCov()
 	  val_cov = matrix_reweight_cor_frac(ibin, jbin);
 	  matrix_input_cov_reweight_cor(ibin, jbin) = val_cov * val_i * val_j;
 
+          val_cov = matrix_geant_frac(ibin, jbin);//for plotting only
+          matrix_input_cov_geant(ibin, jbin) = val_cov * val_i * val_j;//plotting only
+
 	  for(auto it=matrix_input_cov_detector_sub.begin(); it!=matrix_input_cov_detector_sub.end(); it++) {
 		int idx = it->first;
 		val_cov = matrix_detector_sub_frac[idx](ibin, jbin);
@@ -3058,6 +3238,7 @@ void TLee::Set_Spectra_MatrixCov()
 
   ////////////////////////////////////////// MC statistics
 
+/*
   if( 0 ) {
 	TFile *mcfile = new TFile(mc_directory+"file_collapsed_covariance_matrix.root", "read");
 	TMatrixD *mc_matrix = (TMatrixD*)mcfile->Get("matrix_absolute_mc_stat_cov_newworld");
@@ -3069,6 +3250,7 @@ void TLee::Set_Spectra_MatrixCov()
 	}
 	ListWrite.close();
   }
+*/
 
   int mc_file_begin = syst_cov_mc_stat_begin;
   int mc_file_end = syst_cov_mc_stat_end;
@@ -3132,6 +3314,33 @@ void TLee::Set_Spectra_MatrixCov()
 	gh_mc_stat_bin[ibin]->GetPoint( gh_mc_stat_bin[ibin]->GetN()-1, x, y);
 	gh_mc_stat_bin[ibin]->SetPoint( gh_mc_stat_bin[ibin]->GetN(), x+1, y);
   }
+
+///////////////////////////////
+if(flag_syst_mc_stat_cor){
+  matrix_data_MCstat_correlation.Clear();
+  matrix_data_MCstat_correlation.ResizeTo(bins_newworld, bins_newworld);
+
+  matrix_pred_MCstat_correlation.Clear();
+  matrix_pred_MCstat_correlation.ResizeTo(bins_newworld, bins_newworld);
+
+  TFile *roofile_data = new TFile(mc_directory+"run_pred_stat.root", "read");
+  TMatrixD *matrix_datastat = (TMatrixD*)roofile_data->Get("cov_mat_0");
+  //TMatrixD *matrix_datastat = (TMatrixD*)roofile_data->Get("cov_mat_1");
+  //cout<<endl<<" check matrix_datastat "<<matrix_datastat->GetNrows()<<endl<<endl;
+
+  for(int idx=0; idx<matrix_datastat->GetNrows(); idx++ ) {
+    for(int jdx=0; jdx<matrix_datastat->GetNrows(); jdx++ ) {
+      double val_cov = (*matrix_datastat)(idx, jdx);
+      double ii = sqrt((*matrix_datastat)(idx,idx));
+      double jj = sqrt((*matrix_datastat)(jdx,jdx));
+      if( ii!=0 && jj!=0 ) matrix_data_MCstat_correlation(idx, jdx) = val_cov/ii/jj;
+      if( idx==jdx) matrix_data_MCstat_correlation(idx, jdx) = 1;
+    }
+  }
+  matrix_pred_MCstat_correlation = matrix_data_MCstat_correlation;
+}
+/////////////////////
+
 
   cout<<endl;
   cout<<" ---> Complete the initialization"<<endl;

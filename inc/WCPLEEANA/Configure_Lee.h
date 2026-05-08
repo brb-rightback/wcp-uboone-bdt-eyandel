@@ -58,6 +58,7 @@ namespace config_Lee
   bool flag_syst_detector   = false;
   bool flag_syst_additional = true;
   bool flag_syst_mc_stat    = true;
+  bool flag_syst_mc_stat_cor     = false;
   bool flag_syst_reweight        = false;
   bool flag_syst_reweight_cor    = false;
   //ns timing error
@@ -72,6 +73,10 @@ namespace config_Lee
   double Lee_0p_strength_for_outputfile_covariance_matrix = 0;
 
   bool flag_plotting_systematics   = true;
+  bool flag_split_geant            = 1;
+  bool flag_split_pot_t            = 0;
+  bool one_rw                      = 0;
+  bool flag_use_xs_sys             = 0;
 
   ////////// goodness of fit
 

@@ -84,8 +84,13 @@ public:
   bool flag_syst_detector;
   bool flag_syst_additional;
   bool flag_syst_mc_stat;
+  bool flag_syst_mc_stat_cor;
   bool flag_syst_reweight;
   bool flag_syst_reweight_cor;
+  bool one_rw;
+  bool flag_split_geant;
+  bool flag_split_pot_t;
+  bool flag_use_xs_sys;
   //Erin
   bool flag_syst_time;
   //
@@ -131,6 +136,7 @@ public:
 
   TMatrixD matrix_input_cov_flux;
   TMatrixD matrix_input_cov_Xs;
+  TMatrixD matrix_input_cov_geant;
   map<int, TMatrixD>matrix_input_cov_detector_sub;
 
   map<int, TGraph*>gh_mc_stat_bin;
@@ -146,6 +152,7 @@ public:
   bool flag_individual_cov_newworld;
   TMatrixD matrix_absolute_flux_cov_newworld;
   TMatrixD matrix_absolute_Xs_cov_newworld;
+  TMatrixD matrix_absolute_geant_cov_newworld;
   TMatrixD matrix_absolute_detector_cov_newworld;
   map<int, TMatrixD>matrix_absolute_detector_sub_cov_newworld;
   TMatrixD matrix_absolute_mc_stat_cov_newworld;
@@ -173,6 +180,15 @@ public:
   double minimization_Lee_strength_err;
   int minimization_NDF;
   bool flag_Lee_minimization_after_constraint;
+
+  TMatrixD matrix_data_MCstat_correlation; 
+  TMatrixD matrix_pred_MCstat_correlation; 
+  TMatrixD matrix_absolute_data_stat_cov;
+  TMatrixD matrix_absolute_pred_stat_cov;
+
+  TMatrixD matrix_pred_cov_reweight;
+  TMatrixD matrix_pred_cov_reweight_cor;
+  TMatrixD matrix_pred_cov_geant;
 
   /////////////////////////////////////////////////////// function member
 
