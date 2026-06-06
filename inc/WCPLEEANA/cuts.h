@@ -157,6 +157,7 @@ namespace LEEana{
 
   bool is_true_0p(PFevalInfo& pfeval);
   double get_true_Kp(PFevalInfo& pfeval,bool MeV=true,bool total=false);
+  double get_true_sumKp(PFevalInfo& pfeval,bool MeV=true,bool total=false);
   double get_true_p_angle_absorber(PFevalInfo& pfeval);
 
   int mcc8_pmuon_costheta_bin(float pmuon, float costh);
@@ -432,6 +433,21 @@ double LEEana::get_true_Kp(PFevalInfo& pfeval,bool MeV,bool total){
     }
   if (Kp==0.938272) return 0;
   return Kp*units-mass;
+}
+
+double LEEana::get_true_sumKp(PFevalInfo& pfeval,bool MeV,bool total){
+    double sumKp=0;
+    double units=1;
+    if(MeV) units=1000;
+    double mass=0.938272*units;
+    if(total) mass=0;
+    for(size_t i=0; i<pfeval.truth_Ntrack; i++){
+      if(pfeval.truth_mother[i] != 0) continue;
+      if(pfeval.truth_pdg[i] != 2212) continue;
+      sumKp+=pfeval.truth_startMomentum[i][3]*units-mass;
+    }
+  if (sumKp==0.938272) return 0;
+  return sumKp;
 }
 
 double LEEana::get_true_p_angle_absorber(PFevalInfo& pfeval){
@@ -873,6 +889,17 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (var_name == "ssm_cosP") return TMath::Cos(theta);
     if (var_name == "ssm_angle_P") return theta;
     if (var_name == "ssm_angle_P_deg" || var_name == "ssm_angle_P_deg_vtx") return theta*180/3.14159;
+
+  }else if (var_name == "ssm_kdar_bdt_stub_energy"){
+    if (tagger.ssm_prim_track1_kine_energy_range>0 || tagger.ssm_Nsm_wivtx<1) return 0;
+    return tagger.ssm_kdar_bdt_stub_energy;
+
+  }else if (var_name == "ssm_KE_cor"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    double KE_cor = 0;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 || tagger.ssm_Nsm_wivtx>0) KE_cor=tagger.ssm_kdar_bdt_stub_energy;
+    double KE = get_ssmE(tagger)-105.7+KE_cor;
+    return KE;
 
   }else if (var_name == "evtTimeNS_recover"){
     return recover_nsbeamtiming(pfeval, flag_data); 
@@ -2137,6 +2164,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     double Q2_absorber = sqrt(2*235.5*(Emuon-pmuon*costh_absorber)-105.7*105.7 );
 
     double Kp = get_true_Kp(pfeval);
+    double sumKp = get_true_sumKp(pfeval);
     double p_angle_absorber_deg = get_true_p_angle_absorber(pfeval)*180/3.14159;
 
     if (cut_file == 1){
@@ -3449,11 +3477,170 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
     }
 
+    else if (cut_file==788){
+      int outer_slice_width=8;
+      int outer_slice_min = 0;
+      int outer_slice_max = 120;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=15;
+      int slice_min = 0;
+      int slice_max = 120;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 128;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.sumKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
 
-  }
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(abs(outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min))+".gt."+std::to_string(abs(outer_slice_bin*outer_slice_width+outer_slice_min))+".Kp.le.";
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+
+              std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_outer_slice = false;
+                if(sumKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && sumKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && sumKp>outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && sumKp<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+
+              } // found cut
+            
+            } // bin
+
+          } // slice
+
+        } // outer slice
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 788
+
+
+    else if (cut_file==789){
+      int slice_width=5;
+      int slice_min = 0;
+      int slice_max = 120;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 128;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.sumKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = base_cut_string+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<sumKp<<" "<<pass_slice<<std::endl;
+
+                if(pass_slice && pass_bin){ return number; }
+
+              } // found cut
+
+            } // bin
+
+          } // slice
+
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 789
+
+
+
+
+  } // map_cut_xs_bin.begin()
 
   return -1;
 }
+
+
+
+
+
 
 bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine){
 

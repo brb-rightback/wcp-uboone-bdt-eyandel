@@ -1770,6 +1770,9 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_kdar_score_lowE",1);
     T_BDTvars->SetBranchStatus("ssm_kdar_score_hiE",1);
   }
+  if(tagger.saved_ssm_stub_bdt_scores){
+    T_BDTvars->SetBranchStatus("ssm_kdar_bdt_stub_energy",1);
+  }
   if(tagger.saved_ssm_bdt_vars){
     T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
     T_BDTvars->SetBranchStatus("ssm_angle_to_absorber",1);
@@ -1789,6 +1792,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_vtxX",1);
     T_BDTvars->SetBranchStatus("ssm_vtxY",1);
     T_BDTvars->SetBranchStatus("ssm_vtxZ",1);
+    T_BDTvars->SetBranchStatus("ssm_Nsm_wivtx",1);
   }
 
 
