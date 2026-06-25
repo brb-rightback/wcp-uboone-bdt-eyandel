@@ -691,6 +691,9 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   if(tagger.saved_ssm_stub_bdt_scores){
     T_BDTvars->SetBranchStatus("ssm_kdar_bdt_stub_energy",1);
   }
+  if(tagger.saved_ssm_stub_bdt_scores_2){
+    T_BDTvars->SetBranchStatus("ssm_kdar_bdt_stub_energy_2",1);
+  }
   if(tagger.saved_ssm_bdt_vars){
     T_BDTvars->SetBranchStatus("ssm_kine_energy",1);
     T_BDTvars->SetBranchStatus("ssm_angle_to_absorber",1);
@@ -710,6 +713,12 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_vtxX",1);
     T_BDTvars->SetBranchStatus("ssm_vtxY",1);
     T_BDTvars->SetBranchStatus("ssm_vtxZ",1);
+    T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_1",1);
+    T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_2",1);
+    T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_3",1);
+    T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_4",1);
+    T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_5",1);
+    T_BDTvars->SetBranchStatus("ssm_medium_dq_dx",1);
   }
 
 

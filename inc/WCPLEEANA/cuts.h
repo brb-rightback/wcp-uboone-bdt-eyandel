@@ -157,7 +157,8 @@ namespace LEEana{
 
   bool is_true_0p(PFevalInfo& pfeval);
   double get_true_Kp(PFevalInfo& pfeval,bool MeV=true,bool total=false);
-  double get_true_sumKp(PFevalInfo& pfeval,bool MeV=true,bool total=false);
+  double get_true_sumKp(PFevalInfo& pfeval,bool MeV=true,bool total=false, double threshold=0);
+  int n_true_p(PFevalInfo& pfeval, double threshold=0);
   double get_true_p_angle_absorber(PFevalInfo& pfeval);
 
   int mcc8_pmuon_costheta_bin(float pmuon, float costh);
@@ -420,6 +421,17 @@ bool LEEana::is_true_0p(PFevalInfo& pfeval){
   return true;
 }
 
+int LEEana::n_true_p(PFevalInfo& pfeval, double threshold){
+    int n_true_p=0;
+    for(size_t i=0; i<pfeval.truth_Ntrack; i++){
+      if(pfeval.truth_mother[i] != 0) continue;
+      if(pfeval.truth_pdg[i] != 2212) continue;
+      if(pfeval.truth_startMomentum[i][3] - 0.938272 < threshold) continue; 
+      n_true_p++;
+    }
+    return n_true_p;
+}
+
 double LEEana::get_true_Kp(PFevalInfo& pfeval,bool MeV,bool total){
     double Kp=0;
     double units=1;
@@ -435,7 +447,7 @@ double LEEana::get_true_Kp(PFevalInfo& pfeval,bool MeV,bool total){
   return Kp*units-mass;
 }
 
-double LEEana::get_true_sumKp(PFevalInfo& pfeval,bool MeV,bool total){
+double LEEana::get_true_sumKp(PFevalInfo& pfeval,bool MeV,bool total,double threshold){
     double sumKp=0;
     double units=1;
     if(MeV) units=1000;
@@ -444,6 +456,7 @@ double LEEana::get_true_sumKp(PFevalInfo& pfeval,bool MeV,bool total){
     for(size_t i=0; i<pfeval.truth_Ntrack; i++){
       if(pfeval.truth_mother[i] != 0) continue;
       if(pfeval.truth_pdg[i] != 2212) continue;
+      if(pfeval.truth_startMomentum[i][3]*units-mass<threshold) continue;
       sumKp+=pfeval.truth_startMomentum[i][3]*units-mass;
     }
   if (sumKp==0.938272) return 0;
@@ -546,6 +559,16 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
   }else if (weight_name == "cv_spline_cv_spline_oldflux" || weight_name == "cv_spline_oldflux_cv_spline"){
     double oldflux_weight = get_oldflux_weight(eval,pfeval);
     return oldflux_weight * pow(eval.weight_cv * eval.weight_spline,2);
+
+  }else if (weight_name == "cv_spline_lessp"){
+    if (n_true_p(pfeval,0)>3) {return 0;}
+    if (get_true_Kp(pfeval)<10) return addtl_weight*eval.weight_cv * eval.weight_spline*5;
+    return addtl_weight*eval.weight_cv * eval.weight_spline;
+  }else if (weight_name == "cv_spline_lessp_cv_spline_lessp"){
+    if (n_true_p(pfeval,0)>3) {return 0;}
+    if (get_true_Kp(pfeval)<10) return addtl_weight*eval.weight_cv * eval.weight_spline*25;
+    return addtl_weight*eval.weight_cv*eval.weight_spline *addtl_weight*eval.weight_cv*eval.weight_spline;
+
   }else if (weight_name == "add_weight"){//for systematics
     return addtl_weight;
 
@@ -900,6 +923,70 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_prim_track1_kine_energy_range<0 || tagger.ssm_Nsm_wivtx>0) KE_cor=tagger.ssm_kdar_bdt_stub_energy;
     double KE = get_ssmE(tagger)-105.7+KE_cor;
     return KE;
+
+  }else if (var_name == "ssm_KE_cor_fix" || var_name == "ssm_KE_cor_fix_50" || var_name == "ssm_KE_cor_fix_60" || var_name == "ssm_KE_cor_fix_55"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    double KE_cor = 0;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_Nsm_wivtx>0) KE_cor=tagger.ssm_kdar_bdt_stub_energy;
+    double KE = get_ssmE(tagger)-105.7+KE_cor;
+    if(KE<50 &&var_name == "ssm_KE_cor_fix_50") return 50.1;
+    if(KE<55 &&var_name == "ssm_KE_cor_fix_55") return 55.1;
+    if(KE<60 &&var_name == "ssm_KE_cor_fix_60") return 60.1;
+    return KE;
+
+  }else if (var_name == "ssm_dq_dx_fwd_1"){
+    return tagger.ssm_dq_dx_fwd_1;
+  }else if (var_name == "ssm_dq_dx_fwd_2"){
+    return tagger.ssm_dq_dx_fwd_2;
+  }else if (var_name == "ssm_dq_dx_fwd_3"){
+    return tagger.ssm_dq_dx_fwd_3;
+  }else if (var_name == "ssm_dq_dx_fwd_4"){
+    return tagger.ssm_dq_dx_fwd_4;
+  }else if (var_name == "ssm_dq_dx_fwd_5"){
+    return tagger.ssm_dq_dx_fwd_5;
+  }else if (var_name == "ssm_medium_dq_dx"){
+    return tagger.ssm_medium_dq_dx;
+
+  }else if (var_name == "ssm_kdar_stub_lin"){
+    double slope = 4200;
+    double intercept = -15e3*0.6*5;
+    if (tagger.ssm_prim_track1_kine_energy_range>0 || tagger.ssm_Nsm_wivtx<1) return 0;
+    double sum_vtx_charge = 0.6*43e3*(tagger.ssm_dq_dx_fwd_1+tagger.ssm_dq_dx_fwd_2+tagger.ssm_dq_dx_fwd_3+tagger.ssm_dq_dx_fwd_4+tagger.ssm_dq_dx_fwd_5-5*tagger.ssm_medium_dq_dx);
+    if(sum_vtx_charge<0) return 0;
+    return (sum_vtx_charge-intercept)/slope;
+
+  }else if (var_name == "ssm_KE_lin_cor"){
+    if (tagger.ssm_kine_energy<0) return -999;
+
+    double KE_cor = 0;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_Nsm_wivtx>0){
+      double slope = 4200;
+      double intercept = -15e3*0.6*5;
+      double sum_vtx_charge = 0.6*43e3*(tagger.ssm_dq_dx_fwd_1+tagger.ssm_dq_dx_fwd_2+tagger.ssm_dq_dx_fwd_3+tagger.ssm_dq_dx_fwd_4+tagger.ssm_dq_dx_fwd_5-5*tagger.ssm_medium_dq_dx);
+      if(sum_vtx_charge<0) KE_cor = 0;
+      else KE_cor = (sum_vtx_charge-intercept)/slope;
+    }
+
+    double KE = get_ssmE(tagger)-105.7+KE_cor;
+    return KE;
+
+
+
+  }else if (var_name == "ssm_kdar_bdt_stub_energy_2"){
+    if (tagger.ssm_prim_track1_kine_energy_range>0 || tagger.ssm_Nsm_wivtx<1) return 0;
+    return tagger.ssm_kdar_bdt_stub_energy_2;
+
+  }else if (var_name == "ssm_KE_cor_fix_2" || var_name == "ssm_KE_cor_fix_2_50" || var_name == "ssm_KE_cor_fix_2_60" || var_name == "ssm_KE_cor_fix_2_55"){
+    if (tagger.ssm_kine_energy<0) return -999;
+    double KE_cor = 0;
+    if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_Nsm_wivtx>0) KE_cor=tagger.ssm_kdar_bdt_stub_energy_2;
+    double KE = get_ssmE(tagger)-105.7+KE_cor;
+    if(KE<50 && var_name == "ssm_KE_cor_fix_2_50") return 50.1;
+    if(KE<50 && var_name == "ssm_KE_cor_fix_2_55") return 55.1;
+    if(KE<60 && var_name == "ssm_KE_cor_fix_2_60") return 60.1;
+    return KE;
+
+
 
   }else if (var_name == "evtTimeNS_recover"){
     return recover_nsbeamtiming(pfeval, flag_data); 
@@ -2213,8 +2300,20 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     double Q2_absorber = sqrt(2*235.5*(Emuon-pmuon*costh_absorber)-105.7*105.7 );
 
     double Kp = get_true_Kp(pfeval);
+    if(Kp<0) Kp=0;
     double sumKp = get_true_sumKp(pfeval);
-    double sumsubKp = sumKp-Kp;
+    if(sumKp<0) sumKp=0;
+    double sumKp_8MeV = get_true_sumKp(pfeval, true, false, 8);
+    if(sumKp_8MeV<0) sumKp_8MeV=0;
+    double sumsubKp = sumKp-Kp;    
+    if(sumsubKp<0) sumsubKp=0;
+    double sumsubKp_8MeV = sumKp_8MeV-Kp;
+    if(sumsubKp_8MeV<0) sumsubKp_8MeV=0;
+    int Pmult = n_true_p(pfeval);
+//if(sumsubKp!=sumsubKp_8MeV) std::cout<<sumsubKp<<" "<<sumsubKp_8MeV<<std::endl;
+
+//if(sumsubKp<0 || sumsubKp>100) std::cout<<Kp<<" "<<sumKp<<" "<<sumsubKp<<std::endl;
+
     double p_angle_absorber_deg = get_true_p_angle_absorber(pfeval)*180/3.14159;
 
     if (cut_file == 1){
@@ -3565,7 +3664,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
                 if(sumKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && sumKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
                   pass_outer_slice = true;
                 }
-                else if(outer_slice_bin==outer_slice_nbins-1 && sumKp>outer_slice_max){
+                else if(outer_slice_bin==outer_slice_nbins-1 && sumKp>=outer_slice_max){
                   pass_outer_slice = true;
                 }
                 else if(outer_slice_bin==0 && sumKp<outer_slice_min){
@@ -3719,7 +3818,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
                 if(sumsubKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && sumsubKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
                   pass_outer_slice = true;
                 }
-                else if(outer_slice_bin==outer_slice_nbins-1 && sumsubKp>outer_slice_max){
+                else if(outer_slice_bin==outer_slice_nbins-1 && sumsubKp>=outer_slice_max){
                   pass_outer_slice = true;
                 }
                 else if(outer_slice_bin==0 && sumsubKp<outer_slice_min){
@@ -3832,6 +3931,534 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
 
 
     } // 791
+
+
+    else if (cut_file==792 || cut_file==7921){
+      int outer_slice_width=5;
+      int outer_slice_min = 0;
+      int outer_slice_max = 50;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=15;
+      int slice_min = 0;
+      int slice_max = 105;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 112;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      double this_sumsubKp = sumsubKp;
+      if(cut_file==7921) this_sumsubKp = sumsubKp_8MeV;
+      std::string base_cut_string = "kdar.sumsubKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(abs(outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min))+".gt."+std::to_string(abs(outer_slice_bin*outer_slice_width+outer_slice_min))+".Kp.le.";
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_outer_slice = false;
+                if(this_sumsubKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && this_sumsubKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && this_sumsubKp>=outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && this_sumsubKp<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+
+              } // found cut
+
+            } // bin
+
+          } // slice
+
+        } // outer slice
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 792
+
+    else if (cut_file==7923 || cut_file==79231){
+      int outer_slice_width=5;
+      int outer_slice_min = -4;
+      int outer_slice_max = 51;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=10;
+      int slice_min = -5;
+      int slice_max = 115;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 112;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      double this_sumsubKp = sumsubKp;
+      if(cut_file==79231) this_sumsubKp = sumsubKp_8MeV;
+      std::string base_cut_string = "kdar.sumsubKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min)+".gt."+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_min)+".Kp.le.";
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(slice_bin*slice_width+slice_width+slice_min)+".gt."+std::to_string(slice_bin*slice_width+slice_min)+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(bin*bin_width+bin_width+min)+".gt."+std::to_string(bin*bin_width+min);
+
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_outer_slice = false;
+                if(this_sumsubKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && this_sumsubKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && this_sumsubKp>=outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && this_sumsubKp<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+
+              } // found cut
+
+            } // bin
+
+          } // slice
+
+        } // outer slice
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 7923
+
+    else if (cut_file==7922 || cut_file==79221){
+      int outer_slice_width=5;
+      int outer_slice_min = -4;
+      int outer_slice_max = 51;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=15;
+      int slice_min = -10;
+      int slice_max = 110;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 112;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      double this_sumsubKp = sumsubKp;
+      if(cut_file==79221) this_sumsubKp = sumsubKp_8MeV;
+      std::string base_cut_string = "kdar.sumsubKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min)+".gt."+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_min)+".Kp.le.";
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(slice_bin*slice_width+slice_width+slice_min)+".gt."+std::to_string(slice_bin*slice_width+slice_min)+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(bin*bin_width+bin_width+min)+".gt."+std::to_string(bin*bin_width+min);
+
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_outer_slice = false;
+                if(this_sumsubKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && this_sumsubKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && this_sumsubKp>=outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && this_sumsubKp<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+
+              } // found cut
+
+            } // bin
+
+          } // slice
+
+        } // outer slice
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 7922
+
+    else if (cut_file==7924 || cut_file==79241){
+      int outer_slice_width=5;
+      int outer_slice_min = -4;
+      int outer_slice_max = 51;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=8;
+      int slice_min = -6;
+      int slice_max = 114;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 112;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      double this_sumsubKp = sumsubKp;
+      if(cut_file==79241) this_sumsubKp = sumsubKp_8MeV;
+      std::string base_cut_string = "kdar.sumsubKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min)+".gt."+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_min)+".Kp.le.";
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(slice_bin*slice_width+slice_width+slice_min)+".gt."+std::to_string(slice_bin*slice_width+slice_min)+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(bin*bin_width+bin_width+min)+".gt."+std::to_string(bin*bin_width+min);
+
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_outer_slice = false;
+                if(this_sumsubKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && this_sumsubKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && this_sumsubKp>=outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && this_sumsubKp<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+
+              } // found cut
+
+            } // bin
+
+          } // slice
+
+        } // outer slice
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 7924
+
+
+    else if (cut_file==793){
+      int outer_slice_width=8;
+      int outer_slice_min = 0;
+      int outer_slice_max = 48;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=10;
+      int slice_min = 0;
+      int slice_max = 110;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=8;
+      int min = 0;
+      int max = 112;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.sumsubKp.le.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(abs(outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min))+".gt."+std::to_string(abs(outer_slice_bin*outer_slice_width+outer_slice_min))+".Kp.le.";
+
+          // Check all slices
+          for(int slice_bin=0; slice_bin<slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(abs(slice_bin*slice_width+slice_width+slice_min))+".gt."+std::to_string(abs(slice_bin*slice_width+slice_min))+".Kmu.le.";
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(abs(bin*bin_width+bin_width+min))+".gt."+std::to_string(abs(bin*bin_width+min));
+
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+
+                bool pass_outer_slice = false;
+                if(sumsubKp<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && sumsubKp>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && sumsubKp>=outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && sumsubKp<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+
+                bool pass_slice = false;
+                if(Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                else if(slice_bin==slice_nbins-1 && Kp>slice_max){
+                  pass_slice = true;
+                }
+                else if(slice_bin==0 && Kp<slice_min){
+                  pass_slice = true;
+                }
+
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+
+              } // found cut
+
+            } // bin
+
+          } // slice
+
+        } // outer slice
+
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 793
+
+
+
+    else if (cut_file==794 || cut_file==7941){
+      int outer_slice_width=1;
+      int outer_slice_min = 0;
+      int outer_slice_max = 4;
+      int outer_slice_nbins = int( (outer_slice_max-outer_slice_min)/outer_slice_width);
+      int slice_width=5;
+      int slice_min = 0;
+      int slice_max = 115;
+      int slice_nbins = int( (slice_max-slice_min)/slice_width);
+      int bin_width=5;
+      int min = 0;
+      int max = 115;
+      int nbins = int( (max-min)/bin_width);
+      bool found_cut = false;
+      std::string base_cut_string = "kdar.PMult.";
+      if(!is_true_kdar(eval,pfeval)){found_cut=true;}
+      else{
+        
+        // Check all outer slices
+        for(int outer_slice_bin=0; outer_slice_bin<outer_slice_nbins; outer_slice_bin++){
+          std::string cut_string_outer_slice = base_cut_string+std::to_string(outer_slice_bin*outer_slice_width+outer_slice_min)+".sumKp.le.";
+          
+          // Check all slices
+          int temp_slice_nbins = slice_nbins;
+          if(outer_slice_bin==0) temp_slice_nbins=1;
+          for(int slice_bin=0; slice_bin<temp_slice_nbins; slice_bin++){
+          std::string cut_string_slice = cut_string_outer_slice+std::to_string(slice_bin*slice_width+slice_width+slice_min)+".gt."+std::to_string(slice_bin*slice_width+slice_min)+".Kmu.le.";            
+
+            // Check all the bins
+            for(int bin=0; bin<nbins; bin++){
+              std::string cut_string = cut_string_slice+std::to_string(bin*bin_width+bin_width+min)+".gt."+std::to_string(bin*bin_width+min);
+              
+              //std::cout<<cut_string<<"  "<<cut_name<<std::endl;
+              if(cut_name == cut_string){
+                found_cut = true;
+                
+                bool pass_outer_slice = false;
+                if(Pmult<outer_slice_bin*outer_slice_width+outer_slice_width+outer_slice_min && Pmult>=outer_slice_bin*outer_slice_width+outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==outer_slice_nbins-1 && Pmult>=outer_slice_max){
+                  pass_outer_slice = true;
+                }
+                else if(outer_slice_bin==0 && Pmult<outer_slice_min){
+                  pass_outer_slice = true;
+                }
+                
+                bool pass_slice = false;
+                if(outer_slice_bin==0){
+                  pass_slice = true;
+                }
+                if(sumKp<slice_bin*slice_width+slice_width+slice_min && sumKp>=slice_bin*slice_width+slice_min){
+                  pass_slice = true;
+                }
+                if(slice_bin==slice_nbins-1 && sumKp>slice_max){
+                  pass_slice = true;
+                }
+                if(slice_bin==0 && sumKp<slice_min){
+                  pass_slice = true;
+                }
+                
+                bool pass_bin = false;
+                if(KE_muon<bin*bin_width+bin_width+min && KE_muon>=bin*bin_width+min){
+                  pass_bin = true;
+                }
+                else if(bin==nbins-1 && KE_muon>max){
+                  pass_bin = true;
+                }
+                else if(bin==0 && KE_muon<min){
+                  pass_bin = true;
+                }
+                
+                //std::cout<<cut_string<<" "<<KE_muon<<" "<<pass_bin<<" "<<Kp<<" "<<pass_slice<<" "<<sumKp<<" "<<pass_outer_slice<<std::endl;
+                
+                if(pass_outer_slice && pass_slice && pass_bin){ return number; }
+              
+              } // found cut
+            
+            } // bin
+          
+          } // slice
+        
+        } // outer slice
+      
+      } // signal
+      if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
+
+
+    } // 7924
+
 
 
 
@@ -4309,24 +4936,30 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
 
   }else if(ch_name == "kdar_presel_bck"  || ch_name == "kdar_presel_dirt" || ch_name == "kdar_presel_bckNp"
-  || ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_outFV_sig" || ch_name == "kdar_presel_sigNp"
+  || ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_outFV_sig" || ch_name == "kdar_presel_sigNp" 
   || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp"
   || ch_name == "kdar_presel" || ch_name == "kdar_presel_ext"
 
   || ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp" || ch_name == "kdar_preselnsrand_dirt"
-  || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
-  || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
+  || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp" 
+  || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp" 
   || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext"
 
   || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNp_dirt" || ch_name == "kdar_preselNp_ext" || ch_name == "kdar_preselNp"
-  || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"){
+  || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"
+
+  || ch_name == "kdar_preselStub_sig" || ch_name == "kdar_preselStub_bck" || ch_name == "kdar_preselStub_dirt" || ch_name == "kdar_preselStub_ext" || ch_name == "kdar_preselStub"
+  || ch_name == "kdar_preselStubns_sig" || ch_name == "kdar_preselStubns_bck" || ch_name == "kdar_preselStubns_dirt" || ch_name == "kdar_preselStubns_ext" || ch_name == "kdar_preselStubns" || ch_name == "kdar_preselStubnsrand_dirt"
+
+){
 
     bool flag_pass = flag_kdar_presel;
 
-    if((ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp" || ch_name == "kdar_preselnsrand_dirt"
-    || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp"
+    if((ch_name == "kdar_preselns_bck"  || ch_name == "kdar_preselns_dirt" || ch_name == "kdar_preselns_bckNp"  || ch_name == "kdar_preselnsrand_dirt"
+    || ch_name == "kdar_preselns_sig" || ch_name == "kdar_preselns_outFV_sig" || ch_name == "kdar_preselns_sigNp" 
     || ch_name == "kdar_preselns_nuwro_train" || ch_name == "kdar_preselns_gibuu_train" || ch_name == "kdar_preselns_nuwro_trainNp" || ch_name == "kdar_preselns_gibuu_trainNp"
       || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"
+      || ch_name == "kdar_preselStubns_sig" || ch_name == "kdar_preselStubns_bck" || ch_name == "kdar_preselStubns_dirt" || ch_name == "kdar_preselStubns_ext" || ch_name == "kdar_preselStubns" || ch_name == "kdar_preselStubnsrand_dirt"
     //|| ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && merge_time>-3.14 && merge_time<3.14 ){flag_pass=false;}
     || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
@@ -4334,12 +4967,15 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
     if(ch_name == "kdar_presel_sigNp" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
-    if(ch_name == "kdar_presel_bck" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNpns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
+    if(ch_name == "kdar_presel_bck" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselStub_bck" || ch_name == "kdar_preselStubns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
     if(ch_name == "kdar_presel_bckNp")  { if(flag_pass && map_cuts_flag["kdarNp"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdarNp"]; }
     if(ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train"|| ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  {if(eval.event%10<5){flag_pass=false;} }
 
     if(ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNp_dirt" || ch_name == "kdar_preselNp_ext" || ch_name == "kdar_preselNp"
   || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselNpns_dirt" || ch_name == "kdar_preselNpns_ext" || ch_name == "kdar_preselNpns" || ch_name == "kdar_preselNpnsrand_dirt"){if(tagger.ssm_prim_track1_kine_energy_range<0) flag_pass=false;}
+
+    if(ch_name == "kdar_preselStub_sig" || ch_name == "kdar_preselStub_bck" || ch_name == "kdar_preselStub_dirt" || ch_name == "kdar_preselStub_ext" || ch_name == "kdar_preselStub"
+  || ch_name == "kdar_preselStubns_sig" || ch_name == "kdar_preselStubns_bck" || ch_name == "kdar_preselStubns_dirt" || ch_name == "kdar_preselStubns_ext" || ch_name == "kdar_preselStubns" || ch_name == "kdar_preselStubnsrand_dirt"){if(tagger.ssm_prim_track1_kine_energy_range>0 || tagger.ssm_Nsm_wivtx==0) flag_pass=false;}
 
     return flag_pass;
 

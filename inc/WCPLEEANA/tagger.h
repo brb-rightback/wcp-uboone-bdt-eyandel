@@ -1072,6 +1072,7 @@ namespace LEEana{
     bool saved_ssm_kine_vars;
     bool saved_ssm_bdt_scores;
     bool saved_ssm_stub_bdt_scores;
+    bool saved_ssm_stub_bdt_scores_2;
 
     float ssm_flag_st_kdar;
 
@@ -1505,6 +1506,7 @@ namespace LEEana{
     float ssm_kdar_score_hiE;
 
     float ssm_kdar_bdt_stub_energy;
+    float ssm_kdar_bdt_stub_energy_2;
     // End KDAR vars
 
     // new variables for PMT info
@@ -2620,6 +2622,7 @@ void LEEana::clear_tagger_info(TaggerInfo& tagger_info){
     tagger_info.saved_ssm_kine_vars = false;
     tagger_info.saved_ssm_bdt_scores = false;
     tagger_info.saved_ssm_stub_bdt_scores = false;
+    tagger_info.saved_ssm_stub_bdt_scores_2 = false;
 
     tagger_info.ssm_flag_st_kdar = 0;
 
@@ -3052,6 +3055,7 @@ void LEEana::clear_tagger_info(TaggerInfo& tagger_info){
     tagger_info.ssm_kdar_score_hiE = 0;
 
     tagger_info.ssm_kdar_bdt_stub_energy = 0;
+    tagger_info.ssm_kdar_bdt_stub_energy_2 = 0;
     //End KDAR vars
 
     // new variables for PMT info
@@ -4087,6 +4091,10 @@ void LEEana::set_tree_address(TTree *tree0, TaggerInfo& tagger_info, int flag){
   if(tree0->GetBranch("ssm_kdar_bdt_stub_energy")){
     tagger_info.saved_ssm_stub_bdt_scores = true;
     tree0->SetBranchAddress("ssm_kdar_bdt_stub_energy", &tagger_info.ssm_kdar_bdt_stub_energy);
+  }
+  if(tree0->GetBranch("ssm_kdar_bdt_stub_energy_2")){
+    tagger_info.saved_ssm_stub_bdt_scores_2 = true;
+    tree0->SetBranchAddress("ssm_kdar_bdt_stub_energy_2", &tagger_info.ssm_kdar_bdt_stub_energy_2);
   }
 
   if(tree0->GetBranch("ssm_flag_st_kdar")){
@@ -5553,6 +5561,9 @@ void LEEana::put_tree_address(TTree *T_tagger, TaggerInfo& tagger_info, int flag
     }
     if(tagger_info.saved_ssm_stub_bdt_scores){
       T_tagger->Branch("ssm_kdar_bdt_stub_energy",&tagger_info.ssm_kdar_bdt_stub_energy,"ssm_kdar_bdt_stub_energy/F");
+    }
+    if(tagger_info.saved_ssm_stub_bdt_scores_2){
+      T_tagger->Branch("ssm_kdar_bdt_stub_energy_2",&tagger_info.ssm_kdar_bdt_stub_energy_2,"ssm_kdar_bdt_stub_energy_2/F");
     }
 
     if(tagger_info.saved_ssm_bdt_vars){

@@ -971,6 +971,9 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   if(tagger_cv.saved_ssm_stub_bdt_scores){
     T_BDTvars_cv->SetBranchStatus("ssm_kdar_bdt_stub_energy",1);
   }
+  if(tagger_cv.saved_ssm_stub_bdt_scores_2){
+    T_BDTvars_cv->SetBranchStatus("ssm_kdar_bdt_stub_energy_2",1);
+  }
   if(tagger_cv.saved_ssm_bdt_vars){
     T_BDTvars_cv->SetBranchStatus("ssm_kine_energy",1);
     T_BDTvars_cv->SetBranchStatus("ssm_angle_to_absorber",1);
@@ -991,6 +994,12 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_cv->SetBranchStatus("ssm_vtxY",1);
     T_BDTvars_cv->SetBranchStatus("ssm_vtxZ",1);
     T_BDTvars_cv->SetBranchStatus("ssm_Nsm_wivtx",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_dq_dx_fwd_1",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_dq_dx_fwd_2",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_dq_dx_fwd_3",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_dq_dx_fwd_4",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_dq_dx_fwd_5",1);
+    T_BDTvars_cv->SetBranchStatus("ssm_medium_dq_dx",1);
   }
 
   T_eval_cv->SetBranchStatus("*",0);
@@ -1224,6 +1233,9 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   if(tagger_det.saved_ssm_stub_bdt_scores){
     T_BDTvars_det->SetBranchStatus("ssm_kdar_bdt_stub_energy",1);
   }
+  if(tagger_det.saved_ssm_stub_bdt_scores_2){
+    T_BDTvars_det->SetBranchStatus("ssm_kdar_bdt_stub_energy_2",1);
+  }
   if(tagger_det.saved_ssm_bdt_vars){
     T_BDTvars_det->SetBranchStatus("ssm_kine_energy",1);
     T_BDTvars_det->SetBranchStatus("ssm_angle_to_absorber",1);
@@ -1244,6 +1256,12 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_det->SetBranchStatus("ssm_vtxY",1);
     T_BDTvars_det->SetBranchStatus("ssm_vtxZ",1);
     T_BDTvars_det->SetBranchStatus("ssm_Nsm_wivtx",1);
+    T_BDTvars_det->SetBranchStatus("ssm_dq_dx_fwd_1",1);
+    T_BDTvars_det->SetBranchStatus("ssm_dq_dx_fwd_2",1);
+    T_BDTvars_det->SetBranchStatus("ssm_dq_dx_fwd_3",1);
+    T_BDTvars_det->SetBranchStatus("ssm_dq_dx_fwd_4",1);
+    T_BDTvars_det->SetBranchStatus("ssm_dq_dx_fwd_5",1);
+    T_BDTvars_det->SetBranchStatus("ssm_medium_dq_dx",1);
   }
 
   T_eval_det->SetBranchStatus("*",0);
