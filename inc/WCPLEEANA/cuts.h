@@ -4964,7 +4964,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
     || ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) ) ){flag_pass=false;}
     //|| ch_name == "kdar_preselns" || ch_name == "kdar_preselns_ext") && ((merge_time>-4.5 && merge_time<4.5) || merge_time<-10) ){flag_pass=false;}
 
-    if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNpns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
+    if(ch_name == "kdar_presel_sig" || ch_name == "kdar_presel_nuwro_train" || ch_name == "kdar_presel_gibuu_train" || ch_name == "kdar_preselNp_sig" || ch_name == "kdar_preselNpns_sig" || ch_name == "kdar_preselStub_sig" || ch_name == "kdar_preselStubns_sig")  flag_pass = flag_pass && map_cuts_flag["kdar"];
     if(ch_name == "kdar_presel_outFV_sig")  flag_pass = flag_pass && map_cuts_flag["kdarOutFV"];
     if(ch_name == "kdar_presel_sigNp" || ch_name == "kdar_presel_nuwro_trainNp" || ch_name == "kdar_presel_gibuu_trainNp")  flag_pass = flag_pass && map_cuts_flag["kdarNp"];
     if(ch_name == "kdar_presel_bck" || ch_name == "kdar_preselNp_bck" || ch_name == "kdar_preselNpns_bck" || ch_name == "kdar_preselStub_bck" || ch_name == "kdar_preselStubns_bck")  { if(flag_pass && map_cuts_flag["kdar"]){std::cout<<"cutting KDAR "<<eval.run<<" "<<eval.subrun<<" "<<eval.event<<std::endl;} flag_pass = flag_pass && !map_cuts_flag["kdar"]; }
