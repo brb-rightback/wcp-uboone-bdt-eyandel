@@ -713,6 +713,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     T_BDTvars->SetBranchStatus("ssm_vtxX",1);
     T_BDTvars->SetBranchStatus("ssm_vtxY",1);
     T_BDTvars->SetBranchStatus("ssm_vtxZ",1);
+    T_BDTvars->SetBranchStatus("ssm_Nsm_wivtx",1);
     T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_1",1);
     T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_2",1);
     T_BDTvars->SetBranchStatus("ssm_dq_dx_fwd_3",1);
