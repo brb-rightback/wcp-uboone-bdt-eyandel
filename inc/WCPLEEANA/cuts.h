@@ -924,7 +924,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     double KE = get_ssmE(tagger)-105.7+KE_cor;
     return KE;
 
-  }else if (var_name == "ssm_KE_cor_fix" || var_name == "ssm_KE_cor_fix_50" || var_name == "ssm_KE_cor_fix_60" || var_name == "ssm_KE_cor_fix_55"){
+  }else if (var_name == "ssm_KE_cor_fix" || var_name == "ssm_KE_cor_fix_50" || var_name == "ssm_KE_cor_fix_60" || var_name == "ssm_KE_cor_fix_55" || var_name == "ssm_KE_cor_fix_210"){
     if (tagger.ssm_kine_energy<0) return -999;
     double KE_cor = 0;
     if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_Nsm_wivtx>0) KE_cor=tagger.ssm_kdar_bdt_stub_energy;
@@ -932,6 +932,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if(KE<50 &&var_name == "ssm_KE_cor_fix_50") return 50.1;
     if(KE<55 &&var_name == "ssm_KE_cor_fix_55") return 55.1;
     if(KE<60 &&var_name == "ssm_KE_cor_fix_60") return 60.1;
+    if(KE>210 &&var_name == "ssm_KE_cor_fix_210") return -999;
     return KE;
 
   }else if (var_name == "ssm_dq_dx_fwd_1"){
