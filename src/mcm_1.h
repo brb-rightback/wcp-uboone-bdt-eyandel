@@ -7,7 +7,7 @@ void LEEana::CovMatrix::remove_disabled_ch_name(TString name){
   disabled_ch_names.erase(name);
 }
 
-void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_covch_hist, std::map<TString, TH1F*>& map_histoname_hist, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0, double seed=0){
+void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_covch_hist, std::map<TString, TH1F*>& map_histoname_hist, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0, double seed=0, bool ignore_ns=false){
 
    gRandom = new TRandom3(seed);
 
@@ -52,7 +52,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_co
     if (period != run) continue;
 
     //map_all_events[input_filename];
-    get_events_info(input_filename, map_all_events, map_filename_pot, map_histoname_infos);
+    get_events_info(input_filename, map_all_events, map_filename_pot, map_histoname_infos, ignore_ns);
   }
 
   double data_pot = 5e19; // example ...
@@ -264,7 +264,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_co
 }
 
 
-void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tuple<TH1F*, TH1F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0, double seed=0){
+void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tuple<TH1F*, TH1F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, int>>& map_histoname_hists, TVectorD* vec_mean, TVectorD* vec_mean_diff, TMatrixD* cov_mat_bootstrapping, TMatrixD* cov_det_mat, int flag_gp=0, double seed=0, bool ignore_ns=false){
 
   gRandom = new TRandom3(seed);
 
@@ -309,7 +309,7 @@ void LEEana::CovMatrix::gen_det_cov_matrix_norm(int run, std::map<int, std::tupl
     if (period != run) continue;
 
     //map_all_events[input_filename];
-    get_events_info(input_filename, map_all_events, map_filename_pot, map_histoname_infos);
+    get_events_info(input_filename, map_all_events, map_filename_pot, map_histoname_infos,ignore_ns);
   }
 
   double data_pot = 5e19; // example ...
@@ -829,7 +829,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
 
 
 
- void LEEana::CovMatrix::get_events_info(TString input_filename, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > > &map_all_events, std::map<TString, double>& map_filename_pot,  std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos){
+ void LEEana::CovMatrix::get_events_info(TString input_filename, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > > &map_all_events, std::map<TString, double>& map_filename_pot,  std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, bool ignor_ns){
 
    //   std::cout << input_filename << std::endl;
   TFile *file = new TFile(input_filename);
@@ -1413,6 +1413,14 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
 
     if ( !(eval_cv.run == eval_det.run && eval_cv.event == eval_det.event)) std::cout <<"Wrong! " << std::endl;
 
+    if (ignor_ns){
+      pfeval_det.evtTimeNS = pfeval_cv.evtTimeNS;
+      pfeval_det.evtTimeNS_cor = pfeval_cv.evtTimeNS_cor;
+      pfeval_det.PMT_ID = pfeval_cv.PMT_ID;
+      pfeval_det.PMT_Amp = pfeval_cv.PMT_Amp;
+      pfeval_det.PMT_Time = pfeval_cv.PMT_Time;
+    }
+
     std::get<0>(vec_events.at(i)) = eval_cv.run;
     std::get<1>(vec_events.at(i)) = eval_cv.event;
     std::get<2>(vec_events.at(i)) = eval_cv.weight_cv * eval_cv.weight_spline;
@@ -1445,6 +1453,15 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
 
       double val1 = get_kine_var(kine_det, eval_det, pfeval_det, tagger_det, false, var_name);
       bool flag_pass1 = get_cut_pass(ch_name, add_cut, false, eval_det, pfeval_det, tagger_det, kine_det);
+
+      // hack
+      //double merge_time = get_kine_var(kine_cv, eval_cv, pfeval_cv, tagger_cv, false, "merge_time_recover_numi");
+      //if(merge_time>-4.5 && merge_time<4.5){
+      //  flag_pass = false;
+      //  flag_pass1 = false;
+      //}
+      // end hack
+
       if (flag_pass || flag_pass1) {
 	std::get<4>(vec_events.at(i) ).insert(std::make_tuple(no, val, flag_pass, val1, flag_pass1));
       }

@@ -53,10 +53,30 @@ int main( int argc, char** argv )
   if (run>17) xf_input_config_file = "./configurations/rw_sys_input.txt";
 
   CovMatrix cov("./configurations/cov_input.txt", xf_input_config_file, "./configurations/xf_file_ch.txt", "./configurations/rw_cv_input.txt");
-  // cov.add_disabled_ch_name("BG_nueCC_FC_overlay");
-  // cov.add_disabled_ch_name("BG_nueCC_PC_overlay");
-  // cov.add_disabled_ch_name("BG_nueCC_FC_dirt");
-  // cov.add_disabled_ch_name("BG_nueCC_PC_dirt");
+
+  if(run==3 || run==6){
+
+    cov.add_disabled_ch_name("kdar_bdtsel_sig");
+    cov.add_disabled_ch_name("kdar_bdtselns_sig");
+    cov.add_disabled_ch_name("kdar_bdtselStub_sig");
+
+    cov.add_disabled_ch_name("kdar_presel_sig");
+    cov.add_disabled_ch_name("kdar_preselns_sig");
+    cov.add_disabled_ch_name("kdar_preselStub_sig");
+
+    cov.add_disabled_ch_name("kdar_antibdtsel_sig");
+    cov.add_disabled_ch_name("kdar_antibdtselNp_sig");
+
+    cov.add_disabled_ch_name("kdar_ktagged_sig");
+    cov.add_disabled_ch_name("kdar_ktaggedNp_sig");
+
+    cov.add_disabled_ch_name("kdar_lowE_bdtsel_sig");
+    cov.add_disabled_ch_name("kdar_lowE_bdtselns_sig");
+
+    cov.add_disabled_ch_name("kdar_hiE_bdtsel_sig");
+    cov.add_disabled_ch_name("kdar_hiE_bdtselns_sig");
+  }
+
   if (flag_osc) cov.add_osc_config();
   
   // special weights ...

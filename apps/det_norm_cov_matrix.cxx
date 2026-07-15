@@ -31,6 +31,7 @@ int main( int argc, char** argv )
   bool flag_osc = false;
   int flag_gp = 0; // gaussian process smoothing
   double seed = 0;
+  bool ignore_ns=false;
   bool flag_v2h=false;
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
@@ -46,6 +47,10 @@ int main( int argc, char** argv )
      case 's':
       seed = atoi(&argv[i][2]); //Set the seed for bootsrapping
       std::cout<<"Setting bootstrapping seed to "<<seed<<std::endl;
+      break;
+     case 'n':
+      ignore_ns = atoi(&argv[i][2]); //Set the seed for bootsrapping
+      std::cout<<"Setting flag it ignore ns timing in detvar calculation to "<<ignore_ns<<std::endl;
       break;
     case 'h':
       flag_v2h = atoi(&argv[i][2]);
@@ -127,7 +132,7 @@ int main( int argc, char** argv )
   TVectorD* vec_mean_diff = new TVectorD(cov_add_mat->GetNrows());
   TVectorD* vec_mean = new TVectorD(cov_add_mat->GetNrows());
 
-  cov.gen_det_cov_matrix_norm(run, map_covch_hists, map_histoname_hists, vec_mean, vec_mean_diff, cov_mat_bootstrapping, cov_det_mat, flag_gp, seed);
+  cov.gen_det_cov_matrix_norm(run, map_covch_hists, map_histoname_hists, vec_mean, vec_mean_diff, cov_mat_bootstrapping, cov_det_mat, flag_gp, seed, ignore_ns);
 
   TMatrixD* frac_cov_det_mat = new TMatrixD(cov_add_mat->GetNrows(), cov_add_mat->GetNcols());
   for (size_t i=0; i!= frac_cov_det_mat->GetNrows(); i++){
