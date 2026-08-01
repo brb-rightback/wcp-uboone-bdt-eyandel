@@ -47,6 +47,7 @@ int main( int argc, char** argv )
   TaggerInfo tagger;
   PFevalInfo pfeval;
   KineInfo kine;
+  SpaceInfo space;
 
 #include "init.txt"
 

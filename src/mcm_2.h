@@ -327,6 +327,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   TaggerInfo tagger;
   PFevalInfo pfeval;
   KineInfo kine;
+  SpaceInfo space;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;

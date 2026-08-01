@@ -845,6 +845,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   TaggerInfo tagger_cv;
   PFevalInfo pfeval_cv;
   KineInfo kine_cv;
+  SpaceInfo space_cv;
 
   TTree *T_BDTvars_det = (TTree*)file->Get("wcpselection/T_BDTvars_det");
   TTree *T_eval_det = (TTree*)file->Get("wcpselection/T_eval_det");
@@ -857,7 +858,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
   TaggerInfo tagger_det;
   PFevalInfo pfeval_det;
   KineInfo kine_det;
-
+  SpaceInfo space_det;
 
 #include "init.txt"
 

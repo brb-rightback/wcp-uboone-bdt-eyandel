@@ -218,6 +218,7 @@ void LEEana::CovMatrix::get_data_events_info(TString input_filename, std::map<TS
   TaggerInfo tagger;
   PFevalInfo pfeval;
   KineInfo kine;
+  SpaceInfo space;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
