@@ -535,7 +535,7 @@ void LEEana::CovMatrix::add_osc_config(TString osc_ch_filename, TString osc_pars
   TString temp;
   while(!infile1.eof()){
     infile1 >> temp;
-    if (temp == "End") break;
+    if (temp == "End" || temp == "end") break;
     osc_signal_ch_names.insert(temp);
   }
   std::ifstream infile2(osc_pars_filename);
