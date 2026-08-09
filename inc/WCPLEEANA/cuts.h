@@ -984,7 +984,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (tagger.ssm_prim_track1_kine_energy_range<0 && tagger.ssm_Nsm_wivtx>0) KE_cor=tagger.ssm_kdar_bdt_stub_energy_2;
     double KE = get_ssmE(tagger)-105.7+KE_cor;
     if(KE<50 && var_name == "ssm_KE_cor_fix_2_50") return 50.1;
-    if(KE<50 && var_name == "ssm_KE_cor_fix_2_55") return 55.1;
+    if(KE<55 && var_name == "ssm_KE_cor_fix_2_55") return 55.1;
     if(KE<60 && var_name == "ssm_KE_cor_fix_2_60") return 60.1;
     return KE;
 
@@ -3645,7 +3645,7 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
           cut_string = cut_string_slice+std::to_string(min+bin_width)+".gt."+std::to_string(min);
           //if(cut_name == cut_string && p_angle_absorber_deg<min && Kp<slice_bin*slice_width+slice_width+slice_min && Kp>=slice_bin*slice_width+slice_min)   { return number; }
           //if(cut_name == cut_string && KE_muon<min && slice_bin==slice_nbins-1 && Kp>slice_max){ return number; }
-          if(cut_name == cut_string && p_angle_absorber_deg<min && slice_bin==0 && Kp<slice_min){ return number; }
+          if(cut_name == cut_string && p_angle_absorber_deg<min && slice_bin==0 && Kp<=slice_min){ return number; }
         }
       }
       if(!found_cut) std::cout << "get_xs_signal_no: no cut found! " << cut_name <<std::endl;
