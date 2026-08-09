@@ -1244,7 +1244,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, std::vector< std::
     T_BDTvars_det->SetBranchStatus("ssm_kine_pio_mass",1);
     T_BDTvars_det->SetBranchStatus("ssm_cosmict_flag_9",1);
     T_BDTvars_det->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
-    T_BDTvars_det->SetBranchStatus("ssm_prim_track1_kine_energy_range",1);
+    T_BDTvars_det->SetBranchStatus("ssm_prim_track2_kine_energy_range",1);
     T_BDTvars_det->SetBranchStatus("ssm_prim_shw1_kine_energy_best",1);
     T_BDTvars_det->SetBranchStatus("ssm_prim_shw2_kine_energy_best",1);
     T_BDTvars_det->SetBranchStatus("ssm_vtx_activity",1);
