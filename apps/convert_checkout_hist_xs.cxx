@@ -371,8 +371,8 @@ int main( int argc, char** argv )
   }
 
   T_PFeval->SetBranchStatus("run",1);
-  T_Pfeval->SetBranchStatus("subrun",1);
-  T_Pfeval->SetBranchStatus("event",1);
+  T_PFeval->SetBranchStatus("subrun",1);
+  T_PFeval->SetBranchStatus("event",1);
 
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;
 
