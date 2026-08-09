@@ -63,10 +63,18 @@ int main( int argc, char** argv )
   set_tree_address(T_KINEvars, kine);
 
   double total_pot = 0;
+  std::map<std::pair<int, int>, bool >  already_seen;
+
   for (Int_t i=0;i!=T_pot->GetEntries();i++){
+    T_pot->GetEntry(i);
+    auto it = already_seen.find(std::make_pair(pot.runNo,pot.subRunNo));
+    if (it != already_seen.end()) continue;
+    already_seen[std::make_pair(pot.runNo,pot.subRunNo)] = true;
+
     T_pot->GetEntry(i);
     total_pot += pot.pot_tor875;
   }
+
   double ext_pot = cov.get_ext_pot(input_filename);
   if (ext_pot != 0) total_pot = ext_pot;
 
@@ -361,6 +369,10 @@ int main( int argc, char** argv )
     T_PFeval->SetBranchStatus("evtTimeNS_cor",1);
     T_PFeval->SetBranchStatus("cor_nu_deltatime",1);
   }
+
+  T_PFeval->SetBranchStatus("run",1);
+  T_Pfeval->SetBranchStatus("subrun",1);
+  T_Pfeval->SetBranchStatus("event",1);
 
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;
 

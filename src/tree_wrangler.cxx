@@ -105,7 +105,7 @@ void LEEana::tree_wrangler::grow_pot_arboretum(){
     std::string pot_var_name = trees_wi_pot_var_names[old_tree_name].at(2);
     std::cout<<"and using variable names of "<<run_var_name<<" "<<sub_var_name<<" "<<pot_var_name<<"\n"<<std::endl; 
     // Check if vars exist before adding them, allows you to use dummy names if you don't want these trees
-    if(pot_pair->old_pot_tree->GetBranch(sub_var_name.c_str())){
+    if(pot_pair->old_pot_tree->GetBranch(run_var_name.c_str())){
       pot_pair->old_pot_tree->SetBranchAddress(run_var_name.c_str(),&pot_pair->runNo);
     }
     if(pot_pair->old_pot_tree->GetBranch(sub_var_name.c_str())){
