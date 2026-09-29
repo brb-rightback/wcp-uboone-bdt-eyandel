@@ -3785,8 +3785,9 @@ int main( int argc, char** argv )
   T_BDTvars->SetBranchStatus("*",0);
   T_BDTvars->SetBranchStatus("numu_cc_flag",1);
 
-  int haveReco;
-  if(T_lantern && remove_lantern_fails==1) T_lantern->SetBranchAddress("haveReco",&haveReco);
+  int haveReco = 1;
+  if(T_lantern && remove_lantern_fails==1 && T_lantern->GetBranch("haveReco")) T_lantern->SetBranchAddress("haveReco",&haveReco);
+  else if(remove_lantern_fails==1) std::cout<<"WARNING: No lantern/EventTree haveReco branch found, will not remove subruns where Lantern container failed"<<std::endl;
 
   std::set<std::pair<int,int> > remove_set;
 
@@ -4018,6 +4019,9 @@ int main( int argc, char** argv )
     tagger.el_veto_score=-999;
     tagger.el_veto_prim_score=-999;
     tagger.el_veto_all_score=-999;
+    tagger.p_veto_score=-999;
+    tagger.p_veto_prim_score=-999;
+    tagger.p_veto_all_score=-999;
     tagger.n_veto_score=-999;
     tagger.n_veto_nonprim_score=-999;
     tagger.n_veto_all_score=-999;
