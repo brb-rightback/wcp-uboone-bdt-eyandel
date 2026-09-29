@@ -391,25 +391,25 @@ std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vect
 
     double range_proton = 0; 
     double proton_KE = 0;
-    std::vector<float> *temp_spacepoints_x = new std::vector<float>;
-    std::vector<float> *temp_spacepoints_y = new std::vector<float>;
-    std::vector<float> *temp_spacepoints_z = new std::vector<float>;
-    std::vector<float> *temp_spacepoints_q = new std::vector<float>;
+    std::vector<float> temp_spacepoints_x;
+    std::vector<float> temp_spacepoints_y;
+    std::vector<float> temp_spacepoints_z;
+    std::vector<float> temp_spacepoints_q;
     for(size_t sp=0; sp<n_spacepoints; sp++){
       if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)==pfeval.reco_id[i]){
-        temp_spacepoints_x->push_back(space.Trecchargeblob_spacepoints_x->at(sp));
-        temp_spacepoints_y->push_back(space.Trecchargeblob_spacepoints_y->at(sp));
-        temp_spacepoints_z->push_back(space.Trecchargeblob_spacepoints_z->at(sp));
-        temp_spacepoints_q->push_back(space.Trecchargeblob_spacepoints_q->at(sp));
+        temp_spacepoints_x.push_back(space.Trecchargeblob_spacepoints_x->at(sp));
+        temp_spacepoints_y.push_back(space.Trecchargeblob_spacepoints_y->at(sp));
+        temp_spacepoints_z.push_back(space.Trecchargeblob_spacepoints_z->at(sp));
+        temp_spacepoints_q.push_back(space.Trecchargeblob_spacepoints_q->at(sp));
       }
     }
-    int n_spacepoints_part = temp_spacepoints_x->size();
+    int n_spacepoints_part = temp_spacepoints_x.size();
     if(n_spacepoints_part==0) continue;
       
     for(int sp=0; sp<n_spacepoints_part-1; sp++){
-      double dx = temp_spacepoints_x->at(sp) - temp_spacepoints_x->at(sp+1);
-      double dy = temp_spacepoints_y->at(sp) - temp_spacepoints_y->at(sp+1);
-      double dz = temp_spacepoints_z->at(sp) - temp_spacepoints_z->at(sp+1);
+      double dx = temp_spacepoints_x.at(sp) - temp_spacepoints_x.at(sp+1);
+      double dy = temp_spacepoints_y.at(sp) - temp_spacepoints_y.at(sp+1);
+      double dz = temp_spacepoints_z.at(sp) - temp_spacepoints_z.at(sp+1);
       double dist = sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
       range_proton+=dist;
     }
