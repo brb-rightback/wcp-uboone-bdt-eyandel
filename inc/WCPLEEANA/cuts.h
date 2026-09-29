@@ -33,7 +33,7 @@ namespace LEEana{
   double get_mass_MeV(int pdg);
 
   //truth==1 for truth, 0 for WC, else for LArPID, mother_check=-999 for all particles, mother_check=-9999 for all non-primary, which_p=0 for sum of all particles
-  double get_KE(PFevalInfo& pfeval, int pdg, int truth, bool mother_check, int which_p, double threshold);
+  double get_KE(PFevalInfo& pfeval, int pdg, int truth, int mother_check, int which_p, double threshold);
 
   bool check_is_FC(double x, double y, double z);
   bool is_pfeval_muon(PFevalInfo& pfeval,int index, double tolerance);
@@ -231,7 +231,7 @@ bool LEEana::is_true_0p(PFevalInfo& pfeval){
 }
 
 //mother_check=-999 for all particles, mother_check=-9999 for all non-primary, which_p=0 for sum of all particles
-double LEEana::get_KE(PFevalInfo& pfeval, int pdg, int truth, bool mother_check, int which_p, double threshold){
+double LEEana::get_KE(PFevalInfo& pfeval, int pdg, int truth, int mother_check, int which_p, double threshold){
     std::vector<double> all_KE;
 
     int Ntrack = pfeval.reco_Ntrack;
@@ -499,7 +499,7 @@ std::vector<double> LEEana::get_lantern_KE(LanternInfo& lantern, int pdg, double
 
   for(size_t part=0; part<lantern.nTracks; part++){
 
-    if(lantern.trackPID[part]!=2212) continue;
+    if(lantern.trackPID[part]!=pdg) continue;
     if(lantern.trackIsSecondary[part]!=0) continue;
     if(lantern.trackDistToVtx[part]>vtx_cut) continue;
     p_KEs.push_back(lantern.trackRecoE[part]);
