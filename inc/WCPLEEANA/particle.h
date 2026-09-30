@@ -158,14 +158,41 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
     if(n_spacepoints==0) continue;
 
     //std::cout<<"Computing length"<<std::endl;
-    //Get the length of the proton by adding up the distance between each pair of spacepoints
+    //Get the length of the proton by adding up the distance between each pair of spacepoints, skipping jumps >= 2 cm.
+    //Particles can be stored as separate pieces (e.g. the start/end points first, then the trajectory).
     particle_info.track_len=0;
+    std::vector<bool> on_trajectory(n_spacepoints, false);
     for(int sp=0; sp<n_spacepoints-1; sp++){
       double dx = temp_spacepoints_x.at(sp) - temp_spacepoints_x.at(sp+1);
       double dy = temp_spacepoints_y.at(sp) - temp_spacepoints_y.at(sp+1);
       double dz = temp_spacepoints_z.at(sp) - temp_spacepoints_z.at(sp+1);
       double dist = sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
-      particle_info.track_len+=dist;
+      if(dist<2.0){
+        particle_info.track_len+=dist;
+        on_trajectory.at(sp) = true;
+        on_trajectory.at(sp+1) = true;
+      }
+    }
+
+    //Connect the reco start and end to the nearest trajectory point if it is within 2 cm.
+    //If no steps were kept (e.g. only the start and end points are stored), fall back to the straight distance.
+    bool has_trajectory = false;
+    for(int sp=0; sp<n_spacepoints; sp++) if(on_trajectory.at(sp)) has_trajectory = true;
+    if(has_trajectory){
+      for(int ep=0; ep<2; ep++){
+        double ex = (ep==0) ? part_x : part_end_x;
+        double ey = (ep==0) ? part_y : part_end_y;
+        double ez = (ep==0) ? part_z : part_end_z;
+        double dmin = 1e9;
+        for(int sp=0; sp<n_spacepoints; sp++){
+          if(!on_trajectory.at(sp)) continue;
+          double d = sqrt(pow(ex-temp_spacepoints_x.at(sp),2)+pow(ey-temp_spacepoints_y.at(sp),2)+pow(ez-temp_spacepoints_z.at(sp),2));
+          if(d<dmin) dmin = d;
+        }
+        if(dmin<2.0) particle_info.track_len+=dmin;
+      }
+    }else{
+      particle_info.track_len = sqrt(pow(part_x-part_end_x,2)+pow(part_y-part_end_y,2)+pow(part_z-part_end_z,2));
     }
 
 

@@ -357,7 +357,7 @@ std::tuple<bool,bool> LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval){
 int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold){
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> result = get_range_proton_KE(pfeval,space,true); 
   double KE = std::get<0>(result).at(0);
-  double KE_p = get_pandora_proton_KE(pandora,0.05,true).at(0);
+  double KE_p = get_pandora_proton_KE(pandora,0.2,true).at(0);
   double KE_l = std::get<2>(result).at(0);
   double KE_ll = get_lantern_KE(lantern, 2212, 10, true).at(0);
   int bdt_bin=1;
@@ -405,13 +405,45 @@ std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vect
     }
     int n_spacepoints_part = temp_spacepoints_x.size();
     if(n_spacepoints_part==0) continue;
-      
+
+    // Sum the steps between consecutive spacepoints, skipping jumps >= 2 cm. Particles can be stored as
+    // separate pieces (e.g. the start/end points first, then the trajectory), and summing across those
+    // jumps overestimates the range.
+    std::vector<bool> on_trajectory(n_spacepoints_part, false);
     for(int sp=0; sp<n_spacepoints_part-1; sp++){
       double dx = temp_spacepoints_x.at(sp) - temp_spacepoints_x.at(sp+1);
       double dy = temp_spacepoints_y.at(sp) - temp_spacepoints_y.at(sp+1);
       double dz = temp_spacepoints_z.at(sp) - temp_spacepoints_z.at(sp+1);
       double dist = sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
-      range_proton+=dist;
+      if(dist<2.0){
+        range_proton+=dist;
+        on_trajectory.at(sp) = true;
+        on_trajectory.at(sp+1) = true;
+      }
+    }
+
+    // Skipping the jumps also drops the short pieces between the track start/end and the trajectory,
+    // so connect the reco start and end to the nearest trajectory point if it is within 2 cm.
+    // If no steps were kept (e.g. only the start and end points are stored), fall back to the straight distance.
+    bool has_trajectory = false;
+    for(int sp=0; sp<n_spacepoints_part; sp++) if(on_trajectory.at(sp)) has_trajectory = true;
+    if(has_trajectory){
+      for(int ep=0; ep<2; ep++){
+        double ex = (ep==0) ? pfeval.reco_startXYZT[i][0] : pfeval.reco_endXYZT[i][0];
+        double ey = (ep==0) ? pfeval.reco_startXYZT[i][1] : pfeval.reco_endXYZT[i][1];
+        double ez = (ep==0) ? pfeval.reco_startXYZT[i][2] : pfeval.reco_endXYZT[i][2];
+        double dmin = 1e9;
+        for(int sp=0; sp<n_spacepoints_part; sp++){
+          if(!on_trajectory.at(sp)) continue;
+          double d = sqrt(pow(ex-temp_spacepoints_x.at(sp),2)+pow(ey-temp_spacepoints_y.at(sp),2)+pow(ez-temp_spacepoints_z.at(sp),2));
+          if(d<dmin) dmin = d;
+        }
+        if(dmin<2.0) range_proton+=dmin;
+      }
+    }else{
+      range_proton = sqrt(pow(pfeval.reco_startXYZT[i][0]-pfeval.reco_endXYZT[i][0],2)
+                         +pow(pfeval.reco_startXYZT[i][1]-pfeval.reco_endXYZT[i][1],2)
+                         +pow(pfeval.reco_startXYZT[i][2]-pfeval.reco_endXYZT[i][2],2));
     }
 
     int nbb = proton_length_bins.size();
@@ -476,7 +508,7 @@ std::vector<double> LEEana::get_pandora_proton_KE(PandoraInfo& pandora, double T
 
     if(pandora.pfpdg->at(part)!=13) continue;
 
-    if(pandora.trk_llr_pid_score_v->at(part)>muon_trk_llr_pid_score_v) muon_trk_llr_pid_score_v = pandora.trk_llr_pid_score_v->at(part);
+    //if(pandora.trk_llr_pid_score_v->at(part)>muon_trk_llr_pid_score_v) muon_trk_llr_pid_score_v = pandora.trk_llr_pid_score_v->at(part);
 
     if(pandora.trk_llr_pid_score_v->at(part) < TRACK_SCORE_CUT){ proton_KEs.push_back(pandora.trk_energy_proton_v->at(part)); }
   }
