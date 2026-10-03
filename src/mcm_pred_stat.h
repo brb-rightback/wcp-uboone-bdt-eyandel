@@ -38,6 +38,15 @@ void LEEana::CovMatrix::gen_pred_stat_cov_matrix(int run, std::map<int, TH1F*>& 
 
   }
 
+  // histogram and LEE flag of each histogram number, so the fill functions do not look them up by name for every entry
+  std::vector<TH1F*> vec_no_hist(ncount, 0);
+  std::vector<int> vec_no_lee(ncount, 0);
+  for (auto it = map_no_histoname.begin(); it != map_no_histoname.end(); it++){
+    auto it1 = map_histoname_hist.find(it->second);
+    if (it1 != map_histoname_hist.end()) vec_no_hist.at(it->first) = it1->second;
+    vec_no_lee.at(it->first) = std::get<2>(map_histoname_infos[it->second]);
+  }
+
 
   // results ... filename --> re --> variable, weight, lee weight,
   std::map<TString, std::vector<std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool> > > > > map_all_events;
@@ -62,7 +71,7 @@ void LEEana::CovMatrix::gen_pred_stat_cov_matrix(int run, std::map<int, TH1F*>& 
   }
 
 
-  fill_pred_stat_histograms(map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hist);
+  fill_pred_stat_histograms(map_all_events, vec_no_hist, vec_no_lee, map_histoname_hist);
 
   // merge histograms according to POTs ...
   for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
@@ -145,7 +154,7 @@ void LEEana::CovMatrix::gen_pred_stat_cov_matrix(int run, std::map<int, TH1F*>& 
     }
 
     // fill the histogram with variation ...
-    fill_pred_stat_histograms(map_filename_histo, map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hist, map_filename_set_histoname_ratio);
+    fill_pred_stat_histograms(map_filename_histo, map_all_events, vec_no_hist, vec_no_lee, map_no_histoname, map_histoname_hist, map_filename_set_histoname_ratio);
 
      // merge histograms according to POTs ...
     for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
@@ -199,7 +208,7 @@ void LEEana::CovMatrix::gen_pred_stat_cov_matrix(int run, std::map<int, TH1F*>& 
 
 
   // update the final  ones ...
-   fill_pred_stat_histograms(map_all_events, map_histoname_infos, map_no_histoname, map_histoname_hist);
+   fill_pred_stat_histograms(map_all_events, vec_no_hist, vec_no_lee, map_histoname_hist);
 
   // merge histograms according to POTs ...
   for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
@@ -257,7 +266,7 @@ void LEEana::CovMatrix::gen_pred_stat_cov_matrix(int run, std::map<int, TH1F*>& 
 
 }
 
-void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, TH1D*> map_filename_histo, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool> > > > >&map_all_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, TH1F*>& map_histoname_hist, std::map<TString, std::set<std::pair<TString, double> > >& map_filename_histoname_ratio){
+void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, TH1D*> map_filename_histo, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool> > > > >&map_all_events, std::vector<TH1F*>& vec_no_hist, std::vector<int>& vec_no_lee, std::map<int, TString>& map_no_histoname,  std::map<TString, TH1F*>& map_histoname_hist, std::map<TString, std::set<std::pair<TString, double> > >& map_filename_histoname_ratio){
 
   for (auto it = map_histoname_hist.begin(); it != map_histoname_hist.end(); it++){
     it->second->Reset();
@@ -302,9 +311,9 @@ void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, TH1D*> map_f
 	 double val_cv = std::get<1>(*it1);
 	 bool flag_cv = std::get<2>(*it1);
 
-	 TString histoname = map_no_histoname[no];
-	 TH1F *htemp = map_histoname_hist[histoname];
-	 int flag_lee = std::get<2>(map_histoname_infos[histoname]);
+	 const TString& histoname = map_no_histoname[no];
+	 TH1F *htemp = vec_no_hist[no];
+	 int flag_lee = vec_no_lee[no];
 
 	 auto it4 = map_histoname_sum.find(histoname);
 	 if (it4 == map_histoname_sum.end()) std::cout << "something wrong! " << std::endl;
@@ -327,7 +336,7 @@ void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, TH1D*> map_f
 }
 
 
-void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool> > > > >&map_all_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, TH1F*>& map_histoname_hist){
+void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool> > > > >&map_all_events, std::vector<TH1F*>& vec_no_hist, std::vector<int>& vec_no_lee,  std::map<TString, TH1F*>& map_histoname_hist){
   for (auto it = map_histoname_hist.begin(); it != map_histoname_hist.end(); it++){
     it->second->Reset();
   }
@@ -348,9 +357,8 @@ void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, std::vector<
 	double val_cv = std::get<1>(*it1);
 	bool flag_cv = std::get<2>(*it1);
 
-	TString histoname = map_no_histoname[no];
-	TH1F *htemp = map_histoname_hist[histoname];
-	 int flag_lee = std::get<2>(map_histoname_infos[histoname]);
+	TH1F *htemp = vec_no_hist[no];
+	 int flag_lee = vec_no_lee[no];
 	if (flag_cv){
 	  if (flag_lee){
 	    htemp->Fill(val_cv, weight * weight_lee);

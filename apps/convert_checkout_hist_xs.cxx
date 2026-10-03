@@ -379,6 +379,8 @@ int main( int argc, char** argv )
     // event-level quantities for get_cut_pass, computed once per event
     CutEventInfo cut_info;
     fill_cut_event_info(cut_info, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+    // xs signal bin of this event, computed once (on first need) for all histograms; -2 = not computed yet
+    int signal_bin_event = -2;
 
     for (auto it = all_histo_infos.begin(); it != all_histo_infos.end(); it++){
       TString histoname = std::get<0>(*it);
@@ -396,8 +398,10 @@ int main( int argc, char** argv )
       double val = 0;
       if (flag_pass || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
       int signal_bin = -1;
-      if (cov.is_xs_chname(ch_name))
-	signal_bin = get_xs_signal_no(cov.get_cut_file(), cov.get_map_cut_xs_bin(), eval, pfeval, tagger, kine);
+      if (cov.is_xs_chname(ch_name)){
+	if (signal_bin_event == -2) signal_bin_event = get_xs_signal_no(cov.get_cut_file(), cov.get_map_cut_xs_bin(), eval, pfeval, tagger, kine);
+	signal_bin = signal_bin_event;
+      }
 
       if (!((signal_bin != -1) || flag_pass)) continue;
       // get weight ...

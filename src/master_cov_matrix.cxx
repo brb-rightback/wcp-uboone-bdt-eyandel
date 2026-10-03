@@ -701,6 +701,15 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     }
   }
 
+  // histograms and LEE flag of each histogram number, so the fill functions do not look them up by name for every entry
+  std::vector<std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> > vec_no_hists(ncount, std::make_tuple((TH1F*)0, (TH1F*)0, (TH1F*)0, (TH2F*)0, 0));
+  std::vector<int> vec_no_lee(ncount, 0);
+  for (auto it = map_no_histoname.begin(); it != map_no_histoname.end(); it++){
+    auto it1 = map_histoname_hists.find(it->second);
+    if (it1 != map_histoname_hists.end()) vec_no_hists.at(it->first) = it1->second;
+    vec_no_lee.at(it->first) = std::get<2>(map_histoname_infos[it->second]);
+  }
+
   std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > > map_passed_events; // last one is variable name ...
   std::map<TString, double> map_filename_pot;
   std::vector<int> max_lengths;
@@ -783,7 +792,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
       // if (nsize==600) {
       //   std::cout << "[wg] knob: " << j << " universe: " << i << " with nsize=600" << std::endl;
       // }
-      fill_xs_histograms(j, max_lengths.size(), acc_no, i, nsize,  map_passed_events, map_histoname_infos, map_no_histoname, map_histoname_hists);
+      fill_xs_histograms(j, max_lengths.size(), acc_no, i, nsize,  map_passed_events, vec_no_hists, vec_no_lee, map_histoname_hists);
 
       // merge histograms according to POTs ...
       for (auto it = map_pred_covch_histos.begin(); it!=map_pred_covch_histos.end();it++){
@@ -959,7 +968,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
   for (int i=0;i!=rows;i++){
     (*vec_mean)(i) = 0;
   }
-  fill_xs_histograms(map_passed_events, map_histoname_infos, map_no_histoname, map_histoname_hists);
+  fill_xs_histograms(map_passed_events, vec_no_hists, vec_no_lee, map_histoname_hists);
 
 
   // merge histograms according to POTs ...
@@ -1215,7 +1224,7 @@ void LEEana::CovMatrix::fill_pred_R_signal(int run, TMatrixD* mat_R, TVectorD* v
 }
 
 
-void LEEana::CovMatrix::fill_xs_histograms(int num, int tot_num, int acc_no, int no, int tot_no, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists){
+void LEEana::CovMatrix::fill_xs_histograms(int num, int tot_num, int acc_no, int no, int tot_no, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::vector<std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& vec_no_hists, std::vector<int>& vec_no_lee,  std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists){
   // int jinput = num; // backup the input
   for (auto it = map_histoname_hists.begin(); it != map_histoname_hists.end(); it++){
     int num = std::get<4>(it->second);
@@ -1249,14 +1258,13 @@ void LEEana::CovMatrix::fill_xs_histograms(int num, int tot_num, int acc_no, int
 	bool flag_pass = std::get<2>(*it2);
 	int nsignal_bin = std::get<3>(*it2);
 
-   	TString histoname = map_no_histoname[no];
-	auto tmp_hists = map_histoname_hists[histoname];
+	auto tmp_hists = vec_no_hists[no];
 	TH1F *h1 = std::get<0>(tmp_hists);
 	TH1F *h2 = std::get<1>(tmp_hists);
 	TH1F *h3 = std::get<2>(tmp_hists);
 	TH2F *h4 = std::get<3>(tmp_hists);
 	int num = std::get<4>(tmp_hists);
-	int flag_lee = std::get<2>(map_histoname_infos[histoname]);
+	int flag_lee = vec_no_lee[no];
 
    	if (std::isnan(rel_weight_diff) || std::isinf(rel_weight_diff)) continue;
 	// seems to have extremely small cv weight
@@ -1297,7 +1305,7 @@ void LEEana::CovMatrix::fill_xs_histograms(int num, int tot_num, int acc_no, int
 }
 
 
-void LEEana::CovMatrix::fill_xs_histograms(std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos, std::map<int, TString>& map_no_histoname,  std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists){
+void LEEana::CovMatrix::fill_xs_histograms(std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::vector<std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& vec_no_hists, std::vector<int>& vec_no_lee,  std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists){
   for (auto it = map_histoname_hists.begin(); it != map_histoname_hists.end(); it++){
     int num = std::get<4>(it->second);
     TH1F *h1 = std::get<0>(it->second);
@@ -1328,14 +1336,13 @@ void LEEana::CovMatrix::fill_xs_histograms(std::map<TString, std::set<std::tuple
 	int nsignal_bin = std::get<3>(*it2);
 
 
-	TString histoname = map_no_histoname[no];
-	auto tmp_hists = map_histoname_hists[histoname];
+	auto tmp_hists = vec_no_hists[no];
 	TH1F *h1 = std::get<0>(tmp_hists);
 	TH1F *h2 = std::get<1>(tmp_hists);
 	TH1F *h3 = std::get<2>(tmp_hists);
 	TH2F *h4 = std::get<3>(tmp_hists);
 	int num = std::get<4>(tmp_hists);
-	int flag_lee = std::get<2>(map_histoname_infos[histoname]);
+	int flag_lee = vec_no_lee[no];
 
 	//	if (no==0) std::cout << "Xin: " << " " << flag_pass << " " << nsignal_bin << " " << weight << " " << std::endl;
 
@@ -2046,6 +2053,8 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     // event-level quantities for get_cut_pass, computed once per event
     CutEventInfo cut_info;
     fill_cut_event_info(cut_info, false, eval, pfeval, tagger, kine, space, pandora, lantern);
+    // xs signal bin of this event, computed once (on first need) for all histograms; -2 = not computed yet
+    int signal_bin_event = -2;
 
      for (auto it = histo_infos.begin(); it != histo_infos.end(); it++){
       TString histoname = std::get<0>(*it);
@@ -2065,7 +2074,8 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       bool flag_pass = get_cut_pass(ch_name, add_cut, false, cut_info, eval, pfeval, tagger, kine, space, pandora, lantern);
       int signal_bin = -1;
       if (xs_signal_ch_names.find(ch_name) != xs_signal_ch_names.end()){
-	signal_bin = get_xs_signal_no(cut_file, map_cut_xs_bin, eval, pfeval, tagger, kine);
+	if (signal_bin_event == -2) signal_bin_event = get_xs_signal_no(cut_file, map_cut_xs_bin, eval, pfeval, tagger, kine);
+	signal_bin = signal_bin_event;
       }
       // the variable is only stored if the event passes or is a signal event (always on the first event so an unknown variable name still stops the job)
       float val = 0;
