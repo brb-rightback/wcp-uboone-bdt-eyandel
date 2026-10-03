@@ -5,6 +5,8 @@
 #include "TCut.h"
 #include "TString.h"
 #include "TLorentzVector.h"
+#include "TMatrixDSym.h"
+#include "TMatrixDSymEigen.h"
 #include "TH1F.h"
 
 #include "tagger.h"
@@ -45,7 +47,10 @@ namespace LEEana{
   bool check_muon_range_MCS(PFevalInfo& pfeval, int method, double threshold);
 
   double get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool return_KE, bool return_MeV);
-  double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons);
+  //drop_muon_showers: when the muon energy comes from MCS, remove showers that continue the muon past its reco end (start within drop_dist cm of the muon end, cos(angle to the muon direction)>drop_cos)
+  double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers=false, double drop_dist=15, double drop_cos=0.9);
+  double get_muon_continuation_shower_energy(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_data, double drop_dist, double drop_cos);
+  void get_principal_axis(const std::vector<TVector3>& pts, TVector3& centroid, TVector3& axis);
 
   int get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold);
 
@@ -359,12 +364,97 @@ double LEEana::get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool
   return E;
 }
 
-double LEEana::get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons){
+// Centroid and principal axis (direction of largest spread) of a set of points
+void LEEana::get_principal_axis(const std::vector<TVector3>& pts, TVector3& centroid, TVector3& axis){
+  centroid.SetXYZ(0,0,0);
+  for(size_t k=0; k<pts.size(); k++) centroid += pts.at(k);
+  centroid *= 1./pts.size();
+  TMatrixDSym cov(3);
+  cov.Zero();
+  for(size_t k=0; k<pts.size(); k++){
+    TVector3 d = pts.at(k) - centroid;
+    for(int a=0; a<3; a++) for(int b=0; b<3; b++) cov(a,b) += d[a]*d[b];
+  }
+  TMatrixDSymEigen eigen(cov);
+  TMatrixD vectors = eigen.GetEigenVectors();   // columns, sorted by decreasing eigenvalue
+  axis.SetXYZ(vectors(0,0), vectors(1,0), vectors(2,0));
+}
+
+// Kine energy of the showers that continue the primary muon past its reco end: shower start within drop_dist cm of the
+// muon end and cos(angle between the shower and the muon direction at its end) > drop_cos.
+// Directions: principal axis of the muon spacepoints within 10 cm of its end (oriented start->end) and of the shower
+// spacepoints (oriented away from the shower start); start->end if fewer than 3 spacepoints.
+// Each tagged shower is matched to the kine entry of type 11 with the same energy (within 0.5 MeV).
+double LEEana::get_muon_continuation_shower_energy(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_data, double drop_dist, double drop_cos){
+  int mu_index = -1;
+  for(int i=0; i<pfeval.reco_Ntrack; i++){
+    if(is_pfeval_muon(pfeval,i,0.0001)){ mu_index = i; break; }
+  }
+  if(mu_index<0) return 0;
+  TVector3 mu_start(pfeval.reco_startXYZT[mu_index][0], pfeval.reco_startXYZT[mu_index][1], pfeval.reco_startXYZT[mu_index][2]);
+  TVector3 mu_end(pfeval.reco_endXYZT[mu_index][0], pfeval.reco_endXYZT[mu_index][1], pfeval.reco_endXYZT[mu_index][2]);
+
+  int n_spacepoints = space.Trecchargeblob_spacepoints_real_cluster_id->size();
+  std::vector<TVector3> mu_end_pts;
+  for(int sp=0; sp<n_spacepoints; sp++){
+    if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)!=pfeval.reco_id[mu_index]) continue;
+    TVector3 pt(space.Trecchargeblob_spacepoints_x->at(sp), space.Trecchargeblob_spacepoints_y->at(sp), space.Trecchargeblob_spacepoints_z->at(sp));
+    if((pt-mu_end).Mag()<10) mu_end_pts.push_back(pt);
+  }
+  TVector3 mu_dir = mu_end - mu_start;
+  if(mu_end_pts.size()>=3){
+    TVector3 centroid;
+    get_principal_axis(mu_end_pts, centroid, mu_dir);
+    if(mu_dir.Dot(mu_end-mu_start)<0) mu_dir = -mu_dir;
+  }
+  if(mu_dir.Mag()==0) return 0;
+  mu_dir = mu_dir.Unit();
+
+  std::vector<bool> kine_used(kine.kine_energy_particle->size(), false);
+  double E_drop = 0;
+  for(int j=0; j<pfeval.reco_Ntrack; j++){
+    if(abs(pfeval.reco_pdg[j])!=11) continue;
+    TVector3 sh_start(pfeval.reco_startXYZT[j][0], pfeval.reco_startXYZT[j][1], pfeval.reco_startXYZT[j][2]);
+    TVector3 sh_end(pfeval.reco_endXYZT[j][0], pfeval.reco_endXYZT[j][1], pfeval.reco_endXYZT[j][2]);
+    if((sh_start-mu_end).Mag()>=drop_dist) continue;
+    std::vector<TVector3> sh_pts;
+    for(int sp=0; sp<n_spacepoints; sp++){
+      if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)!=pfeval.reco_id[j]) continue;
+      sh_pts.push_back(TVector3(space.Trecchargeblob_spacepoints_x->at(sp), space.Trecchargeblob_spacepoints_y->at(sp), space.Trecchargeblob_spacepoints_z->at(sp)));
+    }
+    if(sh_pts.size()==0) continue;
+    TVector3 sh_dir = sh_end - sh_start;
+    if(sh_pts.size()>=3){
+      TVector3 centroid;
+      get_principal_axis(sh_pts, centroid, sh_dir);
+      if(sh_dir.Dot(centroid-sh_start)<0) sh_dir = -sh_dir;
+    }
+    if(sh_dir.Mag()==0) continue;
+    if(sh_dir.Unit().Dot(mu_dir)<=drop_cos) continue;
+    // remove the matching kine entry (with the same EM scale as get_reco_Enu_corr for data)
+    double KE = (pfeval.reco_startMomentum[j][3]-0.000511)*1000;
+    for(size_t k=0; k<kine.kine_energy_particle->size(); k++){
+      if(kine_used.at(k) || abs(kine.kine_particle_type->at(k))!=11 || fabs(kine.kine_energy_particle->at(k)-KE)>=0.5) continue;
+      kine_used.at(k) = true;
+      double E_kine = kine.kine_energy_particle->at(k);
+      if(flag_data && kine.kine_energy_info->at(k)==2) E_kine *= em_charge_scale;
+      E_drop += E_kine;
+      break;
+    }
+  }
+  return E_drop;
+}
+
+double LEEana::get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers, double drop_dist, double drop_cos){
   double E = get_reco_Enu_corr(kine, flag_data);
   if (E<0) return 0;
   double KEmuon_old = (pfeval.reco_muonMomentum[3]-0.10566)*1000;
   double KEmuon_new = get_muon_energy_new(pfeval, flag_FC_lepton, true, true);
   if(KEmuon_old>0 && KEmuon_new>0) E =  E - KEmuon_old + KEmuon_new;
+  // A muon broken by the reconstruction often has its downstream piece labelled as a shower. Range only covers the labelled
+  // muon track, so that shower completes the muon; MCS gives the full muon momentum, so the shower would be counted twice.
+  bool flag_MCS_used = !flag_FC_lepton && pfeval.mcs_emu_MCS>0 && pfeval.mcs_emu_MCS<4;
+  if(drop_muon_showers && flag_MCS_used && KEmuon_old>0 && KEmuon_new>0) E = E - get_muon_continuation_shower_energy(pfeval, kine, space, flag_data, drop_dist, drop_cos);
   if(correct_protons){
     std::vector<double> KEproton_new = std::get<1>(get_range_proton_KE(pfeval, space, true));
     for(size_t i=0; i<kine.kine_energy_particle->size(); i++){
@@ -969,6 +1059,14 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     TString tag = var_name; tag.ReplaceAll("kine_reco_Enu_new","");   // e.g. "3_5": method 3, threshold 5%
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,TString(tag(0,1)).Atoi(),TString(tag(2,tag.Length()-2)).Atof()/100.);
     return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true);
+  }else if (var_name == "kine_reco_Enu_new3_5_drop10_95" || var_name == "kine_reco_Enu_new3_5_drop15_90" || var_name == "kine_reco_Enu_new3_5_drop15_95" || var_name == "kine_reco_Enu_new3_5_drop30_95"){
+    // new3_5, plus dropping the showers that continue the muon when its energy comes from MCS
+    // "dropD_C": shower start within D cm of the muon end and cos(angle to the muon direction) > 0.C
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,3,0.05);
+    if(var_name == "kine_reco_Enu_new3_5_drop10_95") return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, 10, 0.95);
+    if(var_name == "kine_reco_Enu_new3_5_drop15_90") return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, 15, 0.90);
+    if(var_name == "kine_reco_Enu_new3_5_drop15_95") return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, 15, 0.95);
+    return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, 30, 0.95);
   }else if (var_name == "KE_muon_new2_5" || var_name == "KE_muon_new2_10" || var_name == "KE_muon_new2_15" || var_name == "KE_muon_new2_20"
          || var_name == "KE_muon_new3_5" || var_name == "KE_muon_new3_10" || var_name == "KE_muon_new3_15" || var_name == "KE_muon_new3_20"){
     TString tag = var_name; tag.ReplaceAll("KE_muon_new","");
