@@ -2025,6 +2025,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
 
   int temp_sum = 0;
 
+  bool flag_first_event = true;
   for (size_t i=0;i!=T_eval->GetEntries();i++){
     T_BDTvars->GetEntry(i);
     T_eval->GetEntry(i);
@@ -2057,12 +2058,14 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       auto it3 = disabled_ch_names.find(ch_name);
       if (it3 != disabled_ch_names.end()) continue;
 
-      float val = get_kine_var(kine, eval, pfeval, tagger, false, var_name, space, pandora, lantern);
       bool flag_pass = get_cut_pass(ch_name, add_cut, false, eval, pfeval, tagger, kine, space, pandora, lantern);
       int signal_bin = -1;
       if (xs_signal_ch_names.find(ch_name) != xs_signal_ch_names.end()){
 	signal_bin = get_xs_signal_no(cut_file, map_cut_xs_bin, eval, pfeval, tagger, kine);
       }
+      // the variable is only stored if the event passes or is a signal event (always on the first event so an unknown variable name still stops the job)
+      float val = 0;
+      if (flag_pass || signal_bin !=-1 || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, false, var_name, space, pandora, lantern);
 
       //  std::cout << flag_pass << " " << signal_bin << " " << no << std::endl;
       if (flag_pass || signal_bin !=-1) {
@@ -2071,6 +2074,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       }
       //if (flag_pass || (signal_bin !=-1 && is_preselection(eval))) std::get<4>(event_info).insert(std::make_tuple(no, val, flag_pass, signal_bin));
      }
+    flag_first_event = false;
 
     if (std::get<4>(event_info).size()>0){
       if (option == "expskin_FluxUnisim"){

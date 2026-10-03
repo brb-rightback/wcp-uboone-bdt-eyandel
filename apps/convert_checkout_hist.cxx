@@ -430,6 +430,7 @@ int main( int argc, char** argv )
   std::cout << "Total entries: " << T_eval->GetEntries() << std::endl;
 
 
+  bool flag_first_event = true;
   for (Int_t i=0;i!=T_eval->GetEntries();i++){
     T_BDTvars->GetEntry(i);
     T_eval->GetEntry(i);
@@ -452,10 +453,11 @@ int main( int argc, char** argv )
       TString weight = std::get<7>(*it);
 
       htemp = map_histoname_hist[histoname];
-      // get kinematics variable ...
-      double val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
       // get pass or not
       bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+      // get kinematics variable (only needed if the event passes; always on the first event so an unknown variable name still stops the job)
+      double val = 0;
+      if (flag_pass || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
 
       double osc_weight = 1.0;
 
@@ -476,6 +478,7 @@ int main( int argc, char** argv )
       if (flag_pass)
 	htemp->Fill(val,weight_val);
     }
+    flag_first_event = false;
   }
 
 

@@ -953,6 +953,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   std::vector<int> sup_lengths;
   std::map<TString, int> map_knob_length;
 
+  bool flag_first_event = true;
   for (size_t i=0;i!=T_eval->GetEntries();i++){
     T_BDTvars->GetEntry(i);
     T_eval->GetEntry(i);
@@ -985,8 +986,10 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       auto it3 = disabled_ch_names.find(ch_name);
       if (it3 != disabled_ch_names.end()) continue;
 
-      float val = get_kine_var(kine, eval, pfeval, tagger, false, var_name, space, pandora, lantern);
       bool flag_pass = get_cut_pass(ch_name, add_cut, false, eval, pfeval, tagger, kine, space, pandora, lantern);
+      // the variable is only stored if the event passes (always on the first event so an unknown variable name still stops the job)
+      float val = 0;
+      if (flag_pass || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, false, var_name, space, pandora, lantern);
 
       if (flag_pass) {
 	std::get<4>(event_info).insert(std::make_pair(no, val));
@@ -996,6 +999,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
 	}
       }
     }
+    flag_first_event = false;
     // apply oscillation ...
     std::get<0>(event_info) *= osc_weight;
     //apply reweight

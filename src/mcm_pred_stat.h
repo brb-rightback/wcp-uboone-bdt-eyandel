@@ -888,6 +888,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
 
   vec_events.resize(T_eval->GetEntries());
 
+  bool flag_first_event = true;
   for (Int_t i=0;i!=T_eval->GetEntries();i++){
     T_BDTvars->GetEntry(i);
     T_eval->GetEntry(i);
@@ -922,8 +923,10 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
       TString ch_name = std::get<5>(*it);
       TString add_cut = std::get<6>(*it);
 
-      double val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
       bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+      // the variable is only stored if the event passes (always on the first event so an unknown variable name still stops the job)
+      double val = 0;
+      if (flag_pass || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
 
       if (flag_pass) std::get<4>(vec_events.at(i)).insert(std::make_tuple(no, val, flag_pass));
 
@@ -932,6 +935,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
 	flag_updated = true;
       }
     }
+    flag_first_event = false;
     if (!flag_data){
       std::get<2>(vec_events.at(i)) *= osc_weight;
       std::get<2>(vec_events.at(i)) *= get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(), get_time_info_allruns());
