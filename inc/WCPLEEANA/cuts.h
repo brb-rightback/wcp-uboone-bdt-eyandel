@@ -37,7 +37,12 @@ namespace LEEana{
 
   bool check_is_FC(double x, double y, double z);
   bool is_pfeval_muon(PFevalInfo& pfeval,int index, double tolerance);
-  std::tuple<bool,bool> get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval);
+  //returns (flag_FC_lepton, flag_FC_hadron); flag_FC_lepton is true if the primary muon energy is taken from range, false if from MCS
+  //method=0: original choice (FC event, or muon start/end inside check_is_FC -> range)
+  //method=2: two-sided, FC events with the muon inside check_is_FC -> range, others -> range if |range-MCS|/MCS<threshold, else MCS
+  //method=3: one-sided, FC events with the muon inside check_is_FC -> range, others -> MCS only if (MCS-range)/MCS>threshold
+  std::tuple<bool,bool> get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval, int method=0, double threshold=0.05);
+  bool check_muon_range_MCS(PFevalInfo& pfeval, int method, double threshold);
 
   double get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool return_KE, bool return_MeV);
   double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons);
@@ -286,7 +291,7 @@ double LEEana::get_KE(PFevalInfo& pfeval, int pdg, int truth, int mother_check, 
 
 double LEEana::get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool return_KE, bool return_MeV){
   double E = pfeval.reco_muonMomentum[3];
-  if (E<0) return 0;
+  if (E<=0) return 0;
   if(pfeval.mcs_emu_tracklen>0 && pfeval.mcs_emu_tracklen<4 && flag_FC_lepton) E = pfeval.mcs_emu_tracklen;
   if(pfeval.mcs_emu_MCS>0 && pfeval.mcs_emu_MCS<4 && !flag_FC_lepton) E = pfeval.mcs_emu_MCS;
   if(return_KE) E = E-0.10566;
@@ -332,11 +337,24 @@ bool LEEana::is_pfeval_muon(PFevalInfo& pfeval,int index, double tolerance){
       return flag_prim_mu;
 }
 
-std::tuple<bool,bool> LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval){
+// For methods 2 and 3: true if the primary muon energy should come from range, false if from MCS.
+// Range from an exiting muon is too low, so range well below MCS indicates a muon that leaves the detector.
+bool LEEana::check_muon_range_MCS(PFevalInfo& pfeval, int method, double threshold){
+  bool valid_range = pfeval.mcs_emu_tracklen>0 && pfeval.mcs_emu_tracklen<4;
+  bool valid_MCS = pfeval.mcs_emu_MCS>0 && pfeval.mcs_emu_MCS<4;
+  if(!valid_MCS) return true;   // no usable MCS, use range (get_muon_energy_new falls back to WC if range is not valid either)
+  if(!valid_range) return false;
+  double rel = (pfeval.mcs_emu_tracklen-pfeval.mcs_emu_MCS)/pfeval.mcs_emu_MCS;
+  if(method==2) return fabs(rel)<threshold;   // two-sided: range only if range and MCS agree
+  if(method==3) return rel>=-threshold;       // one-sided: MCS only if it is above range by more than the threshold
+  return true;
+}
+
+std::tuple<bool,bool> LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval, int method, double threshold){
   bool flag_FC_lepton = 1;
   bool flag_FC_hadron = 1;
   std::tuple<bool,bool> result = std::make_tuple(flag_FC_lepton,flag_FC_hadron);
-  if(eval.match_isFC) return result;
+  if(eval.match_isFC && method==0) return result;
   for(size_t i=0; i<pfeval.reco_Ntrack; i++){
     if(pfeval.reco_pdg[i]==22 || pfeval.reco_pdg[i]==2112) continue;
     double x = pfeval.reco_startXYZT[i][0];
@@ -349,6 +367,9 @@ std::tuple<bool,bool> LEEana::get_part_is_FC(PFevalInfo& pfeval,EvalInfo& eval){
     if(is_pfeval_muon(pfeval,i,0.0001)) flag_FC_lepton = flag_FC_lepton*is_FC;
     else flag_FC_hadron = flag_FC_hadron*is_FC;
   }
+  if(eval.match_isFC) flag_FC_hadron = 1;
+  // Methods 2/3: only FC events whose muon passes the box keep range, all other events use the range/MCS comparison
+  if((method==2 || method==3) && !(eval.match_isFC && flag_FC_lepton)) flag_FC_lepton = check_muon_range_MCS(pfeval, method, threshold);
   result = std::make_tuple(flag_FC_lepton,flag_FC_hadron);
   return result;
 }
@@ -472,6 +493,12 @@ std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vect
   std::sort(proton_KEs.begin(), proton_KEs.end(), wayToSort);
   std::sort(prim_larpid_proton_KEs.begin(), prim_larpid_proton_KEs.end(), wayToSort);
   std::sort(larpid_proton_KEs.begin(), larpid_proton_KEs.end(), wayToSort);
+  if(!return_MeV){
+    for (auto& val : prim_proton_KEs) { val *= 0.001;}
+    for (auto& val : proton_KEs) { val *= 0.001;}
+    for (auto& val : prim_larpid_proton_KEs) { val *= 0.001;}
+    for (auto& val : larpid_proton_KEs) { val *= 0.001;}
+  }
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> result = std::make_tuple(prim_proton_KEs,proton_KEs,prim_larpid_proton_KEs,larpid_proton_KEs);
   return result;
 
@@ -876,6 +903,16 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true);
   }else if (var_name == "KE_muon_new"){
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval);
+    return get_muon_energy_new(pfeval, std::get<0>(result_part_FC), true, true);
+  }else if (var_name == "kine_reco_Enu_new2_5" || var_name == "kine_reco_Enu_new2_10" || var_name == "kine_reco_Enu_new2_15" || var_name == "kine_reco_Enu_new2_20"
+         || var_name == "kine_reco_Enu_new3_5" || var_name == "kine_reco_Enu_new3_10" || var_name == "kine_reco_Enu_new3_15" || var_name == "kine_reco_Enu_new3_20"){
+    TString tag = var_name; tag.ReplaceAll("kine_reco_Enu_new","");   // e.g. "3_5": method 3, threshold 5%
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,TString(tag(0,1)).Atoi(),TString(tag(2,tag.Length()-2)).Atof()/100.);
+    return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true);
+  }else if (var_name == "KE_muon_new2_5" || var_name == "KE_muon_new2_10" || var_name == "KE_muon_new2_15" || var_name == "KE_muon_new2_20"
+         || var_name == "KE_muon_new3_5" || var_name == "KE_muon_new3_10" || var_name == "KE_muon_new3_15" || var_name == "KE_muon_new3_20"){
+    TString tag = var_name; tag.ReplaceAll("KE_muon_new","");
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,TString(tag(0,1)).Atoi(),TString(tag(2,tag.Length()-2)).Atof()/100.);
     return get_muon_energy_new(pfeval, std::get<0>(result_part_FC), true, true);
 
   }else if(var_name == "all_veto_score"){
