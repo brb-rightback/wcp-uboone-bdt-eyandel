@@ -65,6 +65,66 @@ namespace LEEana{
   double get_truth_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, TString var_name);
 
   bool get_cut_pass(TString ch_name, TString add_cut, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
+  // Event-level quantities of get_cut_pass (independent of the channel and add_cut), see fill_cut_event_info
+  struct CutEventInfo{
+    double reco_Enu;
+    double KE_muon;
+    double Pmuon;
+    double Emuon;
+    double Ehadron;
+    TLorentzVector truth_muonMomentum;
+    bool flag_truth_inside;
+    double true_proton_KE;
+    std::map<std::string, bool> map_cuts_flag;
+    bool flag_generic;
+    bool flag_numuCC;
+    bool flag_numuCC_tight;
+    bool flag_numuCC_1mu0p;
+    bool flag_numuCC_lowEhad;
+    bool flag_numuCC_cutbased;
+    bool flag_nueCC;
+    bool flag_nueCC_loose;
+    bool flag_0p;
+    bool flag_1p;
+    bool flag_0pi;
+    bool flag_pi0;
+    bool flag_cc_pi0;
+    bool flag_NC;
+    bool flag_FC;
+    bool flag_ncpio_sel;
+    bool flag_ncdelta_sel;
+    bool flag_singlephoton_sel;
+    bool flag_singlephoton_eff_sel;
+    bool flag_singleshower_sel;
+    bool flag_singleshower_eff_sel;
+    bool flag_singlephoton_numu_sel;
+    bool flag_singlephoton_other_sel;
+    bool flag_singlephoton_ncpi0_sel;
+    bool flag_singlephoton_nue_sel;
+    bool flag_singlephoton_nue_sel_allshw;
+    bool flag_nsbeam;
+    bool flag_nsbeam_photon;
+    bool flag_singlephoton_pre;
+    bool flag_singlephoton_numu;
+    bool flag_singlephoton_other;
+    bool flag_singlephoton_ncpi0;
+    bool flag_singlephoton_nue;
+    bool flag_singlephoton_eff_numu;
+    bool flag_singlephoton_eff_other;
+    bool flag_singlephoton_eff_ncpi0;
+    bool flag_singlephoton_eff_nue;
+    bool flag_singlephoton_oneshw;
+    TLorentzVector muonMomentum;
+    float reco_pmuon;
+    int costheta_bin;
+    int Pmu_bin;
+    int Enu_bin;
+    bool part_bin_set = false;     // cached get_particle_0pNp_bdt_bin result for this event
+    double part_bin_thresholds[4];
+    int part_bin;
+  };
+  void fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
+  bool get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutEventInfo& info, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
   bool get_rw_cut_pass(TString cut, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine);
   double get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool,  std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data=false);
   int get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bin, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine);
@@ -2891,25 +2951,78 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
   return -1;
 }
 
-bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
+// Event-level quantities used by get_cut_pass that do not depend on the channel or add_cut.
+// Fill once per event (after reading the entry) and pass to get_cut_pass for every histogram of that event.
+void LEEana::fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
+  double& reco_Enu = info.reco_Enu;
+  double& KE_muon = info.KE_muon;
+  double& Pmuon = info.Pmuon;
+  double& Emuon = info.Emuon;
+  double& Ehadron = info.Ehadron;
+  TLorentzVector& truth_muonMomentum = info.truth_muonMomentum;
+  bool& flag_truth_inside = info.flag_truth_inside;
+  double& true_proton_KE = info.true_proton_KE;
+  std::map<std::string, bool>& map_cuts_flag = info.map_cuts_flag;
+  bool& flag_generic = info.flag_generic;
+  bool& flag_numuCC = info.flag_numuCC;
+  bool& flag_numuCC_tight = info.flag_numuCC_tight;
+  bool& flag_numuCC_1mu0p = info.flag_numuCC_1mu0p;
+  bool& flag_numuCC_lowEhad = info.flag_numuCC_lowEhad;
+  bool& flag_numuCC_cutbased = info.flag_numuCC_cutbased;
+  bool& flag_nueCC = info.flag_nueCC;
+  bool& flag_nueCC_loose = info.flag_nueCC_loose;
+  bool& flag_0p = info.flag_0p;
+  bool& flag_1p = info.flag_1p;
+  bool& flag_0pi = info.flag_0pi;
+  bool& flag_pi0 = info.flag_pi0;
+  bool& flag_cc_pi0 = info.flag_cc_pi0;
+  bool& flag_NC = info.flag_NC;
+  bool& flag_FC = info.flag_FC;
+  bool& flag_ncpio_sel = info.flag_ncpio_sel;
+  bool& flag_ncdelta_sel = info.flag_ncdelta_sel;
+  bool& flag_singlephoton_sel = info.flag_singlephoton_sel;
+  bool& flag_singlephoton_eff_sel = info.flag_singlephoton_eff_sel;
+  bool& flag_singleshower_sel = info.flag_singleshower_sel;
+  bool& flag_singleshower_eff_sel = info.flag_singleshower_eff_sel;
+  bool& flag_singlephoton_numu_sel = info.flag_singlephoton_numu_sel;
+  bool& flag_singlephoton_other_sel = info.flag_singlephoton_other_sel;
+  bool& flag_singlephoton_ncpi0_sel = info.flag_singlephoton_ncpi0_sel;
+  bool& flag_singlephoton_nue_sel = info.flag_singlephoton_nue_sel;
+  bool& flag_singlephoton_nue_sel_allshw = info.flag_singlephoton_nue_sel_allshw;
+  bool& flag_nsbeam = info.flag_nsbeam;
+  bool& flag_nsbeam_photon = info.flag_nsbeam_photon;
+  bool& flag_singlephoton_pre = info.flag_singlephoton_pre;
+  bool& flag_singlephoton_numu = info.flag_singlephoton_numu;
+  bool& flag_singlephoton_other = info.flag_singlephoton_other;
+  bool& flag_singlephoton_ncpi0 = info.flag_singlephoton_ncpi0;
+  bool& flag_singlephoton_nue = info.flag_singlephoton_nue;
+  bool& flag_singlephoton_eff_numu = info.flag_singlephoton_eff_numu;
+  bool& flag_singlephoton_eff_other = info.flag_singlephoton_eff_other;
+  bool& flag_singlephoton_eff_ncpi0 = info.flag_singlephoton_eff_ncpi0;
+  bool& flag_singlephoton_eff_nue = info.flag_singlephoton_eff_nue;
+  bool& flag_singlephoton_oneshw = info.flag_singlephoton_oneshw;
+  TLorentzVector& muonMomentum = info.muonMomentum;
+  float& reco_pmuon = info.reco_pmuon;
+  int& costheta_bin = info.costheta_bin;
+  int& Pmu_bin = info.Pmu_bin;
+  int& Enu_bin = info.Enu_bin;
 
+  reco_Enu = get_reco_Enu_corr(kine, flag_data);
 
-  double reco_Enu = get_reco_Enu_corr(kine, flag_data);
+  KE_muon = pfeval.truth_muonMomentum[3]*1000.-105.66; // MeV
+  Pmuon = (TMath::Sqrt(pow(KE_muon,2) + 2*KE_muon*105.66));
 
-  double KE_muon = pfeval.truth_muonMomentum[3]*1000.-105.66; // MeV
-  double Pmuon   = (TMath::Sqrt(pow(KE_muon,2) + 2*KE_muon*105.66));
+  Emuon = pfeval.truth_muonMomentum[3]*1000; // MeV
+  Ehadron = eval.truth_nuEnergy - pfeval.truth_muonMomentum[3]*1000.; // MeV
 
-  double Emuon = pfeval.truth_muonMomentum[3]*1000; // MeV
-  double Ehadron = eval.truth_nuEnergy - pfeval.truth_muonMomentum[3]*1000.; // MeV
+  truth_muonMomentum = TLorentzVector(pfeval.truth_muonMomentum[0], pfeval.truth_muonMomentum[1], pfeval.truth_muonMomentum[2], pfeval.truth_muonMomentum[3]);
 
-  TLorentzVector truth_muonMomentum(pfeval.truth_muonMomentum[0], pfeval.truth_muonMomentum[1], pfeval.truth_muonMomentum[2], pfeval.truth_muonMomentum[3]);
-
-  bool flag_truth_inside = false; // in the active volume
+  flag_truth_inside = false; // in the active volume
   if (eval.truth_vtxX > -1 && eval.truth_vtxX <= 254.3 &&  eval.truth_vtxY >-115.0 && eval.truth_vtxY<=117.0 && eval.truth_vtxZ > 0.6 && eval.truth_vtxZ <=1036.4) flag_truth_inside = true;
 
-  double true_proton_KE = get_KE(pfeval, 2212, 1, 0, 1, 0);
+  true_proton_KE = get_KE(pfeval, 2212, 1, 0, 1, 0);
   // definition of additional cuts
-  std::map<std::string, bool> map_cuts_flag;
+  map_cuts_flag.clear();
   if(is_far_sideband(kine, tagger, flag_data)) map_cuts_flag["farsideband"] = true;
   else map_cuts_flag["farsideband"] = false;
 
@@ -3143,6 +3256,83 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
   map_cuts_flag["none"] = false;
   map_cuts_flag["LEE"] = true;
 
+
+  flag_generic = is_generic(eval);
+  flag_numuCC = is_numuCC(tagger);
+  //bool flag_numuCC = is_numuCC(tagger) && (is_far_sideband(kine, tagger, flag_data) || is_near_sideband(kine, tagger, flag_data) );
+  flag_numuCC_tight = is_numuCC_tight(tagger, pfeval);
+  flag_numuCC_1mu0p = is_numuCC_1mu0p(tagger, kine, pfeval);
+  flag_numuCC_lowEhad = is_numuCC_lowEhad(tagger, kine, pfeval, flag_data);
+  flag_numuCC_cutbased = is_numuCC_cutbased(tagger);
+  flag_nueCC = is_nueCC(tagger);
+  flag_nueCC_loose = is_loosenueCC(tagger);
+
+  flag_0p = is_0p(tagger, kine, pfeval);
+  flag_1p = is_1p(tagger, kine, pfeval);
+  flag_0pi = is_0pi(tagger, kine, pfeval);
+
+  flag_pi0 = is_pi0(kine, flag_data);
+  flag_cc_pi0 = is_cc_pi0(kine, flag_data);
+  flag_NC = is_NC(tagger);
+  flag_FC = is_FC(eval);
+
+  //bool flag_ncpio_sel = is_NCpio_bdt(tagger) && (!flag_0p);
+  flag_ncpio_sel = is_NCpio_sel(tagger, kine);
+  flag_ncdelta_sel = is_NCdelta_sel(tagger, pfeval);
+
+  //Erin
+  flag_singlephoton_sel = is_singlephoton_sel(tagger, pfeval);
+  flag_singlephoton_eff_sel = is_singlephoton_eff_sel(tagger, pfeval);
+  flag_singleshower_sel = is_singleshower_sel(tagger, pfeval);
+  flag_singleshower_eff_sel = is_singleshower_eff_sel(tagger, pfeval);
+  flag_singlephoton_numu_sel = is_singlephoton_numu_sel(tagger, pfeval);
+  flag_singlephoton_other_sel = is_singlephoton_other_sel(tagger, pfeval);
+  flag_singlephoton_ncpi0_sel = is_singlephoton_ncpi0_sel(tagger, pfeval);
+  flag_singlephoton_nue_sel = is_singlephoton_nue_sel(tagger, pfeval);
+  flag_singlephoton_nue_sel_allshw = is_singlephoton_nue_sel_allshw(tagger, pfeval);
+  flag_nsbeam = is_nsbeam_photon(pfeval, eval); //set all cuts to shifted
+  flag_nsbeam_photon = is_nsbeam_photon(pfeval, eval);
+  flag_singlephoton_pre = is_singlephoton_pre(tagger, pfeval);
+  flag_singlephoton_numu = is_singlephoton_numu(tagger, pfeval);
+  flag_singlephoton_other = is_singlephoton_other(tagger, pfeval);
+  flag_singlephoton_ncpi0 = is_singlephoton_ncpi0(tagger, pfeval);
+  flag_singlephoton_nue = is_singlephoton_nue(tagger, pfeval);
+  flag_singlephoton_eff_numu = is_singlephoton_eff_numu(tagger, pfeval);
+  flag_singlephoton_eff_other = is_singlephoton_eff_other(tagger, pfeval);
+  flag_singlephoton_eff_ncpi0 = is_singlephoton_eff_ncpi0(tagger, pfeval);
+  flag_singlephoton_eff_nue = is_singlephoton_eff_nue(tagger, pfeval);
+  flag_singlephoton_oneshw = is_singlephoton_oneshw(tagger, pfeval);
+  //
+
+  muonMomentum = TLorentzVector(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2], pfeval.reco_muonMomentum[3]);
+  reco_pmuon = TMath::Sqrt(pow(pfeval.reco_muonMomentum[0],2)+pow(pfeval.reco_muonMomentum[1],2)+pow(pfeval.reco_muonMomentum[2],2))*1000;
+
+  costheta_bin = get_costheta_bin(TMath::Cos(muonMomentum.Theta()));
+  Pmu_bin = get_Pmuon_bin(reco_pmuon);
+  Enu_bin = get_Enu_bin(reco_Enu);
+
+  info.part_bin_set = false;
+}
+
+bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
+  CutEventInfo info;
+  fill_cut_event_info(info, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+  return get_cut_pass(ch_name, add_cut, flag_data, info, eval, pfeval, tagger, kine, space, pandora, lantern);
+}
+
+bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutEventInfo& info, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
+
+  // event-level quantities, computed once per event in fill_cut_event_info
+  double reco_Enu = info.reco_Enu;
+  double KE_muon = info.KE_muon;
+  double Pmuon = info.Pmuon;
+  double Emuon = info.Emuon;
+  double Ehadron = info.Ehadron;
+  TLorentzVector truth_muonMomentum = info.truth_muonMomentum;
+  bool flag_truth_inside = info.flag_truth_inside;
+  double true_proton_KE = info.true_proton_KE;
+  std::map<std::string, bool>& map_cuts_flag = info.map_cuts_flag;   // only existing keys are read below
+
   // figure out additional cuts and flag_data ...
   bool flag_add = true;
   if(add_cut == "all") flag_add = true;
@@ -3166,62 +3356,53 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
 
   if (!flag_add) return false;
 
-  bool flag_generic = is_generic(eval);
-  bool flag_numuCC = is_numuCC(tagger);
-  //bool flag_numuCC = is_numuCC(tagger) && (is_far_sideband(kine, tagger, flag_data) || is_near_sideband(kine, tagger, flag_data) );
-  bool flag_numuCC_tight = is_numuCC_tight(tagger, pfeval);
-  bool flag_numuCC_1mu0p = is_numuCC_1mu0p(tagger, kine, pfeval);
-  bool flag_numuCC_lowEhad = is_numuCC_lowEhad(tagger, kine, pfeval, flag_data);
-  bool flag_numuCC_cutbased = is_numuCC_cutbased(tagger);
-  bool flag_nueCC = is_nueCC(tagger);
-  bool flag_nueCC_loose = is_loosenueCC(tagger);
-
-  bool flag_0p = is_0p(tagger, kine, pfeval);
-  bool flag_1p = is_1p(tagger, kine, pfeval);
-  bool flag_0pi = is_0pi(tagger, kine, pfeval);
-
-  bool flag_pi0 = is_pi0(kine, flag_data);
-  bool flag_cc_pi0 = is_cc_pi0(kine, flag_data);
-  bool flag_NC = is_NC(tagger);
-  bool flag_FC = is_FC(eval);
-
-  //bool flag_ncpio_sel = is_NCpio_bdt(tagger) && (!flag_0p);
-  bool flag_ncpio_sel = is_NCpio_sel(tagger, kine);
-  bool flag_ncdelta_sel = is_NCdelta_sel(tagger, pfeval);
-
-  //Erin
-  bool flag_singlephoton_sel = is_singlephoton_sel(tagger, pfeval);
-  bool flag_singlephoton_eff_sel = is_singlephoton_eff_sel(tagger, pfeval);
-  bool flag_singleshower_sel = is_singleshower_sel(tagger, pfeval);
-  bool flag_singleshower_eff_sel = is_singleshower_eff_sel(tagger, pfeval);
-  bool flag_singlephoton_numu_sel = is_singlephoton_numu_sel(tagger, pfeval);
-  bool flag_singlephoton_other_sel = is_singlephoton_other_sel(tagger, pfeval);
-  bool flag_singlephoton_ncpi0_sel = is_singlephoton_ncpi0_sel(tagger, pfeval);
-  bool flag_singlephoton_nue_sel = is_singlephoton_nue_sel(tagger, pfeval);
-  bool flag_singlephoton_nue_sel_allshw = is_singlephoton_nue_sel_allshw(tagger, pfeval);
-  bool flag_nsbeam = is_nsbeam_photon(pfeval, eval); //set all cuts to shifted
-  bool flag_nsbeam_photon = is_nsbeam_photon(pfeval, eval);
-  bool flag_singlephoton_pre = is_singlephoton_pre(tagger, pfeval);
-  bool flag_singlephoton_numu = is_singlephoton_numu(tagger, pfeval);
-  bool flag_singlephoton_other = is_singlephoton_other(tagger, pfeval);
-  bool flag_singlephoton_ncpi0 = is_singlephoton_ncpi0(tagger, pfeval);
-  bool flag_singlephoton_nue = is_singlephoton_nue(tagger, pfeval);
-  bool flag_singlephoton_eff_numu = is_singlephoton_eff_numu(tagger, pfeval);
-  bool flag_singlephoton_eff_other = is_singlephoton_eff_other(tagger, pfeval);
-  bool flag_singlephoton_eff_ncpi0 = is_singlephoton_eff_ncpi0(tagger, pfeval);
-  bool flag_singlephoton_eff_nue = is_singlephoton_eff_nue(tagger, pfeval);
-  bool flag_singlephoton_oneshw = is_singlephoton_oneshw(tagger, pfeval);
-  //
+  bool flag_generic = info.flag_generic;
+  bool flag_numuCC = info.flag_numuCC;
+  bool flag_numuCC_tight = info.flag_numuCC_tight;
+  bool flag_numuCC_1mu0p = info.flag_numuCC_1mu0p;
+  bool flag_numuCC_lowEhad = info.flag_numuCC_lowEhad;
+  bool flag_numuCC_cutbased = info.flag_numuCC_cutbased;
+  bool flag_nueCC = info.flag_nueCC;
+  bool flag_nueCC_loose = info.flag_nueCC_loose;
+  bool flag_0p = info.flag_0p;
+  bool flag_1p = info.flag_1p;
+  bool flag_0pi = info.flag_0pi;
+  bool flag_pi0 = info.flag_pi0;
+  bool flag_cc_pi0 = info.flag_cc_pi0;
+  bool flag_NC = info.flag_NC;
+  bool flag_FC = info.flag_FC;
+  bool flag_ncpio_sel = info.flag_ncpio_sel;
+  bool flag_ncdelta_sel = info.flag_ncdelta_sel;
+  bool flag_singlephoton_sel = info.flag_singlephoton_sel;
+  bool flag_singlephoton_eff_sel = info.flag_singlephoton_eff_sel;
+  bool flag_singleshower_sel = info.flag_singleshower_sel;
+  bool flag_singleshower_eff_sel = info.flag_singleshower_eff_sel;
+  bool flag_singlephoton_numu_sel = info.flag_singlephoton_numu_sel;
+  bool flag_singlephoton_other_sel = info.flag_singlephoton_other_sel;
+  bool flag_singlephoton_ncpi0_sel = info.flag_singlephoton_ncpi0_sel;
+  bool flag_singlephoton_nue_sel = info.flag_singlephoton_nue_sel;
+  bool flag_singlephoton_nue_sel_allshw = info.flag_singlephoton_nue_sel_allshw;
+  bool flag_nsbeam = info.flag_nsbeam;
+  bool flag_nsbeam_photon = info.flag_nsbeam_photon;
+  bool flag_singlephoton_pre = info.flag_singlephoton_pre;
+  bool flag_singlephoton_numu = info.flag_singlephoton_numu;
+  bool flag_singlephoton_other = info.flag_singlephoton_other;
+  bool flag_singlephoton_ncpi0 = info.flag_singlephoton_ncpi0;
+  bool flag_singlephoton_nue = info.flag_singlephoton_nue;
+  bool flag_singlephoton_eff_numu = info.flag_singlephoton_eff_numu;
+  bool flag_singlephoton_eff_other = info.flag_singlephoton_eff_other;
+  bool flag_singlephoton_eff_ncpi0 = info.flag_singlephoton_eff_ncpi0;
+  bool flag_singlephoton_eff_nue = info.flag_singlephoton_eff_nue;
+  bool flag_singlephoton_oneshw = info.flag_singlephoton_oneshw;
+  TLorentzVector muonMomentum = info.muonMomentum;
+  float reco_pmuon = info.reco_pmuon;
+  int costheta_bin = info.costheta_bin;
+  int Pmu_bin = info.Pmu_bin;
+  int Enu_bin = info.Enu_bin;
 
   float costheta_binning[10] = {-1, -.5, 0, .27, .45, .62, .76, .86, .94, 1};		// PeLEE binning
   //float costheta_binning[7]  = {-1,         .27,      .62, .76, .86, .94, 1};		// coarse binning
   //float costheta_binning[3]    = {-1,                   .62,                1};	//very coarse binning
-  TLorentzVector muonMomentum(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2], pfeval.reco_muonMomentum[3]);
-  float reco_pmuon = TMath::Sqrt(pow(pfeval.reco_muonMomentum[0],2)+pow(pfeval.reco_muonMomentum[1],2)+pow(pfeval.reco_muonMomentum[2],2))*1000;
-
-  int costheta_bin = get_costheta_bin(TMath::Cos(muonMomentum.Theta()));
-  int Pmu_bin      = get_Pmuon_bin(reco_pmuon);
-  int Enu_bin      = get_Enu_bin(reco_Enu);
 
   std::string ch_name_string(ch_name.Data());
   std::string sequence_to_find = "numuCC_part_bdt";  
@@ -3273,7 +3454,14 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, Eval
      || ch_name_string == "numuCC_part_bdt_dirt" || ch_name_string == "numuCC_part_bdt")) return true;
 
     //int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, -0.65, 1.60); 
-    int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, 0.65, 1.60);
+    // computed once per event and cached in info (recomputed if the thresholds change)
+    double part_bin_thresholds[4] = {45, 45, 0.65, 1.60};
+    if(!info.part_bin_set || !std::equal(part_bin_thresholds, part_bin_thresholds+4, info.part_bin_thresholds)){
+      info.part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, part_bin_thresholds[0], part_bin_thresholds[1], part_bin_thresholds[2], part_bin_thresholds[3]);
+      std::copy(part_bin_thresholds, part_bin_thresholds+4, info.part_bin_thresholds);
+      info.part_bin_set = true;
+    }
+    int part_bin = info.part_bin;
 
     if((ch_name_string == "numuCC_part_bdt_Np_sig" || ch_name_string == "numuCC_part_bdt_Np_bck" || ch_name_string == "numuCC_part_bdt_Np_ext" 
      || ch_name_string == "numuCC_part_bdt_Np_dirt" || ch_name_string == "numuCC_part_bdt_Np" || ch_name_string == "numuCC_part_bdt_Np_open") && part_bin==5) return true;

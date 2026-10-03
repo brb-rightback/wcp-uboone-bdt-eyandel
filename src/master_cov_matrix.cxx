@@ -2043,6 +2043,10 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     double reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
     std::get<0>(event_info) *= reweight;
 
+    // event-level quantities for get_cut_pass, computed once per event
+    CutEventInfo cut_info;
+    fill_cut_event_info(cut_info, false, eval, pfeval, tagger, kine, space, pandora, lantern);
+
      for (auto it = histo_infos.begin(); it != histo_infos.end(); it++){
       TString histoname = std::get<0>(*it);
 
@@ -2058,7 +2062,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       auto it3 = disabled_ch_names.find(ch_name);
       if (it3 != disabled_ch_names.end()) continue;
 
-      bool flag_pass = get_cut_pass(ch_name, add_cut, false, eval, pfeval, tagger, kine, space, pandora, lantern);
+      bool flag_pass = get_cut_pass(ch_name, add_cut, false, cut_info, eval, pfeval, tagger, kine, space, pandora, lantern);
       int signal_bin = -1;
       if (xs_signal_ch_names.find(ch_name) != xs_signal_ch_names.end()){
 	signal_bin = get_xs_signal_no(cut_file, map_cut_xs_bin, eval, pfeval, tagger, kine);

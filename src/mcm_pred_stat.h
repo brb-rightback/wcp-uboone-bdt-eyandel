@@ -913,6 +913,10 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     double osc_weight = 1.0;
     bool flag_updated = false;
 
+    // event-level quantities for get_cut_pass, computed once per event
+    CutEventInfo cut_info;
+    fill_cut_event_info(cut_info, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+
     for (auto it = histo_infos.begin(); it != histo_infos.end(); it++){
       TString histoname = std::get<0>(*it);
 
@@ -923,7 +927,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
       TString ch_name = std::get<5>(*it);
       TString add_cut = std::get<6>(*it);
 
-      bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+      bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, cut_info, eval, pfeval, tagger, kine, space, pandora, lantern);
       // the variable is only stored if the event passes (always on the first event so an unknown variable name still stops the job)
       double val = 0;
       if (flag_pass || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);

@@ -999,6 +999,12 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     double osc_weight = 1.0;
     bool flag_updated = false;
 
+    // event-level quantities for get_cut_pass, computed once per event
+    CutEventInfo cut_info_cv;
+    CutEventInfo cut_info_det;
+    fill_cut_event_info(cut_info_cv, false, eval_cv, pfeval_cv, tagger_cv, kine_cv, space_cv, pandora_cv, lantern_cv);
+    fill_cut_event_info(cut_info_det, false, eval_det, pfeval_det, tagger_det, kine_det, space_det, pandora_det, lantern_det);
+
     for (auto it = histo_infos.begin(); it != histo_infos.end(); it++){
       TString histoname = std::get<0>(*it);
 
@@ -1013,8 +1019,8 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
       auto it3 = disabled_ch_names.find(ch_name);
       if (it3 != disabled_ch_names.end()) continue;
 
-      bool flag_pass = get_cut_pass(ch_name, add_cut, false, eval_cv, pfeval_cv, tagger_cv, kine_cv, space_cv, pandora_cv, lantern_cv);
-      bool flag_pass1 = get_cut_pass(ch_name, add_cut, false, eval_det, pfeval_det, tagger_det, kine_det, space_det, pandora_det, lantern_det);
+      bool flag_pass = get_cut_pass(ch_name, add_cut, false, cut_info_cv, eval_cv, pfeval_cv, tagger_cv, kine_cv, space_cv, pandora_cv, lantern_cv);
+      bool flag_pass1 = get_cut_pass(ch_name, add_cut, false, cut_info_det, eval_det, pfeval_det, tagger_det, kine_det, space_det, pandora_det, lantern_det);
 
       // both variables are stored if either sample passes (always on the first event so an unknown variable name still stops the job)
       double val = 0, val1 = 0;

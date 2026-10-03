@@ -376,6 +376,10 @@ int main( int argc, char** argv )
 
     //    if (!is_preselection(eval)) continue;
 
+    // event-level quantities for get_cut_pass, computed once per event
+    CutEventInfo cut_info;
+    fill_cut_event_info(cut_info, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+
     for (auto it = all_histo_infos.begin(); it != all_histo_infos.end(); it++){
       TString histoname = std::get<0>(*it);
       Int_t nbin = std::get<1>(*it);
@@ -387,7 +391,7 @@ int main( int argc, char** argv )
       TString weight = std::get<7>(*it);
 
       // get pass or not
-      bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, eval, pfeval, tagger, kine, space, pandora, lantern);
+      bool flag_pass = get_cut_pass(ch_name, add_cut, flag_data, cut_info, eval, pfeval, tagger, kine, space, pandora, lantern);
       // get kinematics variable (only needed if the event passes; always on the first event so an unknown variable name still stops the job)
       double val = 0;
       if (flag_pass || flag_first_event) val = get_kine_var(kine, eval, pfeval, tagger, flag_data, var_name, space, pandora, lantern);
