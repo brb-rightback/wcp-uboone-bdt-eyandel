@@ -22,6 +22,7 @@
 #include "WCPLEEANA/space.h"
 #include "WCPLEEANA/pandora.h"
 #include "WCPLEEANA/lantern.h"
+#include "WCPLEEANA/analysis_trees.h"
 
 namespace LEEana{
   class CovMatrix{
