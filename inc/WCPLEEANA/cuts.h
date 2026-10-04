@@ -45,9 +45,12 @@ namespace LEEana{
   bool check_muon_range_MCS(PFevalInfo& pfeval, int method, double threshold);
 
   double get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool return_KE, bool return_MeV);
-  //drop_muon_showers: when the muon energy comes from MCS, remove showers that continue the muon past its reco end (start within drop_dist cm of the muon end, cos(angle to the muon direction)>drop_cos)
-  double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers=false, double drop_dist=15, double drop_cos=0.9);
-  double get_muon_continuation_shower_energy(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_data, double drop_dist, double drop_cos);
+  //drop_muon_showers: when the muon energy comes from MCS, remove particles that continue the muon past its reco end (start within drop_dist cm of the muon end, cos(angle to the muon direction)>drop_cos)
+  //drop_mass: also remove the change of the masses in kine_reco_add_energy from removing those particles (false for Eavail, which removes all of kine_reco_add_energy itself)
+  double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers=false, double drop_dist=15, double drop_cos=0.9, bool drop_mass=true);
+  double get_muon_continuation_energy(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_data, double drop_dist, double drop_cos, double& E_mass);
+  int get_reco_mother_index(PFevalInfo& pfeval, int index, const std::vector<bool>& removed);
+  double get_kine_chain_end_mass(PFevalInfo& pfeval, const std::vector<int>& indices, const std::vector<bool>& removed);
   void get_principal_axis(const std::vector<TVector3>& pts, TVector3& centroid, TVector3& axis);
 
   int get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold);
@@ -339,12 +342,18 @@ void LEEana::get_principal_axis(const std::vector<TVector3>& pts, TVector3& cent
   axis.SetXYZ(vectors(0,0), vectors(1,0), vectors(2,0));
 }
 
-// Kine energy of the showers that continue the primary muon past its reco end: shower start within drop_dist cm of the
-// muon end and cos(angle between the shower and the muon direction at its end) > drop_cos.
-// Directions: principal axis of the muon spacepoints within 10 cm of its end (oriented start->end) and of the shower
-// spacepoints (oriented away from the shower start); start->end if fewer than 3 spacepoints.
-// Each tagged shower is matched to the kine entry of type 11 with the same energy (within 0.5 MeV).
-double LEEana::get_muon_continuation_shower_energy(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_data, double drop_dist, double drop_cos){
+// Kine energy of the particles that continue the primary muon past its reco end (a muon broken by the reconstruction):
+// start within drop_dist cm of the muon end and cos(angle between the particle and the muon direction at its end) > drop_cos.
+// Any particle type is tagged (showers and the muon-like/pion-like track pieces), except the 22/2112 pseudo-particles and
+// protons (their kine energy is replaced by the range KE in get_kine_reco_Enu_new, which cannot be matched to a particle).
+// Start: the reco start for showers, the endpoint closer to the muon end for tracks.
+// Directions: principal axis of the muon spacepoints within 10 cm of its end (oriented start->end) and of the particle
+// spacepoints (oriented away from its start); start->end if fewer than 3 spacepoints.
+// Each tagged particle is matched to the kine entry of the same type with the same energy (within 0.5 MeV).
+// E_mass returns the change of the masses in kine_reco_add_energy from removing the tagged particles (see
+// get_kine_chain_end_mass): mostly 0, as a broken muon carries one mass however many pieces it has.
+double LEEana::get_muon_continuation_energy(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_data, double drop_dist, double drop_cos, double& E_mass){
+  E_mass = 0;
   int mu_index = -1;
   for(int i=0; i<pfeval.reco_Ntrack; i++){
     if(is_pfeval_muon(pfeval,i,0.0001)){ mu_index = i; break; }
@@ -370,50 +379,129 @@ double LEEana::get_muon_continuation_shower_energy(PFevalInfo& pfeval, KineInfo&
   mu_dir = mu_dir.Unit();
 
   std::vector<bool> kine_used(kine.kine_energy_particle->size(), false);
+  std::vector<bool> dropped(pfeval.reco_Ntrack, false);
   double E_drop = 0;
   for(int j=0; j<pfeval.reco_Ntrack; j++){
-    if(abs(pfeval.reco_pdg[j])!=11) continue;
-    TVector3 sh_start(pfeval.reco_startXYZT[j][0], pfeval.reco_startXYZT[j][1], pfeval.reco_startXYZT[j][2]);
-    TVector3 sh_end(pfeval.reco_endXYZT[j][0], pfeval.reco_endXYZT[j][1], pfeval.reco_endXYZT[j][2]);
-    if((sh_start-mu_end).Mag()>=drop_dist) continue;
-    std::vector<TVector3> sh_pts;
+    int pdg = abs(pfeval.reco_pdg[j]);
+    if(j==mu_index || pdg==22 || pdg==2112 || pdg==2212) continue;
+    TVector3 p_start(pfeval.reco_startXYZT[j][0], pfeval.reco_startXYZT[j][1], pfeval.reco_startXYZT[j][2]);
+    TVector3 p_end(pfeval.reco_endXYZT[j][0], pfeval.reco_endXYZT[j][1], pfeval.reco_endXYZT[j][2]);
+    if(pdg!=11 && (p_end-mu_end).Mag()<(p_start-mu_end).Mag()) std::swap(p_start, p_end);
+    if((p_start-mu_end).Mag()>=drop_dist) continue;
+    std::vector<TVector3> p_pts;
     for(int sp=0; sp<n_spacepoints; sp++){
       if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)!=pfeval.reco_id[j]) continue;
-      sh_pts.push_back(TVector3(space.Trecchargeblob_spacepoints_x->at(sp), space.Trecchargeblob_spacepoints_y->at(sp), space.Trecchargeblob_spacepoints_z->at(sp)));
+      p_pts.push_back(TVector3(space.Trecchargeblob_spacepoints_x->at(sp), space.Trecchargeblob_spacepoints_y->at(sp), space.Trecchargeblob_spacepoints_z->at(sp)));
     }
-    if(sh_pts.size()==0) continue;
-    TVector3 sh_dir = sh_end - sh_start;
-    if(sh_pts.size()>=3){
+    if(p_pts.size()==0) continue;
+    TVector3 p_dir = p_end - p_start;
+    if(p_pts.size()>=3){
       TVector3 centroid;
-      get_principal_axis(sh_pts, centroid, sh_dir);
-      if(sh_dir.Dot(centroid-sh_start)<0) sh_dir = -sh_dir;
+      get_principal_axis(p_pts, centroid, p_dir);
+      if(p_dir.Dot(centroid-p_start)<0) p_dir = -p_dir;
     }
-    if(sh_dir.Mag()==0) continue;
-    if(sh_dir.Unit().Dot(mu_dir)<=drop_cos) continue;
+    if(p_dir.Mag()==0) continue;
+    if(p_dir.Unit().Dot(mu_dir)<=drop_cos) continue;
     // remove the matching kine entry (with the same EM scale as get_reco_Enu_corr for data)
-    double KE = (pfeval.reco_startMomentum[j][3]-0.000511)*1000;
+    double mass = 0.000511;
+    if(pdg==13) mass = 0.105658;
+    else if(pdg==211) mass = 0.13957;
+    double KE = (pfeval.reco_startMomentum[j][3]-mass)*1000;
+    int k_match = -1;
     for(size_t k=0; k<kine.kine_energy_particle->size(); k++){
-      if(kine_used.at(k) || abs(kine.kine_particle_type->at(k))!=11 || fabs(kine.kine_energy_particle->at(k)-KE)>=0.5) continue;
-      kine_used.at(k) = true;
-      double E_kine = kine.kine_energy_particle->at(k);
-      if(flag_data && kine.kine_energy_info->at(k)==2) E_kine *= em_charge_scale;
-      E_drop += E_kine;
+      if(kine_used.at(k) || abs(kine.kine_particle_type->at(k))!=pdg || fabs(kine.kine_energy_particle->at(k)-KE)>=0.5) continue;
+      k_match = k;
+      break;
+    }
+    if(k_match<0) continue;
+    kine_used.at(k_match) = true;
+    double E_kine = kine.kine_energy_particle->at(k_match);
+    if(flag_data && kine.kine_energy_info->at(k_match)==2 && kine.kine_particle_type->at(k_match)==11) E_kine *= em_charge_scale;
+    E_drop += E_kine;
+    dropped.at(j) = true;
+  }
+
+  // masses: muon/pion particles with a kine entry, with and without the dropped particles
+  std::vector<bool> kine_used_mass(kine.kine_energy_particle->size(), false);
+  std::vector<int> mass_indices;
+  for(int j=0; j<pfeval.reco_Ntrack; j++){
+    int pdg = abs(pfeval.reco_pdg[j]);
+    if(pdg!=13 && pdg!=211) continue;
+    double KE = (pfeval.reco_startMomentum[j][3]-(pdg==13 ? 0.105658 : 0.13957))*1000;
+    for(size_t k=0; k<kine.kine_energy_particle->size(); k++){
+      if(kine_used_mass.at(k) || abs(kine.kine_particle_type->at(k))!=pdg || fabs(kine.kine_energy_particle->at(k)-KE)>=0.5) continue;
+      kine_used_mass.at(k) = true;
+      mass_indices.push_back(j);
       break;
     }
   }
+  std::vector<bool> none_removed(pfeval.reco_Ntrack, false);
+  E_mass = get_kine_chain_end_mass(pfeval, mass_indices, none_removed) - get_kine_chain_end_mass(pfeval, mass_indices, dropped);
   return E_drop;
 }
 
-double LEEana::get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers, double drop_dist, double drop_cos){
+// Index of the mother of particle index, skipping removed particles (their daughters count as daughters of their mother).
+// -1: attached to the neutrino vertex; -2: attached through a gap (22/2112 pseudo-particle) or the mother is not found.
+int LEEana::get_reco_mother_index(PFevalInfo& pfeval, int index, const std::vector<bool>& removed){
+  int curr = index;
+  for(int depth=0; depth<100; depth++){
+    int mother_id = pfeval.reco_mother[curr];
+    if(mother_id==0) return -1;
+    int mother = -2;
+    for(int i=0; i<pfeval.reco_Ntrack; i++){
+      if(pfeval.reco_id[i]==mother_id){ mother = i; break; }
+    }
+    if(mother<0) return -2;
+    if(abs(pfeval.reco_pdg[mother])==22 || abs(pfeval.reco_pdg[mother])==2112) return -2;
+    if(!removed.at(mother)) return mother;
+    curr = mother;
+  }
+  return -2;
+}
+
+// Muon/pion masses in kine_reco_add_energy, following WireCell (NeutrinoID::fill_kine_tree): walking the particle tree
+// from the neutrino vertex, each muon/pion adds its mass, and a muon/pion continued by a muon/pion daughter gives its mass
+// back. So each muon/pion chain (a broken track, pi->mu) carries one mass, of the particle at its end (one per end if it
+// branches). Particles attached through a gap (22/2112 pseudo-particle in their ancestry) add no muon/pion mass.
+// indices: the muon/pion particles with a kine entry; removed particles are left out (their daughters move to their mother).
+double LEEana::get_kine_chain_end_mass(PFevalInfo& pfeval, const std::vector<int>& indices, const std::vector<bool>& removed){
+  double E_mass = 0;
+  for(size_t a=0; a<indices.size(); a++){
+    int j = indices.at(a);
+    if(removed.at(j)) continue;
+    // attached to the neutrino vertex through the tree?
+    int mother = j;
+    for(int depth=0; depth<100 && mother>=0; depth++) mother = get_reco_mother_index(pfeval, mother, removed);
+    if(mother!=-1) continue;
+    // continued by a muon/pion daughter?
+    bool flag_continued = false;
+    for(size_t b=0; b<indices.size(); b++){
+      int i = indices.at(b);
+      if(i==j || removed.at(i)) continue;
+      if(get_reco_mother_index(pfeval, i, removed)==j){ flag_continued = true; break; }
+    }
+    if(flag_continued) continue;
+    if(abs(pfeval.reco_pdg[j])==13) E_mass += 105.658;
+    else E_mass += 139.570;
+  }
+  return E_mass;
+}
+
+double LEEana::get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers, double drop_dist, double drop_cos, bool drop_mass){
   double E = get_reco_Enu_corr(kine, flag_data);
   if (E<0) return 0;
   double KEmuon_old = (pfeval.reco_muonMomentum[3]-0.10566)*1000;
   double KEmuon_new = get_muon_energy_new(pfeval, flag_FC_lepton, true, true);
   if(KEmuon_old>0 && KEmuon_new>0) E =  E - KEmuon_old + KEmuon_new;
-  // A muon broken by the reconstruction often has its downstream piece labelled as a shower. Range only covers the labelled
-  // muon track, so that shower completes the muon; MCS gives the full muon momentum, so the shower would be counted twice.
+  // A muon broken by the reconstruction often has its downstream pieces labelled as separate particles (showers, or
+  // muon/pion-like tracks). Range only covers the labelled muon track, so those pieces complete the muon; MCS gives the full
+  // muon momentum, so the pieces (and the masses added for them) would be counted twice.
   bool flag_MCS_used = !flag_FC_lepton && pfeval.mcs_emu_MCS>0 && pfeval.mcs_emu_MCS<4;
-  if(drop_muon_showers && flag_MCS_used && KEmuon_old>0 && KEmuon_new>0) E = E - get_muon_continuation_shower_energy(pfeval, kine, space, flag_data, drop_dist, drop_cos);
+  if(drop_muon_showers && flag_MCS_used && KEmuon_old>0 && KEmuon_new>0){
+    double E_mass = 0;
+    E = E - get_muon_continuation_energy(pfeval, kine, space, flag_data, drop_dist, drop_cos, E_mass);
+    if(drop_mass) E = E - E_mass;
+  }
   if(correct_protons){
     std::vector<double> KEproton_new = std::get<1>(get_range_proton_KE(pfeval, space, true));
     for(size_t i=0; i<kine.kine_energy_particle->size(); i++){
@@ -917,8 +1005,8 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,TString(tag(0,1)).Atoi(),TString(tag(2,tag.Length()-2)).Atof()/100.);
     return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true);
   }else if (var_name == "kine_reco_Enu_new3_5_drop10_95" || var_name == "kine_reco_Enu_new3_5_drop15_90" || var_name == "kine_reco_Enu_new3_5_drop15_95" || var_name == "kine_reco_Enu_new3_5_drop30_95"){
-    // new3_5, plus dropping the showers that continue the muon when its energy comes from MCS
-    // "dropD_C": shower start within D cm of the muon end and cos(angle to the muon direction) > 0.C
+    // new3_5, plus dropping the particles (showers and muon/pion-like pieces, with their masses) that continue the muon when its energy comes from MCS
+    // "dropD_C": particle start within D cm of the muon end and cos(angle to the muon direction) > 0.C
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,3,0.05);
     if(var_name == "kine_reco_Enu_new3_5_drop10_95") return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, 10, 0.95);
     if(var_name == "kine_reco_Enu_new3_5_drop15_90") return get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, 15, 0.90);
@@ -976,7 +1064,17 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     }
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,method,threshold);
     double KE_muon = get_muon_energy_new(pfeval, std::get<0>(result_part_FC), true, true);   // KE, MeV (0 without a muon)
-    double Eavail = get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern) - kine.kine_reco_add_energy - KE_muon;
+    double Enu = 0;
+    if (tag.Index("drop")>=0){
+      // same as kine_reco_Enu_new*_dropD_C, but keeping the masses of the dropped particles (all of kine_reco_add_energy is removed below)
+      TString drop = tag(tag.Index("drop")+4, tag.Length());          // e.g. "15_95"
+      double drop_dist = TString(drop(0,drop.Index("_"))).Atof();
+      double drop_cos = TString(drop(drop.Index("_")+1,drop.Length())).Atof()/100.;
+      Enu = get_kine_reco_Enu_new(pfeval, kine, space, std::get<0>(result_part_FC), flag_data, true, true, drop_dist, drop_cos, false);
+    }else{
+      Enu = get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern);
+    }
+    double Eavail = Enu - kine.kine_reco_add_energy - KE_muon;
     if (Eavail<0) return -1000; //check for any odd cases
     return Eavail;
 
