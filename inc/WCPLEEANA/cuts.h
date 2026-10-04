@@ -27,7 +27,7 @@ namespace LEEana{
   double em_charge_scale = 0.95;
   //double em_charge_scale = 1.0;
 
-  bool wayToSort(int i, int j) { return i > j; };
+  bool wayToSort(double i, double j) { return i > j; };
 
   double get_mass_GeV(int pdg);
   double get_mass_MeV(int pdg);
@@ -45,6 +45,7 @@ namespace LEEana{
   bool check_muon_range_MCS(PFevalInfo& pfeval, int method, double threshold);
 
   double get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool return_KE, bool return_MeV);
+  TVector3 get_muon_momentum_new(PFevalInfo& pfeval, EvalInfo& eval);
   //drop_muon_showers: when the muon energy comes from MCS, remove particles that continue the muon past its reco end (start within drop_dist cm of the muon end, cos(angle to the muon direction)>drop_cos)
   //drop_mass: also remove the change of the masses in kine_reco_add_energy from removing those particles (false for Eavail, which removes all of kine_reco_add_energy itself)
   double get_kine_reco_Enu_new(PFevalInfo& pfeval, KineInfo& kine, SpaceInfo& space, bool flag_FC_lepton, bool flag_data, bool correct_protons, bool drop_muon_showers=false, double drop_dist=15, double drop_cos=0.9, bool drop_mass=true);
@@ -56,6 +57,8 @@ namespace LEEana{
   int get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold);
 
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV);
+  double get_range_proton_KE_particle(PFevalInfo& pfeval, SpaceInfo& space, int i);
+  int get_reco_leading_proton(PFevalInfo& pfeval, SpaceInfo& space, double KE_threshold, double& KE_lead, int& n_protons);
 
   std::vector<double> get_pandora_proton_KE(PandoraInfo& pandora, double TRACK_SCORE_CUT, bool return_MeV);
   std::vector<double> get_lantern_KE(LanternInfo& lantern, int pdg, double vtx_cut, bool return_MeV);
@@ -85,6 +88,8 @@ namespace LEEana{
     bool flag_0p;
     bool flag_cc_pi0;
     bool flag_FC;
+    bool flag_FC_lepton;           // muon energy from range (true) or MCS (false), as in kine_reco_Enu_new3_5
+    bool flag_FC_hadron;           // hadronic system contained (get_part_is_FC)
     int costheta_bin;
     int Enu_bin;
     bool part_bin_set = false;     // cached get_particle_0pNp_bdt_bin result for this event
@@ -96,6 +101,50 @@ namespace LEEana{
   bool get_rw_cut_pass(TString cut, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine);
   double get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool,  std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data=false);
   int get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bin, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine);
+  // binning helpers of the cross-section measurements (truth: get_xs_signal_no, reco: the "*_bin" variables of get_kine_var)
+  TString get_xs_bin_name(TString prefix, double value, const std::vector<double>& edges);
+  TString get_xs_2d_bin_name(TString prefix, TString slice_var, double slice_value, const std::vector<double>& slice_edges, TString var, double value, const std::vector<std::vector<double>>& bin_edges);
+  TString get_xs_3d_bin_name(TString prefix, TString outer_var, double outer_value, const std::vector<double>& outer_edges, TString inner_var, double inner_value, const std::vector<std::vector<double>>& inner_edges, TString var, double value, const std::vector<std::vector<std::vector<double>>>& bin_edges);
+  int get_bin_index(double value, const std::vector<double>& edges);
+  int get_2d_bin_index(double slice_value, const std::vector<double>& slice_edges, double value, const std::vector<std::vector<double>>& bin_edges);
+  int get_3d_bin_index(double outer_value, const std::vector<double>& outer_edges, double inner_value, const std::vector<std::vector<double>>& inner_edges, double value, const std::vector<std::vector<std::vector<double>>>& bin_edges);
+  double get_muon_Etot_new(PFevalInfo& pfeval, EvalInfo& eval);
+  TVector3 get_reco_proton_dir(PFevalInfo& pfeval, int index);
+  double get_reco_cos_mu_p(PFevalInfo& pfeval, int index);
+
+  // Slices of the multi-differential measurements, shared by the truth and the reco binnings (inner edges, as in
+  // get_bin_index). The triple-differential inner slices are given for each outer slice.
+  namespace xs{
+    const std::vector<double> costheta_slices = {0, 0.3, 0.5, 0.7, 0.8, 0.9};      // 12 (muon costheta), 13 (proton costheta)
+    const std::vector<double> pl_slices = {0, 150, 300, 450, 625, 850, 1200};             // 16
+    const std::vector<double> Eavail_slices = {75, 150, 250, 375, 550, 800};                  // 17
+    const std::vector<double> Kp_slices_mup = {95, 145, 220, 345};                          // 18
+    const std::vector<double> Eavail_slices_mup = {150, 250, 375, 550, 800};                  // 19
+    const std::vector<double> Emu_slices_mup = {350, 550, 700, 900, 1150};                 // 20
+    const std::vector<double> Eavail_outer_0p = {75, 150};                                    // 21, 22 (0p)
+    const std::vector<double> Eavail_outer_Np = {150, 250, 375, 550};                         // 21, 22 (Np)
+    const std::vector<std::vector<double>> costheta_inner_0p(3, {0, 0.5, 0.7, 0.9});           // 21
+    const std::vector<std::vector<double>> costheta_inner_Np(5, {0, 0.3, 0.5, 0.7, 0.8, 0.9});
+    const std::vector<std::vector<double>> pl_inner_0p(3, {150, 300, 450, 625, 850, 1200});     // 22
+    const std::vector<std::vector<double>> pl_inner_Np(5, {0, 150, 300, 450, 625, 850, 1200});
+    const std::vector<double> costheta_outer_p = {0.5, 0.7, 0.8, 0.9};                         // 23, 24
+    const std::vector<std::vector<double>> Emu_inner_p = {
+      {350, 450},   // costheta <= 0.5
+      {350, 450, 700},   // costheta 0.5 - 0.7
+      {450, 550, 900},   // costheta 0.7 - 0.8
+      {450, 550, 900},   // costheta 0.8 - 0.9
+      {550, 700, 900, 1150, 1600}   // costheta > 0.9
+    };
+    const std::vector<double> pl_outer_p = {150, 300, 450, 625, 850};                        // 25, 26
+    const std::vector<std::vector<double>> pt_inner_p = {
+      {150, 200, 250, 350},   // pl <= 150
+      {200, 300, 450},   // pl 150 - 300
+      {200, 300, 450},   // pl 300 - 450
+      {250, 450},   // pl 450 - 625
+      {250, 450},   // pl 625 - 850
+      {250, 550}   // pl > 850
+    };
+  }
 
   // generic neutrino cuts
   // TCut generic_cut = "match_found == 1 && stm_eventtype != 0 &&stm_lowenergy ==0 && stm_LM ==0 && stm_TGM ==0 && stm_STM==0 && stm_FullDead == 0 && stm_cluster_length >15";
@@ -231,10 +280,11 @@ double LEEana::get_truth_p_mu_cos(PFevalInfo& pfeval){
     double protonMomentum2 = -1000;
     double protonMomentum3 = -1000;
     double Ep=0;
-    for(size_t i=0; i<pfeval.truth_Ntrack; i++){
+    for(int i=0; i<pfeval.truth_Ntrack; i++){
       if(pfeval.truth_mother[i] != 0) continue;
       if(pfeval.truth_pdg[i] != 2212) continue;
       if(pfeval.truth_startMomentum[i][3] < Ep) continue;
+      Ep = pfeval.truth_startMomentum[i][3];
       protonMomentum0 = pfeval.truth_startMomentum[i][0];
       protonMomentum1 = pfeval.truth_startMomentum[i][1];
       protonMomentum2 = pfeval.truth_startMomentum[i][2];
@@ -324,6 +374,22 @@ double LEEana::get_muon_energy_new(PFevalInfo& pfeval, bool flag_FC_lepton, bool
   if(return_KE) E = E-0.10566;
   if(return_MeV) E = E*1000;
   return E;
+}
+
+// Reco muon total energy [MeV] of kine_reco_Enu_new3_5: range or MCS with the one-sided 5% method (0 without a reco muon).
+double LEEana::get_muon_Etot_new(PFevalInfo& pfeval, EvalInfo& eval){
+  std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,3,0.05);
+  return get_muon_energy_new(pfeval, std::get<0>(result_part_FC), false, true);
+}
+
+// Reco muon momentum vector [MeV]: magnitude from get_muon_Etot_new, direction of reco_muonMomentum. Zero vector without
+// a reco muon.
+TVector3 LEEana::get_muon_momentum_new(PFevalInfo& pfeval, EvalInfo& eval){
+  TVector3 dir(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2]);
+  if (pfeval.reco_muonMomentum[3]<=0 || dir.Mag()==0) return TVector3(0,0,0);
+  double E = get_muon_Etot_new(pfeval, eval);
+  double p = (E>105.66) ? sqrt(E*E-105.66*105.66) : 0;
+  return p*dir.Unit();
 }
 
 // Centroid and principal axis (direction of largest spread) of a set of points
@@ -587,17 +653,107 @@ int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, Sp
   return bdt_bin;
 }
 
+// Kinetic energy [MeV] from the range of reco particle i, assuming a proton (see get_range_proton_KE for the range).
+// Returns -1 if the particle has no spacepoints.
+double LEEana::get_range_proton_KE_particle(PFevalInfo& pfeval, SpaceInfo& space, int i){
+  const std::vector<double>& proton_length_bins = get_proton_length_bins(); 
+  const std::vector<double>& proton_energy_bins = get_proton_energy_bins();
+  int n_spacepoints = space.Trecchargeblob_spacepoints_real_cluster_id->size();
+
+  double range_proton = 0; 
+  double proton_KE = 0;
+  std::vector<float> temp_spacepoints_x;
+  std::vector<float> temp_spacepoints_y;
+  std::vector<float> temp_spacepoints_z;
+  std::vector<float> temp_spacepoints_q;
+  for(size_t sp=0; sp<n_spacepoints; sp++){
+    if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)==pfeval.reco_id[i]){
+      temp_spacepoints_x.push_back(space.Trecchargeblob_spacepoints_x->at(sp));
+      temp_spacepoints_y.push_back(space.Trecchargeblob_spacepoints_y->at(sp));
+      temp_spacepoints_z.push_back(space.Trecchargeblob_spacepoints_z->at(sp));
+      temp_spacepoints_q.push_back(space.Trecchargeblob_spacepoints_q->at(sp));
+    }
+  }
+  int n_spacepoints_part = temp_spacepoints_x.size();
+  if(n_spacepoints_part==0) return -1;
+
+  // Sum the steps between consecutive spacepoints, skipping jumps >= 2 cm. Particles can be stored as
+  // separate pieces (e.g. the start/end points first, then the trajectory), and summing across those
+  // jumps overestimates the range.
+  std::vector<bool> on_trajectory(n_spacepoints_part, false);
+  for(int sp=0; sp<n_spacepoints_part-1; sp++){
+    double dx = temp_spacepoints_x.at(sp) - temp_spacepoints_x.at(sp+1);
+    double dy = temp_spacepoints_y.at(sp) - temp_spacepoints_y.at(sp+1);
+    double dz = temp_spacepoints_z.at(sp) - temp_spacepoints_z.at(sp+1);
+    double dist = sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
+    if(dist<2.0){
+      range_proton+=dist;
+      on_trajectory.at(sp) = true;
+      on_trajectory.at(sp+1) = true;
+    }
+  }
+
+  // Skipping the jumps also drops the short pieces between the track start/end and the trajectory,
+  // so connect the reco start and end to the nearest trajectory point if it is within 2 cm.
+  // If no steps were kept (e.g. only the start and end points are stored), fall back to the straight distance.
+  bool has_trajectory = false;
+  for(int sp=0; sp<n_spacepoints_part; sp++) if(on_trajectory.at(sp)) has_trajectory = true;
+  if(has_trajectory){
+    for(int ep=0; ep<2; ep++){
+      double ex = (ep==0) ? pfeval.reco_startXYZT[i][0] : pfeval.reco_endXYZT[i][0];
+      double ey = (ep==0) ? pfeval.reco_startXYZT[i][1] : pfeval.reco_endXYZT[i][1];
+      double ez = (ep==0) ? pfeval.reco_startXYZT[i][2] : pfeval.reco_endXYZT[i][2];
+      double dmin = 1e9;
+      for(int sp=0; sp<n_spacepoints_part; sp++){
+        if(!on_trajectory.at(sp)) continue;
+        double d = sqrt(pow(ex-temp_spacepoints_x.at(sp),2)+pow(ey-temp_spacepoints_y.at(sp),2)+pow(ez-temp_spacepoints_z.at(sp),2));
+        if(d<dmin) dmin = d;
+      }
+      if(dmin<2.0) range_proton+=dmin;
+    }
+  }else{
+    range_proton = sqrt(pow(pfeval.reco_startXYZT[i][0]-pfeval.reco_endXYZT[i][0],2)
+                       +pow(pfeval.reco_startXYZT[i][1]-pfeval.reco_endXYZT[i][1],2)
+                       +pow(pfeval.reco_startXYZT[i][2]-pfeval.reco_endXYZT[i][2],2));
+  }
+
+  int nbb = proton_length_bins.size();
+  for(int bb=0; bb<nbb-1; bb++){
+    if(proton_length_bins.at(bb)<=range_proton && proton_length_bins.at(bb+1)>range_proton){
+      double m = (proton_energy_bins.at(bb+1)-proton_energy_bins.at(bb))/(proton_length_bins.at(bb+1)-proton_length_bins.at(bb));
+      proton_KE = proton_energy_bins.at(bb) + m * (range_proton-proton_length_bins.at(bb));
+      break;
+    }
+  }
+  return proton_KE;
+}
+
+// Leading reco proton: the primary WireCell proton (reco_pdg==2212, reco_mother==0) with the largest range KE, the one
+// that sets the reco Np category in get_particle_0pNp_bdt_bin. Returns its index (-1 if none) and fills its KE [MeV]
+// (0 if none) and the number of primary WireCell protons with range KE >= KE_threshold.
+int LEEana::get_reco_leading_proton(PFevalInfo& pfeval, SpaceInfo& space, double KE_threshold, double& KE_lead, int& n_protons){
+  int index = -1;
+  KE_lead = 0;
+  n_protons = 0;
+  for(int i=0; i<pfeval.reco_Ntrack; i++){
+    if(pfeval.reco_pdg[i]!=2212 || pfeval.reco_mother[i]!=0) continue;
+    double KE = get_range_proton_KE_particle(pfeval, space, i);
+    if(KE<0) continue;
+    if(KE>=KE_threshold) n_protons++;
+    if(KE>KE_lead){
+      KE_lead = KE;
+      index = i;
+    }
+  }
+  return index;
+}
+
 std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> LEEana::get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV){
 
   std::vector<double> prim_proton_KEs;
   std::vector<double> proton_KEs;
   std::vector<double> prim_larpid_proton_KEs;
   std::vector<double> larpid_proton_KEs;
-
-  const std::vector<double>& proton_length_bins = get_proton_length_bins(); 
-  const std::vector<double>& proton_energy_bins = get_proton_energy_bins();
-
-  int n_spacepoints = space.Trecchargeblob_spacepoints_real_cluster_id->size();
 
   for(size_t i=0; i<pfeval.reco_Ntrack; i++){
 
@@ -607,72 +763,9 @@ std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vect
     if (pfeval.reco_larpid_pdg[i]==2212) flag_larpid=true;
     if(!flag_wc && !flag_larpid) continue;
 
-    double range_proton = 0; 
-    double proton_KE = 0;
-    std::vector<float> temp_spacepoints_x;
-    std::vector<float> temp_spacepoints_y;
-    std::vector<float> temp_spacepoints_z;
-    std::vector<float> temp_spacepoints_q;
-    for(size_t sp=0; sp<n_spacepoints; sp++){
-      if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)==pfeval.reco_id[i]){
-        temp_spacepoints_x.push_back(space.Trecchargeblob_spacepoints_x->at(sp));
-        temp_spacepoints_y.push_back(space.Trecchargeblob_spacepoints_y->at(sp));
-        temp_spacepoints_z.push_back(space.Trecchargeblob_spacepoints_z->at(sp));
-        temp_spacepoints_q.push_back(space.Trecchargeblob_spacepoints_q->at(sp));
-      }
-    }
-    int n_spacepoints_part = temp_spacepoints_x.size();
-    if(n_spacepoints_part==0) continue;
+    double proton_KE = get_range_proton_KE_particle(pfeval, space, i);
+    if(proton_KE<0) continue;
 
-    // Sum the steps between consecutive spacepoints, skipping jumps >= 2 cm. Particles can be stored as
-    // separate pieces (e.g. the start/end points first, then the trajectory), and summing across those
-    // jumps overestimates the range.
-    std::vector<bool> on_trajectory(n_spacepoints_part, false);
-    for(int sp=0; sp<n_spacepoints_part-1; sp++){
-      double dx = temp_spacepoints_x.at(sp) - temp_spacepoints_x.at(sp+1);
-      double dy = temp_spacepoints_y.at(sp) - temp_spacepoints_y.at(sp+1);
-      double dz = temp_spacepoints_z.at(sp) - temp_spacepoints_z.at(sp+1);
-      double dist = sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
-      if(dist<2.0){
-        range_proton+=dist;
-        on_trajectory.at(sp) = true;
-        on_trajectory.at(sp+1) = true;
-      }
-    }
-
-    // Skipping the jumps also drops the short pieces between the track start/end and the trajectory,
-    // so connect the reco start and end to the nearest trajectory point if it is within 2 cm.
-    // If no steps were kept (e.g. only the start and end points are stored), fall back to the straight distance.
-    bool has_trajectory = false;
-    for(int sp=0; sp<n_spacepoints_part; sp++) if(on_trajectory.at(sp)) has_trajectory = true;
-    if(has_trajectory){
-      for(int ep=0; ep<2; ep++){
-        double ex = (ep==0) ? pfeval.reco_startXYZT[i][0] : pfeval.reco_endXYZT[i][0];
-        double ey = (ep==0) ? pfeval.reco_startXYZT[i][1] : pfeval.reco_endXYZT[i][1];
-        double ez = (ep==0) ? pfeval.reco_startXYZT[i][2] : pfeval.reco_endXYZT[i][2];
-        double dmin = 1e9;
-        for(int sp=0; sp<n_spacepoints_part; sp++){
-          if(!on_trajectory.at(sp)) continue;
-          double d = sqrt(pow(ex-temp_spacepoints_x.at(sp),2)+pow(ey-temp_spacepoints_y.at(sp),2)+pow(ez-temp_spacepoints_z.at(sp),2));
-          if(d<dmin) dmin = d;
-        }
-        if(dmin<2.0) range_proton+=dmin;
-      }
-    }else{
-      range_proton = sqrt(pow(pfeval.reco_startXYZT[i][0]-pfeval.reco_endXYZT[i][0],2)
-                         +pow(pfeval.reco_startXYZT[i][1]-pfeval.reco_endXYZT[i][1],2)
-                         +pow(pfeval.reco_startXYZT[i][2]-pfeval.reco_endXYZT[i][2],2));
-    }
-
-    int nbb = proton_length_bins.size();
-    for(int bb=0; bb<nbb-1; bb++){
-      if(proton_length_bins.at(bb)<=range_proton && proton_length_bins.at(bb+1)>range_proton){
-        double m = (proton_energy_bins.at(bb+1)-proton_energy_bins.at(bb))/(proton_length_bins.at(bb+1)-proton_length_bins.at(bb));
-        proton_KE = proton_energy_bins.at(bb) + m * (range_proton-proton_length_bins.at(bb));
-        break;
-      }
-    }
-    
     if(flag_wc) proton_KEs.push_back(proton_KE);
     if(flag_larpid) larpid_proton_KEs.push_back(proton_KE);
     if(pfeval.reco_mother[i]==0){
@@ -1078,6 +1171,435 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     if (Eavail<0) return -1000; //check for any odd cases
     return Eavail;
 
+  }else if (var_name == "muon_pt" || var_name == "muon_pl" || var_name == "Emu_costheta_bin" || var_name == "pl_pt_bin" || var_name == "Eavail_Emu_bin"
+         || var_name == "Eavail_costheta_Emu_bin" || var_name == "Eavail_pl_pt_bin"){
+    // Reco variables of the muon (and Eavail) cross-section measurements. Muon energy / momentum as in kine_reco_Enu_new3_5
+    // (get_muon_Etot_new / get_muon_momentum_new), muon direction of reco_muonMomentum, Eavail as Eavail_new3_5_drop15_95
+    // (-1000 for negative values, in the first slice).
+    //   muon_pt, muon_pl: transverse / longitudinal muon momentum w.r.t. the beam [MeV] (truth bins: cut_file 14, 15).
+    //   "*_bin": the reco bin of a multi-differential measurement as the flattened bin index + 0.5, for histograms from 0
+    //   to nbin. Same slices as the truth bins of get_xs_signal_no; finer bins (50 MeV), each a part of one truth bin.
+    //     Emu_costheta_bin (cut_file 12): nbin = 146
+    //     pl_pt_bin (16): nbin = 114
+    //     Eavail_Emu_bin (17): nbin = 127
+    //     Eavail_costheta_Emu_bin (21), Eavail_pl_pt_bin (22): reco 0p and reco Np (leading proton below / above 45 MeV,
+    //     the reco Np category) have their own binnings, as the truth bins, so the channels need different nbin:
+    //     Eavail_costheta_Emu_bin 198 (reco 0p channels) / 329 (reco Np channel), Eavail_pl_pt_bin 180 / 296.
+    //   Every event the numuCC_part_bdt channels pass (reco_muonMomentum[3] >= 0) gets a bin; -1 without a reco muon.
+    static const std::vector<std::vector<double>> Emu_bins_costheta = {
+      {150, 200, 250, 300, 350, 400, 450, 500, 550, 650, 850},   // costheta <= 0
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 700, 850},   // costheta 0 - 0.3
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 950},   // costheta 0.3 - 0.5
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 1000, 1100, 1250, 1450},   // costheta 0.5 - 0.7
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1050, 1150, 1300, 1550, 2100},   // costheta 0.7 - 0.8
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1400, 1500, 1600, 1750, 2000, 2400},   // costheta 0.8 - 0.9
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1600, 1700, 1800, 1900, 2050, 2200, 2400, 2750}   // costheta > 0.9
+    };
+    static const std::vector<std::vector<double>> pt_bins_pl = {
+      {100, 150, 200, 250, 300, 350, 400, 450, 500, 600},   // pl <= 0
+      {50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 650},   // pl 0 - 150
+      {100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 650, 750},   // pl 150 - 300
+      {100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 750},   // pl 300 - 450
+      {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800},   // pl 450 - 625
+      {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 750, 850},   // pl 625 - 850
+      {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 850, 950},   // pl 850 - 1200
+      {200, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 1000, 1100, 1200, 1400, 1700}   // pl > 1200
+    };
+    static const std::vector<std::vector<double>> Emu_bins_Eavail = {
+      {350, 450, 550, 700, 900, 1150, 1450},   // Eavail <= 75
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1200, 1300, 1400, 1600, 1850, 2300},   // Eavail 75 - 150
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 950, 1000, 1050, 1150, 1250, 1350, 1550, 1750},   // Eavail 150 - 250
+      {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 850, 950, 1150, 1350, 1450, 1800},   // Eavail 250 - 375
+      {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000, 1150, 1350, 1600},   // Eavail 375 - 550
+      {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 700, 800, 900, 1050, 1250, 1600},   // Eavail 550 - 800
+      {150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1150, 1450}   // Eavail > 800
+    };
+    static const std::vector<std::vector<std::vector<double>>> Emu_bins_3d_0p = {
+      {
+       {250, 300, 350, 400, 500},   // Eavail <= 75, costheta <= 0
+       {250, 300, 350, 400, 450, 550, 650, 800, 1000},   // Eavail <= 75, costheta 0 - 0.5
+       {300, 350, 400, 450, 550, 700, 800, 950, 1150},   // Eavail <= 75, costheta 0.5 - 0.7
+       {250, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 1000, 1050, 1150, 1250, 1350, 1500, 1700, 2150},   // Eavail <= 75, costheta 0.7 - 0.9
+       {300, 450, 550, 600, 650, 700, 750, 800, 900, 950, 1000, 1100, 1150, 1200, 1300, 1400, 1600, 1750, 2050}   // Eavail <= 75, costheta > 0.9
+      },
+      {
+       {300, 400},   // Eavail 75 - 150, costheta <= 0
+       {350, 450, 550, 700},   // Eavail 75 - 150, costheta 0 - 0.5
+       {350, 450, 550, 700, 850},   // Eavail 75 - 150, costheta 0.5 - 0.7
+       {300, 450, 550, 650, 700, 750, 850, 900, 950, 1050, 1150, 1300, 1650},   // Eavail 75 - 150, costheta 0.7 - 0.9
+       {350, 450, 600, 700, 900, 1000, 1150, 1300, 1450, 1800}   // Eavail 75 - 150, costheta > 0.9
+      },
+      {
+       {150, 200, 250, 300, 350, 400, 450, 550, 700},   // Eavail > 150, costheta <= 0
+       {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 950, 1350},   // Eavail > 150, costheta 0 - 0.5
+       {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 750, 850, 1000, 1250},   // Eavail > 150, costheta 0.5 - 0.7
+       {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1150, 1250, 1350, 1500, 1700, 2150},   // Eavail > 150, costheta 0.7 - 0.9
+       {200, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 850, 900, 950, 1000, 1050, 1150, 1250, 1350, 1600, 1750, 2050, 2550}   // Eavail > 150, costheta > 0.9
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> Emu_bins_3d_Np = {
+      {
+       {250, 300, 400},   // Eavail <= 150, costheta <= 0
+       {250, 350, 450},   // Eavail <= 150, costheta 0 - 0.3
+       {300, 400, 500},   // Eavail <= 150, costheta 0.3 - 0.5
+       {200, 350, 450, 500, 550, 650, 800, 950},   // Eavail <= 150, costheta 0.5 - 0.7
+       {300, 450, 550, 600, 700, 800, 950},   // Eavail <= 150, costheta 0.7 - 0.8
+       {250, 400, 550, 650, 700, 750, 800, 850, 900, 1000, 1100, 1200, 1400},   // Eavail <= 150, costheta 0.8 - 0.9
+       {250, 450, 600, 700, 800, 900, 950, 1050, 1100, 1150, 1250, 1350, 1450, 1600, 1800, 2000, 2300}   // Eavail <= 150, costheta > 0.9
+      },
+      {
+       {200, 250, 300, 350, 400},   // Eavail 150 - 250, costheta <= 0
+       {200, 300, 400, 500},   // Eavail 150 - 250, costheta 0 - 0.3
+       {200, 300, 350, 450, 500, 600},   // Eavail 150 - 250, costheta 0.3 - 0.5
+       {200, 300, 350, 400, 450, 550, 600, 700, 800, 950},   // Eavail 150 - 250, costheta 0.5 - 0.7
+       {200, 350, 450, 550, 650, 700, 750, 850, 1000, 1250},   // Eavail 150 - 250, costheta 0.7 - 0.8
+       {200, 350, 450, 550, 600, 650, 700, 750, 800, 900, 1000, 1050, 1150, 1250, 1400, 1700},   // Eavail 150 - 250, costheta 0.8 - 0.9
+       {250, 400, 500, 600, 650, 700, 800, 900, 950, 1000, 1050, 1100, 1150, 1250, 1350, 1450, 1550, 1750, 1850, 2150}   // Eavail 150 - 250, costheta > 0.9
+      },
+      {
+       {200, 250, 300, 350, 400, 450},   // Eavail 250 - 375, costheta <= 0
+       {200, 300, 400, 500, 600},   // Eavail 250 - 375, costheta 0 - 0.3
+       {200, 300, 450, 550, 650},   // Eavail 250 - 375, costheta 0.3 - 0.5
+       {200, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 850, 1000},   // Eavail 250 - 375, costheta 0.5 - 0.7
+       {250, 350, 450, 550, 700, 800, 900, 1150},   // Eavail 250 - 375, costheta 0.7 - 0.8
+       {200, 300, 400, 500, 550, 600, 700, 750, 850, 900, 1000, 1100, 1200, 1350},   // Eavail 250 - 375, costheta 0.8 - 0.9
+       {250, 400, 500, 600, 700, 750, 800, 900, 950, 1000, 1050, 1150, 1250, 1350, 1450, 1600, 1850, 2200}   // Eavail 250 - 375, costheta > 0.9
+      },
+      {
+       {200, 250, 300, 350, 400, 450},   // Eavail 375 - 550, costheta <= 0
+       {200, 300, 450, 550},   // Eavail 375 - 550, costheta 0 - 0.3
+       {200, 300, 350, 450, 600},   // Eavail 375 - 550, costheta 0.3 - 0.5
+       {200, 300, 400, 450, 550, 600, 700, 800, 950},   // Eavail 375 - 550, costheta 0.5 - 0.7
+       {200, 350, 450, 550, 700, 850, 1100},   // Eavail 375 - 550, costheta 0.7 - 0.8
+       {200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1300},   // Eavail 375 - 550, costheta 0.8 - 0.9
+       {300, 400, 550, 700, 800, 900, 1000, 1150, 1300, 1550, 2100}   // Eavail 375 - 550, costheta > 0.9
+      },
+      {
+       {150, 200, 250, 300, 350, 400, 450, 550},   // Eavail > 550, costheta <= 0
+       {150, 200, 350, 450, 600},   // Eavail > 550, costheta 0 - 0.3
+       {200, 300, 450, 550},   // Eavail > 550, costheta 0.3 - 0.5
+       {150, 250, 350, 450, 550, 700, 850},   // Eavail > 550, costheta 0.5 - 0.7
+       {250, 350, 550, 750, 950},   // Eavail > 550, costheta 0.7 - 0.8
+       {200, 300, 400, 500, 600, 700, 850, 1000, 1300},   // Eavail > 550, costheta 0.8 - 0.9
+       {250, 400, 550, 650, 750, 900, 1050, 1250, 1550}   // Eavail > 550, costheta > 0.9
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> pt_bins_3d_0p = {
+      {
+       {100, 150, 200, 250, 300, 350, 400, 450, 550},   // Eavail <= 75, pl <= 150
+       {100, 150, 200, 250, 300, 350, 400, 450, 600},   // Eavail <= 75, pl 150 - 300
+       {150, 200, 250, 300, 350, 400, 500, 650},   // Eavail <= 75, pl 300 - 450
+       {150, 200, 250, 300, 350, 400, 450, 500, 550, 700},   // Eavail <= 75, pl 450 - 625
+       {200, 250, 300, 350, 400, 450, 550, 650},   // Eavail <= 75, pl 625 - 850
+       {250, 350, 400, 450, 500, 550, 600, 700, 850},   // Eavail <= 75, pl 850 - 1200
+       {300, 350, 450, 550, 600, 700, 800, 950, 1200}   // Eavail <= 75, pl > 1200
+      },
+      {
+       {150, 200, 250, 300, 400, 500},   // Eavail 75 - 150, pl <= 150
+       {150, 250, 350, 450},   // Eavail 75 - 150, pl 150 - 300
+       {150, 250, 300, 450},   // Eavail 75 - 150, pl 300 - 450
+       {250, 350, 450, 550},   // Eavail 75 - 150, pl 450 - 625
+       {300, 450, 550},   // Eavail 75 - 150, pl 625 - 850
+       {300, 400, 500, 600},   // Eavail 75 - 150, pl 850 - 1200
+       {450, 650, 900}   // Eavail 75 - 150, pl > 1200
+      },
+      {
+       {50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 700},   // Eavail > 150, pl <= 150
+       {100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 650},   // Eavail > 150, pl 150 - 300
+       {100, 150, 200, 250, 300, 350, 400, 450, 500, 600},   // Eavail > 150, pl 300 - 450
+       {150, 200, 250, 300, 350, 400, 450, 500, 550, 650},   // Eavail > 150, pl 450 - 625
+       {200, 300, 350, 400, 450, 500, 600, 700},   // Eavail > 150, pl 625 - 850
+       {250, 300, 400, 450, 500, 550, 650, 750, 950},   // Eavail > 150, pl 850 - 1200
+       {350, 450, 550, 650, 750, 850, 1050, 1400}   // Eavail > 150, pl > 1200
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> pt_bins_3d_Np = {
+      {
+       {200, 300},   // Eavail <= 150, pl <= 0
+       {100, 150, 200, 250, 300, 400},   // Eavail <= 150, pl 0 - 150
+       {150, 250, 350, 400, 450},   // Eavail <= 150, pl 150 - 300
+       {200, 250, 300, 350, 400, 450},   // Eavail <= 150, pl 300 - 450
+       {200, 300, 350, 400, 450, 550},   // Eavail <= 150, pl 450 - 625
+       {200, 250, 300, 350, 400, 450, 500, 600},   // Eavail <= 150, pl 625 - 850
+       {300, 350, 450, 500, 550, 650},   // Eavail <= 150, pl 850 - 1200
+       {350, 450, 550, 650, 700, 850}   // Eavail <= 150, pl > 1200
+      },
+      {
+       {150, 200, 250, 300, 400},   // Eavail 150 - 250, pl <= 0
+       {100, 150, 200, 250, 300, 350, 400},   // Eavail 150 - 250, pl 0 - 150
+       {100, 150, 200, 250, 300, 350, 400, 450, 500},   // Eavail 150 - 250, pl 150 - 300
+       {150, 200, 250, 300, 350, 400, 450, 500, 550},   // Eavail 150 - 250, pl 300 - 450
+       {200, 250, 300, 350, 400, 450, 500, 550, 650},   // Eavail 150 - 250, pl 450 - 625
+       {200, 300, 350, 400, 450, 500, 550, 650},   // Eavail 150 - 250, pl 625 - 850
+       {200, 250, 300, 350, 400, 450, 500, 550, 600, 750},   // Eavail 150 - 250, pl 850 - 1200
+       {350, 450, 500, 550, 650, 700, 800, 1000, 1250}   // Eavail 150 - 250, pl > 1200
+      },
+      {
+       {150, 200, 250, 300, 350},   // Eavail 250 - 375, pl <= 0
+       {100, 150, 200, 250, 300, 350, 400, 500},   // Eavail 250 - 375, pl 0 - 150
+       {150, 200, 250, 300, 350, 400, 450, 500, 550},   // Eavail 250 - 375, pl 150 - 300
+       {150, 200, 300, 350, 400, 450, 500, 600},   // Eavail 250 - 375, pl 300 - 450
+       {200, 250, 300, 350, 400, 450, 500, 550, 650},   // Eavail 250 - 375, pl 450 - 625
+       {200, 250, 300, 350, 400, 450, 500, 600, 700},   // Eavail 250 - 375, pl 625 - 850
+       {250, 350, 400, 450, 500, 550, 650, 800},   // Eavail 250 - 375, pl 850 - 1200
+       {250, 450, 550, 650, 750, 950}   // Eavail 250 - 375, pl > 1200
+      },
+      {
+       {100, 150, 200, 250, 300, 400},   // Eavail 375 - 550, pl <= 0
+       {100, 150, 200, 250, 300, 350, 400, 500},   // Eavail 375 - 550, pl 0 - 150
+       {100, 150, 200, 250, 300, 350, 450, 550},   // Eavail 375 - 550, pl 150 - 300
+       {150, 250, 350, 450, 550},   // Eavail 375 - 550, pl 300 - 450
+       {250, 350, 450, 550},   // Eavail 375 - 550, pl 450 - 625
+       {250, 350, 450, 500, 600},   // Eavail 375 - 550, pl 625 - 850
+       {300, 400, 550, 650},   // Eavail 375 - 550, pl 850 - 1200
+       {450, 550, 750, 1000}   // Eavail 375 - 550, pl > 1200
+      },
+      {
+       {100, 150, 200, 250, 300, 350, 450},   // Eavail > 550, pl <= 0
+       {50, 100, 150, 200, 250, 300, 350, 450},   // Eavail > 550, pl 0 - 150
+       {100, 150, 200, 250, 300, 350, 450},   // Eavail > 550, pl 150 - 300
+       {150, 250, 350, 450, 550},   // Eavail > 550, pl 300 - 450
+       {200, 300, 450, 550},   // Eavail > 550, pl 450 - 625
+       {250, 400, 500},   // Eavail > 550, pl 625 - 850
+       {300, 450, 650},   // Eavail > 550, pl 850 - 1200
+       {650, 950}   // Eavail > 550, pl > 1200
+      }
+    };
+    if (pfeval.reco_muonMomentum[3]<0) return (var_name == "muon_pt" || var_name == "muon_pl") ? -1000 : -1;
+    TVector3 muon_p = get_muon_momentum_new(pfeval, eval);
+    if (var_name == "muon_pt") return muon_p.Perp();
+    if (var_name == "muon_pl") return muon_p.Z();
+    if (var_name == "pl_pt_bin") return get_2d_bin_index(muon_p.Z(), xs::pl_slices, muon_p.Perp(), pt_bins_pl) + 0.5;
+    double Emu = get_muon_Etot_new(pfeval, eval);
+    TVector3 mu_dir(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2]);
+    if (var_name == "Emu_costheta_bin") return get_2d_bin_index(mu_dir.CosTheta(), xs::costheta_slices, Emu, Emu_bins_costheta) + 0.5;
+    double Eavail = get_kine_var(kine, eval, pfeval, tagger, flag_data, "Eavail_new3_5_drop15_95", space, pandora, lantern);
+    if (var_name == "Eavail_Emu_bin") return get_2d_bin_index(Eavail, xs::Eavail_slices, Emu, Emu_bins_Eavail) + 0.5;
+    double KE_lead = 0;
+    int n_protons = 0;
+    get_reco_leading_proton(pfeval, space, 45, KE_lead, n_protons);
+    bool flag_reco_Np = KE_lead >= 45;
+    if (var_name == "Eavail_costheta_Emu_bin"){
+      if (flag_reco_Np) return get_3d_bin_index(Eavail, xs::Eavail_outer_Np, mu_dir.CosTheta(), xs::costheta_inner_Np, Emu, Emu_bins_3d_Np) + 0.5;
+      return get_3d_bin_index(Eavail, xs::Eavail_outer_0p, mu_dir.CosTheta(), xs::costheta_inner_0p, Emu, Emu_bins_3d_0p) + 0.5;
+    }
+    if (flag_reco_Np) return get_3d_bin_index(Eavail, xs::Eavail_outer_Np, muon_p.Z(), xs::pl_inner_Np, muon_p.Perp(), pt_bins_3d_Np) + 0.5;
+    return get_3d_bin_index(Eavail, xs::Eavail_outer_0p, muon_p.Z(), xs::pl_inner_0p, muon_p.Perp(), pt_bins_3d_0p) + 0.5;
+  }else if (var_name == "reco_Np" || var_name == "reco_Kp" || var_name == "reco_costhetap" || var_name == "reco_costhetamup"
+         || var_name == "Kp_costhetap_bin" || var_name == "Kp_costhetamup_bin" || var_name == "Eavail_costhetamup_bin" || var_name == "Emu_costhetamup_bin"
+         || var_name == "costheta_Emu_Kp_bin" || var_name == "costheta_Emu_costhetamup_bin" || var_name == "pl_pt_Kp_bin" || var_name == "pl_pt_costhetamup_bin"){
+    // Reco variables of the proton cross-section measurements. The protons are the primary WireCell protons with range KE
+    // (get_reco_leading_proton); the leading one (largest range KE) sets the reco Np category of get_particle_0pNp_bdt_bin.
+    // Its direction is from its end points, pointing away from the vertex (get_reco_proton_dir; better than
+    // reco_startMomentum).
+    //   reco_Np: number of protons with range KE >= 45 MeV (truth bins: cut_file 7, 8)
+    //   reco_Kp: leading proton KE [MeV], 0 without a proton (cut_file 9)
+    //   reco_costhetap, reco_costhetamup: leading proton cos(theta), cos(muon, proton) (cut_file 10, 11)
+    //   "*_bin": the reco bin of a multi-differential measurement as the flattened bin index + 0.5, for histograms from 0
+    //   to nbin. Same slices as the truth bins of get_xs_signal_no; finer bins (Kp: 25 MeV, cos(mu, p): 0.1), each a part
+    //   of one truth bin. Muon energy / momentum as in kine_reco_Enu_new3_5, Eavail as Eavail_new3_5_drop15_95.
+    //     Kp_costhetap_bin (cut_file 13): nbin = 95       Kp_costhetamup_bin (18): 98
+    //     Eavail_costhetamup_bin (19): 114                   Emu_costhetamup_bin (20): 113
+    //     costheta_Emu_Kp_bin (23): 209                      costheta_Emu_costhetamup_bin (24): 240
+    //     pl_pt_Kp_bin (25): 228                             pl_pt_costhetamup_bin (26): 251
+    //   The angles and the bins are -2 without a proton above 45 MeV (reco 0p, which goes to the channels without a reco
+    //   proton).
+    static const std::vector<std::vector<double>> Kp_bins_costhetap = {
+      {70, 95, 120, 145, 170, 195, 220},   // costhetap <= 0
+      {70, 95, 120, 145, 170, 195, 220, 245, 270},   // costhetap 0 - 0.3
+      {70, 95, 120, 145, 170, 195, 220, 245, 270},   // costhetap 0.3 - 0.5
+      {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 370},   // costhetap 0.5 - 0.7
+      {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 370, 420, 470},   // costhetap 0.7 - 0.8
+      {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 370, 395, 420, 470},   // costhetap 0.8 - 0.9
+      {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 370, 395, 420, 445, 470, 520, 595}   // costhetap > 0.9
+    };
+    static const std::vector<std::vector<double>> costhetamup_bins_Kp = {
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Kp <= 95
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Kp 95 - 145
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Kp 145 - 220
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Kp 220 - 345
+      {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}   // Kp > 345
+    };
+    static const std::vector<std::vector<double>> costhetamup_bins_Eavail = {
+      {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // Eavail <= 150
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Eavail 150 - 250
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Eavail 250 - 375
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Eavail 375 - 550
+      {-0.9, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Eavail 550 - 800
+      {-0.9, -0.7, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}   // Eavail > 800
+    };
+    static const std::vector<std::vector<double>> costhetamup_bins_Emu = {
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Emu <= 350
+      {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Emu 350 - 550
+      {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Emu 550 - 700
+      {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Emu 700 - 900
+      {-0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // Emu 900 - 1150
+      {-0.8, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}   // Emu > 1150
+    };
+    static const std::vector<std::vector<std::vector<double>>> Kp_bins_costheta_Emu = {
+      {
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 370, 395, 445, 495},   // costheta <= 0.5, Emu <= 350
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 345, 395, 470},   // costheta <= 0.5, Emu 350 - 450
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 370, 420, 470}   // costheta <= 0.5, Emu > 450
+      },
+      {
+       {70, 95, 120, 145, 170, 195, 220, 245, 295, 370},   // costheta 0.5 - 0.7, Emu <= 350
+       {70, 95, 120, 170, 220, 270},   // costheta 0.5 - 0.7, Emu 350 - 450
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 345},   // costheta 0.5 - 0.7, Emu 450 - 700
+       {70, 95, 120, 145, 170, 195, 220, 245, 295, 345, 470}   // costheta 0.5 - 0.7, Emu > 700
+      },
+      {
+       {70, 95, 120, 145, 170, 195, 220, 270},   // costheta 0.7 - 0.8, Emu <= 450
+       {95, 120, 170, 220},   // costheta 0.7 - 0.8, Emu 450 - 550
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 320},   // costheta 0.7 - 0.8, Emu 550 - 900
+       {70, 95, 120, 170, 220, 270, 345}   // costheta 0.7 - 0.8, Emu > 900
+      },
+      {
+       {70, 95, 120, 145, 170, 195, 220, 270},   // costheta 0.8 - 0.9, Emu <= 450
+       {70, 120, 170, 220},   // costheta 0.8 - 0.9, Emu 450 - 550
+       {70, 95, 120, 145, 170, 195, 220, 245, 270},   // costheta 0.8 - 0.9, Emu 550 - 900
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 345}   // costheta 0.8 - 0.9, Emu > 900
+      },
+      {
+       {70, 95, 120, 145, 170, 195, 220, 245, 295},   // costheta > 0.9, Emu <= 550
+       {70, 95, 120, 145, 170, 220},   // costheta > 0.9, Emu 550 - 700
+       {70, 95, 120, 145, 170, 220, 245},   // costheta > 0.9, Emu 700 - 900
+       {70, 95, 120, 145, 170, 195, 220, 245},   // costheta > 0.9, Emu 900 - 1150
+       {70, 95, 120, 145, 170, 195, 220, 270},   // costheta > 0.9, Emu 1150 - 1600
+       {70, 95, 120, 145, 170, 220, 245, 345}   // costheta > 0.9, Emu > 1600
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> costhetamup_bins_costheta_Emu = {
+      {
+       {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7},   // costheta <= 0.5, Emu <= 350
+       {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.3, 0.5},   // costheta <= 0.5, Emu 350 - 450
+       {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.3, 0.4, 0.6}   // costheta <= 0.5, Emu > 450
+      },
+      {
+       {-0.6, -0.4, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8},   // costheta 0.5 - 0.7, Emu <= 350
+       {-0.5, -0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.5 - 0.7, Emu 350 - 450
+       {-0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.5, 0.7},   // costheta 0.5 - 0.7, Emu 450 - 700
+       {-0.6, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.4, 0.6}   // costheta 0.5 - 0.7, Emu > 700
+      },
+      {
+       {-0.5, -0.3, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8},   // costheta 0.7 - 0.8, Emu <= 450
+       {-0.3, 0, 0.2, 0.4},   // costheta 0.7 - 0.8, Emu 450 - 550
+       {-0.6, -0.4, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.6},   // costheta 0.7 - 0.8, Emu 550 - 900
+       {-0.5, -0.3, -0.1, 0, 0.1, 0.2, 0.4}   // costheta 0.7 - 0.8, Emu > 900
+      },
+      {
+       {-0.5, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // costheta 0.8 - 0.9, Emu <= 450
+       {-0.3, 0, 0.2, 0.5, 0.7},   // costheta 0.8 - 0.9, Emu 450 - 550
+       {-0.6, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // costheta 0.8 - 0.9, Emu 550 - 900
+       {-0.6, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}   // costheta 0.8 - 0.9, Emu > 900
+      },
+      {
+       {-0.6, -0.3, -0.1, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},   // costheta > 0.9, Emu <= 550
+       {-0.4, -0.2, 0.2, 0.4, 0.5, 0.7},   // costheta > 0.9, Emu 550 - 700
+       {-0.5, -0.2, 0, 0.2, 0.4, 0.5, 0.6, 0.8},   // costheta > 0.9, Emu 700 - 900
+       {-0.6, -0.4, -0.2, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // costheta > 0.9, Emu 900 - 1150
+       {-0.6, -0.4, -0.2, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // costheta > 0.9, Emu 1150 - 1600
+       {-0.5, -0.3, -0.2, 0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.8}   // costheta > 0.9, Emu > 1600
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> Kp_bins_pl_pt = {
+      {
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 345, 395, 445},   // pl <= 150, pt <= 150
+       {70, 95, 120, 145, 170, 195, 220, 245, 295, 345},   // pl <= 150, pt 150 - 200
+       {70, 95, 120, 145, 170, 195, 220, 245, 295, 345},   // pl <= 150, pt 200 - 250
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 345, 395},   // pl <= 150, pt 250 - 350
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 345, 370, 420, 470}   // pl <= 150, pt > 350
+      },
+      {
+       {70, 95, 120, 145, 170, 195, 220, 270},   // pl 150 - 300, pt <= 200
+       {70, 95, 120, 145, 170, 195, 220, 270},   // pl 150 - 300, pt 200 - 300
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 320},   // pl 150 - 300, pt 300 - 450
+       {70, 95, 120, 145, 170, 220, 270, 320, 470}   // pl 150 - 300, pt > 450
+      },
+      {
+       {70, 95, 120, 145, 170, 195, 220},   // pl 300 - 450, pt <= 200
+       {70, 95, 120, 145, 170, 195, 220},   // pl 300 - 450, pt 200 - 300
+       {70, 95, 120, 145, 170, 195, 220, 245, 270},   // pl 300 - 450, pt 300 - 450
+       {70, 95, 120, 145, 170, 195, 220, 245, 295, 345}   // pl 300 - 450, pt > 450
+      },
+      {
+       {70, 95, 120, 145, 170, 220},   // pl 450 - 625, pt <= 250
+       {70, 95, 120, 145, 170, 195, 220, 245, 295},   // pl 450 - 625, pt 250 - 450
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 345}   // pl 450 - 625, pt > 450
+      },
+      {
+       {70, 95, 120, 170, 220},   // pl 625 - 850, pt <= 250
+       {70, 95, 120, 145, 170, 195, 220, 245, 270},   // pl 625 - 850, pt 250 - 450
+       {70, 95, 120, 145, 170, 195, 220, 270, 345}   // pl 625 - 850, pt > 450
+      },
+      {
+       {70, 95, 120, 145, 170, 195},   // pl > 850, pt <= 250
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295},   // pl > 850, pt 250 - 550
+       {70, 95, 120, 145, 170, 195, 220, 245, 270, 295, 320, 370, 470}   // pl > 850, pt > 550
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> costhetamup_bins_pl_pt = {
+      {
+       {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // pl <= 150, pt <= 150
+       {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.2, 0.3, 0.6},   // pl <= 150, pt 150 - 200
+       {-0.8, -0.7, -0.6, -0.5, -0.3, -0.2, 0, 0.2, 0.4},   // pl <= 150, pt 200 - 250
+       {-0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.2, 0.4, 0.6},   // pl <= 150, pt 250 - 350
+       {-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.3, 0.5}   // pl <= 150, pt > 350
+      },
+      {
+       {-0.6, -0.3, -0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // pl 150 - 300, pt <= 200
+       {-0.6, -0.3, -0.1, 0, 0.2, 0.3, 0.4, 0.5, 0.7},   // pl 150 - 300, pt 200 - 300
+       {-0.6, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.5, 0.7},   // pl 150 - 300, pt 300 - 450
+       {-0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.2}   // pl 150 - 300, pt > 450
+      },
+      {
+       {-0.4, 0, 0.3, 0.5, 0.6, 0.8},   // pl 300 - 450, pt <= 200
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl 300 - 450, pt 200 - 300
+       {-0.5, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7},   // pl 300 - 450, pt 300 - 450
+       {-0.5, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.4, 0.6}   // pl 300 - 450, pt > 450
+      },
+      {
+       {-0.4, -0.1, 0.2, 0.4, 0.6, 0.7},   // pl 450 - 625, pt <= 250
+       {-0.6, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // pl 450 - 625, pt 250 - 450
+       {-0.7, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.4, 0.6}   // pl 450 - 625, pt > 450
+      },
+      {
+       {-0.2, 0.2, 0.4, 0.6},   // pl 625 - 850, pt <= 250
+       {-0.6, -0.4, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // pl 625 - 850, pt 250 - 450
+       {-0.6, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6}   // pl 625 - 850, pt > 450
+      },
+      {
+       {-0.2, 0.2, 0.4, 0.6, 0.8},   // pl > 850, pt <= 250
+       {-0.7, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},   // pl > 850, pt 250 - 550
+       {-0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}   // pl > 850, pt > 550
+      }
+    };
+    double KE_lead = 0;
+    int n_protons = 0;
+    int index = get_reco_leading_proton(pfeval, space, 45, KE_lead, n_protons);
+    if (var_name == "reco_Np") return n_protons;
+    if (var_name == "reco_Kp") return KE_lead;
+    if (index<0 || KE_lead<45) return -2;
+    TVector3 p_dir = get_reco_proton_dir(pfeval, index);
+    if (var_name == "reco_costhetap") return (p_dir.Mag()==0) ? -2 : p_dir.CosTheta();
+    if (var_name == "reco_costhetamup") return (p_dir.Mag()==0 || pfeval.reco_muonMomentum[3]<=0) ? -2 : get_reco_cos_mu_p(pfeval, index);
+    if (var_name == "Kp_costhetap_bin") return get_2d_bin_index(p_dir.CosTheta(), xs::costheta_slices, KE_lead, Kp_bins_costhetap) + 0.5;
+    double cos_mu_p = get_reco_cos_mu_p(pfeval, index);
+    if (var_name == "Kp_costhetamup_bin") return get_2d_bin_index(KE_lead, xs::Kp_slices_mup, cos_mu_p, costhetamup_bins_Kp) + 0.5;
+    if (var_name == "Eavail_costhetamup_bin"){
+      double Eavail = get_kine_var(kine, eval, pfeval, tagger, flag_data, "Eavail_new3_5_drop15_95", space, pandora, lantern);
+      return get_2d_bin_index(Eavail, xs::Eavail_slices_mup, cos_mu_p, costhetamup_bins_Eavail) + 0.5;
+    }
+    if (var_name == "pl_pt_Kp_bin" || var_name == "pl_pt_costhetamup_bin"){
+      TVector3 muon_p = get_muon_momentum_new(pfeval, eval);
+      if (var_name == "pl_pt_Kp_bin") return get_3d_bin_index(muon_p.Z(), xs::pl_outer_p, muon_p.Perp(), xs::pt_inner_p, KE_lead, Kp_bins_pl_pt) + 0.5;
+      return get_3d_bin_index(muon_p.Z(), xs::pl_outer_p, muon_p.Perp(), xs::pt_inner_p, cos_mu_p, costhetamup_bins_pl_pt) + 0.5;
+    }
+    double Emu = get_muon_Etot_new(pfeval, eval);
+    if (var_name == "Emu_costhetamup_bin") return get_2d_bin_index(Emu, xs::Emu_slices_mup, cos_mu_p, costhetamup_bins_Emu) + 0.5;
+    TVector3 mu_dir(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2]);
+    if (var_name == "costheta_Emu_Kp_bin") return get_3d_bin_index(mu_dir.CosTheta(), xs::costheta_outer_p, Emu, xs::Emu_inner_p, KE_lead, Kp_bins_costheta_Emu) + 0.5;
+    return get_3d_bin_index(mu_dir.CosTheta(), xs::costheta_outer_p, Emu, xs::Emu_inner_p, cos_mu_p, costhetamup_bins_costheta_Emu) + 0.5;
   }else if(var_name == "all_veto_score"){
     return tagger.all_veto_score;
   }else if(var_name == "VtxAct_bdt_score"){
@@ -1185,20 +1707,477 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
   // every signal definition below requires a true CC interaction inside the active volume
   if (!(eval.truth_isCC==1 && eval.truth_vtxInside==1)) return -1;
 
-  // truth kinematics (the same for every bin)
-  double KE_muon = pfeval.truth_muonMomentum[3]*1000.-105.66; // MeV
-  double pmuon   = TMath::Sqrt(pow(KE_muon,2) + 2*KE_muon*105.66); // MeV
-  double Pmuon   = TMath::Sqrt(pow(KE_muon,2) + 2*KE_muon*105.66); // MeV
+  // truth kinematics
   double Emuon   = pfeval.truth_muonMomentum[3]*1000; // MeV
   double Ehadron = eval.truth_nuEnergy - pfeval.truth_muonMomentum[3]*1000.; // MeV
-
-  float pmuon_binning[7] = {0, 180, 300, 450, 770, 1280, 2500};
-
-  float costheta_binning[10] = {-1, -.5, 0, .27, .45, .62, .76, .86, .94, 1};			//fine binning
-  //float costheta_binning[5]  = {-1,         .27,      .62,      .86,      1};		//coarse binning
-  //float costheta_binning[3]    = {-1,                   .62,                1};		//very coarse binning
   TLorentzVector muonMomentum(pfeval.truth_muonMomentum[0], pfeval.truth_muonMomentum[1], pfeval.truth_muonMomentum[2], pfeval.truth_muonMomentum[3]);
   float costh = TMath::Cos(muonMomentum.Theta());
+
+  // numuCC 0p/Np truth bins in one variable (cut_file 2-6). Signal: numu CC with the vertex in the FV, split into 0p/Np by
+  // the leading primary proton KE (45 MeV), as XsnumuCCinFV0p/Np. The bins cover the whole range of each variable, so
+  // every signal event gets a bin. Bin names: "numuCC.<0p|Np>.inside.<var>" + ".le.<e1>", ".le.<e(k+1)>.gt.<ek>", ".gt.<en>"
+  // (inner edges ek below), e.g. "numuCC.Np.inside.Emu.le.250.gt.200". Edges follow the resolution of each variable
+  // (bin width about the 68% half-width of reco - true) and the expected statistics at ~1e21 POT.
+  //   2: Emu, muon total energy [MeV]
+  //   3: costheta, muon cos(theta)
+  //   4: nu, energy transfer Enu - Emu [MeV]; coarser for 0p, whose hadronic energy is mostly not reconstructed
+  //   5: Eavail, available energy (get_true_Eavail, no thresholds, no masses) [MeV]
+  //   6: Enu, neutrino energy [MeV]
+  // Proton content (cut_file 7-11), counting primary protons with KE >= 45 MeV; the leading proton is the primary proton
+  // with the largest KE. In 9-11 all 0p events share one bin, "numuCC.0p.inside".
+  //   7: 0p / Np: "numuCC.0p.inside", "numuCC.Np.inside"
+  //   8: 0p / 1p / 2p / >2p: "numuCC.0p.inside", "numuCC.1p.inside", "numuCC.2p.inside", "numuCC.gt2p.inside"
+  //   9: Kp, leading proton KE [MeV] ("numuCC.Np.inside.Kp.le.70" is 45 < Kp <= 70)
+  //  10: costhetap, leading proton cos(theta)
+  //  11: costhetamup, cosine of the opening angle between the muon and the leading proton
+  // Double differential (cut_file 12), 0p/Np as in 2-6: slices in the outer variable, each with its own bins in the inner
+  // variable (more bins where the statistics and resolution allow, the same for 0p and Np). Bin names are the slice name
+  // followed by the bin name, e.g. "numuCC.Np.inside.costheta.le.0.3.gt.0.Emu.le.300.gt.250".
+  //  12: costheta slices x Emu bins
+  //  13: costhetap slices x Kp bins of the leading proton (Np only; all 0p events in one bin, "numuCC.0p.inside")
+  // Muon transverse / longitudinal momentum (w.r.t. the beam, z) [MeV], 0p/Np as in 2-6:
+  //  14: pt = p sin(theta)
+  //  15: pl = p cos(theta)
+  //  16: pl slices x pt bins
+  //  17: Eavail slices x Emu bins, 0p/Np
+  //  18: Kp slices x costhetamup bins (Np only; all 0p events in one bin, "numuCC.0p.inside")
+  //  19: Eavail slices x costhetamup bins (Np only; all 0p events in one bin)
+  //  20: Emu slices x costhetamup bins (Np only; all 0p events in one bin)
+  // Triple differential: outer slices, inner slices, bins (helpers get_xs_3d_bin_name / get_3d_bin_index). 0p and Np
+  // have different binnings: true 0p events are concentrated at low Eavail (~2/3 at Eavail <= 150 MeV), Np events extend
+  // to high Eavail, so common binnings would starve one of them. Inner slices are the same in all outer slices.
+  //  21: Eavail (outer) x costheta (inner) x Emu
+  //  22: Eavail (outer) x pl (inner) x pt
+  // Proton triple differential (Np only; all 0p events in one bin, "numuCC.0p.inside"). The inner slices follow the
+  // statistics in each outer slice (e.g. more energetic muons in the forward slices), the same for 23/24 and for 25/26.
+  //  23: costheta (outer) x Emu (inner) x Kp
+  //  24: costheta (outer) x Emu (inner) x costhetamup
+  //  25: pl (outer) x pt (inner) x Kp
+  //  26: pl (outer) x pt (inner) x costhetamup
+  // The edges of all binnings come from one grid per variable (the 1D edges; pt also 50 MeV steps), so the slices and bins
+  // of different measurements line up; the slices shared with the reco binnings are in LEEana::xs.
+  if (cut_file>=2 && cut_file<=26){
+    if (eval.truth_nuPdg!=14) return -1;
+    // 1D
+    static const std::vector<double> Emu_edges = {200, 250, 300, 350, 450, 550, 700, 900, 1150, 1600};
+    static const std::vector<double> costheta_edges = {-0.3, 0, 0.15, 0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95};
+    static const std::vector<double> nu_edges_0p = {100, 200, 500, 950};
+    static const std::vector<double> nu_edges_Np = {100, 200, 325, 500, 700, 950, 1300, 1700};
+    static const std::vector<double> Eavail_edges = {75, 150, 250, 375, 550, 800, 1100};
+    static const std::vector<double> Enu_edges = {400, 500, 650, 800, 1000, 1300, 1700, 2300};
+    static const std::vector<double> Kp_edges = {70, 95, 120, 145, 170, 220, 270, 345, 470};
+    static const std::vector<double> costhetap_edges = {-0.5, -0.2, 0, 0.15, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+    static const std::vector<double> costhetamup_edges = {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6};
+    static const std::vector<double> pt_edges = {100, 200, 300, 450, 650};
+    static const std::vector<double> pl_edges = {-150, 0, 75, 150, 300, 450, 625, 850, 1200, 1700};
+    // multi-differential: bins in each slice (slices in LEEana::xs)
+    static const std::vector<std::vector<double>> Emu_bins_costheta = {
+      {250, 300},   // costheta <= 0
+      {250, 300},   // costheta 0 - 0.3
+      {300, 350, 450},   // costheta 0.3 - 0.5
+      {300, 350, 450, 700},   // costheta 0.5 - 0.7
+      {300, 450, 550, 900},   // costheta 0.7 - 0.8
+      {350, 450, 550, 900},   // costheta 0.8 - 0.9
+      {450, 550, 700, 900, 1150, 1600}   // costheta > 0.9
+    };
+    static const std::vector<std::vector<double>> Kp_bins_costhetap = {
+      {70, 95, 120, 145},   // costhetap <= 0
+      {70, 95, 120, 145, 170, 220},   // costhetap 0 - 0.3
+      {70, 95, 120, 145, 170, 220, 270},   // costhetap 0.3 - 0.5
+      {70, 95, 120, 145, 170, 220, 270, 345},   // costhetap 0.5 - 0.7
+      {70, 95, 120, 145, 170, 220, 270, 345, 470},   // costhetap 0.7 - 0.8
+      {70, 95, 120, 145, 170, 220, 270, 345, 470},   // costhetap 0.8 - 0.9
+      {70, 95, 120, 145, 170, 220, 270, 345}   // costhetap > 0.9
+    };
+    static const std::vector<std::vector<double>> pt_bins_pl = {
+      {100, 200, 250},   // pl <= 0
+      {150, 200, 250, 350},   // pl 0 - 150
+      {150, 200, 300, 450},   // pl 150 - 300
+      {150, 250, 350},   // pl 300 - 450
+      {200, 350, 550},   // pl 450 - 625
+      {200, 350, 550},   // pl 625 - 850
+      {250, 450},   // pl 850 - 1200
+      {350, 800}   // pl > 1200
+    };
+    static const std::vector<std::vector<double>> Emu_bins_Eavail = {
+      {350, 550, 700, 900, 1150},   // Eavail <= 75
+      {300, 350, 450, 550, 700, 900, 1600},   // Eavail 75 - 150
+      {300, 450, 550, 900},   // Eavail 150 - 250
+      {300, 450, 700, 1150},   // Eavail 250 - 375
+      {250, 350, 450, 700, 1150},   // Eavail 375 - 550
+      {250, 350, 550, 900},   // Eavail 550 - 800
+      {300, 450, 700, 1150}   // Eavail > 800
+    };
+    static const std::vector<std::vector<double>> costhetamup_bins_Kp = {
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp <= 95
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 95 - 145
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 145 - 220
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 220 - 345
+      {-0.6, -0.2, 0, 0.2, 0.6}   // Kp > 345
+    };
+    static const std::vector<std::vector<double>> costhetamup_bins_Eavail = {
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail <= 150
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 150 - 250
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 250 - 375
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 375 - 550
+      {-0.4, 0, 0.4},   // Eavail 550 - 800
+      {-0.2, 0.2, 0.6}   // Eavail > 800
+    };
+    static const std::vector<std::vector<double>> costhetamup_bins_Emu = {
+      {-0.6, -0.4, -0.2, 0.2, 0.6},   // Emu <= 350
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.6},   // Emu 350 - 550
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 550 - 700
+      {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 700 - 900
+      {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 900 - 1150
+      {-0.4, -0.2, 0, 0.2, 0.4, 0.6}   // Emu > 1150
+    };
+    static const std::vector<std::vector<std::vector<double>>> Emu_bins_3d_0p = {
+      {
+       {300},   // Eavail <= 75, costheta <= 0
+       {300, 450},   // Eavail <= 75, costheta 0 - 0.5
+       {350, 450, 700},   // Eavail <= 75, costheta 0.5 - 0.7
+       {350, 450, 550, 700, 900, 1150},   // Eavail <= 75, costheta 0.7 - 0.9
+       {450, 550, 700, 900, 1150, 1600}   // Eavail <= 75, costheta > 0.9
+      },
+      {
+       {},   // Eavail 75 - 150, costheta <= 0
+       {350},   // Eavail 75 - 150, costheta 0 - 0.5
+       {550},   // Eavail 75 - 150, costheta 0.5 - 0.7
+       {450, 700, 900},   // Eavail 75 - 150, costheta 0.7 - 0.9
+       {700, 900, 1150}   // Eavail 75 - 150, costheta > 0.9
+      },
+      {
+       {300},   // Eavail > 150, costheta <= 0
+       {250, 350},   // Eavail > 150, costheta 0 - 0.5
+       {300, 450},   // Eavail > 150, costheta 0.5 - 0.7
+       {350, 450, 550, 700, 1150},   // Eavail > 150, costheta 0.7 - 0.9
+       {450, 550, 700, 900, 1600}   // Eavail > 150, costheta > 0.9
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> Emu_bins_3d_Np = {
+      {
+       {},   // Eavail <= 150, costheta <= 0
+       {},   // Eavail <= 150, costheta 0 - 0.3
+       {},   // Eavail <= 150, costheta 0.3 - 0.5
+       {450},   // Eavail <= 150, costheta 0.5 - 0.7
+       {550, 700},   // Eavail <= 150, costheta 0.7 - 0.8
+       {550, 700, 900},   // Eavail <= 150, costheta 0.8 - 0.9
+       {700, 900, 1150, 1600}   // Eavail <= 150, costheta > 0.9
+      },
+      {
+       {300},   // Eavail 150 - 250, costheta <= 0
+       {},   // Eavail 150 - 250, costheta 0 - 0.3
+       {450},   // Eavail 150 - 250, costheta 0.3 - 0.5
+       {450, 550},   // Eavail 150 - 250, costheta 0.5 - 0.7
+       {550},   // Eavail 150 - 250, costheta 0.7 - 0.8
+       {550, 900},   // Eavail 150 - 250, costheta 0.8 - 0.9
+       {700, 900, 1150}   // Eavail 150 - 250, costheta > 0.9
+      },
+      {
+       {300},   // Eavail 250 - 375, costheta <= 0
+       {},   // Eavail 250 - 375, costheta 0 - 0.3
+       {450},   // Eavail 250 - 375, costheta 0.3 - 0.5
+       {450, 700},   // Eavail 250 - 375, costheta 0.5 - 0.7
+       {550, 700},   // Eavail 250 - 375, costheta 0.7 - 0.8
+       {550, 700, 900},   // Eavail 250 - 375, costheta 0.8 - 0.9
+       {700, 900, 1600}   // Eavail 250 - 375, costheta > 0.9
+      },
+      {
+       {300},   // Eavail 375 - 550, costheta <= 0
+       {450},   // Eavail 375 - 550, costheta 0 - 0.3
+       {450},   // Eavail 375 - 550, costheta 0.3 - 0.5
+       {450, 700},   // Eavail 375 - 550, costheta 0.5 - 0.7
+       {700},   // Eavail 375 - 550, costheta 0.7 - 0.8
+       {700},   // Eavail 375 - 550, costheta 0.8 - 0.9
+       {900}   // Eavail 375 - 550, costheta > 0.9
+      },
+      {
+       {250, 350},   // Eavail > 550, costheta <= 0
+       {350},   // Eavail > 550, costheta 0 - 0.3
+       {450},   // Eavail > 550, costheta 0.3 - 0.5
+       {450, 700},   // Eavail > 550, costheta 0.5 - 0.7
+       {550},   // Eavail > 550, costheta 0.7 - 0.8
+       {700},   // Eavail > 550, costheta 0.8 - 0.9
+       {900}   // Eavail > 550, costheta > 0.9
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> pt_bins_3d_0p = {
+      {
+       {200, 250, 300},   // Eavail <= 75, pl <= 150
+       {200, 300},   // Eavail <= 75, pl 150 - 300
+       {150, 250, 350},   // Eavail <= 75, pl 300 - 450
+       {150, 300, 450},   // Eavail <= 75, pl 450 - 625
+       {200, 350, 550},   // Eavail <= 75, pl 625 - 850
+       {250, 550},   // Eavail <= 75, pl 850 - 1200
+       {300}   // Eavail <= 75, pl > 1200
+      },
+      {
+       {250},   // Eavail 75 - 150, pl <= 150
+       {250},   // Eavail 75 - 150, pl 150 - 300
+       {300},   // Eavail 75 - 150, pl 300 - 450
+       {250, 350},   // Eavail 75 - 150, pl 450 - 625
+       {300, 450},   // Eavail 75 - 150, pl 625 - 850
+       {300},   // Eavail 75 - 150, pl 850 - 1200
+       {450}   // Eavail 75 - 150, pl > 1200
+      },
+      {
+       {150, 250, 350},   // Eavail > 150, pl <= 150
+       {150, 200, 250, 350},   // Eavail > 150, pl 150 - 300
+       {150, 200, 300, 450},   // Eavail > 150, pl 300 - 450
+       {200, 300},   // Eavail > 150, pl 450 - 625
+       {200, 350},   // Eavail > 150, pl 625 - 850
+       {250, 450},   // Eavail > 150, pl 850 - 1200
+       {350, 650}   // Eavail > 150, pl > 1200
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> pt_bins_3d_Np = {
+      {
+       {},   // Eavail <= 150, pl <= 0
+       {300},   // Eavail <= 150, pl 0 - 150
+       {250, 350},   // Eavail <= 150, pl 150 - 300
+       {300},   // Eavail <= 150, pl 300 - 450
+       {300, 450},   // Eavail <= 150, pl 450 - 625
+       {300},   // Eavail <= 150, pl 625 - 850
+       {300},   // Eavail <= 150, pl 850 - 1200
+       {350}   // Eavail <= 150, pl > 1200
+      },
+      {
+       {250},   // Eavail 150 - 250, pl <= 0
+       {300},   // Eavail 150 - 250, pl 0 - 150
+       {300, 450},   // Eavail 150 - 250, pl 150 - 300
+       {300, 450},   // Eavail 150 - 250, pl 300 - 450
+       {300},   // Eavail 150 - 250, pl 450 - 625
+       {300, 450},   // Eavail 150 - 250, pl 625 - 850
+       {300, 550},   // Eavail 150 - 250, pl 850 - 1200
+       {350}   // Eavail 150 - 250, pl > 1200
+      },
+      {
+       {250},   // Eavail 250 - 375, pl <= 0
+       {250, 350},   // Eavail 250 - 375, pl 0 - 150
+       {250, 350},   // Eavail 250 - 375, pl 150 - 300
+       {300, 450},   // Eavail 250 - 375, pl 300 - 450
+       {300, 450},   // Eavail 250 - 375, pl 450 - 625
+       {300, 450},   // Eavail 250 - 375, pl 625 - 850
+       {350, 550},   // Eavail 250 - 375, pl 850 - 1200
+       {450}   // Eavail 250 - 375, pl > 1200
+      },
+      {
+       {200, 300},   // Eavail 375 - 550, pl <= 0
+       {250},   // Eavail 375 - 550, pl 0 - 150
+       {250, 450},   // Eavail 375 - 550, pl 150 - 300
+       {350},   // Eavail 375 - 550, pl 300 - 450
+       {350, 550},   // Eavail 375 - 550, pl 450 - 625
+       {450},   // Eavail 375 - 550, pl 625 - 850
+       {550},   // Eavail 375 - 550, pl 850 - 1200
+       {}   // Eavail 375 - 550, pl > 1200
+      },
+      {
+       {150, 250},   // Eavail > 550, pl <= 0
+       {200, 300, 450},   // Eavail > 550, pl 0 - 150
+       {250, 450},   // Eavail > 550, pl 150 - 300
+       {350},   // Eavail > 550, pl 300 - 450
+       {450},   // Eavail > 550, pl 450 - 625
+       {},   // Eavail > 550, pl 625 - 850
+       {},   // Eavail > 550, pl 850 - 1200
+       {650}   // Eavail > 550, pl > 1200
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> Kp_bins_costheta_Emu = {
+      {
+       {70, 95, 120, 145, 170, 220, 270, 345},   // costheta <= 0.5, Emu <= 350
+       {95, 145, 220, 270, 345, 470},   // costheta <= 0.5, Emu 350 - 450
+       {95, 145, 220, 270, 345, 470}   // costheta <= 0.5, Emu > 450
+      },
+      {
+       {120},   // costheta 0.5 - 0.7, Emu <= 350
+       {120},   // costheta 0.5 - 0.7, Emu 350 - 450
+       {70, 120, 170, 220, 270, 345},   // costheta 0.5 - 0.7, Emu 450 - 700
+       {120, 220, 345, 470}   // costheta 0.5 - 0.7, Emu > 700
+      },
+      {
+       {120},   // costheta 0.7 - 0.8, Emu <= 450
+       {120},   // costheta 0.7 - 0.8, Emu 450 - 550
+       {95, 145, 170, 220, 270},   // costheta 0.7 - 0.8, Emu 550 - 900
+       {170, 345}   // costheta 0.7 - 0.8, Emu > 900
+      },
+      {
+       {95, 170},   // costheta 0.8 - 0.9, Emu <= 450
+       {120},   // costheta 0.8 - 0.9, Emu 450 - 550
+       {70, 95, 120, 145, 170, 220, 270},   // costheta 0.8 - 0.9, Emu 550 - 900
+       {95, 120, 145, 220, 270, 345}   // costheta 0.8 - 0.9, Emu > 900
+      },
+      {
+       {120},   // costheta > 0.9, Emu <= 550
+       {95, 170},   // costheta > 0.9, Emu 550 - 700
+       {70, 95, 120, 170},   // costheta > 0.9, Emu 700 - 900
+       {70, 95, 120, 145, 170, 220},   // costheta > 0.9, Emu 900 - 1150
+       {70, 95, 120, 145, 220, 270},   // costheta > 0.9, Emu 1150 - 1600
+       {95, 145, 220, 345}   // costheta > 0.9, Emu > 1600
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> costhetamup_bins_costheta_Emu = {
+      {
+       {-0.6, -0.4, -0.2, 0.2},   // costheta <= 0.5, Emu <= 350
+       {-0.6, -0.4, -0.2, 0},   // costheta <= 0.5, Emu 350 - 450
+       {-0.6, -0.4, -0.2, 0}   // costheta <= 0.5, Emu > 450
+      },
+      {
+       {0.2},   // costheta 0.5 - 0.7, Emu <= 350
+       {0},   // costheta 0.5 - 0.7, Emu 350 - 450
+       {-0.4, -0.2, 0, 0.2},   // costheta 0.5 - 0.7, Emu 450 - 700
+       {-0.2, 0, 0.2}   // costheta 0.5 - 0.7, Emu > 700
+      },
+      {
+       {0.2},   // costheta 0.7 - 0.8, Emu <= 450
+       {0.2},   // costheta 0.7 - 0.8, Emu 450 - 550
+       {-0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.7 - 0.8, Emu 550 - 900
+       {0, 0.2}   // costheta 0.7 - 0.8, Emu > 900
+      },
+      {
+       {0.2, 0.6},   // costheta 0.8 - 0.9, Emu <= 450
+       {0.2},   // costheta 0.8 - 0.9, Emu 450 - 550
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.8 - 0.9, Emu 550 - 900
+       {-0.2, 0, 0.2, 0.4}   // costheta 0.8 - 0.9, Emu > 900
+      },
+      {
+       {0.4},   // costheta > 0.9, Emu <= 550
+       {0.2},   // costheta > 0.9, Emu 550 - 700
+       {0, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 700 - 900
+       {-0.2, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 900 - 1150
+       {-0.2, 0, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 1150 - 1600
+       {-0.2, 0.2, 0.4, 0.6}   // costheta > 0.9, Emu > 1600
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> Kp_bins_pl_pt = {
+      {
+       {120, 220, 345},   // pl <= 150, pt <= 150
+       {120, 220},   // pl <= 150, pt 150 - 200
+       {120, 220, 345},   // pl <= 150, pt 200 - 250
+       {95, 145, 220, 270, 345},   // pl <= 150, pt 250 - 350
+       {95, 145, 220, 270, 345, 470}   // pl <= 150, pt > 350
+      },
+      {
+       {120},   // pl 150 - 300, pt <= 200
+       {95, 145, 220},   // pl 150 - 300, pt 200 - 300
+       {95, 145, 220},   // pl 150 - 300, pt 300 - 450
+       {145, 270, 470}   // pl 150 - 300, pt > 450
+      },
+      {
+       {120},   // pl 300 - 450, pt <= 200
+       {95, 170},   // pl 300 - 450, pt 200 - 300
+       {95, 145, 220},   // pl 300 - 450, pt 300 - 450
+       {120, 220, 345}   // pl 300 - 450, pt > 450
+      },
+      {
+       {95},   // pl 450 - 625, pt <= 250
+       {70, 95, 120, 145, 170, 220},   // pl 450 - 625, pt 250 - 450
+       {95, 145, 220, 345}   // pl 450 - 625, pt > 450
+      },
+      {
+       {95},   // pl 625 - 850, pt <= 250
+       {70, 95, 120, 145, 170, 220},   // pl 625 - 850, pt 250 - 450
+       {95, 145, 220, 270, 345}   // pl 625 - 850, pt > 450
+      },
+      {
+       {95},   // pl > 850, pt <= 250
+       {70, 95, 120, 145, 220, 270},   // pl > 850, pt 250 - 550
+       {95, 145, 220, 270, 470}   // pl > 850, pt > 550
+      }
+    };
+    static const std::vector<std::vector<std::vector<double>>> costhetamup_bins_pl_pt = {
+      {
+       {-0.4},   // pl <= 150, pt <= 150
+       {-0.6, -0.2},   // pl <= 150, pt 150 - 200
+       {-0.6, -0.2, 0.2},   // pl <= 150, pt 200 - 250
+       {-0.6, -0.4, -0.2, 0},   // pl <= 150, pt 250 - 350
+       {-0.6, -0.4, -0.2, 0}   // pl <= 150, pt > 350
+      },
+      {
+       {0.4},   // pl 150 - 300, pt <= 200
+       {0, 0.4},   // pl 150 - 300, pt 200 - 300
+       {-0.4, -0.2, 0, 0.2},   // pl 150 - 300, pt 300 - 450
+       {-0.2, 0}   // pl 150 - 300, pt > 450
+      },
+      {
+       {},   // pl 300 - 450, pt <= 200
+       {0, 0.4},   // pl 300 - 450, pt 200 - 300
+       {-0.2, 0, 0.2, 0.4},   // pl 300 - 450, pt 300 - 450
+       {-0.2, 0, 0.2}   // pl 300 - 450, pt > 450
+      },
+      {
+       {0.4},   // pl 450 - 625, pt <= 250
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl 450 - 625, pt 250 - 450
+       {-0.2, 0, 0.2, 0.4}   // pl 450 - 625, pt > 450
+      },
+      {
+       {0.2},   // pl 625 - 850, pt <= 250
+       {-0.2, 0, 0.2, 0.4, 0.6},   // pl 625 - 850, pt 250 - 450
+       {-0.2, 0, 0.2, 0.4}   // pl 625 - 850, pt > 450
+      },
+      {
+       {0.2, 0.6},   // pl > 850, pt <= 250
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl > 850, pt 250 - 550
+       {-0.2, 0, 0.2, 0.4, 0.6}   // pl > 850, pt > 550
+      }
+    };
+    // leading primary proton (as get_KE(pfeval, 2212, 1, 0, 1, 0)) and the number of primary protons above 45 MeV
+    int lead_p = -1;
+    double Kp = 0;
+    int n_p = 0;
+    for (int i=0; i<pfeval.truth_Ntrack; i++){
+      if (pfeval.truth_mother[i]!=0 || pfeval.truth_pdg[i]!=2212) continue;
+      double KE = pfeval.truth_startMomentum[i][3]*1000 - get_mass_MeV(2212);
+      if (KE>=45) n_p++;
+      if (KE>Kp){
+        Kp = KE;
+        lead_p = i;
+      }
+    }
+    bool flag_0p = Kp < 45;
+    TString prefix = flag_0p ? "numuCC.0p.inside." : "numuCC.Np.inside.";
+    TVector3 muon_p(pfeval.truth_muonMomentum[0]*1000, pfeval.truth_muonMomentum[1]*1000, pfeval.truth_muonMomentum[2]*1000);
+    double Eavail_true = (cut_file==5 || cut_file==17 || cut_file==19 || cut_file==21 || cut_file==22) ? get_true_Eavail(eval, pfeval, false, false) : 0;
+    TString bin_name;
+    // 0p and Np bins
+    if (cut_file==2) bin_name = get_xs_bin_name(prefix+"Emu", Emuon, Emu_edges);
+    else if (cut_file==3) bin_name = get_xs_bin_name(prefix+"costheta", costh, costheta_edges);
+    else if (cut_file==4) bin_name = get_xs_bin_name(prefix+"nu", Ehadron, flag_0p ? nu_edges_0p : nu_edges_Np);
+    else if (cut_file==5) bin_name = get_xs_bin_name(prefix+"Eavail", Eavail_true, Eavail_edges);
+    else if (cut_file==6) bin_name = get_xs_bin_name(prefix+"Enu", eval.truth_nuEnergy, Enu_edges);
+    else if (cut_file==7) bin_name = flag_0p ? "numuCC.0p.inside" : "numuCC.Np.inside";
+    else if (cut_file==8) bin_name = (n_p==0) ? "numuCC.0p.inside" : (n_p==1) ? "numuCC.1p.inside" : (n_p==2) ? "numuCC.2p.inside" : "numuCC.gt2p.inside";
+    else if (cut_file==12) bin_name = get_xs_2d_bin_name(prefix, "costheta", costh, xs::costheta_slices, "Emu", Emuon, Emu_bins_costheta);
+    else if (cut_file==14) bin_name = get_xs_bin_name(prefix+"pt", muon_p.Perp(), pt_edges);
+    else if (cut_file==15) bin_name = get_xs_bin_name(prefix+"pl", muon_p.Z(), pl_edges);
+    else if (cut_file==16) bin_name = get_xs_2d_bin_name(prefix, "pl", muon_p.Z(), xs::pl_slices, "pt", muon_p.Perp(), pt_bins_pl);
+    else if (cut_file==17) bin_name = get_xs_2d_bin_name(prefix, "Eavail", Eavail_true, xs::Eavail_slices, "Emu", Emuon, Emu_bins_Eavail);
+    else if (cut_file==21) bin_name = flag_0p ? get_xs_3d_bin_name(prefix, "Eavail", Eavail_true, xs::Eavail_outer_0p, "costheta", costh, xs::costheta_inner_0p, "Emu", Emuon, Emu_bins_3d_0p)
+                                              : get_xs_3d_bin_name(prefix, "Eavail", Eavail_true, xs::Eavail_outer_Np, "costheta", costh, xs::costheta_inner_Np, "Emu", Emuon, Emu_bins_3d_Np);
+    else if (cut_file==22) bin_name = flag_0p ? get_xs_3d_bin_name(prefix, "Eavail", Eavail_true, xs::Eavail_outer_0p, "pl", muon_p.Z(), xs::pl_inner_0p, "pt", muon_p.Perp(), pt_bins_3d_0p)
+                                              : get_xs_3d_bin_name(prefix, "Eavail", Eavail_true, xs::Eavail_outer_Np, "pl", muon_p.Z(), xs::pl_inner_Np, "pt", muon_p.Perp(), pt_bins_3d_Np);
+    // one bin for all 0p events, Np bins of the leading proton
+    else if (flag_0p) bin_name = "numuCC.0p.inside";
+    else{
+      TVector3 p_dir(pfeval.truth_startMomentum[lead_p][0], pfeval.truth_startMomentum[lead_p][1], pfeval.truth_startMomentum[lead_p][2]);
+      double costhp = p_dir.CosTheta();
+      double cos_mu_p = p_dir.Unit().Dot(muon_p.Unit());
+      if (cut_file==9) bin_name = get_xs_bin_name("numuCC.Np.inside.Kp", Kp, Kp_edges);
+      else if (cut_file==10) bin_name = get_xs_bin_name("numuCC.Np.inside.costhetap", costhp, costhetap_edges);
+      else if (cut_file==11) bin_name = get_xs_bin_name("numuCC.Np.inside.costhetamup", cos_mu_p, costhetamup_edges);
+      else if (cut_file==13) bin_name = get_xs_2d_bin_name("numuCC.Np.inside.", "costhetap", costhp, xs::costheta_slices, "Kp", Kp, Kp_bins_costhetap);
+      else if (cut_file==18) bin_name = get_xs_2d_bin_name("numuCC.Np.inside.", "Kp", Kp, xs::Kp_slices_mup, "costhetamup", cos_mu_p, costhetamup_bins_Kp);
+      else if (cut_file==19) bin_name = get_xs_2d_bin_name("numuCC.Np.inside.", "Eavail", Eavail_true, xs::Eavail_slices_mup, "costhetamup", cos_mu_p, costhetamup_bins_Eavail);
+      else if (cut_file==20) bin_name = get_xs_2d_bin_name("numuCC.Np.inside.", "Emu", Emuon, xs::Emu_slices_mup, "costhetamup", cos_mu_p, costhetamup_bins_Emu);
+      else if (cut_file==23) bin_name = get_xs_3d_bin_name("numuCC.Np.inside.", "costheta", costh, xs::costheta_outer_p, "Emu", Emuon, xs::Emu_inner_p, "Kp", Kp, Kp_bins_costheta_Emu);
+      else if (cut_file==24) bin_name = get_xs_3d_bin_name("numuCC.Np.inside.", "costheta", costh, xs::costheta_outer_p, "Emu", Emuon, xs::Emu_inner_p, "costhetamup", cos_mu_p, costhetamup_bins_costheta_Emu);
+      else if (cut_file==25) bin_name = get_xs_3d_bin_name("numuCC.Np.inside.", "pl", muon_p.Z(), xs::pl_outer_p, "pt", muon_p.Perp(), xs::pt_inner_p, "Kp", Kp, Kp_bins_pl_pt);
+      else bin_name = get_xs_3d_bin_name("numuCC.Np.inside.", "pl", muon_p.Z(), xs::pl_outer_p, "pt", muon_p.Perp(), xs::pt_inner_p, "costhetamup", cos_mu_p, costhetamup_bins_pl_pt);   // 26
+    }
+    auto it = map_cut_xs_bin.find(bin_name);
+    if (it != map_cut_xs_bin.end()) return it->second;
+    std::cout << "get_xs_signal_no: no bin " << bin_name << " in the xs bin file!" << std::endl;
+    return -1;
+  }
 
   for (auto it = map_cut_xs_bin.begin(); it != map_cut_xs_bin.end(); it++){
     const TString& cut_name = it->first;
@@ -1258,6 +2237,73 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
   return -1;
 }
 
+// Index of the bin of value for the inner bin edges e1 < ... < en: 0 for value <= e1, k for ek < value <= e(k+1),
+// n for value > en (the same convention as get_xs_bin_name).
+int LEEana::get_bin_index(double value, const std::vector<double>& edges){
+  int index = 0;
+  while (index < (int)edges.size() && value > edges.at(index)) index++;
+  return index;
+}
+
+// Flattened index of a double-differential bin: the bins of all lower slices, then the bin of value within its slice
+// (slices from the inner edges slice_edges, bins in slice k from the inner edges bin_edges[k]).
+int LEEana::get_2d_bin_index(double slice_value, const std::vector<double>& slice_edges, double value, const std::vector<std::vector<double>>& bin_edges){
+  int slice = get_bin_index(slice_value, slice_edges);
+  int index = 0;
+  for (int k=0; k<slice; k++) index += bin_edges.at(k).size() + 1;
+  return index + get_bin_index(value, bin_edges.at(slice));
+}
+
+// Flattened index of a triple-differential bin: outer slices (outer_edges), inner slices within outer slice k
+// (inner_edges[k]), bins within each inner slice (bin_edges[outer][inner]).
+int LEEana::get_3d_bin_index(double outer_value, const std::vector<double>& outer_edges, double inner_value, const std::vector<std::vector<double>>& inner_edges, double value, const std::vector<std::vector<std::vector<double>>>& bin_edges){
+  int outer = get_bin_index(outer_value, outer_edges);
+  int index = 0;
+  for (int k=0; k<outer; k++)
+    for (size_t l=0; l<bin_edges.at(k).size(); l++) index += bin_edges.at(k).at(l).size() + 1;
+  return index + get_2d_bin_index(inner_value, inner_edges.at(outer), value, bin_edges.at(outer));
+}
+
+// Name of the bin of value for the inner bin edges e1 < ... < en: prefix + ".le.e1" (value <= e1),
+// ".le.e(k+1).gt.ek" (ek < value <= e(k+1)) or ".gt.en" (value > en). Just prefix without edges (a single bin).
+TString LEEana::get_xs_bin_name(TString prefix, double value, const std::vector<double>& edges){
+  if (edges.empty()) return prefix;
+  if (value <= edges.front()) return prefix + Form(".le.%g", edges.front());
+  for (size_t k=1; k<edges.size(); k++){
+    if (value <= edges.at(k)) return prefix + Form(".le.%g.gt.%g", edges.at(k), edges.at(k-1));
+  }
+  return prefix + Form(".gt.%g", edges.back());
+}
+
+// Name of a double-differential bin: the slice of slice_value (inner slice edges slice_edges) followed by the bin of value
+// within that slice (inner edges bin_edges[slice index]), e.g. prefix + "costheta.le.0.3.gt.0" + ".Emu.le.300.gt.250".
+TString LEEana::get_xs_2d_bin_name(TString prefix, TString slice_var, double slice_value, const std::vector<double>& slice_edges, TString var, double value, const std::vector<std::vector<double>>& bin_edges){
+  TString slice_name = get_xs_bin_name(prefix + slice_var, slice_value, slice_edges);
+  return get_xs_bin_name(slice_name + "." + var, value, bin_edges.at(get_bin_index(slice_value, slice_edges)));
+}
+
+// Name of a triple-differential bin: outer slice, inner slice (inner_edges[outer]), bin, e.g.
+// prefix + "Eavail.le.75" + ".costheta.le.0.5.gt.0" + ".Emu.le.450.gt.350".
+TString LEEana::get_xs_3d_bin_name(TString prefix, TString outer_var, double outer_value, const std::vector<double>& outer_edges, TString inner_var, double inner_value, const std::vector<std::vector<double>>& inner_edges, TString var, double value, const std::vector<std::vector<std::vector<double>>>& bin_edges){
+  int outer = get_bin_index(outer_value, outer_edges);
+  TString outer_name = get_xs_bin_name(prefix + outer_var, outer_value, outer_edges);
+  return get_xs_2d_bin_name(outer_name + ".", inner_var, inner_value, inner_edges.at(outer), var, value, bin_edges.at(outer));
+}
+
+// Direction of reco particle index, from its end points, pointing away from the reco neutrino vertex.
+TVector3 LEEana::get_reco_proton_dir(PFevalInfo& pfeval, int index){
+  TVector3 p_start(pfeval.reco_startXYZT[index][0], pfeval.reco_startXYZT[index][1], pfeval.reco_startXYZT[index][2]);
+  TVector3 p_end(pfeval.reco_endXYZT[index][0], pfeval.reco_endXYZT[index][1], pfeval.reco_endXYZT[index][2]);
+  TVector3 vtx(pfeval.reco_nuvtxX, pfeval.reco_nuvtxY, pfeval.reco_nuvtxZ);
+  return ((p_end-vtx).Mag() >= (p_start-vtx).Mag()) ? p_end-p_start : p_start-p_end;
+}
+
+// Cosine of the opening angle between the reco muon (reco_muonMomentum) and reco particle index (get_reco_proton_dir).
+double LEEana::get_reco_cos_mu_p(PFevalInfo& pfeval, int index){
+  TVector3 mu_dir(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2]);
+  return get_reco_proton_dir(pfeval, index).Unit().Dot(mu_dir.Unit());
+}
+
 // Event-level quantities used by get_cut_pass that do not depend on the channel or add_cut.
 // Fill once per event (after reading the entry) and pass to get_cut_pass for every histogram of that event.
 void LEEana::fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
@@ -1279,6 +2325,8 @@ void LEEana::fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& e
   bool& flag_0p = info.flag_0p;
   bool& flag_cc_pi0 = info.flag_cc_pi0;
   bool& flag_FC = info.flag_FC;
+  bool& flag_FC_lepton = info.flag_FC_lepton;
+  bool& flag_FC_hadron = info.flag_FC_hadron;
   TLorentzVector muonMomentum;
   int& costheta_bin = info.costheta_bin;
   int& Enu_bin = info.Enu_bin;
@@ -1466,6 +2514,11 @@ void LEEana::fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& e
 
   flag_cc_pi0 = is_cc_pi0(kine, flag_data);
   flag_FC = is_FC(eval);
+  // lepton FC/PC = muon energy from range/MCS with the one-sided 5% method (kine_reco_Enu_new3_5); hadron FC/PC from the
+  // containment of the other particles (always FC in FC events)
+  std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval, eval, 3, 0.05);
+  flag_FC_lepton = std::get<0>(result_part_FC);
+  flag_FC_hadron = std::get<1>(result_part_FC);
 
   muonMomentum = TLorentzVector(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2], pfeval.reco_muonMomentum[3]);
 
@@ -1525,20 +2578,30 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
   std::string ch_name_string(ch_name.Data());
   std::string sequence_to_find = "numuCC_part_bdt";  
   size_t pos = ch_name_string.find(sequence_to_find);
-  std::string sequence_to_find_FC = "_FC";
-  std::string sequence_to_find_PC = "_PC";
-  size_t posFC = ch_name_string.find(sequence_to_find_FC);
-  size_t posPC = ch_name_string.find(sequence_to_find_PC);
-  bool flag_allow_FC=true;
-  bool flag_allow_PC=true;
+  // optional FC/PC split, given as the last "_" token of the channel name (removed before matching the name):
+  //   _FC / _PC                              event FC/PC (match_isFC)
+  //   _LFC / _LPC                            lepton: muon energy from range / MCS (flag_FC_lepton)
+  //   _HFC / _HPC                            hadronic system contained or not (flag_FC_hadron)
+  //   _LFCHFC / _LFCHPC / _LPCHFC / _LPCHPC  lepton and hadronic system
+  int require_FC = -1;       // -1: no requirement, 1: FC, 0: PC
+  int require_lepton = -1;
+  int require_hadron = -1;
   if(pos != std::string::npos){
-    if (posFC != std::string::npos) {
-        ch_name_string.erase(posFC);
-        flag_allow_PC=false;
-    }else if(posPC != std::string::npos){
-        ch_name_string.erase(posPC);
-        flag_allow_FC=false;
+    size_t posSuffix = ch_name_string.rfind('_');
+    std::string suffix = (posSuffix != std::string::npos) ? ch_name_string.substr(posSuffix+1) : "";
+    bool flag_suffix = true;
+    if(suffix == "FC") require_FC = 1;
+    else if(suffix == "PC") require_FC = 0;
+    else if(suffix == "LFC") require_lepton = 1;
+    else if(suffix == "LPC") require_lepton = 0;
+    else if(suffix == "HFC") require_hadron = 1;
+    else if(suffix == "HPC") require_hadron = 0;
+    else if(suffix.size() == 6 && (suffix.substr(0,3) == "LFC" || suffix.substr(0,3) == "LPC") && (suffix.substr(3) == "HFC" || suffix.substr(3) == "HPC")){
+      require_lepton = (suffix[1] == 'F');
+      require_hadron = (suffix[4] == 'F');
     }
+    else flag_suffix = false;
+    if(flag_suffix) ch_name_string.erase(posSuffix);
   }
 
   if(ch_name_string == "numuCC_part_bdt_Np_sig"     || ch_name_string == "numuCC_part_bdt_Np_bck"     || ch_name_string == "numuCC_part_bdt_Np_ext"     || ch_name_string == "numuCC_part_bdt_Np_dirt"     || ch_name_string == "numuCC_part_bdt_Np"
@@ -1563,8 +2626,9 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
        || ch_name_string == "numuCC_part_bdt_bck" || ch_name_string == "numuCC_part_bdt_dirt" || ch_name_string == "numuCC_part_bdt_0p_bck" || ch_name_string == "numuCC_part_bdt_0p_dirt") 
         && map_cuts_flag["XsnumuCCinFV"]==true) return false; 
 
-    if(eval.match_isFC==1 && flag_allow_FC==false) return false;
-    if(eval.match_isFC==0 && flag_allow_PC==false) return false;
+    if(require_FC >= 0 && eval.match_isFC != require_FC) return false;
+    if(require_lepton >= 0 && info.flag_FC_lepton != (require_lepton == 1)) return false;
+    if(require_hadron >= 0 && info.flag_FC_hadron != (require_hadron == 1)) return false;
 
     if(tagger.numu_score<0.9 || pfeval.reco_muonMomentum[3]<0) return false; 
 
@@ -1657,122 +2721,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
   }else if (ch_name == "CCpi0_nonueCC_PC_overlay" || ch_name == "BG_CCpi0_nonueCC_PC_ext" || ch_name == "BG_CCpi0_nonueCC_PC_dirt" || ch_name == "CCpi0_nonueCC_PC_bnb" || ch_name == "CCpi0_nonueCC_PC_numu2nueoverlay"){
     if (flag_numuCC && (!flag_FC) && flag_cc_pi0 && (!flag_nueCC) ) return true;
     else return false;
- // Janet's requests: <600 MeV numuCC PC, FC for three variables = 6 obs channels
-  }else if (ch_name == "numuCC_600MeV_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_600MeV_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_600MeV_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_600MeV_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC && flag_FC && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=0 && reco_Enu<600) return true;
-    else return false;
-  }else if (ch_name == "numuCC_600MeV_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_600MeV_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_600MeV_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_600MeV_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=0 && reco_Enu<600) return true;
-    else return false;
-  }else if (ch_name == "numuCC2_600MeV_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC2_600MeV_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC2_600MeV_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC2_600MeV_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC && flag_FC && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=0 && reco_Enu<600) return true;
-    else return false;
-  }else if (ch_name == "numuCC2_600MeV_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC2_600MeV_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC2_600MeV_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC2_600MeV_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=0 && reco_Enu<600) return true;
-    else return false;
-  }else if (ch_name == "numuCC3_600MeV_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC3_600MeV_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC3_600MeV_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC3_600MeV_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC && flag_FC && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=0 && reco_Enu<600) return true;
-    else return false;
-  }else if (ch_name == "numuCC3_600MeV_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC3_600MeV_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC3_600MeV_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC3_600MeV_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=0 && reco_Enu<600) return true;
-    else return false;
 
-  }else if (ch_name == "numuCC_600t1500MeV_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_600t1500MeV_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_600t1500MeV_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_600t1500MeV_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC && flag_FC && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=600 && reco_Enu<1500) return true;
-    else return false;
-  }else if (ch_name == "numuCC_600t1500MeV_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_600t1500MeV_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_600t1500MeV_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_600t1500MeV_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=600 && reco_Enu<1500) return true;
-    else return false;
-  }else if (ch_name == "numuCC2_600t1500MeV_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC2_600t1500MeV_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC2_600t1500MeV_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC2_600t1500MeV_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC && flag_FC && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=600 && reco_Enu<1500) return true;
-    else return false;
-  }else if (ch_name == "numuCC2_600t1500MeV_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC2_600t1500MeV_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC2_600t1500MeV_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC2_600t1500MeV_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=600 && reco_Enu<1500) return true;
-    else return false;
-  }else if (ch_name == "numuCC3_600t1500MeV_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC3_600t1500MeV_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC3_600t1500MeV_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC3_600t1500MeV_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC && flag_FC && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=600 && reco_Enu<1500) return true;
-    else return false;
-  }else if (ch_name == "numuCC3_600t1500MeV_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC3_600t1500MeV_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC3_600t1500MeV_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC3_600t1500MeV_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0) && reco_Enu>=600 && reco_Enu<1500) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC_extra_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_extra_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_extra_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_extra_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_tight && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC_extra_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_extra_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_extra_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_extra_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_tight && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC_extra2_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_extra2_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_extra2_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_extra2_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_tight && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC_extra2_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_extra2_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_extra2_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_extra2_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_tight && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC_lowEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_lowEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_lowEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_lowEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_1mu0p && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC_lowEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_lowEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_lowEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_lowEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_1mu0p && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC2_lowEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC2_lowEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC2_lowEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC2_lowEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_1mu0p && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC2_lowEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC2_lowEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC2_lowEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC2_lowEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_1mu0p && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC3_lowEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC3_lowEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC3_lowEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC3_lowEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_1mu0p && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC3_lowEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC3_lowEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC3_lowEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC3_lowEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_1mu0p && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC4_lowEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC4_lowEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC4_lowEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC4_lowEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_1mu0p && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC4_lowEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC4_lowEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC4_lowEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC4_lowEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_1mu0p && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC_highEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_highEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_highEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_highEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC_highEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_highEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_highEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_highEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC2_highEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC2_highEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC2_highEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC2_highEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC2_highEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC2_highEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC2_highEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC2_highEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC3_highEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC3_highEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC3_highEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC3_highEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC3_highEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC3_highEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC3_highEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC3_highEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
-  }else if (ch_name == "numuCC4_highEhad_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC4_highEhad_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC4_highEhad_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC4_highEhad_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC4_highEhad_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC4_highEhad_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC4_highEhad_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC4_highEhad_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_tight && (!flag_numuCC_1mu0p) && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-
- // cut-based numuCC FC/PC 2 obs channels
-  }else if (ch_name == "numuCC_cutbased_nopi0_nonueCC_FC_overlay" || ch_name == "BG_numuCC_cutbased_nopi0_nonueCC_FC_ext" || ch_name =="BG_numuCC_cutbased_nopi0_nonueCC_FC_dirt" || ch_name == "numuCC_cutbased_nopi0_nonueCC_FC_bnb"){
-    if (flag_numuCC_cutbased && flag_FC && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
-  }else if (ch_name == "numuCC_cutbased_nopi0_nonueCC_PC_overlay" || ch_name == "BG_numuCC_cutbased_nopi0_nonueCC_PC_ext" || ch_name =="BG_numuCC_cutbased_nopi0_nonueCC_PC_dirt" || ch_name == "numuCC_cutbased_nopi0_nonueCC_PC_bnb"){
-    if (flag_numuCC_cutbased && (!flag_FC) && (!flag_nueCC) && (!flag_cc_pi0)) return true;
-    else return false;
 
  // generic selection nu PC+FC 1 obs channel
 }else if (ch_name == "generic_nu_overlay" || ch_name == "BG_generic_nu_ext" || ch_name =="BG_generic_nu_dirt" || ch_name == "generic_nu_bnb" ||
