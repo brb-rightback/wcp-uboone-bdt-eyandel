@@ -62,6 +62,9 @@ namespace LEEana{
 
   double get_reco_Eproton(KineInfo& kine);
 
+  double get_true_Eavail(EvalInfo& eval, PFevalInfo& pfeval, bool useThreshold, bool useMass);
+  double get_truth_p_mu_cos(PFevalInfo& pfeval);
+
   double get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, bool flag_data, TString var_name, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
   double get_truth_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, TString var_name);
 
@@ -139,7 +142,7 @@ namespace LEEana{
   bool is_FC(EvalInfo& eval);
 
 
-  bool is_true_0p(PFevalInfo& pfeval);
+  bool is_true_0p(PFevalInfo& pfeval,double threshold);
 
   const std::vector<double>& get_proton_length_bins(){
     static const std::vector<double> proton_length_bins = {7.65721e-06, 0.003103, 0.0091284, 0.0176375, 0.0283912, 0.0412807, 0.0562127, 0.0731138, 0.0919263, 0.112603, 0.135101, 0.159272, 0.185117, 0.212807, 0.24211, 0.273135, 0.305831, 0.340111, 0.376083, 0.413583, 0.452689, 0.493293, 0.535259, 0.57868, 0.62366, 0.670316, 0.718547, 0.768222, 0.819402, 0.871993, 0.926046, 0.981485, 1.03822, 1.09633, 1.15586, 1.21689, 1.27932, 1.34303, 1.40806, 1.47449, 1.54236, 1.61158, 1.68204, 1.75379, 1.82687, 1.90134, 1.97711, 2.05409, 2.13233, 2.21187, 2.29275, 2.37489, 2.45822, 2.54277, 2.62858, 2.71569, 2.80402, 2.89352, 2.98421, 3.07612, 3.16929, 3.26367, 3.35917, 3.45585, 3.55372, 3.65281, 3.75307, 3.85444, 3.95696, 4.06063, 4.1655, 4.2715, 4.37859, 4.48679, 4.59613, 4.70662, 4.81823, 4.9309, 5.04466, 5.15953, 5.27553, 5.39262, 5.51076, 5.62996, 5.75025, 5.87164, 5.9941, 6.11758, 6.24211, 6.3677, 6.49437, 6.62208, 6.75079, 6.88053, 7.0113, 7.14313, 7.27598, 7.40982, 7.54466, 7.68052, 7.81742, 7.95524, 8.09388, 8.23334, 8.37365, 8.51481, 8.65683, 8.79972, 8.94348, 9.08814, 9.23371, 9.38019, 9.52759, 9.67593, 9.82522, 9.97548, 10.1267, 10.2789, 10.4321, 10.5864, 10.7416, 10.8979, 11.0553, 11.2137, 11.3732, 11.5338, 11.6953, 11.8576, 12.0207, 12.1846, 12.3493, 12.5147, 12.681, 12.8481, 13.016, 13.1847, 13.3543, 13.5248, 13.696, 13.8682, 14.0412, 14.2152, 14.39, 14.5657, 14.7423, 14.9198, 15.0983, 15.2777, 15.4581, 15.6394, 15.8217, 16.0049, 16.1887, 16.3733, 16.5586, 16.7447, 16.9315, 17.119, 17.3073, 17.4963, 17.6862, 17.8767, 18.0681, 18.2603, 18.4532, 18.6469, 18.8415, 19.0368, 19.233, 19.43, 19.6278, 19.8265, 20.026, 20.2264, 20.4276, 20.6297, 20.8325, 21.0361, 21.2403, 21.4452, 21.6507, 21.857, 22.064, 22.2716, 22.48, 22.689, 22.8988, 23.1093, 23.3205, 23.5325, 23.7451, 23.9585, 24.1727, 24.3876, 24.6033, 24.8197, 25.0368, 25.2548, 25.4735, 25.693, 25.9133, 26.1343, 26.3559, 26.5782, 26.801, 27.0245, 27.2487, 27.4735, 27.6989, 27.925, 28.1517, 28.3791, 28.6072, 28.8359, 29.0653, 29.2953, 29.5261, 29.7575, 29.9896, 30.2223, 30.4558, 30.69, 30.9249, 31.1604, 31.3967, 31.6337, 31.8714, 32.1096, 32.3484, 32.5878, 32.8278, 33.0684, 33.3095, 33.5513, 33.7937, 34.0367, 34.2803, 34.5245, 34.7693, 35.0147, 35.2608, 35.5075, 35.7548, 36.0027, 36.2513, 36.5005, 36.7503, 37.0008, 37.2519, 37.5037, 37.7562, 38.0092, 38.2628, 38.5169, 38.7716, 39.0268, 39.2825, 39.5388, 39.7957, 40.0531, 40.3111, 40.5697, 40.8288, 41.0885, 41.3487, 41.6096, 41.871, 42.1329, 42.3955, 42.6586, 42.9224, 43.1867, 43.4516, 43.7171, 43.9832, 44.2498, 44.5171, 44.7848, 45.0531, 45.3218, 45.5911, 45.8609, 46.1312, 46.402, 46.6733, 46.9451, 47.2175, 47.4904, 47.7638, 48.0377, 48.3122, 48.5872, 48.8627, 49.1388, 49.4154, 49.6925, 49.9702, 50.2485, 50.5272, 50.8065, 51.0864, 51.3668, 51.6476, 51.9288, 52.2105, 52.4926, 52.7752, 53.0582, 53.3417, 53.6256, 53.9099, 54.1947, 54.48, 54.7657, 55.0518, 55.3384, 55.6255, 55.913, 56.201, 56.4895, 56.7784, 57.0678, 57.3576, 57.6479, 57.9387, 58.23, 58.5217, 58.8139, 59.1066, 59.3997, 59.6934, 59.9875, 60.2821, 60.5771, 60.8727, 61.1687, 61.4653, 61.7623, 62.0598, 62.3578, 62.6563, 62.9553, 63.2548, 63.5548, 63.8553, 64.1563, 64.4578, 64.7598, 65.0623, 65.3653, 65.6688, 65.9728, 66.2772, 66.5819, 66.8871, 67.1926, 67.4985, 67.8048, 68.1114, 68.4185, 68.726, 69.0338, 69.342, 69.6507, 69.9597, 70.2691, 70.5789, 70.8891, 71.1998, 71.5108, 71.8222, 72.134, 72.4462, 72.7588, 73.0719, 73.3853, 73.6991, 74.0134, 74.328, 74.6431, 74.9585, 75.2744, 75.5907, 75.9074, 76.2246, 76.5421, 76.8601, 77.1784, 77.4972, 77.8164, 78.1361, 78.4561, 78.7766, 79.0975, 79.4189, 79.7406, 80.0628, 80.3854, 80.7085, 81.032, 81.3559, 81.6802, 82.0048, 82.3298, 82.6551, 82.9808, 83.3068, 83.6331, 83.9598, 84.2868, 84.6142, 84.9419, 85.27, 85.5984, 85.9271, 86.2562, 86.5857, 86.9155, 87.2456, 87.5761, 87.907, 88.2382, 88.5697, 88.9016, 89.2339, 89.5665, 89.8995, 90.2328, 90.5665, 90.9005, 91.2349, 91.5697, 91.9048, 92.2403, 92.5761, 92.9123, 93.2489, 93.5858, 93.9231, 94.2608, 94.5988, 94.9372, 95.276, 95.6151, 95.9546, 96.2945, 96.6347, 96.9753, 97.3163, 97.6577, 97.9994, 98.3415, 98.6839, 99.0265, 99.3695, 99.7128, 100.056, 100.4, 100.744, 101.089, 101.434, 101.779, 102.124, 102.47, 102.816, 103.162, 103.509, 103.856, 104.203, 104.55, 104.898, 105.246, 105.595, 105.943, 106.292, 106.642, 106.991, 107.341, 107.692, 108.042, 108.393, 108.744, 109.096, 109.448, 109.8, 110.153, 110.505, 110.858, 111.212, 111.566, 111.92, 112.274, 112.629, 112.984, 113.339, 113.695, 114.051, 114.407, 114.764, 115.121, 115.478, 115.836, 116.194, 116.552, 116.91, 117.269, 117.628, 117.987, 118.346, 118.706, 119.066, 119.426, 119.786, 120.147, 120.508, 120.869, 121.231, 121.593, 121.955, 122.317, 122.68, 123.043, 123.406, 123.769, 124.133, 124.497, 124.861, 125.225, 125.59, 125.955, 126.321, 126.686, 127.052, 127.418, 127.785, 128.151, 128.518, 128.885, 129.253, 129.621, 129.989, 130.357, 130.726, 131.094, 131.464, 131.833, 132.203, 132.573, 132.943, 133.314, 133.684, 134.055, 134.427, 134.798, 135.17, 135.542, 135.914, 136.287, 136.659, 137.032, 137.406, 137.779, 138.153, 138.526, 138.901, 139.275, 139.649, 140.024, 140.399, 140.775, 141.15, 141.526, 141.902, 142.278, 142.655, 143.031, 143.408, 143.785, 144.163, 144.54, 144.918, 145.296, 145.675, 146.053, 146.432, 146.811, 147.191, 147.57, 147.95, 148.33, 148.71, 149.091, 149.472, 149.853, 150.234, 150.616, 150.997, 151.379, 151.762, 152.144, 152.527, 152.91, 153.293, 153.676, 154.06, 154.444, 154.828, 155.212, 155.596, 155.981, 156.366, 156.751, 157.136, 157.521, 157.907, 158.293, 158.679, 159.065, 159.452, 159.838, 160.225, 160.612, 161.0, 161.387, 161.775, 162.163, 162.551, 162.939, 163.328, 163.717, 164.106, 164.495, 164.884, 165.274, 165.664, 166.054, 166.444, 166.835, 167.225, 167.616, 168.007, 168.399, 168.79, 169.182, 169.574, 169.966, 170.359, 170.751, 171.144, 171.537, 171.93, 172.324, 172.717, 173.111, 173.505, 173.899, 174.294, 174.688, 175.083, 175.478, 175.873, 176.268, 176.664, 177.06, 177.455, 177.851, 178.248, 178.644, 179.041, 179.437, 179.834, 180.231, 180.629, 181.026, 181.424, 181.822, 182.22, 182.618, 183.017, 183.415, 183.814, 184.213, 184.612, 185.011, 185.411, 185.811, 186.211, 186.611, 187.011, 187.412, 187.812, 188.213, 188.614, 189.015, 189.417, 189.818, 190.22, 190.622, 191.024, 191.427, 191.829, 192.232, 192.635, 193.038, 193.441, 193.845, 194.248, 194.652, 195.056, 195.46, 195.864, 196.268, 196.673, 197.077, 197.482, 197.887, 198.292, 198.698, 199.103, 199.509, 199.914, 200.32, 200.726, 201.133, 201.539, 201.946, 202.352, 202.759, 203.166, 203.574, 203.981, 204.389, 204.796, 205.204, 205.612, 206.02, 206.429, 206.837, 207.246, 207.655, 208.064, 208.473, 208.882, 209.292, 209.702, 210.111, 210.521, 210.932, 211.342, 211.752, 212.163, 212.574, 212.985, 213.396, 213.807, 214.219, 214.63, 215.042, 215.454, 215.865, 216.278, 216.69, 217.102, 217.515, 217.927, 218.34, 218.753, 219.166, 219.579, 219.993, 220.406, 220.82, 221.234, 221.648, 222.062, 222.476, 222.89, 223.305, 223.72, 224.134, 224.549, 224.964, 225.38, 225.795, 226.211, 226.626, 227.042, 227.458, 227.874, 228.29, 228.707, 229.123, 229.54, 229.957, 230.374, 230.791, 231.208, 231.626, 232.043, 232.461, 232.879, 233.297, 233.715, 234.133, 234.552, 234.97, 235.389, 235.807, 236.226, 236.645, 237.064, 237.484, 237.903, 238.323, 238.742, 239.162, 239.582, 240.002, 240.422, 240.842, 241.263, 241.683, 242.104, 242.525, 242.946, 243.367, 243.788, 244.209, 244.631, 245.052, 245.474, 245.896, 246.318, 246.74, 247.162, 247.585, 248.007, 248.43, 248.852, 249.275, 249.698, 250.121, 250.545, 250.968, 251.392, 251.815, 252.239, 252.663, 253.087, 253.511, 253.935, 254.36, 254.784, 255.209, 255.634, 256.059, 256.484, 256.909, 257.334, 257.759, 258.185, 258.611, 259.036, 259.462, 259.888, 260.314, 260.74, 261.166, 261.593, 262.019, 262.446, 262.873, 263.3, 263.727, 264.154, 264.581, 265.008, 265.436, 265.863, 266.291, 266.719, 267.147, 267.575, 268.003, 268.431, 268.86, 269.288, 269.717, 270.146, 270.574, 271.003, 271.432, 271.862, 272.291, 272.72, 273.15, 273.58, 274.01, 274.44, 274.87, 275.3, 275.73, 276.16, 276.591, 277.021, 277.452, 277.883, 278.314, 278.745, 279.176, 279.607, 280.038, 280.47, 280.901, 281.333, 281.764, 282.196, 282.628, 283.06, 283.492, 283.924, 284.356, 284.789, 285.221, 285.654, 286.086, 286.519, 286.952, 287.385, 287.818, 288.251, 288.684, 289.118, 289.551, 289.985, 290.418, 290.852, 291.286, 291.72, 292.154, 292.588, 293.022, 293.457, 293.891, 294.326, 294.76, 295.195, 295.63, 296.065, 296.5, 296.935, 297.37, 297.805, 298.241, 298.676, 299.112, 299.548, 299.983, 300.419, 300.855, 301.291, 301.728, 302.164, 302.6, 303.036, 303.473, 303.91, 304.346, 304.783, 305.22, 305.657, 306.094, 306.531, 306.968, 307.406, 307.843, 308.28, 308.718, 309.156, 309.594, 310.031, 310.469, 310.907, 311.346, 311.784, 312.222, 312.661, 313.099, 313.538, 313.976, 314.415, 314.854, 315.293, 315.732, 316.171, 316.61, 317.05, 317.489, 317.929, 318.368, 328.368, 338.368, 348.368, 358.368, 368.368, 378.368, 388.368, 398.368, 408.368, 418.368, 428.368, 438.368, 448.368, 458.368, 468.368, 478.368, 488.368, 498.368, 508.368, 518.3679999999999, 528.3679999999999, 538.3679999999999, 548.3679999999999, 558.3679999999999, 568.3679999999999, 578.3679999999999, 588.3679999999999, 598.3679999999999, 608.3679999999999, 618.3679999999999, 628.3679999999999, 638.3679999999999, 648.3679999999999, 658.3679999999999, 668.3679999999999, 678.3679999999999, 688.3679999999999, 698.3679999999999, 708.3679999999999, 718.3679999999999, 728.3679999999999, 738.3679999999999, 748.3679999999999, 758.3679999999999, 768.3679999999999, 778.3679999999999, 788.3679999999999, 798.3679999999999, 808.3679999999999, 818.3679999999999, 828.3679999999999, 838.3679999999999, 848.3679999999999, 858.3679999999999, 868.3679999999999, 878.3679999999999, 888.3679999999999, 898.3679999999999, 908.3679999999999, 918.3679999999999, 928.3679999999999, 938.3679999999999, 948.3679999999999, 958.3679999999999, 968.3679999999999, 978.3679999999999, 988.3679999999999, 998.3679999999999, 1008.3679999999999, 1018.3679999999999, 1028.368, 1038.368, 1048.368, 1058.368, 1068.368, 1078.368, 1088.368, 1098.368, 1108.368};
@@ -187,12 +190,70 @@ double LEEana::get_reco_Eproton(KineInfo& kine){
   return reco_Eproton;
 }
 
+double LEEana::get_true_Eavail(EvalInfo& eval, PFevalInfo& pfeval, bool useThreshold, bool useMass){
+  double Eavail=0;
+  //std::cout<<pfeval.truth_Ntrack;
+  for(int i=0; i<pfeval.truth_Ntrack; i++){
+    int pdgcode = pfeval.truth_pdg[i];
+    int mother = pfeval.truth_mother[i];
+    //if (mother!=0) { break; }
+    if(mother==0){
+      double dx = eval.truth_vtxX-pfeval.truth_startXYZT[i][0];
+      double dy = eval.truth_vtxY-pfeval.truth_startXYZT[i][1];
+      double dz = eval.truth_vtxZ-pfeval.truth_startXYZT[i][2];
+      double vtx_diff = sqrt( dx*dx + dy*dy + dz*dz );
+      if(vtx_diff>13.25){ continue; }//catches cases with two nu
+      if( (eval.truth_nuTime*1000-pfeval.truth_startXYZT[i][3])>0.01){ continue; }//catches cases with two n
 
-bool LEEana::is_true_0p(PFevalInfo& pfeval){
+      if( abs(pdgcode)==2212 && 1*(pfeval.truth_startMomentum[i][3]*1000-938.27208816)<35 && useThreshold) continue;//below threshold porton, reject if using threshold
+      else if( abs(pdgcode)==211 && pfeval.truth_startMomentum[i][3]*1000-139.57039<10 && useThreshold) continue;//below threshold pion, reject if using threshold
+      else if( abs(pdgcode)==2212 ) Eavail+=1*(pfeval.truth_startMomentum[i][3]*1000-938.27208816)+useMass*8.36; //proton KE only
+      else if(abs(pdgcode)==2112 ) continue; //primary neutron
+      else if( abs(pdgcode)==13 && abs(eval.truth_nuPdg)==14 ) continue; //primary muon from numu
+      else if( abs(pdgcode)==11 && abs(eval.truth_nuPdg)==12 ) continue; //primary e from nue
+      else if( abs(pdgcode)==15 && abs(eval.truth_nuPdg)==16 ) continue; //primary tau from nutau
+      else if( abs(pdgcode)==12 || abs(pdgcode)==14 || abs(pdgcode)==16 ) continue; //primary nu
+      else if( abs(pdgcode)>3000 && abs(pdgcode)<4000 ) continue; //strange baryon
+      else if( abs(pdgcode)==211 ) Eavail+=pfeval.truth_startMomentum[i][3]*1000-139.57039+useMass*139.57039;//pion, KE only
+      else if (abs(pdgcode)<10000 ) Eavail+=pfeval.truth_startMomentum[i][3]*1000;//everything else add all energy
+    }
+  }
+  //std::cout<<"  "<<Eavail<<std::endl; 
+  return Eavail;
+}
+
+double LEEana::get_truth_p_mu_cos(PFevalInfo& pfeval){
+    double protonMomentum0 = -1000;
+    double protonMomentum1 = -1000;
+    double protonMomentum2 = -1000;
+    double protonMomentum3 = -1000;
+    double Ep=0;
     for(size_t i=0; i<pfeval.truth_Ntrack; i++){
       if(pfeval.truth_mother[i] != 0) continue;
       if(pfeval.truth_pdg[i] != 2212) continue;
-      if(pfeval.truth_startMomentum[i][3] - 0.938272 < 0.035) continue; //Erin: CHANGE, no proton threshold
+      if(pfeval.truth_startMomentum[i][3] < Ep) continue;
+      protonMomentum0 = pfeval.truth_startMomentum[i][0];
+      protonMomentum1 = pfeval.truth_startMomentum[i][1];
+      protonMomentum2 = pfeval.truth_startMomentum[i][2];
+      protonMomentum3 = pfeval.truth_startMomentum[i][3];
+    }
+
+   if (protonMomentum3>0 && pfeval.truth_muonMomentum[3]>0){
+      double AdotB = protonMomentum0*pfeval.truth_muonMomentum[0]+protonMomentum1*pfeval.truth_muonMomentum[1]+protonMomentum2*pfeval.truth_muonMomentum[2];
+      double magA = sqrt(protonMomentum0*protonMomentum0+protonMomentum1*protonMomentum1+protonMomentum2*protonMomentum2);
+      double magB = sqrt(pfeval.truth_muonMomentum[0]*pfeval.truth_muonMomentum[0]+pfeval.truth_muonMomentum[1]*pfeval.truth_muonMomentum[1]+pfeval.truth_muonMomentum[2]*pfeval.truth_muonMomentum[2]);
+      double p_mu_angle = AdotB/(magA*magB);
+      return p_mu_angle;
+    }
+    return -1000;
+
+}
+
+bool LEEana::is_true_0p(PFevalInfo& pfeval,double threshold=0.035){
+    for(size_t i=0; i<pfeval.truth_Ntrack; i++){
+      if(pfeval.truth_mother[i] != 0) continue;
+      if(pfeval.truth_pdg[i] != 2212) continue;
+      if(pfeval.truth_startMomentum[i][3] - 0.938272 < threshold) continue; //Erin: CHANGE, no proton threshold
       return false;
     }
   return true;
@@ -868,6 +929,56 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     TString tag = var_name; tag.ReplaceAll("KE_muon_new","");
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,TString(tag(0,1)).Atoi(),TString(tag(2,tag.Length()-2)).Atof()/100.);
     return get_muon_energy_new(pfeval, std::get<0>(result_part_FC), true, true);
+  }else if (var_name == "Ehadron_new"
+         || var_name == "Ehadron_new2_5" || var_name == "Ehadron_new2_10" || var_name == "Ehadron_new2_15" || var_name == "Ehadron_new2_20"
+         || var_name == "Ehadron_new3_5" || var_name == "Ehadron_new3_10" || var_name == "Ehadron_new3_15" || var_name == "Ehadron_new3_20"
+         || var_name == "Ehadron_new3_5_drop10_95" || var_name == "Ehadron_new3_5_drop15_90" || var_name == "Ehadron_new3_5_drop15_95" || var_name == "Ehadron_new3_5_drop30_95"){
+    // hadronic energy of the matching kine_reco_Enu_new* variable: that Enu minus the total energy (KE + mass) of the
+    // muon, with the muon energy chosen the same way (range or MCS for the same method and threshold)
+    if (pfeval.reco_muonMomentum[3]<=0) return -1000;
+    TString enu_name = var_name; enu_name.ReplaceAll("Ehadron_new","kine_reco_Enu_new");
+    TString tag = var_name; tag.ReplaceAll("Ehadron_new","");     // e.g. "", "3_5", "3_5_drop15_95"
+    int method = 0;
+    double threshold = 0.05;
+    if (tag.Length()>0){
+      method = TString(tag(0,1)).Atoi();
+      TString thr = tag(2,tag.Length()-2);
+      if (thr.Index("_")>=0) thr = thr(0,thr.Index("_"));
+      threshold = thr.Atof()/100.;
+    }
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,method,threshold);
+    double E_muon = get_muon_energy_new(pfeval, std::get<0>(result_part_FC), false, true);   // total energy, MeV
+    return get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern) - E_muon;
+  }else if (var_name == "Eavail"){
+    // available energy: Enu without the added masses/binding energy (kine_reco_add_energy) and without the muon KE
+    double Emu = pfeval.reco_muonMomentum[3]*1000-105.6583755;
+    if (pfeval.reco_muonMomentum[3]<=0) Emu=0;
+    double Enu = get_reco_Enu_corr(kine, flag_data);
+    double Eadd = kine.kine_reco_add_energy;
+    double Eavail = Enu - Eadd - Emu;
+    if (Eavail<0) return -1000; //check for any odd cases
+    return Eavail;
+  }else if (var_name == "Eavail_new"
+         || var_name == "Eavail_new2_5" || var_name == "Eavail_new2_10" || var_name == "Eavail_new2_15" || var_name == "Eavail_new2_20"
+         || var_name == "Eavail_new3_5" || var_name == "Eavail_new3_10" || var_name == "Eavail_new3_15" || var_name == "Eavail_new3_20"
+         || var_name == "Eavail_new3_5_drop10_95" || var_name == "Eavail_new3_5_drop15_90" || var_name == "Eavail_new3_5_drop15_95" || var_name == "Eavail_new3_5_drop30_95"){
+    // available energy of the matching kine_reco_Enu_new* variable: that Enu minus kine_reco_add_energy (masses and
+    // binding energy) and minus the muon KE, with the muon energy chosen the same way (range or MCS for the same method and threshold)
+    TString enu_name = var_name; enu_name.ReplaceAll("Eavail_new","kine_reco_Enu_new");
+    TString tag = var_name; tag.ReplaceAll("Eavail_new","");      // e.g. "", "3_5", "3_5_drop15_95"
+    int method = 0;
+    double threshold = 0.05;
+    if (tag.Length()>0){
+      method = TString(tag(0,1)).Atoi();
+      TString thr = tag(2,tag.Length()-2);
+      if (thr.Index("_")>=0) thr = thr(0,thr.Index("_"));
+      threshold = thr.Atof()/100.;
+    }
+    std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,method,threshold);
+    double KE_muon = get_muon_energy_new(pfeval, std::get<0>(result_part_FC), true, true);   // KE, MeV (0 without a muon)
+    double Eavail = get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern) - kine.kine_reco_add_energy - KE_muon;
+    if (Eavail<0) return -1000; //check for any odd cases
+    return Eavail;
 
   }else if(var_name == "all_veto_score"){
     return tagger.all_veto_score;

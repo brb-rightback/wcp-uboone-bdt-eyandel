@@ -61,13 +61,13 @@ void LEEana::set_analysis_branch_status(AnalysisTrees& trees, bool flag_data){
     "stm_STM", "stm_FullDead", "stm_clusterlength", "run", "event"};
   static const std::vector<std::string> eval_truth_branches = {
     "weight_spline", "weight_cv", "weight_lee", "truth_isCC", "truth_nuPdg", "truth_vtxInside", "truth_nuEnergy",
-    "truth_energyInside", "truth_vtxX", "truth_vtxY", "truth_vtxZ", "match_completeness_energy"};
+    "truth_energyInside", "truth_vtxX", "truth_vtxY", "truth_vtxZ", "truth_nuTime", "match_completeness_energy"};
   static const std::vector<std::string> pfeval_branches = {
     "run", "reco_nuvtxX", "reco_nuvtxY", "reco_nuvtxZ", "reco_muonMomentum", "reco_showerKE", "reco_larpid_pdg",
     "reco_Ntrack", "reco_id", "reco_pdg", "reco_mother", "reco_startXYZT", "reco_endXYZT", "reco_startMomentum",
     "mcs_emu_MCS", "mcs_emu_tracklen"};
   static const std::vector<std::string> pfeval_truth_branches = {
-    "truth_muonMomentum", "truth_Ntrack", "truth_pdg", "truth_mother", "truth_startMomentum", "truth_NCDelta",
+    "truth_muonMomentum", "truth_Ntrack", "truth_pdg", "truth_mother", "truth_startXYZT", "truth_startMomentum", "truth_NCDelta",
     "truth_NprimPio", "truth_nuScatType", "truth_nu_momentum", "mcflux_ntype", "mcflux_dk2gen", "mcflux_gen2vtx"};
   static const std::vector<std::string> kine_branches = {
     "kine_reco_Enu", "kine_energy_particle", "kine_particle_type", "kine_energy_info", "kine_reco_add_energy",
