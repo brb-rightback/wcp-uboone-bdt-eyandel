@@ -1,0 +1,24 @@
+1       15    numuCC.0p.inside.pl.le.-150                                                                 13101.6         0.022  0.011
+2       15    numuCC.0p.inside.pl.le.0.gt.-150                                                            6550.82         0.022  0.011
+3       15    numuCC.0p.inside.pl.le.75.gt.0                                                              3275.41         0.022  0.011
+4       15    numuCC.0p.inside.pl.le.150.gt.75                                                            3275.41         0.022  0.011
+5       15    numuCC.0p.inside.pl.le.300.gt.150                                                           6550.82         0.022  0.011
+6       15    numuCC.0p.inside.pl.le.450.gt.300                                                           6550.82         0.022  0.011
+7       15    numuCC.0p.inside.pl.le.625.gt.450                                                           7642.63         0.022  0.011
+8       15    numuCC.0p.inside.pl.le.850.gt.625                                                           9826.24         0.022  0.011
+9       15    numuCC.0p.inside.pl.le.1200.gt.850                                                          15285.3         0.022  0.011
+10      15    numuCC.0p.inside.pl.le.1700.gt.1200                                                         21836.1         0.022  0.011
+11      15    numuCC.0p.inside.pl.gt.1700                                                                 43672.2         0.022  0.011
+12      15    numuCC.Np.inside.pl.le.-150                                                                 13101.6         0.022  0.011
+13      15    numuCC.Np.inside.pl.le.0.gt.-150                                                            6550.82         0.022  0.011
+14      15    numuCC.Np.inside.pl.le.75.gt.0                                                              3275.41         0.022  0.011
+15      15    numuCC.Np.inside.pl.le.150.gt.75                                                            3275.41         0.022  0.011
+16      15    numuCC.Np.inside.pl.le.300.gt.150                                                           6550.82         0.022  0.011
+17      15    numuCC.Np.inside.pl.le.450.gt.300                                                           6550.82         0.022  0.011
+18      15    numuCC.Np.inside.pl.le.625.gt.450                                                           7642.63         0.022  0.011
+19      15    numuCC.Np.inside.pl.le.850.gt.625                                                           9826.24         0.022  0.011
+20      15    numuCC.Np.inside.pl.le.1200.gt.850                                                          15285.3         0.022  0.011
+21      15    numuCC.Np.inside.pl.le.1700.gt.1200                                                         21836.1         0.022  0.011
+22      15    numuCC.Np.inside.pl.gt.1700                                                                 43672.2         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err

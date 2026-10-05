@@ -1,0 +1,145 @@
+numuCC_part_bdt_Np_LFCHFC                 Eavail_costheta_Emu_bin_t         83      0       83              1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig_LFCHFC             Eavail_costheta_Emu_bin_t         83      0       83              1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck_LFCHFC             Eavail_costheta_Emu_bin_t         83      0       83              1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt_LFCHFC            Eavail_costheta_Emu_bin_t         83      0       83              1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext_LFCHFC             Eavail_costheta_Emu_bin_t         83      0       83              1       0               0       0               0               49              3       unity               0
+
+numuCC_part_bdt_Np_LFCHPC                 KE_muon_new3_5                    7       0       1400            2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig_LFCHPC             KE_muon_new3_5                    7       0       1400            2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck_LFCHPC             KE_muon_new3_5                    7       0       1400            2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt_LFCHPC            KE_muon_new3_5                    7       0       1400            2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext_LFCHPC             KE_muon_new3_5                    7       0       1400            2       0               0       0               0               50              3       unity               0
+
+numuCC_part_bdt_Np_LPCHFC                 Eavail_costheta_Emu_bin_t         83      0       83              3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig_LPCHFC             Eavail_costheta_Emu_bin_t         83      0       83              3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck_LPCHFC             Eavail_costheta_Emu_bin_t         83      0       83              3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt_LPCHFC            Eavail_costheta_Emu_bin_t         83      0       83              3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext_LPCHFC             Eavail_costheta_Emu_bin_t         83      0       83              3       0               0       0               0               51              3       unity               0
+
+numuCC_part_bdt_Np_LPCHPC                 Eavail_costheta_Emu_bin_t         83      0       83              4       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig_LPCHPC             Eavail_costheta_Emu_bin_t         83      0       83              4       1               1       0               0               7               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck_LPCHPC             Eavail_costheta_Emu_bin_t         83      0       83              4       1               1       0               0               8               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt_LPCHPC            Eavail_costheta_Emu_bin_t         83      0       83              4       0               0       0.5             0               8               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext_LPCHPC             Eavail_costheta_Emu_bin_t         83      0       83              4       0               0       0               0               52              3       unity               0
+
+numuCC_part_bdt_PorLNp_LFCHFC             Eavail_costheta_Emu_bin_t         55      0       55              5       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig_LFCHFC         Eavail_costheta_Emu_bin_t         55      0       55              5       1               1       0               0               9               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck_LFCHFC         Eavail_costheta_Emu_bin_t         55      0       55              5       1               1       0               0               10              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt_LFCHFC        Eavail_costheta_Emu_bin_t         55      0       55              5       0               0       0.5             0               10              4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext_LFCHFC         Eavail_costheta_Emu_bin_t         55      0       55              5       0               0       0               0               53              3       unity               0
+
+numuCC_part_bdt_PorLNp_LFCHPC             KE_muon_new3_5                    6       0       1200            6       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig_LFCHPC         KE_muon_new3_5                    6       0       1200            6       1               1       0               0               11              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck_LFCHPC         KE_muon_new3_5                    6       0       1200            6       1               1       0               0               12              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt_LFCHPC        KE_muon_new3_5                    6       0       1200            6       0               0       0.5             0               12              4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext_LFCHPC         KE_muon_new3_5                    6       0       1200            6       0               0       0               0               54              3       unity               0
+
+numuCC_part_bdt_PorLNp_LPCHFC             KE_muon_new3_5                    13      0       1950            7       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig_LPCHFC         KE_muon_new3_5                    13      0       1950            7       1               1       0               0               13              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck_LPCHFC         KE_muon_new3_5                    13      0       1950            7       1               1       0               0               14              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt_LPCHFC        KE_muon_new3_5                    13      0       1950            7       0               0       0.5             0               14              4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext_LPCHFC         KE_muon_new3_5                    13      0       1950            7       0               0       0               0               55              3       unity               0
+
+numuCC_part_bdt_PorLNp_LPCHPC             KE_muon_new3_5                    10      0       2000            8       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig_LPCHPC         KE_muon_new3_5                    10      0       2000            8       1               1       0               0               15              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck_LPCHPC         KE_muon_new3_5                    10      0       2000            8       1               1       0               0               16              2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt_LPCHPC        KE_muon_new3_5                    10      0       2000            8       0               0       0.5             0               16              4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext_LPCHPC         KE_muon_new3_5                    10      0       2000            8       0               0       0               0               56              3       unity               0
+
+numuCC_part_bdt_Scat0p_LFCHFC             KE_muon_new3_5                    9       0       900             9       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Scat0p_sig_LFCHFC         KE_muon_new3_5                    9       0       900             9       1               1       0               0               17              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_bck_LFCHFC         KE_muon_new3_5                    9       0       900             9       1               1       0               0               18              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_dirt_LFCHFC        KE_muon_new3_5                    9       0       900             9       0               0       0.5             0               18              4       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_ext_LFCHFC         KE_muon_new3_5                    9       0       900             9       0               0       0               0               57              3       unity               0
+
+numuCC_part_bdt_Scat0p_LFCHPC             KE_muon_new3_5                    3       0       450             10      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Scat0p_sig_LFCHPC         KE_muon_new3_5                    3       0       450             10      1               1       0               0               19              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_bck_LFCHPC         KE_muon_new3_5                    3       0       450             10      1               1       0               0               20              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_dirt_LFCHPC        KE_muon_new3_5                    3       0       450             10      0               0       0.5             0               20              4       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_ext_LFCHPC         KE_muon_new3_5                    3       0       450             10      0               0       0               0               58              3       unity               0
+
+numuCC_part_bdt_Scat0p_LPCHFC             KE_muon_new3_5                    5       0       1500            11      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Scat0p_sig_LPCHFC         KE_muon_new3_5                    5       0       1500            11      1               1       0               0               21              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_bck_LPCHFC         KE_muon_new3_5                    5       0       1500            11      1               1       0               0               22              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_dirt_LPCHFC        KE_muon_new3_5                    5       0       1500            11      0               0       0.5             0               22              4       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_ext_LPCHFC         KE_muon_new3_5                    5       0       1500            11      0               0       0               0               59              3       unity               0
+
+numuCC_part_bdt_Scat0p_LPCHPC             KE_muon_new3_5                    5       0       1750            12      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Scat0p_sig_LPCHPC         KE_muon_new3_5                    5       0       1750            12      1               1       0               0               23              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_bck_LPCHPC         KE_muon_new3_5                    5       0       1750            12      1               1       0               0               24              2       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_dirt_LPCHPC        KE_muon_new3_5                    5       0       1750            12      0               0       0.5             0               24              4       cv_spline_rootino   0
+numuCC_part_bdt_Scat0p_ext_LPCHPC         KE_muon_new3_5                    5       0       1750            12      0               0       0               0               60              3       unity               0
+
+numuCC_part_bdt_Act0p_LFCHFC              KE_muon_new3_5                    12      0       1200            13      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Act0p_sig_LFCHFC          KE_muon_new3_5                    12      0       1200            13      1               1       0               0               25              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_bck_LFCHFC          KE_muon_new3_5                    12      0       1200            13      1               1       0               0               26              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_dirt_LFCHFC         KE_muon_new3_5                    12      0       1200            13      0               0       0.5             0               26              4       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_ext_LFCHFC          KE_muon_new3_5                    12      0       1200            13      0               0       0               0               61              3       unity               0
+
+numuCC_part_bdt_Act0p_LFCHPC              KE_muon_new3_5                    2       0       700             14      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Act0p_sig_LFCHPC          KE_muon_new3_5                    2       0       700             14      1               1       0               0               27              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_bck_LFCHPC          KE_muon_new3_5                    2       0       700             14      1               1       0               0               28              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_dirt_LFCHPC         KE_muon_new3_5                    2       0       700             14      0               0       0.5             0               28              4       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_ext_LFCHPC          KE_muon_new3_5                    2       0       700             14      0               0       0               0               62              3       unity               0
+
+numuCC_part_bdt_Act0p_LPCHFC              KE_muon_new3_5                    8       0       2000            15      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Act0p_sig_LPCHFC          KE_muon_new3_5                    8       0       2000            15      1               1       0               0               29              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_bck_LPCHFC          KE_muon_new3_5                    8       0       2000            15      1               1       0               0               30              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_dirt_LPCHFC         KE_muon_new3_5                    8       0       2000            15      0               0       0.5             0               30              4       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_ext_LPCHFC          KE_muon_new3_5                    8       0       2000            15      0               0       0               0               63              3       unity               0
+
+numuCC_part_bdt_Act0p_LPCHPC              KE_muon_new3_5                    10      0       2000            16      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Act0p_sig_LPCHPC          KE_muon_new3_5                    10      0       2000            16      1               1       0               0               31              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_bck_LPCHPC          KE_muon_new3_5                    10      0       2000            16      1               1       0               0               32              2       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_dirt_LPCHPC         KE_muon_new3_5                    10      0       2000            16      0               0       0.5             0               32              4       cv_spline_rootino   0
+numuCC_part_bdt_Act0p_ext_LPCHPC          KE_muon_new3_5                    10      0       2000            16      0               0       0               0               64              3       unity               0
+
+numuCC_part_bdt_Trk0p_LFCHFC              KE_muon_new3_5                    13      0       1300            17      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Trk0p_sig_LFCHFC          KE_muon_new3_5                    13      0       1300            17      1               1       0               0               33              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_bck_LFCHFC          KE_muon_new3_5                    13      0       1300            17      1               1       0               0               34              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_dirt_LFCHFC         KE_muon_new3_5                    13      0       1300            17      0               0       0.5             0               34              4       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_ext_LFCHFC          KE_muon_new3_5                    13      0       1300            17      0               0       0               0               65              3       unity               0
+
+numuCC_part_bdt_Trk0p_LFCHPC              KE_muon_new3_5                    2       0       700             18      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Trk0p_sig_LFCHPC          KE_muon_new3_5                    2       0       700             18      1               1       0               0               35              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_bck_LFCHPC          KE_muon_new3_5                    2       0       700             18      1               1       0               0               36              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_dirt_LFCHPC         KE_muon_new3_5                    2       0       700             18      0               0       0.5             0               36              4       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_ext_LFCHPC          KE_muon_new3_5                    2       0       700             18      0               0       0               0               66              3       unity               0
+
+numuCC_part_bdt_Trk0p_LPCHFC              KE_muon_new3_5                    13      0       1950            19      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Trk0p_sig_LPCHFC          KE_muon_new3_5                    13      0       1950            19      1               1       0               0               37              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_bck_LPCHFC          KE_muon_new3_5                    13      0       1950            19      1               1       0               0               38              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_dirt_LPCHFC         KE_muon_new3_5                    13      0       1950            19      0               0       0.5             0               38              4       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_ext_LPCHFC          KE_muon_new3_5                    13      0       1950            19      0               0       0               0               67              3       unity               0
+
+numuCC_part_bdt_Trk0p_LPCHPC              KE_muon_new3_5                    8       0       2000            20      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Trk0p_sig_LPCHPC          KE_muon_new3_5                    8       0       2000            20      1               1       0               0               39              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_bck_LPCHPC          KE_muon_new3_5                    8       0       2000            20      1               1       0               0               40              2       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_dirt_LPCHPC         KE_muon_new3_5                    8       0       2000            20      0               0       0.5             0               40              4       cv_spline_rootino   0
+numuCC_part_bdt_Trk0p_ext_LPCHPC          KE_muon_new3_5                    8       0       2000            20      0               0       0               0               68              3       unity               0
+
+numuCC_part_bdt_G0p_LFCHFC                Eavail_costheta_Emu_bin_t         55      0       55              21      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_G0p_sig_LFCHFC            Eavail_costheta_Emu_bin_t         55      0       55              21      1               1       0               0               41              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_bck_LFCHFC            Eavail_costheta_Emu_bin_t         55      0       55              21      1               1       0               0               42              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_dirt_LFCHFC           Eavail_costheta_Emu_bin_t         55      0       55              21      0               0       0.5             0               42              4       cv_spline_rootino   0
+numuCC_part_bdt_G0p_ext_LFCHFC            Eavail_costheta_Emu_bin_t         55      0       55              21      0               0       0               0               69              3       unity               0
+
+numuCC_part_bdt_G0p_LFCHPC                KE_muon_new3_5                    6       0       1200            22      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_G0p_sig_LFCHPC            KE_muon_new3_5                    6       0       1200            22      1               1       0               0               43              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_bck_LFCHPC            KE_muon_new3_5                    6       0       1200            22      1               1       0               0               44              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_dirt_LFCHPC           KE_muon_new3_5                    6       0       1200            22      0               0       0.5             0               44              4       cv_spline_rootino   0
+numuCC_part_bdt_G0p_ext_LFCHPC            KE_muon_new3_5                    6       0       1200            22      0               0       0               0               70              3       unity               0
+
+numuCC_part_bdt_G0p_LPCHFC                KE_muon_new3_5                    13      0       1950            23      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_G0p_sig_LPCHFC            KE_muon_new3_5                    13      0       1950            23      1               1       0               0               45              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_bck_LPCHFC            KE_muon_new3_5                    13      0       1950            23      1               1       0               0               46              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_dirt_LPCHFC           KE_muon_new3_5                    13      0       1950            23      0               0       0.5             0               46              4       cv_spline_rootino   0
+numuCC_part_bdt_G0p_ext_LPCHFC            KE_muon_new3_5                    13      0       1950            23      0               0       0               0               71              3       unity               0
+
+numuCC_part_bdt_G0p_LPCHPC                KE_muon_new3_5                    10      0       2000            24      0               0       0               0               0               5       unity               0
+numuCC_part_bdt_G0p_sig_LPCHPC            KE_muon_new3_5                    10      0       2000            24      1               1       0               0               47              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_bck_LPCHPC            KE_muon_new3_5                    10      0       2000            24      1               1       0               0               48              2       cv_spline_rootino   0
+numuCC_part_bdt_G0p_dirt_LPCHPC           KE_muon_new3_5                    10      0       2000            24      0               0       0.5             0               48              4       cv_spline_rootino   0
+numuCC_part_bdt_G0p_ext_LPCHPC            KE_muon_new3_5                    10      0       2000            24      0               0       0               0               72              3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

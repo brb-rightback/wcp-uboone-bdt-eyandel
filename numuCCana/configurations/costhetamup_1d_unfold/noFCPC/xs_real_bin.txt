@@ -1,0 +1,11 @@
+1       11    numuCC.0p.inside                                                                            43672.2         0.022  0.011
+2       11    numuCC.Np.inside.costhetamup.le.-0.6                                                        17468.9         0.022  0.011
+3       11    numuCC.Np.inside.costhetamup.le.-0.4.gt.-0.6                                                8734.43         0.022  0.011
+4       11    numuCC.Np.inside.costhetamup.le.-0.2.gt.-0.4                                                8734.43         0.022  0.011
+5       11    numuCC.Np.inside.costhetamup.le.0.gt.-0.2                                                   8734.43         0.022  0.011
+6       11    numuCC.Np.inside.costhetamup.le.0.2.gt.0                                                    8734.43         0.022  0.011
+7       11    numuCC.Np.inside.costhetamup.le.0.4.gt.0.2                                                  8734.43         0.022  0.011
+8       11    numuCC.Np.inside.costhetamup.le.0.6.gt.0.4                                                  8734.43         0.022  0.011
+9       11    numuCC.Np.inside.costhetamup.gt.0.6                                                         17468.9         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err
