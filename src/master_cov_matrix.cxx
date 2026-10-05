@@ -45,6 +45,8 @@ float leeweight(float Enu)
 
 LEEana::CovMatrix::CovMatrix(TString cov_filename, TString cv_filename, TString file_filename, TString rw_filename, TString time_filename){
   flag_osc = false;
+  flag_rootino = false;
+  rootino_pot_ratio = 1.0;
 
   //Erin
   //read in timing scaling file
@@ -154,6 +156,15 @@ LEEana::CovMatrix::CovMatrix(TString cov_filename, TString cv_filename, TString 
     if (bin_num == -1) break;
 
     map_ch_hist[ch_no] = std::make_tuple(name, var_name, bin_num, low_limit, high_limit, weight, obs_no, lee_strength);
+    if (weight.Contains("rootino")){ // apply the rootino fix in the systematics as well, with the ratio from the weight name
+      double ratio = get_rootino_ratio(weight);
+      if (flag_rootino && ratio != rootino_pot_ratio){
+        std::cout << "ERROR: channels in " << cov_filename << " use different rootino POT ratios (" << rootino_pot_ratio << " and " << ratio << ")" << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      flag_rootino = true;
+      rootino_pot_ratio = ratio;
+    }
     map_name_ch[name] = ch_no;
 
     map_ch_filetype[ch_no] = file_no;
@@ -1398,7 +1409,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;
-  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern;
+  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern, *T_glee = trees.T_glee;
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
 
   EvalInfo eval;
@@ -1409,6 +1420,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   SpaceInfo space;
   PandoraInfo pandora;
   LanternInfo lantern;
+  GleeInfo glee;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
@@ -1676,6 +1688,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
+  if(T_glee) set_tree_address(T_glee, glee);
 
   double total_pot = 0;
   for (Int_t i=0;i!=T_pot->GetEntries();i++){
@@ -1794,12 +1807,14 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     if(T_spacepoints) T_spacepoints->GetEntry(i);
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
+    if(T_glee) T_glee->GetEntry(i);
 
     std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > event_info;
     std::get<0>(event_info) = eval.weight_cv * eval.weight_spline;
+    if (flag_rootino) std::get<0>(event_info) *= get_rootino_weight(eval, glee, rootino_pot_ratio); // rootino bug fix, see get_rootino_weight
     std::get<1>(event_info) = leeweight(eval.truth_nuEnergy);
 
-    double reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
+    double reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
     std::get<0>(event_info) *= reweight;
 
     // event-level quantities for get_cut_pass, computed once per event
@@ -1942,7 +1957,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       }else if (option == "reweight"){
         std::get<2>(event_info).resize(1000);
         std::get<3>(event_info).push_back(1000);
-        if(!(flag_reweight)) reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(true), get_time_info_allruns());
+        if(!(flag_reweight)) reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(true), get_time_info_allruns());
         for (size_t j=0;j!=1000;j++){
           if(flag_reweight){
             if (eval.weight_cv>0 && reweight!=1){
@@ -1966,7 +1981,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
             std::get<2>(event_info).at(0) = 0;
           }
         }else{
-           reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(true) , get_time_info_allruns());
+           reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(true) , get_time_info_allruns());
            std::get<2>(event_info).at(0) = reweight-1;
         }
       }else if (option == "UBGenieFluxSmallUni"){
@@ -1985,7 +2000,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
         if(rw_type==3){
           std::get<2>(event_info).resize(acc_no+1000);
           std::get<3>(event_info).push_back(1000);
-          if(!(flag_reweight)) reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(true), get_time_info_allruns());
+          if(!(flag_reweight)) reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(true), get_time_info_allruns());
           for (size_t j=0;j!=1000;j++){
             if(flag_reweight){
               if (eval.weight_cv>0 && reweight!=1){
@@ -2009,7 +2024,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
               std::get<2>(event_info).at(acc_no) = 0;
             }
           }else{
-             reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(true), get_time_info_allruns());
+             reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(true), get_time_info_allruns());
              std::get<2>(event_info).at(acc_no) = reweight-1;
           }
           acc_no++;

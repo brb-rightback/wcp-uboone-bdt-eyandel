@@ -22,6 +22,7 @@
 #include "WCPLEEANA/space.h"
 #include "WCPLEEANA/pandora.h"
 #include "WCPLEEANA/lantern.h"
+#include "WCPLEEANA/glee.h"
 #include "WCPLEEANA/analysis_trees.h"
 
 namespace LEEana{
@@ -147,6 +148,8 @@ namespace LEEana{
     std::vector<float> get_spec_weight(LEEana::EvalInfo& eval, LEEana::PFevalInfo& pfeval);
 
     bool get_osc_flag(){return flag_osc;};
+    bool get_rootino_flag(){return flag_rootino;};
+    double get_rootino_ratio_cov(){return rootino_pot_ratio;};
     bool is_osc_channel(TString ch_name);
     double get_osc_weight(EvalInfo& eval, PFevalInfo& pfeval);
 
@@ -262,6 +265,8 @@ namespace LEEana{
 
     // Osc related
     bool flag_osc;
+    bool flag_rootino; // a channel uses a rootino weight, apply the rootino fix in the systematics too
+    double rootino_pot_ratio; // rootino POT ratio read from the rootino weight name (cv_spline_rootino_<ratio>)
     std::set<TString> osc_signal_ch_names;
     double osc_par_delta_m2_eV2;
     double osc_par_sin22theta_ee;

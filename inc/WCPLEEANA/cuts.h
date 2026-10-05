@@ -14,6 +14,7 @@
 #include "space.h"
 #include "pandora.h"
 #include "lantern.h"
+#include "glee.h"
 
 #include <map>
 #include <sstream>
@@ -99,7 +100,10 @@ namespace LEEana{
   void fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
   bool get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutEventInfo& info, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
   bool get_rw_cut_pass(TString cut, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine);
-  double get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool,  std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data=false);
+  // rootino bug fix factor (1 unless GTruth_ResNum==9), used by get_weight and the systematics
+  double get_rootino_ratio(TString weight_name);
+  double get_rootino_weight(EvalInfo& eval, GleeInfo& glee, double rootino_pot_ratio);
+  double get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, GleeInfo& glee, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool,  std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data=false);
   int get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bin, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine);
   // binning helpers of the cross-section measurements (truth: get_xs_signal_no, reco: the "*_bin" variables of get_kine_var)
   TString get_xs_bin_name(TString prefix, double value, const std::vector<double>& edges);
@@ -867,7 +871,33 @@ std::vector<double> LEEana::get_lantern_KE(LanternInfo& lantern, int pdg, double
 }
 
 
-double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data){
+// The rootino POT ratio is set by the weight name: cv_spline_rootino_<ratio>, <ratio> = (runs 1-5 POT)/(runs 4-5 POT).
+// Also accepts the squared (err2) form cv_spline_rootino_<ratio>_cv_spline_rootino_<ratio>, and the plain cv_spline_rootino (ratio 1).
+double LEEana::get_rootino_ratio(TString weight_name){
+  TString key = "cv_spline_rootino";
+  if (!weight_name.BeginsWith(key)) return 1.0;
+  TString rest = weight_name(key.Length(), weight_name.Length()-key.Length()); // "", "_1.25", "_1.25_cv_spline_rootino_1.25", "_cv_spline_rootino"
+  if (!rest.BeginsWith("_")) return 1.0;
+  rest = rest(1, rest.Length()-1);
+  Ssiz_t end = rest.Index("_");
+  TString token = (end==kNPOS) ? rest : TString(rest(0, end));
+  if (token == "cv") return 1.0; // plain cv_spline_rootino_cv_spline_rootino
+  if (!token.IsFloat()){
+    std::cout << "ERROR: could not read the rootino POT ratio from weight " << weight_name << std::endl;
+    exit(EXIT_FAILURE);
+  }
+  return token.Atof();
+}
+
+double LEEana::get_rootino_weight(EvalInfo& eval, GleeInfo& glee, double rootino_pot_ratio){
+  // rootino bug fix: events with GTruth_ResNum==9 are dropped before run 4a (run 18961)
+  // and the remaining ones are scaled up by rootino_pot_ratio = (runs 1-5 POT)/(runs 4-5 POT)
+  if (glee.GTruth_ResNum!=9) return 1.0;
+  if (eval.run < 18961) return 0.0;
+  return rootino_pot_ratio;
+}
+
+double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeval, KineInfo& kine, TaggerInfo& tagger, GleeInfo& glee, std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > > rw_info, std::map<int, std::tuple< double, double, double, double > > time_info, bool flag_data){
   double addtl_weight = 1.0;
 
   //Begin reweighting
@@ -918,6 +948,11 @@ double LEEana::get_weight(TString weight_name, EvalInfo& eval, PFevalInfo& pfeva
 
   if (weight_name == "cv_spline"){
     return addtl_weight*eval.weight_cv * eval.weight_spline;
+  //rootino bug fix weights, see get_rootino_weight
+  }else if (weight_name.BeginsWith("cv_spline_rootino")){
+    double rootino_weight = get_rootino_weight(eval, glee, get_rootino_ratio(weight_name));
+    if (weight_name.Index("_cv_spline_rootino") == kNPOS) return addtl_weight*eval.weight_cv * eval.weight_spline * rootino_weight;
+    return pow(addtl_weight*eval.weight_cv * eval.weight_spline * rootino_weight,2);
   //cex bug fix weights
   }else if (weight_name == "cv_spline_cexbugfix"){
     double ratio_weight = 1.0;

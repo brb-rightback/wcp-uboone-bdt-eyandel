@@ -15,6 +15,7 @@
 #include "WCPLEEANA/space.h"
 #include "WCPLEEANA/pandora.h"
 #include "WCPLEEANA/lantern.h"
+#include "WCPLEEANA/glee.h"
 
 using namespace std;
 using namespace LEEana;
@@ -39,7 +40,7 @@ int main( int argc, char** argv )
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;
-  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern;
+  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern, *T_glee = trees.T_glee;
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
 
   if (T_eval->GetBranch("weight_cv")) flag_data = false;
@@ -52,6 +53,7 @@ int main( int argc, char** argv )
   SpaceInfo space;
   PandoraInfo pandora;
   LanternInfo lantern;
+  GleeInfo glee;
 
 #include "init.txt"
 
@@ -68,6 +70,7 @@ int main( int argc, char** argv )
   if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
+  if(T_glee) set_tree_address(T_glee, glee);
 
   double total_pot = 0;
   for (Int_t i=0;i!=T_pot->GetEntries();i++){
@@ -171,6 +174,7 @@ int main( int argc, char** argv )
     if(T_spacepoints) T_spacepoints->GetEntry(i);
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
+    if(T_glee) T_glee->GetEntry(i);
 
     //    if (!is_preselection(eval)) continue;
 
@@ -203,7 +207,7 @@ int main( int argc, char** argv )
 
       if (!((signal_bin != -1) || flag_pass)) continue;
       // get weight ...
-      double weight_val = get_weight(weight, eval, pfeval, kine, tagger, cov.get_rw_info(), cov.get_time_info_allruns(), flag_data);
+      double weight_val = get_weight(weight, eval, pfeval, kine, tagger, glee, cov.get_rw_info(), cov.get_time_info_allruns(), flag_data);
 
       //  if (ch_name == "numuCC_signal_Enu_FC_overlay" && weight == "cv_spline") std::cout << "Xin: " << " " << flag_pass << " " << signal_bin << " " << weight_val << " " <<eval.run << " " << eval.subrun << " " << eval.event << std::endl;
 

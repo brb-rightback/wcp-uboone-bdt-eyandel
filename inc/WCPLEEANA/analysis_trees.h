@@ -21,6 +21,7 @@ namespace LEEana{
     TTree *T_spacepoints;   // 0 if the file does not have it
     TTree *T_pandora;       // 0 if the file does not have it
     TTree *T_lantern;       // 0 if the file does not have it
+    TTree *T_glee;          // singlephotonana/eventweight_tree, 0 if the file does not have it
   };
 
   // suffix: "" for normal checkout files, "_cv" or "_det" for the merged detector-variation files
@@ -42,6 +43,7 @@ LEEana::AnalysisTrees LEEana::get_analysis_trees(TFile* file, TString suffix){
   trees.T_spacepoints = (TTree*)file->Get("wcpselection/T_spacepoints" + suffix);
   trees.T_pandora = (TTree*)file->Get("nuselection/NeutrinoSelectionFilter" + suffix);
   trees.T_lantern = (TTree*)file->Get("lantern/EventTree" + suffix);
+  trees.T_glee = (TTree*)file->Get("singlephotonana/eventweight_tree" + suffix);
   return trees;
 }
 
@@ -80,9 +82,11 @@ void LEEana::set_analysis_branch_status(AnalysisTrees& trees, bool flag_data){
     "slice_orig_pass_id", "n_pfps", "trk_llr_pid_score_v", "pfp_generation_v", "trk_energy_proton_v", "pfpdg"};
   static const std::vector<std::string> lantern_branches = {
     "nTracks", "trackIsSecondary", "trackPID", "trackRecoE", "trackDistToVtx"};
+  static const std::vector<std::string> glee_truth_branches = {
+    "GTruth_ResNum"};
 
-  TTree *all_trees[7] = {trees.T_BDTvars, trees.T_eval, trees.T_PFeval, trees.T_KINEvars, trees.T_spacepoints, trees.T_pandora, trees.T_lantern};
-  for (int i=0; i!=7; i++){
+  TTree *all_trees[8] = {trees.T_BDTvars, trees.T_eval, trees.T_PFeval, trees.T_KINEvars, trees.T_spacepoints, trees.T_pandora, trees.T_lantern, trees.T_glee};
+  for (int i=0; i!=8; i++){
     if (all_trees[i]) all_trees[i]->SetBranchStatus("*", 0);
   }
 
@@ -96,6 +100,7 @@ void LEEana::set_analysis_branch_status(AnalysisTrees& trees, bool flag_data){
   if (!flag_data){
     enable_branches(trees.T_eval, eval_truth_branches);
     enable_branches(trees.T_PFeval, pfeval_truth_branches);
+    enable_branches(trees.T_glee, glee_truth_branches);
   }
 }
 

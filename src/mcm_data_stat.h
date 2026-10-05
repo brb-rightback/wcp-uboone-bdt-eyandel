@@ -216,7 +216,7 @@ void LEEana::CovMatrix::get_data_events_info(TString input_filename, std::map<TS
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;
-  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern;
+  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern, *T_glee = trees.T_glee;
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
 
   EvalInfo eval;
@@ -227,6 +227,7 @@ void LEEana::CovMatrix::get_data_events_info(TString input_filename, std::map<TS
   SpaceInfo space;
   PandoraInfo pandora;
   LanternInfo lantern;
+  GleeInfo glee;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
@@ -494,6 +495,7 @@ void LEEana::CovMatrix::get_data_events_info(TString input_filename, std::map<TS
   if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
+  if(T_glee) set_tree_address(T_glee, glee);
   
   // fill histogram ...
   // switch on the branches the analysis code reads (one list for all apps, see analysis_trees.h)
@@ -515,6 +517,7 @@ void LEEana::CovMatrix::get_data_events_info(TString input_filename, std::map<TS
     if(T_spacepoints) T_spacepoints->GetEntry(i);
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
+    if(T_glee) T_glee->GetEntry(i);
 
     std::get<0>(vec_events.at(i)) = eval.run;
     std::get<1>(vec_events.at(i)) = eval.event;

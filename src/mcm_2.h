@@ -322,7 +322,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;
-  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern;
+  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern, *T_glee = trees.T_glee;
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
 
   EvalInfo eval;
@@ -333,6 +333,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   SpaceInfo space;
   PandoraInfo pandora;
   LanternInfo lantern;
+  GleeInfo glee;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
@@ -600,6 +601,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
   if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
+  if(T_glee) set_tree_address(T_glee, glee);
 
   double total_pot = 0;
   for (Int_t i=0;i!=T_pot->GetEntries();i++){
@@ -716,11 +718,13 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     if(T_spacepoints) T_spacepoints->GetEntry(i);
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
+    if(T_glee) T_glee->GetEntry(i);
 
     //std::cout << i << std::endl;
 
     std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::pair<int, float> > > event_info;
     std::get<0>(event_info) = eval.weight_cv * eval.weight_spline;
+    if (flag_rootino) std::get<0>(event_info) *= get_rootino_weight(eval, glee, rootino_pot_ratio); // rootino bug fix, see get_rootino_weight
     std::get<1>(event_info) = leeweight(eval.truth_nuEnergy);
 
     double osc_weight = 1.0;
@@ -760,7 +764,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     // apply oscillation ...
     std::get<0>(event_info) *= osc_weight;
     //apply reweight
-    double reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
+    double reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
     std::get<0>(event_info) *= reweight;
 
 
@@ -941,7 +945,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
       }else if (option == "reweight"){
         std::get<2>(event_info).resize(1000);
         std::get<3>(event_info).push_back(1000);
-        if(!(flag_reweight)) reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(true), get_time_info_allruns());
+        if(!(flag_reweight)) reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(true), get_time_info_allruns());
         for (size_t j=0;j!=1000;j++){
           if(flag_reweight){
             if (eval.weight_cv>0 && reweight!=1){
@@ -965,7 +969,7 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
             std::get<2>(event_info).at(0) = 0;
           }
         }else{
-           reweight = get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(true), get_time_info_allruns());
+           reweight = get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(true), get_time_info_allruns());
            std::get<2>(event_info).at(0) = reweight-1;
         }
 

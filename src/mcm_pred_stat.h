@@ -376,7 +376,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;
-  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern;
+  TTree *T_spacepoints = trees.T_spacepoints, *T_pandora = trees.T_pandora, *T_lantern = trees.T_lantern, *T_glee = trees.T_glee;
   TTree *T_pot = (TTree*)file->Get("wcpselection/T_pot");
 
   EvalInfo eval;
@@ -387,6 +387,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
   SpaceInfo space;
   PandoraInfo pandora;
   LanternInfo lantern;
+  GleeInfo glee;
 
   kine.kine_energy_particle = new std::vector<float>;
   kine.kine_energy_info = new std::vector<int>;
@@ -660,6 +661,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
   if(T_spacepoints) set_tree_address(T_spacepoints, space, 0);
   if(T_pandora) set_tree_address(T_pandora, pandora);
   if(T_lantern) set_tree_address(T_lantern, lantern);
+  if(T_glee) set_tree_address(T_glee, glee);
 
   //  std::cout << flag_data << " " << input_filename << std::endl;
 
@@ -698,12 +700,14 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     if(T_spacepoints) T_spacepoints->GetEntry(i);
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
+    if(T_glee) T_glee->GetEntry(i);
 
     std::get<0>(vec_events.at(i)) = eval.run;
     std::get<1>(vec_events.at(i)) = eval.event;
 
     if (!flag_data){
       std::get<2>(vec_events.at(i)) = eval.weight_cv * eval.weight_spline;
+      if (flag_rootino) std::get<2>(vec_events.at(i)) *= get_rootino_weight(eval, glee, rootino_pot_ratio); // rootino bug fix, see get_rootino_weight
       // hack for now ...
       std::get<3>(vec_events.at(i)) = leeweight(eval.truth_nuEnergy);
     }else{
@@ -743,7 +747,7 @@ void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TS
     flag_first_event = false;
     if (!flag_data){
       std::get<2>(vec_events.at(i)) *= osc_weight;
-      std::get<2>(vec_events.at(i)) *= get_weight("add_weight", eval, pfeval, kine, tagger, get_rw_info(), get_time_info_allruns());
+      std::get<2>(vec_events.at(i)) *= get_weight("add_weight", eval, pfeval, kine, tagger, glee, get_rw_info(), get_time_info_allruns());
     }
 }
 

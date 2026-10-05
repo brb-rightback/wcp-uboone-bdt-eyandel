@@ -397,7 +397,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
 
   AnalysisTrees trees_cv = get_analysis_trees(file, "_cv");
   TTree *T_BDTvars_cv = trees_cv.T_BDTvars, *T_eval_cv = trees_cv.T_eval, *T_PFeval_cv = trees_cv.T_PFeval, *T_KINEvars_cv = trees_cv.T_KINEvars;
-  TTree *T_spacepoints_cv = trees_cv.T_spacepoints, *T_pandora_cv = trees_cv.T_pandora, *T_lantern_cv = trees_cv.T_lantern;
+  TTree *T_spacepoints_cv = trees_cv.T_spacepoints, *T_pandora_cv = trees_cv.T_pandora, *T_lantern_cv = trees_cv.T_lantern, *T_glee_cv = trees_cv.T_glee;
   TTree *T_pot_cv = (TTree*)file->Get("wcpselection/T_pot_cv");
 
   EvalInfo eval_cv;
@@ -408,10 +408,11 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   SpaceInfo space_cv;
   PandoraInfo pandora_cv;
   LanternInfo lantern_cv;
+  GleeInfo glee_cv;
 
   AnalysisTrees trees_det = get_analysis_trees(file, "_det");
   TTree *T_BDTvars_det = trees_det.T_BDTvars, *T_eval_det = trees_det.T_eval, *T_PFeval_det = trees_det.T_PFeval, *T_KINEvars_det = trees_det.T_KINEvars;
-  TTree *T_spacepoints_det = trees_det.T_spacepoints, *T_pandora_det = trees_det.T_pandora, *T_lantern_det = trees_det.T_lantern;
+  TTree *T_spacepoints_det = trees_det.T_spacepoints, *T_pandora_det = trees_det.T_pandora, *T_lantern_det = trees_det.T_lantern, *T_glee_det = trees_det.T_glee;
   TTree *T_pot_det = (TTree*)file->Get("wcpselection/T_pot_det");
 
   EvalInfo eval_det;
@@ -422,6 +423,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   SpaceInfo space_det;
   PandoraInfo pandora_det;
   LanternInfo lantern_det;
+  GleeInfo glee_det;
 
 #include "init.txt"
 
@@ -433,6 +435,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   if(T_spacepoints_cv) set_tree_address(T_spacepoints_cv, space_cv, 0);
   if(T_pandora_cv) set_tree_address(T_pandora_cv, pandora_cv);
   if(T_lantern_cv) set_tree_address(T_lantern_cv, lantern_cv);
+  if(T_glee_cv) set_tree_address(T_glee_cv, glee_cv);
 
   set_tree_address(T_BDTvars_det, tagger_det,2 );
   set_tree_address(T_eval_det, eval_det);
@@ -442,6 +445,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   if(T_spacepoints_det) set_tree_address(T_spacepoints_det, space_det, 0);
   if(T_pandora_det) set_tree_address(T_pandora_det, pandora_det);
   if(T_lantern_det) set_tree_address(T_lantern_det, lantern_det);
+  if(T_glee_det) set_tree_address(T_glee_det, glee_det);
 
   double total_pot = 0;
   for (Int_t i=0;i!=T_pot_cv->GetEntries();i++){
@@ -473,6 +477,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     if(T_spacepoints_cv) T_spacepoints_cv->GetEntry(i);
     if(T_pandora_cv) T_pandora_cv->GetEntry(i);
     if(T_lantern_cv) T_lantern_cv->GetEntry(i);
+    if(T_glee_cv) T_glee_cv->GetEntry(i);
 
     T_BDTvars_det->GetEntry(i);
     T_eval_det->GetEntry(i);
@@ -481,12 +486,14 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     if(T_spacepoints_det) T_spacepoints_det->GetEntry(i);
     if(T_pandora_det) T_pandora_det->GetEntry(i);
     if(T_lantern_det) T_lantern_det->GetEntry(i);
+    if(T_glee_det) T_glee_det->GetEntry(i);
 
     if ( !(eval_cv.run == eval_det.run && eval_cv.event == eval_det.event)) std::cout <<"Wrong! " << std::endl;
 
     std::get<0>(vec_events.at(i)) = eval_cv.run;
     std::get<1>(vec_events.at(i)) = eval_cv.event;
     std::get<2>(vec_events.at(i)) = eval_cv.weight_cv * eval_cv.weight_spline;
+    if (flag_rootino) std::get<2>(vec_events.at(i)) *= get_rootino_weight(eval_cv, glee_cv, rootino_pot_ratio); // rootino bug fix, see get_rootino_weight
 
 
 
@@ -538,7 +545,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
     }
     flag_first_event = false;
     std::get<2>(vec_events.at(i)) *= osc_weight;
-    double reweight = get_weight("add_weight", eval_cv, pfeval_cv, kine_cv, tagger_cv, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
+    double reweight = get_weight("add_weight", eval_cv, pfeval_cv, kine_cv, tagger_cv, glee_cv, get_rw_info(), get_time_info_allruns());//automatically 1 if reweighting is not applied
     std::get<2>(vec_events.at(i)) *= reweight;
 
 
