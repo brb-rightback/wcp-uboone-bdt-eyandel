@@ -148,6 +148,357 @@ namespace LEEana{
       {250, 450},   // pl 625 - 850
       {250, 550}   // pl > 850
     };
+    // truth bins of the multi-differential measurements in each slice (get_xs_signal_no); also the reco bins of the
+    // "_bin_t" variables of get_kine_var (reco values in the truth binning)
+    const std::vector<std::vector<double>> truth_Emu_bins_costheta = {
+      {250, 300},   // costheta <= 0
+      {250, 300},   // costheta 0 - 0.3
+      {300, 350, 450},   // costheta 0.3 - 0.5
+      {300, 350, 450, 700},   // costheta 0.5 - 0.7
+      {300, 450, 550, 900},   // costheta 0.7 - 0.8
+      {350, 450, 550, 900},   // costheta 0.8 - 0.9
+      {450, 550, 700, 900, 1150, 1600}   // costheta > 0.9
+    };
+    const std::vector<std::vector<double>> truth_Kp_bins_costhetap = {
+      {70, 95, 120, 145},   // costhetap <= 0
+      {70, 95, 120, 145, 170, 220},   // costhetap 0 - 0.3
+      {70, 95, 120, 145, 170, 220, 270},   // costhetap 0.3 - 0.5
+      {70, 95, 120, 145, 170, 220, 270, 345},   // costhetap 0.5 - 0.7
+      {70, 95, 120, 145, 170, 220, 270, 345, 470},   // costhetap 0.7 - 0.8
+      {70, 95, 120, 145, 170, 220, 270, 345, 470},   // costhetap 0.8 - 0.9
+      {70, 95, 120, 145, 170, 220, 270, 345}   // costhetap > 0.9
+    };
+    const std::vector<std::vector<double>> truth_pt_bins_pl = {
+      {100, 200, 250},   // pl <= 0
+      {150, 200, 250, 350},   // pl 0 - 150
+      {150, 200, 300, 450},   // pl 150 - 300
+      {150, 250, 350},   // pl 300 - 450
+      {200, 350, 550},   // pl 450 - 625
+      {200, 350, 550},   // pl 625 - 850
+      {250, 450},   // pl 850 - 1200
+      {350, 800}   // pl > 1200
+    };
+    const std::vector<std::vector<double>> truth_Emu_bins_Eavail = {
+      {350, 550, 700, 900, 1150},   // Eavail <= 75
+      {300, 350, 450, 550, 700, 900, 1600},   // Eavail 75 - 150
+      {300, 450, 550, 900},   // Eavail 150 - 250
+      {300, 450, 700, 1150},   // Eavail 250 - 375
+      {250, 350, 450, 700, 1150},   // Eavail 375 - 550
+      {250, 350, 550, 900},   // Eavail 550 - 800
+      {300, 450, 700, 1150}   // Eavail > 800
+    };
+    const std::vector<std::vector<double>> truth_costhetamup_bins_Kp = {
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp <= 95
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 95 - 145
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 145 - 220
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 220 - 345
+      {-0.6, -0.2, 0, 0.2, 0.6}   // Kp > 345
+    };
+    const std::vector<std::vector<double>> truth_costhetamup_bins_Eavail = {
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail <= 150
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 150 - 250
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 250 - 375
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 375 - 550
+      {-0.4, 0, 0.4},   // Eavail 550 - 800
+      {-0.2, 0.2, 0.6}   // Eavail > 800
+    };
+    const std::vector<std::vector<double>> truth_costhetamup_bins_Emu = {
+      {-0.6, -0.4, -0.2, 0.2, 0.6},   // Emu <= 350
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.6},   // Emu 350 - 550
+      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 550 - 700
+      {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 700 - 900
+      {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 900 - 1150
+      {-0.4, -0.2, 0, 0.2, 0.4, 0.6}   // Emu > 1150
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_Emu_bins_3d_0p = {
+      {
+       {300},   // Eavail <= 75, costheta <= 0
+       {300, 450},   // Eavail <= 75, costheta 0 - 0.5
+       {350, 450, 700},   // Eavail <= 75, costheta 0.5 - 0.7
+       {350, 450, 550, 700, 900, 1150},   // Eavail <= 75, costheta 0.7 - 0.9
+       {450, 550, 700, 900, 1150, 1600}   // Eavail <= 75, costheta > 0.9
+      },
+      {
+       {},   // Eavail 75 - 150, costheta <= 0
+       {350},   // Eavail 75 - 150, costheta 0 - 0.5
+       {550},   // Eavail 75 - 150, costheta 0.5 - 0.7
+       {450, 700, 900},   // Eavail 75 - 150, costheta 0.7 - 0.9
+       {700, 900, 1150}   // Eavail 75 - 150, costheta > 0.9
+      },
+      {
+       {300},   // Eavail > 150, costheta <= 0
+       {250, 350},   // Eavail > 150, costheta 0 - 0.5
+       {300, 450},   // Eavail > 150, costheta 0.5 - 0.7
+       {350, 450, 550, 700, 1150},   // Eavail > 150, costheta 0.7 - 0.9
+       {450, 550, 700, 900, 1600}   // Eavail > 150, costheta > 0.9
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_Emu_bins_3d_Np = {
+      {
+       {},   // Eavail <= 150, costheta <= 0
+       {},   // Eavail <= 150, costheta 0 - 0.3
+       {},   // Eavail <= 150, costheta 0.3 - 0.5
+       {450},   // Eavail <= 150, costheta 0.5 - 0.7
+       {550, 700},   // Eavail <= 150, costheta 0.7 - 0.8
+       {550, 700, 900},   // Eavail <= 150, costheta 0.8 - 0.9
+       {700, 900, 1150, 1600}   // Eavail <= 150, costheta > 0.9
+      },
+      {
+       {300},   // Eavail 150 - 250, costheta <= 0
+       {},   // Eavail 150 - 250, costheta 0 - 0.3
+       {450},   // Eavail 150 - 250, costheta 0.3 - 0.5
+       {450, 550},   // Eavail 150 - 250, costheta 0.5 - 0.7
+       {550},   // Eavail 150 - 250, costheta 0.7 - 0.8
+       {550, 900},   // Eavail 150 - 250, costheta 0.8 - 0.9
+       {700, 900, 1150}   // Eavail 150 - 250, costheta > 0.9
+      },
+      {
+       {300},   // Eavail 250 - 375, costheta <= 0
+       {},   // Eavail 250 - 375, costheta 0 - 0.3
+       {450},   // Eavail 250 - 375, costheta 0.3 - 0.5
+       {450, 700},   // Eavail 250 - 375, costheta 0.5 - 0.7
+       {550, 700},   // Eavail 250 - 375, costheta 0.7 - 0.8
+       {550, 700, 900},   // Eavail 250 - 375, costheta 0.8 - 0.9
+       {700, 900, 1600}   // Eavail 250 - 375, costheta > 0.9
+      },
+      {
+       {300},   // Eavail 375 - 550, costheta <= 0
+       {450},   // Eavail 375 - 550, costheta 0 - 0.3
+       {450},   // Eavail 375 - 550, costheta 0.3 - 0.5
+       {450, 700},   // Eavail 375 - 550, costheta 0.5 - 0.7
+       {700},   // Eavail 375 - 550, costheta 0.7 - 0.8
+       {700},   // Eavail 375 - 550, costheta 0.8 - 0.9
+       {900}   // Eavail 375 - 550, costheta > 0.9
+      },
+      {
+       {250, 350},   // Eavail > 550, costheta <= 0
+       {350},   // Eavail > 550, costheta 0 - 0.3
+       {450},   // Eavail > 550, costheta 0.3 - 0.5
+       {450, 700},   // Eavail > 550, costheta 0.5 - 0.7
+       {550},   // Eavail > 550, costheta 0.7 - 0.8
+       {700},   // Eavail > 550, costheta 0.8 - 0.9
+       {900}   // Eavail > 550, costheta > 0.9
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_pt_bins_3d_0p = {
+      {
+       {200, 250, 300},   // Eavail <= 75, pl <= 150
+       {200, 300},   // Eavail <= 75, pl 150 - 300
+       {150, 250, 350},   // Eavail <= 75, pl 300 - 450
+       {150, 300, 450},   // Eavail <= 75, pl 450 - 625
+       {200, 350, 550},   // Eavail <= 75, pl 625 - 850
+       {250, 550},   // Eavail <= 75, pl 850 - 1200
+       {300}   // Eavail <= 75, pl > 1200
+      },
+      {
+       {250},   // Eavail 75 - 150, pl <= 150
+       {250},   // Eavail 75 - 150, pl 150 - 300
+       {300},   // Eavail 75 - 150, pl 300 - 450
+       {250, 350},   // Eavail 75 - 150, pl 450 - 625
+       {300, 450},   // Eavail 75 - 150, pl 625 - 850
+       {300},   // Eavail 75 - 150, pl 850 - 1200
+       {450}   // Eavail 75 - 150, pl > 1200
+      },
+      {
+       {150, 250, 350},   // Eavail > 150, pl <= 150
+       {150, 200, 250, 350},   // Eavail > 150, pl 150 - 300
+       {150, 200, 300, 450},   // Eavail > 150, pl 300 - 450
+       {200, 300},   // Eavail > 150, pl 450 - 625
+       {200, 350},   // Eavail > 150, pl 625 - 850
+       {250, 450},   // Eavail > 150, pl 850 - 1200
+       {350, 650}   // Eavail > 150, pl > 1200
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_pt_bins_3d_Np = {
+      {
+       {},   // Eavail <= 150, pl <= 0
+       {300},   // Eavail <= 150, pl 0 - 150
+       {250, 350},   // Eavail <= 150, pl 150 - 300
+       {300},   // Eavail <= 150, pl 300 - 450
+       {300, 450},   // Eavail <= 150, pl 450 - 625
+       {300},   // Eavail <= 150, pl 625 - 850
+       {300},   // Eavail <= 150, pl 850 - 1200
+       {350}   // Eavail <= 150, pl > 1200
+      },
+      {
+       {250},   // Eavail 150 - 250, pl <= 0
+       {300},   // Eavail 150 - 250, pl 0 - 150
+       {300, 450},   // Eavail 150 - 250, pl 150 - 300
+       {300, 450},   // Eavail 150 - 250, pl 300 - 450
+       {300},   // Eavail 150 - 250, pl 450 - 625
+       {300, 450},   // Eavail 150 - 250, pl 625 - 850
+       {300, 550},   // Eavail 150 - 250, pl 850 - 1200
+       {350}   // Eavail 150 - 250, pl > 1200
+      },
+      {
+       {250},   // Eavail 250 - 375, pl <= 0
+       {250, 350},   // Eavail 250 - 375, pl 0 - 150
+       {250, 350},   // Eavail 250 - 375, pl 150 - 300
+       {300, 450},   // Eavail 250 - 375, pl 300 - 450
+       {300, 450},   // Eavail 250 - 375, pl 450 - 625
+       {300, 450},   // Eavail 250 - 375, pl 625 - 850
+       {350, 550},   // Eavail 250 - 375, pl 850 - 1200
+       {450}   // Eavail 250 - 375, pl > 1200
+      },
+      {
+       {200, 300},   // Eavail 375 - 550, pl <= 0
+       {250},   // Eavail 375 - 550, pl 0 - 150
+       {250, 450},   // Eavail 375 - 550, pl 150 - 300
+       {350},   // Eavail 375 - 550, pl 300 - 450
+       {350, 550},   // Eavail 375 - 550, pl 450 - 625
+       {450},   // Eavail 375 - 550, pl 625 - 850
+       {550},   // Eavail 375 - 550, pl 850 - 1200
+       {}   // Eavail 375 - 550, pl > 1200
+      },
+      {
+       {150, 250},   // Eavail > 550, pl <= 0
+       {200, 300, 450},   // Eavail > 550, pl 0 - 150
+       {250, 450},   // Eavail > 550, pl 150 - 300
+       {350},   // Eavail > 550, pl 300 - 450
+       {450},   // Eavail > 550, pl 450 - 625
+       {},   // Eavail > 550, pl 625 - 850
+       {},   // Eavail > 550, pl 850 - 1200
+       {650}   // Eavail > 550, pl > 1200
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_Kp_bins_costheta_Emu = {
+      {
+       {70, 95, 120, 145, 170, 220, 270, 345},   // costheta <= 0.5, Emu <= 350
+       {95, 145, 220, 270, 345, 470},   // costheta <= 0.5, Emu 350 - 450
+       {95, 145, 220, 270, 345, 470}   // costheta <= 0.5, Emu > 450
+      },
+      {
+       {120},   // costheta 0.5 - 0.7, Emu <= 350
+       {120},   // costheta 0.5 - 0.7, Emu 350 - 450
+       {70, 120, 170, 220, 270, 345},   // costheta 0.5 - 0.7, Emu 450 - 700
+       {120, 220, 345, 470}   // costheta 0.5 - 0.7, Emu > 700
+      },
+      {
+       {120},   // costheta 0.7 - 0.8, Emu <= 450
+       {120},   // costheta 0.7 - 0.8, Emu 450 - 550
+       {95, 145, 170, 220, 270},   // costheta 0.7 - 0.8, Emu 550 - 900
+       {170, 345}   // costheta 0.7 - 0.8, Emu > 900
+      },
+      {
+       {95, 170},   // costheta 0.8 - 0.9, Emu <= 450
+       {120},   // costheta 0.8 - 0.9, Emu 450 - 550
+       {70, 95, 120, 145, 170, 220, 270},   // costheta 0.8 - 0.9, Emu 550 - 900
+       {95, 120, 145, 220, 270, 345}   // costheta 0.8 - 0.9, Emu > 900
+      },
+      {
+       {120},   // costheta > 0.9, Emu <= 550
+       {95, 170},   // costheta > 0.9, Emu 550 - 700
+       {70, 95, 120, 170},   // costheta > 0.9, Emu 700 - 900
+       {70, 95, 120, 145, 170, 220},   // costheta > 0.9, Emu 900 - 1150
+       {70, 95, 120, 145, 220, 270},   // costheta > 0.9, Emu 1150 - 1600
+       {95, 145, 220, 345}   // costheta > 0.9, Emu > 1600
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_costhetamup_bins_costheta_Emu = {
+      {
+       {-0.6, -0.4, -0.2, 0.2},   // costheta <= 0.5, Emu <= 350
+       {-0.6, -0.4, -0.2, 0},   // costheta <= 0.5, Emu 350 - 450
+       {-0.6, -0.4, -0.2, 0}   // costheta <= 0.5, Emu > 450
+      },
+      {
+       {0.2},   // costheta 0.5 - 0.7, Emu <= 350
+       {0},   // costheta 0.5 - 0.7, Emu 350 - 450
+       {-0.4, -0.2, 0, 0.2},   // costheta 0.5 - 0.7, Emu 450 - 700
+       {-0.2, 0, 0.2}   // costheta 0.5 - 0.7, Emu > 700
+      },
+      {
+       {0.2},   // costheta 0.7 - 0.8, Emu <= 450
+       {0.2},   // costheta 0.7 - 0.8, Emu 450 - 550
+       {-0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.7 - 0.8, Emu 550 - 900
+       {0, 0.2}   // costheta 0.7 - 0.8, Emu > 900
+      },
+      {
+       {0.2, 0.6},   // costheta 0.8 - 0.9, Emu <= 450
+       {0.2},   // costheta 0.8 - 0.9, Emu 450 - 550
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.8 - 0.9, Emu 550 - 900
+       {-0.2, 0, 0.2, 0.4}   // costheta 0.8 - 0.9, Emu > 900
+      },
+      {
+       {0.4},   // costheta > 0.9, Emu <= 550
+       {0.2},   // costheta > 0.9, Emu 550 - 700
+       {0, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 700 - 900
+       {-0.2, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 900 - 1150
+       {-0.2, 0, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 1150 - 1600
+       {-0.2, 0.2, 0.4, 0.6}   // costheta > 0.9, Emu > 1600
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_Kp_bins_pl_pt = {
+      {
+       {120, 220, 345},   // pl <= 150, pt <= 150
+       {120, 220},   // pl <= 150, pt 150 - 200
+       {120, 220, 345},   // pl <= 150, pt 200 - 250
+       {95, 145, 220, 270, 345},   // pl <= 150, pt 250 - 350
+       {95, 145, 220, 270, 345, 470}   // pl <= 150, pt > 350
+      },
+      {
+       {120},   // pl 150 - 300, pt <= 200
+       {95, 145, 220},   // pl 150 - 300, pt 200 - 300
+       {95, 145, 220},   // pl 150 - 300, pt 300 - 450
+       {145, 270, 470}   // pl 150 - 300, pt > 450
+      },
+      {
+       {120},   // pl 300 - 450, pt <= 200
+       {95, 170},   // pl 300 - 450, pt 200 - 300
+       {95, 145, 220},   // pl 300 - 450, pt 300 - 450
+       {120, 220, 345}   // pl 300 - 450, pt > 450
+      },
+      {
+       {95},   // pl 450 - 625, pt <= 250
+       {70, 95, 120, 145, 170, 220},   // pl 450 - 625, pt 250 - 450
+       {95, 145, 220, 345}   // pl 450 - 625, pt > 450
+      },
+      {
+       {95},   // pl 625 - 850, pt <= 250
+       {70, 95, 120, 145, 170, 220},   // pl 625 - 850, pt 250 - 450
+       {95, 145, 220, 270, 345}   // pl 625 - 850, pt > 450
+      },
+      {
+       {95},   // pl > 850, pt <= 250
+       {70, 95, 120, 145, 220, 270},   // pl > 850, pt 250 - 550
+       {95, 145, 220, 270, 470}   // pl > 850, pt > 550
+      }
+    };
+    const std::vector<std::vector<std::vector<double>>> truth_costhetamup_bins_pl_pt = {
+      {
+       {-0.4},   // pl <= 150, pt <= 150
+       {-0.6, -0.2},   // pl <= 150, pt 150 - 200
+       {-0.6, -0.2, 0.2},   // pl <= 150, pt 200 - 250
+       {-0.6, -0.4, -0.2, 0},   // pl <= 150, pt 250 - 350
+       {-0.6, -0.4, -0.2, 0}   // pl <= 150, pt > 350
+      },
+      {
+       {0.4},   // pl 150 - 300, pt <= 200
+       {0, 0.4},   // pl 150 - 300, pt 200 - 300
+       {-0.4, -0.2, 0, 0.2},   // pl 150 - 300, pt 300 - 450
+       {-0.2, 0}   // pl 150 - 300, pt > 450
+      },
+      {
+       {},   // pl 300 - 450, pt <= 200
+       {0, 0.4},   // pl 300 - 450, pt 200 - 300
+       {-0.2, 0, 0.2, 0.4},   // pl 300 - 450, pt 300 - 450
+       {-0.2, 0, 0.2}   // pl 300 - 450, pt > 450
+      },
+      {
+       {0.4},   // pl 450 - 625, pt <= 250
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl 450 - 625, pt 250 - 450
+       {-0.2, 0, 0.2, 0.4}   // pl 450 - 625, pt > 450
+      },
+      {
+       {0.2},   // pl 625 - 850, pt <= 250
+       {-0.2, 0, 0.2, 0.4, 0.6},   // pl 625 - 850, pt 250 - 450
+       {-0.2, 0, 0.2, 0.4}   // pl 625 - 850, pt > 450
+      },
+      {
+       {0.2, 0.6},   // pl > 850, pt <= 250
+       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl > 850, pt 250 - 550
+       {-0.2, 0, 0.2, 0.4, 0.6}   // pl > 850, pt > 550
+      }
+    };
   }
 
   // generic neutrino cuts
@@ -1207,7 +1558,9 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     return Eavail;
 
   }else if (var_name == "muon_pt" || var_name == "muon_pl" || var_name == "Emu_costheta_bin" || var_name == "pl_pt_bin" || var_name == "Eavail_Emu_bin"
-         || var_name == "Eavail_costheta_Emu_bin" || var_name == "Eavail_pl_pt_bin"){
+         || var_name == "Eavail_costheta_Emu_bin" || var_name == "Eavail_pl_pt_bin"
+         || var_name == "Emu_costheta_bin_t" || var_name == "pl_pt_bin_t" || var_name == "Eavail_Emu_bin_t"
+         || var_name == "Eavail_costheta_Emu_bin_t" || var_name == "Eavail_pl_pt_bin_t"){
     // Reco variables of the muon (and Eavail) cross-section measurements. Muon energy / momentum as in kine_reco_Enu_new3_5
     // (get_muon_Etot_new / get_muon_momentum_new), muon direction of reco_muonMomentum, Eavail as Eavail_new3_5_drop15_95
     // (-1000 for negative values, in the first slice).
@@ -1220,6 +1573,9 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     //     Eavail_costheta_Emu_bin (21), Eavail_pl_pt_bin (22): reco 0p and reco Np (leading proton below / above 45 MeV,
     //     the reco Np category) have their own binnings, as the truth bins, so the channels need different nbin:
     //     Eavail_costheta_Emu_bin 198 (reco 0p channels) / 329 (reco Np channel), Eavail_pl_pt_bin 180 / 296.
+    //   "*_bin_t": the same in the truth binning (for channels without the statistics for the finer bins), nbin =
+    //     Emu_costheta_bin_t 32, pl_pt_bin_t 32, Eavail_Emu_bin_t 40, Eavail_costheta_Emu_bin_t 56 / 84 (reco 0p / Np),
+    //     Eavail_pl_pt_bin_t 66 / 95.
     //   Every event the numuCC_part_bdt channels pass (reco_muonMomentum[3] >= 0) gets a bin; -1 without a reco muon.
     static const std::vector<std::vector<double>> Emu_bins_costheta = {
       {150, 200, 250, 300, 350, 400, 450, 500, 550, 650, 850},   // costheta <= 0
@@ -1400,29 +1756,34 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
        {650, 950}   // Eavail > 550, pl > 1200
       }
     };
-    if (pfeval.reco_muonMomentum[3]<0) return (var_name == "muon_pt" || var_name == "muon_pl") ? -1000 : -1;
+    // "_bin_t" variants: the same reco values in the truth binning of get_xs_signal_no (LEEana::xs), nbin as the truth bins
+    bool flag_truth_bins = var_name.EndsWith("_bin_t");
+    TString name = flag_truth_bins ? TString(var_name(0, var_name.Length()-2)) : var_name;
+    if (pfeval.reco_muonMomentum[3]<0) return (name == "muon_pt" || name == "muon_pl") ? -1000 : -1;
     TVector3 muon_p = get_muon_momentum_new(pfeval, eval);
-    if (var_name == "muon_pt") return muon_p.Perp();
-    if (var_name == "muon_pl") return muon_p.Z();
-    if (var_name == "pl_pt_bin") return get_2d_bin_index(muon_p.Z(), xs::pl_slices, muon_p.Perp(), pt_bins_pl) + 0.5;
+    if (name == "muon_pt") return muon_p.Perp();
+    if (name == "muon_pl") return muon_p.Z();
+    if (name == "pl_pt_bin") return get_2d_bin_index(muon_p.Z(), xs::pl_slices, muon_p.Perp(), flag_truth_bins ? xs::truth_pt_bins_pl : pt_bins_pl) + 0.5;
     double Emu = get_muon_Etot_new(pfeval, eval);
     TVector3 mu_dir(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2]);
-    if (var_name == "Emu_costheta_bin") return get_2d_bin_index(mu_dir.CosTheta(), xs::costheta_slices, Emu, Emu_bins_costheta) + 0.5;
+    if (name == "Emu_costheta_bin") return get_2d_bin_index(mu_dir.CosTheta(), xs::costheta_slices, Emu, flag_truth_bins ? xs::truth_Emu_bins_costheta : Emu_bins_costheta) + 0.5;
     double Eavail = get_kine_var(kine, eval, pfeval, tagger, flag_data, "Eavail_new3_5_drop15_95", space, pandora, lantern);
-    if (var_name == "Eavail_Emu_bin") return get_2d_bin_index(Eavail, xs::Eavail_slices, Emu, Emu_bins_Eavail) + 0.5;
+    if (name == "Eavail_Emu_bin") return get_2d_bin_index(Eavail, xs::Eavail_slices, Emu, flag_truth_bins ? xs::truth_Emu_bins_Eavail : Emu_bins_Eavail) + 0.5;
     double KE_lead = 0;
     int n_protons = 0;
     get_reco_leading_proton(pfeval, space, 45, KE_lead, n_protons);
     bool flag_reco_Np = KE_lead >= 45;
-    if (var_name == "Eavail_costheta_Emu_bin"){
-      if (flag_reco_Np) return get_3d_bin_index(Eavail, xs::Eavail_outer_Np, mu_dir.CosTheta(), xs::costheta_inner_Np, Emu, Emu_bins_3d_Np) + 0.5;
-      return get_3d_bin_index(Eavail, xs::Eavail_outer_0p, mu_dir.CosTheta(), xs::costheta_inner_0p, Emu, Emu_bins_3d_0p) + 0.5;
+    if (name == "Eavail_costheta_Emu_bin"){
+      if (flag_reco_Np) return get_3d_bin_index(Eavail, xs::Eavail_outer_Np, mu_dir.CosTheta(), xs::costheta_inner_Np, Emu, flag_truth_bins ? xs::truth_Emu_bins_3d_Np : Emu_bins_3d_Np) + 0.5;
+      return get_3d_bin_index(Eavail, xs::Eavail_outer_0p, mu_dir.CosTheta(), xs::costheta_inner_0p, Emu, flag_truth_bins ? xs::truth_Emu_bins_3d_0p : Emu_bins_3d_0p) + 0.5;
     }
-    if (flag_reco_Np) return get_3d_bin_index(Eavail, xs::Eavail_outer_Np, muon_p.Z(), xs::pl_inner_Np, muon_p.Perp(), pt_bins_3d_Np) + 0.5;
-    return get_3d_bin_index(Eavail, xs::Eavail_outer_0p, muon_p.Z(), xs::pl_inner_0p, muon_p.Perp(), pt_bins_3d_0p) + 0.5;
+    if (flag_reco_Np) return get_3d_bin_index(Eavail, xs::Eavail_outer_Np, muon_p.Z(), xs::pl_inner_Np, muon_p.Perp(), flag_truth_bins ? xs::truth_pt_bins_3d_Np : pt_bins_3d_Np) + 0.5;
+    return get_3d_bin_index(Eavail, xs::Eavail_outer_0p, muon_p.Z(), xs::pl_inner_0p, muon_p.Perp(), flag_truth_bins ? xs::truth_pt_bins_3d_0p : pt_bins_3d_0p) + 0.5;
   }else if (var_name == "reco_Np" || var_name == "reco_Kp" || var_name == "reco_costhetap" || var_name == "reco_costhetamup"
          || var_name == "Kp_costhetap_bin" || var_name == "Kp_costhetamup_bin" || var_name == "Eavail_costhetamup_bin" || var_name == "Emu_costhetamup_bin"
-         || var_name == "costheta_Emu_Kp_bin" || var_name == "costheta_Emu_costhetamup_bin" || var_name == "pl_pt_Kp_bin" || var_name == "pl_pt_costhetamup_bin"){
+         || var_name == "costheta_Emu_Kp_bin" || var_name == "costheta_Emu_costhetamup_bin" || var_name == "pl_pt_Kp_bin" || var_name == "pl_pt_costhetamup_bin"
+         || var_name == "Kp_costhetap_bin_t" || var_name == "Kp_costhetamup_bin_t" || var_name == "Eavail_costhetamup_bin_t" || var_name == "Emu_costhetamup_bin_t"
+         || var_name == "costheta_Emu_Kp_bin_t" || var_name == "costheta_Emu_costhetamup_bin_t" || var_name == "pl_pt_Kp_bin_t" || var_name == "pl_pt_costhetamup_bin_t"){
     // Reco variables of the proton cross-section measurements. The protons are the primary WireCell protons with range KE
     // (get_reco_leading_proton); the leading one (largest range KE) sets the reco Np category of get_particle_0pNp_bdt_bin.
     // Its direction is from its end points, pointing away from the vertex (get_reco_proton_dir; better than
@@ -1437,6 +1798,9 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     //     Eavail_costhetamup_bin (19): 114                   Emu_costhetamup_bin (20): 113
     //     costheta_Emu_Kp_bin (23): 209                      costheta_Emu_costhetamup_bin (24): 240
     //     pl_pt_Kp_bin (25): 228                             pl_pt_costhetamup_bin (26): 251
+    //   "*_bin_t": the same in the truth binning (for channels without the statistics for the finer bins), nbin =
+    //     Kp_costhetap_bin_t 58, Kp_costhetamup_bin_t 38, Eavail_costhetamup_bin_t 40, Emu_costhetamup_bin_t 42,
+    //     costheta_Emu_Kp_bin_t 101, costheta_Emu_costhetamup_bin_t 83, pl_pt_Kp_bin_t 95, pl_pt_costhetamup_bin_t 88.
     //   The angles and the bins are -2 without a proton above 45 MeV (reco 0p, which goes to the channels without a reco
     //   proton).
     static const std::vector<std::vector<double>> Kp_bins_costhetap = {
@@ -1609,32 +1973,35 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
        {-0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}   // pl > 850, pt > 550
       }
     };
+    // "_bin_t" variants: the same reco values in the truth binning of get_xs_signal_no (LEEana::xs), nbin as the truth bins
+    bool flag_truth_bins = var_name.EndsWith("_bin_t");
+    TString name = flag_truth_bins ? TString(var_name(0, var_name.Length()-2)) : var_name;
     double KE_lead = 0;
     int n_protons = 0;
     int index = get_reco_leading_proton(pfeval, space, 45, KE_lead, n_protons);
-    if (var_name == "reco_Np") return n_protons;
-    if (var_name == "reco_Kp") return KE_lead;
+    if (name == "reco_Np") return n_protons;
+    if (name == "reco_Kp") return KE_lead;
     if (index<0 || KE_lead<45) return -2;
     TVector3 p_dir = get_reco_proton_dir(pfeval, index);
-    if (var_name == "reco_costhetap") return (p_dir.Mag()==0) ? -2 : p_dir.CosTheta();
-    if (var_name == "reco_costhetamup") return (p_dir.Mag()==0 || pfeval.reco_muonMomentum[3]<=0) ? -2 : get_reco_cos_mu_p(pfeval, index);
-    if (var_name == "Kp_costhetap_bin") return get_2d_bin_index(p_dir.CosTheta(), xs::costheta_slices, KE_lead, Kp_bins_costhetap) + 0.5;
+    if (name == "reco_costhetap") return (p_dir.Mag()==0) ? -2 : p_dir.CosTheta();
+    if (name == "reco_costhetamup") return (p_dir.Mag()==0 || pfeval.reco_muonMomentum[3]<=0) ? -2 : get_reco_cos_mu_p(pfeval, index);
+    if (name == "Kp_costhetap_bin") return get_2d_bin_index(p_dir.CosTheta(), xs::costheta_slices, KE_lead, flag_truth_bins ? xs::truth_Kp_bins_costhetap : Kp_bins_costhetap) + 0.5;
     double cos_mu_p = get_reco_cos_mu_p(pfeval, index);
-    if (var_name == "Kp_costhetamup_bin") return get_2d_bin_index(KE_lead, xs::Kp_slices_mup, cos_mu_p, costhetamup_bins_Kp) + 0.5;
-    if (var_name == "Eavail_costhetamup_bin"){
+    if (name == "Kp_costhetamup_bin") return get_2d_bin_index(KE_lead, xs::Kp_slices_mup, cos_mu_p, flag_truth_bins ? xs::truth_costhetamup_bins_Kp : costhetamup_bins_Kp) + 0.5;
+    if (name == "Eavail_costhetamup_bin"){
       double Eavail = get_kine_var(kine, eval, pfeval, tagger, flag_data, "Eavail_new3_5_drop15_95", space, pandora, lantern);
-      return get_2d_bin_index(Eavail, xs::Eavail_slices_mup, cos_mu_p, costhetamup_bins_Eavail) + 0.5;
+      return get_2d_bin_index(Eavail, xs::Eavail_slices_mup, cos_mu_p, flag_truth_bins ? xs::truth_costhetamup_bins_Eavail : costhetamup_bins_Eavail) + 0.5;
     }
-    if (var_name == "pl_pt_Kp_bin" || var_name == "pl_pt_costhetamup_bin"){
+    if (name == "pl_pt_Kp_bin" || name == "pl_pt_costhetamup_bin"){
       TVector3 muon_p = get_muon_momentum_new(pfeval, eval);
-      if (var_name == "pl_pt_Kp_bin") return get_3d_bin_index(muon_p.Z(), xs::pl_outer_p, muon_p.Perp(), xs::pt_inner_p, KE_lead, Kp_bins_pl_pt) + 0.5;
-      return get_3d_bin_index(muon_p.Z(), xs::pl_outer_p, muon_p.Perp(), xs::pt_inner_p, cos_mu_p, costhetamup_bins_pl_pt) + 0.5;
+      if (name == "pl_pt_Kp_bin") return get_3d_bin_index(muon_p.Z(), xs::pl_outer_p, muon_p.Perp(), xs::pt_inner_p, KE_lead, flag_truth_bins ? xs::truth_Kp_bins_pl_pt : Kp_bins_pl_pt) + 0.5;
+      return get_3d_bin_index(muon_p.Z(), xs::pl_outer_p, muon_p.Perp(), xs::pt_inner_p, cos_mu_p, flag_truth_bins ? xs::truth_costhetamup_bins_pl_pt : costhetamup_bins_pl_pt) + 0.5;
     }
     double Emu = get_muon_Etot_new(pfeval, eval);
-    if (var_name == "Emu_costhetamup_bin") return get_2d_bin_index(Emu, xs::Emu_slices_mup, cos_mu_p, costhetamup_bins_Emu) + 0.5;
+    if (name == "Emu_costhetamup_bin") return get_2d_bin_index(Emu, xs::Emu_slices_mup, cos_mu_p, flag_truth_bins ? xs::truth_costhetamup_bins_Emu : costhetamup_bins_Emu) + 0.5;
     TVector3 mu_dir(pfeval.reco_muonMomentum[0], pfeval.reco_muonMomentum[1], pfeval.reco_muonMomentum[2]);
-    if (var_name == "costheta_Emu_Kp_bin") return get_3d_bin_index(mu_dir.CosTheta(), xs::costheta_outer_p, Emu, xs::Emu_inner_p, KE_lead, Kp_bins_costheta_Emu) + 0.5;
-    return get_3d_bin_index(mu_dir.CosTheta(), xs::costheta_outer_p, Emu, xs::Emu_inner_p, cos_mu_p, costhetamup_bins_costheta_Emu) + 0.5;
+    if (name == "costheta_Emu_Kp_bin") return get_3d_bin_index(mu_dir.CosTheta(), xs::costheta_outer_p, Emu, xs::Emu_inner_p, KE_lead, flag_truth_bins ? xs::truth_Kp_bins_costheta_Emu : Kp_bins_costheta_Emu) + 0.5;
+    return get_3d_bin_index(mu_dir.CosTheta(), xs::costheta_outer_p, Emu, xs::Emu_inner_p, cos_mu_p, flag_truth_bins ? xs::truth_costhetamup_bins_costheta_Emu : costhetamup_bins_costheta_Emu) + 0.5;
   }else if(var_name == "all_veto_score"){
     return tagger.all_veto_score;
   }else if(var_name == "VtxAct_bdt_score"){
@@ -1805,356 +2172,22 @@ int LEEana::get_xs_signal_no(int cut_file, std::map<TString, int>& map_cut_xs_bi
     static const std::vector<double> costhetamup_edges = {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6};
     static const std::vector<double> pt_edges = {100, 200, 300, 450, 650};
     static const std::vector<double> pl_edges = {-150, 0, 75, 150, 300, 450, 625, 850, 1200, 1700};
-    // multi-differential: bins in each slice (slices in LEEana::xs)
-    static const std::vector<std::vector<double>> Emu_bins_costheta = {
-      {250, 300},   // costheta <= 0
-      {250, 300},   // costheta 0 - 0.3
-      {300, 350, 450},   // costheta 0.3 - 0.5
-      {300, 350, 450, 700},   // costheta 0.5 - 0.7
-      {300, 450, 550, 900},   // costheta 0.7 - 0.8
-      {350, 450, 550, 900},   // costheta 0.8 - 0.9
-      {450, 550, 700, 900, 1150, 1600}   // costheta > 0.9
-    };
-    static const std::vector<std::vector<double>> Kp_bins_costhetap = {
-      {70, 95, 120, 145},   // costhetap <= 0
-      {70, 95, 120, 145, 170, 220},   // costhetap 0 - 0.3
-      {70, 95, 120, 145, 170, 220, 270},   // costhetap 0.3 - 0.5
-      {70, 95, 120, 145, 170, 220, 270, 345},   // costhetap 0.5 - 0.7
-      {70, 95, 120, 145, 170, 220, 270, 345, 470},   // costhetap 0.7 - 0.8
-      {70, 95, 120, 145, 170, 220, 270, 345, 470},   // costhetap 0.8 - 0.9
-      {70, 95, 120, 145, 170, 220, 270, 345}   // costhetap > 0.9
-    };
-    static const std::vector<std::vector<double>> pt_bins_pl = {
-      {100, 200, 250},   // pl <= 0
-      {150, 200, 250, 350},   // pl 0 - 150
-      {150, 200, 300, 450},   // pl 150 - 300
-      {150, 250, 350},   // pl 300 - 450
-      {200, 350, 550},   // pl 450 - 625
-      {200, 350, 550},   // pl 625 - 850
-      {250, 450},   // pl 850 - 1200
-      {350, 800}   // pl > 1200
-    };
-    static const std::vector<std::vector<double>> Emu_bins_Eavail = {
-      {350, 550, 700, 900, 1150},   // Eavail <= 75
-      {300, 350, 450, 550, 700, 900, 1600},   // Eavail 75 - 150
-      {300, 450, 550, 900},   // Eavail 150 - 250
-      {300, 450, 700, 1150},   // Eavail 250 - 375
-      {250, 350, 450, 700, 1150},   // Eavail 375 - 550
-      {250, 350, 550, 900},   // Eavail 550 - 800
-      {300, 450, 700, 1150}   // Eavail > 800
-    };
-    static const std::vector<std::vector<double>> costhetamup_bins_Kp = {
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp <= 95
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 95 - 145
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 145 - 220
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Kp 220 - 345
-      {-0.6, -0.2, 0, 0.2, 0.6}   // Kp > 345
-    };
-    static const std::vector<std::vector<double>> costhetamup_bins_Eavail = {
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail <= 150
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 150 - 250
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 250 - 375
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Eavail 375 - 550
-      {-0.4, 0, 0.4},   // Eavail 550 - 800
-      {-0.2, 0.2, 0.6}   // Eavail > 800
-    };
-    static const std::vector<std::vector<double>> costhetamup_bins_Emu = {
-      {-0.6, -0.4, -0.2, 0.2, 0.6},   // Emu <= 350
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.6},   // Emu 350 - 550
-      {-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 550 - 700
-      {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 700 - 900
-      {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // Emu 900 - 1150
-      {-0.4, -0.2, 0, 0.2, 0.4, 0.6}   // Emu > 1150
-    };
-    static const std::vector<std::vector<std::vector<double>>> Emu_bins_3d_0p = {
-      {
-       {300},   // Eavail <= 75, costheta <= 0
-       {300, 450},   // Eavail <= 75, costheta 0 - 0.5
-       {350, 450, 700},   // Eavail <= 75, costheta 0.5 - 0.7
-       {350, 450, 550, 700, 900, 1150},   // Eavail <= 75, costheta 0.7 - 0.9
-       {450, 550, 700, 900, 1150, 1600}   // Eavail <= 75, costheta > 0.9
-      },
-      {
-       {},   // Eavail 75 - 150, costheta <= 0
-       {350},   // Eavail 75 - 150, costheta 0 - 0.5
-       {550},   // Eavail 75 - 150, costheta 0.5 - 0.7
-       {450, 700, 900},   // Eavail 75 - 150, costheta 0.7 - 0.9
-       {700, 900, 1150}   // Eavail 75 - 150, costheta > 0.9
-      },
-      {
-       {300},   // Eavail > 150, costheta <= 0
-       {250, 350},   // Eavail > 150, costheta 0 - 0.5
-       {300, 450},   // Eavail > 150, costheta 0.5 - 0.7
-       {350, 450, 550, 700, 1150},   // Eavail > 150, costheta 0.7 - 0.9
-       {450, 550, 700, 900, 1600}   // Eavail > 150, costheta > 0.9
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> Emu_bins_3d_Np = {
-      {
-       {},   // Eavail <= 150, costheta <= 0
-       {},   // Eavail <= 150, costheta 0 - 0.3
-       {},   // Eavail <= 150, costheta 0.3 - 0.5
-       {450},   // Eavail <= 150, costheta 0.5 - 0.7
-       {550, 700},   // Eavail <= 150, costheta 0.7 - 0.8
-       {550, 700, 900},   // Eavail <= 150, costheta 0.8 - 0.9
-       {700, 900, 1150, 1600}   // Eavail <= 150, costheta > 0.9
-      },
-      {
-       {300},   // Eavail 150 - 250, costheta <= 0
-       {},   // Eavail 150 - 250, costheta 0 - 0.3
-       {450},   // Eavail 150 - 250, costheta 0.3 - 0.5
-       {450, 550},   // Eavail 150 - 250, costheta 0.5 - 0.7
-       {550},   // Eavail 150 - 250, costheta 0.7 - 0.8
-       {550, 900},   // Eavail 150 - 250, costheta 0.8 - 0.9
-       {700, 900, 1150}   // Eavail 150 - 250, costheta > 0.9
-      },
-      {
-       {300},   // Eavail 250 - 375, costheta <= 0
-       {},   // Eavail 250 - 375, costheta 0 - 0.3
-       {450},   // Eavail 250 - 375, costheta 0.3 - 0.5
-       {450, 700},   // Eavail 250 - 375, costheta 0.5 - 0.7
-       {550, 700},   // Eavail 250 - 375, costheta 0.7 - 0.8
-       {550, 700, 900},   // Eavail 250 - 375, costheta 0.8 - 0.9
-       {700, 900, 1600}   // Eavail 250 - 375, costheta > 0.9
-      },
-      {
-       {300},   // Eavail 375 - 550, costheta <= 0
-       {450},   // Eavail 375 - 550, costheta 0 - 0.3
-       {450},   // Eavail 375 - 550, costheta 0.3 - 0.5
-       {450, 700},   // Eavail 375 - 550, costheta 0.5 - 0.7
-       {700},   // Eavail 375 - 550, costheta 0.7 - 0.8
-       {700},   // Eavail 375 - 550, costheta 0.8 - 0.9
-       {900}   // Eavail 375 - 550, costheta > 0.9
-      },
-      {
-       {250, 350},   // Eavail > 550, costheta <= 0
-       {350},   // Eavail > 550, costheta 0 - 0.3
-       {450},   // Eavail > 550, costheta 0.3 - 0.5
-       {450, 700},   // Eavail > 550, costheta 0.5 - 0.7
-       {550},   // Eavail > 550, costheta 0.7 - 0.8
-       {700},   // Eavail > 550, costheta 0.8 - 0.9
-       {900}   // Eavail > 550, costheta > 0.9
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> pt_bins_3d_0p = {
-      {
-       {200, 250, 300},   // Eavail <= 75, pl <= 150
-       {200, 300},   // Eavail <= 75, pl 150 - 300
-       {150, 250, 350},   // Eavail <= 75, pl 300 - 450
-       {150, 300, 450},   // Eavail <= 75, pl 450 - 625
-       {200, 350, 550},   // Eavail <= 75, pl 625 - 850
-       {250, 550},   // Eavail <= 75, pl 850 - 1200
-       {300}   // Eavail <= 75, pl > 1200
-      },
-      {
-       {250},   // Eavail 75 - 150, pl <= 150
-       {250},   // Eavail 75 - 150, pl 150 - 300
-       {300},   // Eavail 75 - 150, pl 300 - 450
-       {250, 350},   // Eavail 75 - 150, pl 450 - 625
-       {300, 450},   // Eavail 75 - 150, pl 625 - 850
-       {300},   // Eavail 75 - 150, pl 850 - 1200
-       {450}   // Eavail 75 - 150, pl > 1200
-      },
-      {
-       {150, 250, 350},   // Eavail > 150, pl <= 150
-       {150, 200, 250, 350},   // Eavail > 150, pl 150 - 300
-       {150, 200, 300, 450},   // Eavail > 150, pl 300 - 450
-       {200, 300},   // Eavail > 150, pl 450 - 625
-       {200, 350},   // Eavail > 150, pl 625 - 850
-       {250, 450},   // Eavail > 150, pl 850 - 1200
-       {350, 650}   // Eavail > 150, pl > 1200
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> pt_bins_3d_Np = {
-      {
-       {},   // Eavail <= 150, pl <= 0
-       {300},   // Eavail <= 150, pl 0 - 150
-       {250, 350},   // Eavail <= 150, pl 150 - 300
-       {300},   // Eavail <= 150, pl 300 - 450
-       {300, 450},   // Eavail <= 150, pl 450 - 625
-       {300},   // Eavail <= 150, pl 625 - 850
-       {300},   // Eavail <= 150, pl 850 - 1200
-       {350}   // Eavail <= 150, pl > 1200
-      },
-      {
-       {250},   // Eavail 150 - 250, pl <= 0
-       {300},   // Eavail 150 - 250, pl 0 - 150
-       {300, 450},   // Eavail 150 - 250, pl 150 - 300
-       {300, 450},   // Eavail 150 - 250, pl 300 - 450
-       {300},   // Eavail 150 - 250, pl 450 - 625
-       {300, 450},   // Eavail 150 - 250, pl 625 - 850
-       {300, 550},   // Eavail 150 - 250, pl 850 - 1200
-       {350}   // Eavail 150 - 250, pl > 1200
-      },
-      {
-       {250},   // Eavail 250 - 375, pl <= 0
-       {250, 350},   // Eavail 250 - 375, pl 0 - 150
-       {250, 350},   // Eavail 250 - 375, pl 150 - 300
-       {300, 450},   // Eavail 250 - 375, pl 300 - 450
-       {300, 450},   // Eavail 250 - 375, pl 450 - 625
-       {300, 450},   // Eavail 250 - 375, pl 625 - 850
-       {350, 550},   // Eavail 250 - 375, pl 850 - 1200
-       {450}   // Eavail 250 - 375, pl > 1200
-      },
-      {
-       {200, 300},   // Eavail 375 - 550, pl <= 0
-       {250},   // Eavail 375 - 550, pl 0 - 150
-       {250, 450},   // Eavail 375 - 550, pl 150 - 300
-       {350},   // Eavail 375 - 550, pl 300 - 450
-       {350, 550},   // Eavail 375 - 550, pl 450 - 625
-       {450},   // Eavail 375 - 550, pl 625 - 850
-       {550},   // Eavail 375 - 550, pl 850 - 1200
-       {}   // Eavail 375 - 550, pl > 1200
-      },
-      {
-       {150, 250},   // Eavail > 550, pl <= 0
-       {200, 300, 450},   // Eavail > 550, pl 0 - 150
-       {250, 450},   // Eavail > 550, pl 150 - 300
-       {350},   // Eavail > 550, pl 300 - 450
-       {450},   // Eavail > 550, pl 450 - 625
-       {},   // Eavail > 550, pl 625 - 850
-       {},   // Eavail > 550, pl 850 - 1200
-       {650}   // Eavail > 550, pl > 1200
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> Kp_bins_costheta_Emu = {
-      {
-       {70, 95, 120, 145, 170, 220, 270, 345},   // costheta <= 0.5, Emu <= 350
-       {95, 145, 220, 270, 345, 470},   // costheta <= 0.5, Emu 350 - 450
-       {95, 145, 220, 270, 345, 470}   // costheta <= 0.5, Emu > 450
-      },
-      {
-       {120},   // costheta 0.5 - 0.7, Emu <= 350
-       {120},   // costheta 0.5 - 0.7, Emu 350 - 450
-       {70, 120, 170, 220, 270, 345},   // costheta 0.5 - 0.7, Emu 450 - 700
-       {120, 220, 345, 470}   // costheta 0.5 - 0.7, Emu > 700
-      },
-      {
-       {120},   // costheta 0.7 - 0.8, Emu <= 450
-       {120},   // costheta 0.7 - 0.8, Emu 450 - 550
-       {95, 145, 170, 220, 270},   // costheta 0.7 - 0.8, Emu 550 - 900
-       {170, 345}   // costheta 0.7 - 0.8, Emu > 900
-      },
-      {
-       {95, 170},   // costheta 0.8 - 0.9, Emu <= 450
-       {120},   // costheta 0.8 - 0.9, Emu 450 - 550
-       {70, 95, 120, 145, 170, 220, 270},   // costheta 0.8 - 0.9, Emu 550 - 900
-       {95, 120, 145, 220, 270, 345}   // costheta 0.8 - 0.9, Emu > 900
-      },
-      {
-       {120},   // costheta > 0.9, Emu <= 550
-       {95, 170},   // costheta > 0.9, Emu 550 - 700
-       {70, 95, 120, 170},   // costheta > 0.9, Emu 700 - 900
-       {70, 95, 120, 145, 170, 220},   // costheta > 0.9, Emu 900 - 1150
-       {70, 95, 120, 145, 220, 270},   // costheta > 0.9, Emu 1150 - 1600
-       {95, 145, 220, 345}   // costheta > 0.9, Emu > 1600
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> costhetamup_bins_costheta_Emu = {
-      {
-       {-0.6, -0.4, -0.2, 0.2},   // costheta <= 0.5, Emu <= 350
-       {-0.6, -0.4, -0.2, 0},   // costheta <= 0.5, Emu 350 - 450
-       {-0.6, -0.4, -0.2, 0}   // costheta <= 0.5, Emu > 450
-      },
-      {
-       {0.2},   // costheta 0.5 - 0.7, Emu <= 350
-       {0},   // costheta 0.5 - 0.7, Emu 350 - 450
-       {-0.4, -0.2, 0, 0.2},   // costheta 0.5 - 0.7, Emu 450 - 700
-       {-0.2, 0, 0.2}   // costheta 0.5 - 0.7, Emu > 700
-      },
-      {
-       {0.2},   // costheta 0.7 - 0.8, Emu <= 450
-       {0.2},   // costheta 0.7 - 0.8, Emu 450 - 550
-       {-0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.7 - 0.8, Emu 550 - 900
-       {0, 0.2}   // costheta 0.7 - 0.8, Emu > 900
-      },
-      {
-       {0.2, 0.6},   // costheta 0.8 - 0.9, Emu <= 450
-       {0.2},   // costheta 0.8 - 0.9, Emu 450 - 550
-       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // costheta 0.8 - 0.9, Emu 550 - 900
-       {-0.2, 0, 0.2, 0.4}   // costheta 0.8 - 0.9, Emu > 900
-      },
-      {
-       {0.4},   // costheta > 0.9, Emu <= 550
-       {0.2},   // costheta > 0.9, Emu 550 - 700
-       {0, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 700 - 900
-       {-0.2, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 900 - 1150
-       {-0.2, 0, 0.2, 0.4, 0.6},   // costheta > 0.9, Emu 1150 - 1600
-       {-0.2, 0.2, 0.4, 0.6}   // costheta > 0.9, Emu > 1600
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> Kp_bins_pl_pt = {
-      {
-       {120, 220, 345},   // pl <= 150, pt <= 150
-       {120, 220},   // pl <= 150, pt 150 - 200
-       {120, 220, 345},   // pl <= 150, pt 200 - 250
-       {95, 145, 220, 270, 345},   // pl <= 150, pt 250 - 350
-       {95, 145, 220, 270, 345, 470}   // pl <= 150, pt > 350
-      },
-      {
-       {120},   // pl 150 - 300, pt <= 200
-       {95, 145, 220},   // pl 150 - 300, pt 200 - 300
-       {95, 145, 220},   // pl 150 - 300, pt 300 - 450
-       {145, 270, 470}   // pl 150 - 300, pt > 450
-      },
-      {
-       {120},   // pl 300 - 450, pt <= 200
-       {95, 170},   // pl 300 - 450, pt 200 - 300
-       {95, 145, 220},   // pl 300 - 450, pt 300 - 450
-       {120, 220, 345}   // pl 300 - 450, pt > 450
-      },
-      {
-       {95},   // pl 450 - 625, pt <= 250
-       {70, 95, 120, 145, 170, 220},   // pl 450 - 625, pt 250 - 450
-       {95, 145, 220, 345}   // pl 450 - 625, pt > 450
-      },
-      {
-       {95},   // pl 625 - 850, pt <= 250
-       {70, 95, 120, 145, 170, 220},   // pl 625 - 850, pt 250 - 450
-       {95, 145, 220, 270, 345}   // pl 625 - 850, pt > 450
-      },
-      {
-       {95},   // pl > 850, pt <= 250
-       {70, 95, 120, 145, 220, 270},   // pl > 850, pt 250 - 550
-       {95, 145, 220, 270, 470}   // pl > 850, pt > 550
-      }
-    };
-    static const std::vector<std::vector<std::vector<double>>> costhetamup_bins_pl_pt = {
-      {
-       {-0.4},   // pl <= 150, pt <= 150
-       {-0.6, -0.2},   // pl <= 150, pt 150 - 200
-       {-0.6, -0.2, 0.2},   // pl <= 150, pt 200 - 250
-       {-0.6, -0.4, -0.2, 0},   // pl <= 150, pt 250 - 350
-       {-0.6, -0.4, -0.2, 0}   // pl <= 150, pt > 350
-      },
-      {
-       {0.4},   // pl 150 - 300, pt <= 200
-       {0, 0.4},   // pl 150 - 300, pt 200 - 300
-       {-0.4, -0.2, 0, 0.2},   // pl 150 - 300, pt 300 - 450
-       {-0.2, 0}   // pl 150 - 300, pt > 450
-      },
-      {
-       {},   // pl 300 - 450, pt <= 200
-       {0, 0.4},   // pl 300 - 450, pt 200 - 300
-       {-0.2, 0, 0.2, 0.4},   // pl 300 - 450, pt 300 - 450
-       {-0.2, 0, 0.2}   // pl 300 - 450, pt > 450
-      },
-      {
-       {0.4},   // pl 450 - 625, pt <= 250
-       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl 450 - 625, pt 250 - 450
-       {-0.2, 0, 0.2, 0.4}   // pl 450 - 625, pt > 450
-      },
-      {
-       {0.2},   // pl 625 - 850, pt <= 250
-       {-0.2, 0, 0.2, 0.4, 0.6},   // pl 625 - 850, pt 250 - 450
-       {-0.2, 0, 0.2, 0.4}   // pl 625 - 850, pt > 450
-      },
-      {
-       {0.2, 0.6},   // pl > 850, pt <= 250
-       {-0.4, -0.2, 0, 0.2, 0.4, 0.6},   // pl > 850, pt 250 - 550
-       {-0.2, 0, 0.2, 0.4, 0.6}   // pl > 850, pt > 550
-      }
-    };
+    // multi-differential: bins in each slice (bins and slices in LEEana::xs, shared with the "_bin_t" reco variables)
+    const std::vector<std::vector<double>>& Emu_bins_costheta = xs::truth_Emu_bins_costheta;
+    const std::vector<std::vector<double>>& Kp_bins_costhetap = xs::truth_Kp_bins_costhetap;
+    const std::vector<std::vector<double>>& pt_bins_pl = xs::truth_pt_bins_pl;
+    const std::vector<std::vector<double>>& Emu_bins_Eavail = xs::truth_Emu_bins_Eavail;
+    const std::vector<std::vector<double>>& costhetamup_bins_Kp = xs::truth_costhetamup_bins_Kp;
+    const std::vector<std::vector<double>>& costhetamup_bins_Eavail = xs::truth_costhetamup_bins_Eavail;
+    const std::vector<std::vector<double>>& costhetamup_bins_Emu = xs::truth_costhetamup_bins_Emu;
+    const std::vector<std::vector<std::vector<double>>>& Emu_bins_3d_0p = xs::truth_Emu_bins_3d_0p;
+    const std::vector<std::vector<std::vector<double>>>& Emu_bins_3d_Np = xs::truth_Emu_bins_3d_Np;
+    const std::vector<std::vector<std::vector<double>>>& pt_bins_3d_0p = xs::truth_pt_bins_3d_0p;
+    const std::vector<std::vector<std::vector<double>>>& pt_bins_3d_Np = xs::truth_pt_bins_3d_Np;
+    const std::vector<std::vector<std::vector<double>>>& Kp_bins_costheta_Emu = xs::truth_Kp_bins_costheta_Emu;
+    const std::vector<std::vector<std::vector<double>>>& costhetamup_bins_costheta_Emu = xs::truth_costhetamup_bins_costheta_Emu;
+    const std::vector<std::vector<std::vector<double>>>& Kp_bins_pl_pt = xs::truth_Kp_bins_pl_pt;
+    const std::vector<std::vector<std::vector<double>>>& costhetamup_bins_pl_pt = xs::truth_costhetamup_bins_pl_pt;
     // leading primary proton (as get_KE(pfeval, 2212, 1, 0, 1, 0)) and the number of primary protons above 45 MeV
     int lead_p = -1;
     double Kp = 0;
@@ -2618,9 +2651,11 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
   //   _LFC / _LPC                            lepton: muon energy from range / MCS (flag_FC_lepton)
   //   _HFC / _HPC                            hadronic system contained or not (flag_FC_hadron)
   //   _LFCHFC / _LFCHPC / _LPCHFC / _LPCHPC  lepton and hadronic system
+  //   _LPCorHPC                              lepton or hadronic system PC (everything but _LFCHFC)
   int require_FC = -1;       // -1: no requirement, 1: FC, 0: PC
   int require_lepton = -1;
   int require_hadron = -1;
+  bool require_any_PC = false;
   if(pos != std::string::npos){
     size_t posSuffix = ch_name_string.rfind('_');
     std::string suffix = (posSuffix != std::string::npos) ? ch_name_string.substr(posSuffix+1) : "";
@@ -2631,6 +2666,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
     else if(suffix == "LPC") require_lepton = 0;
     else if(suffix == "HFC") require_hadron = 1;
     else if(suffix == "HPC") require_hadron = 0;
+    else if(suffix == "LPCorHPC") require_any_PC = true;
     else if(suffix.size() == 6 && (suffix.substr(0,3) == "LFC" || suffix.substr(0,3) == "LPC") && (suffix.substr(3) == "HFC" || suffix.substr(3) == "HPC")){
       require_lepton = (suffix[1] == 'F');
       require_hadron = (suffix[4] == 'F');
@@ -2664,6 +2700,7 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
     if(require_FC >= 0 && eval.match_isFC != require_FC) return false;
     if(require_lepton >= 0 && info.flag_FC_lepton != (require_lepton == 1)) return false;
     if(require_hadron >= 0 && info.flag_FC_hadron != (require_hadron == 1)) return false;
+    if(require_any_PC && info.flag_FC_lepton && info.flag_FC_hadron) return false;
 
     if(tagger.numu_score<0.9 || pfeval.reco_muonMomentum[3]<0) return false; 
 
