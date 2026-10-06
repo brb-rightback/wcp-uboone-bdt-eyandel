@@ -473,6 +473,7 @@ int main(int argc, char** argv)
     }
 
     tree_config->Fill();
+    file_collapsed_covariance_matrix->cd();// TTree::Write writes to the current directory (the tests above may change it)
     tree_config->Write();
     file_collapsed_covariance_matrix->Close();
   }

@@ -259,6 +259,10 @@ int main( int argc, char** argv )
   if (flag_err==3){
     std::cout <<"Total uncertainty from external covariance matrix: "<< cov_inputfile << std::endl;
     TFile* f_cov = new TFile(cov_inputfile, "READ");
+    if( f_cov->IsZombie() ) {
+      std::cout<<"ERROR: cannot open "<<cov_inputfile<<std::endl;
+      return 1;
+    }
     int flag_syst_flux_Xs = 0;
     int flag_syst_detector = 0;
     int flag_syst_additional = 0;
@@ -267,6 +271,11 @@ int main( int argc, char** argv )
     std::vector<double> *vc_val_GOF = new std::vector<double>;
     std::vector<int> *vc_val_GOF_NDF = new std::vector<int>;
     TTree* t_covconfig = (TTree*)f_cov->Get("tree");
+    if( !t_covconfig ) {
+      std::cout<<"ERROR: no TTree \"tree\" (configuration of the covariance matrix) in "<<cov_inputfile
+               <<" (read_TLee_v20 writes it with flag_GoF_output2file_default_0)"<<std::endl;
+      return 1;
+    }
     t_covconfig->SetBranchAddress("flag_syst_flux_Xs", &flag_syst_flux_Xs);
     t_covconfig->SetBranchAddress("flag_syst_detector", &flag_syst_detector);
     t_covconfig->SetBranchAddress("flag_syst_additional", &flag_syst_additional);
@@ -285,6 +294,10 @@ int main( int argc, char** argv )
     // absolute cov matrix
     TMatrixD* matrix_absolute_cov = (TMatrixD*)f_cov->Get("matrix_absolute_cov_newworld");
     TMatrixD* matrix_absolute_detector_cov = (TMatrixD*)f_cov->Get("matrix_absolute_detector_cov_newworld");
+    if( !matrix_absolute_cov || !matrix_absolute_detector_cov ) {
+      std::cout<<"ERROR: no matrix_absolute_cov_newworld / matrix_absolute_detector_cov_newworld in "<<cov_inputfile<<std::endl;
+      return 1;
+    }
 
     std::cout <<"User: "<< "chosen LEE strength: "<< lee_strength << " run option: " << run << std::endl;
     std::cout <<"Cov matrix config: \n"

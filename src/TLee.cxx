@@ -1142,6 +1142,7 @@ int TLee::Exe_Goodness_of_fit(int num_Y, int num_X, TMatrixD matrix_pred, TMatri
 	TMatrixD matrix_syst_abscov_temp = matrix_YY;
 	Plotting_singlecase(matrix_pred_temp, matrix_meas_temp, matrix_syst_abscov_temp, 1, "noConstraint", index);
 
+	TDirectory::TContext ctxt_userfile;// keep the current directory of the caller
 	TFile *userfile = new TFile("file_user_no.root", "recreate");
 	TMatrixD matrix_gof_pred = matrix_pred_Y; matrix_gof_pred.T();
 	TMatrixD matrix_gof_meas = matrix_data_Y; matrix_gof_meas.T();

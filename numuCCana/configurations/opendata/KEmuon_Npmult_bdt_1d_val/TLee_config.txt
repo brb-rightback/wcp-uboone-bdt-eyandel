@@ -1,0 +1,54 @@
+# KEmuon_Npmult_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LFCHPC                        KE_muon_new3_5               34-41
+#   numuCC_part_bdt_Np_LPCHFC                        KE_muon_new3_5               42-55
+#   numuCC_part_bdt_Np_LPCHPC                        KE_muon_new3_5               56-69
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               70-102
+#   numuCC_part_bdt_PorLNp_LFCHPC                    KE_muon_new3_5               103-109
+#   numuCC_part_bdt_PorLNp_LPCHFC                    KE_muon_new3_5               110-123
+#   numuCC_part_bdt_PorLNp_LPCHPC                    KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               135-144
+#   numuCC_part_bdt_Scat0p_LFCHPC                    KE_muon_new3_5               145-148
+#   numuCC_part_bdt_Scat0p_LPCHFC                    KE_muon_new3_5               149-154
+#   numuCC_part_bdt_Scat0p_LPCHPC                    KE_muon_new3_5               155-160
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               161-173
+#   numuCC_part_bdt_Act0p_LFCHPC                     KE_muon_new3_5               174-176
+#   numuCC_part_bdt_Act0p_LPCHFC                     KE_muon_new3_5               177-185
+#   numuCC_part_bdt_Act0p_LPCHPC                     KE_muon_new3_5               186-196
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               197-210
+#   numuCC_part_bdt_Trk0p_LFCHPC                     KE_muon_new3_5               211-213
+#   numuCC_part_bdt_Trk0p_LPCHFC                     KE_muon_new3_5               214-227
+#   numuCC_part_bdt_Trk0p_LPCHPC                     KE_muon_new3_5               228-236
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               237-269
+#   numuCC_part_bdt_G0p_LFCHPC                       KE_muon_new3_5               270-276
+#   numuCC_part_bdt_G0p_LPCHFC                       KE_muon_new3_5               277-290
+#   numuCC_part_bdt_G0p_LPCHPC                       KE_muon_new3_5               291-301
+#   numuCC_part_bdt_Np_LFCHFC_1                      reco_Np                      302-304
+#   numuCC_part_bdt_Np_LFCHPC_1                      reco_Np                      305-307
+#   numuCC_part_bdt_Np_LPCHFC_1                      reco_Np                      308-310
+#   numuCC_part_bdt_Np_LPCHPC_1                      reco_Np                      311-313
+#
+# channels_observation flag_lookelsewhere
+  28 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> proton multiplicity Np LFCHFC
+  1 46001 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 302-304 1 0 1 1 1
+# muon energy -> proton multiplicity Np LFCHPC
+  1 46002 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 305-307 1 0 1 1 1
+# muon energy -> proton multiplicity Np LPCHFC
+  1 46003 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 308-310 1 0 1 1 1
+# muon energy -> proton multiplicity Np LPCHPC
+  1 46004 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 311-313 1 0 1 1 1
+# muon energy -> proton multiplicity, all channels
+  1 46005 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 302-304,305-307,308-310,311-313 1 0 1 1 1
+# FC proton multiplicity -> proton multiplicity Np LFCHPC
+  1 46006 302-304 305-307 1 0 1 1 1
+# FC proton multiplicity -> proton multiplicity Np LPCHFC
+  1 46007 302-304 308-310 1 0 1 1 1
+# FC proton multiplicity -> proton multiplicity Np LPCHPC
+  1 46008 302-304 311-313 1 0 1 1 1
+# FC proton multiplicity -> proton multiplicity, all PC channels
+  1 46009 302-304 305-307,308-310,311-313 1 0 1 1 1
+End

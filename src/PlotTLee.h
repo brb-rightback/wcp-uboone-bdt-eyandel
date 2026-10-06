@@ -687,6 +687,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   roostr = TString::Format("canv_spectra_GoF_total_%02d.png", index); canv_spectra_GoF_total->SaveAs(roostr);
 
   //Erin
+  TDirectory::TContext ctxt_file_hists;// keep the current directory of the caller
   TFile *file_hists = new TFile(TString::Format("file_hists_%02d.root", index), "recreate");
   file_hists->cd();
   gh_data->SetName("gh_data");
