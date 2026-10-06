@@ -12,6 +12,100 @@ using namespace std;
 #include "WCPLEEANA/Configure_Lee.h"
 
 #include "TApplication.h"
+#include "TObjArray.h"
+#include "TObjString.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// goodness-of-fit tests from TLee_config.txt //////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// One row of TLee_config.txt: a (conditionally constrained) goodness-of-fit test, run with Exe_Goodness_of_fit_detailed.
+struct TLeeConfigTest {
+  int line;                     // line in the file
+  int index;                    // test index (Exe_Goodness_of_fit_detailed, plot settings in PlotTLee.h)
+  vector<int> support_bins;     // constraining bins (empty: no constraint)
+  vector<int> target_bins;      // tested (constrained) bins
+  bool flag_syst_flux_Xs;       // systematics / statistics included in this test
+  bool flag_syst_detector;
+  bool flag_syst_additional;
+  bool flag_syst_mc_stat;
+  bool flag_syst_mc_stat_cor;
+};
+
+// Bin list "1,3-6" -> 1,3,4,5,6 (global bin indices); "none" -> empty
+vector<int> parse_bin_list(TString str, TString filename, int line)
+{
+  vector<int> bins;
+  if( str=="none" ) return bins;
+  TObjArray *tokens = str.Tokenize(",");
+  for(int itok=0; itok<tokens->GetEntries(); itok++) {
+    TString token = ((TObjString*)tokens->At(itok))->GetString();
+    TString low = token, hgh = token;
+    Ssiz_t dash = token.Index("-");
+    if( dash!=kNPOS ) { low = token(0, dash); hgh = token(dash+1, token.Length()-dash-1); }
+    if( !low.IsDigit() || !hgh.IsDigit() || low=="" || hgh=="" || low.Atoi()>hgh.Atoi() ) {
+      cerr<<" ---> Error "<<filename<<" line "<<line<<": bad bin list \""<<str<<"\" (token \""<<token<<"\")"<<endl;
+      exit(1);
+    }
+    for(int ibin=low.Atoi(); ibin<=hgh.Atoi(); ibin++) bins.push_back(ibin);
+  }
+  delete tokens;
+  return bins;
+}
+
+// TLee_config.txt: one test per row, entries separated by spaces,
+//   run(0/1)  index  support_bins  target_bins  xsflux(0/1)  det(0/1)  add(0/1)  mcstat(0/1)  mcstatcor(0/1)
+// Rows with run 0 are skipped; "#" starts a comment; reading stops at a row starting with "End".
+vector<TLeeConfigTest> read_TLee_config(TString filename)
+{
+  vector<TLeeConfigTest> tests;
+  ifstream infile(filename);
+  if( !infile ) {
+    cout<<" ---> No "<<filename<<": no goodness-of-fit tests from the configuration file"<<endl;
+    return tests;
+  }
+  string line_str;
+  int line = 0;
+  while( getline(infile, line_str) ) {
+    line++;
+    size_t comment = line_str.find('#');
+    if( comment!=string::npos ) line_str = line_str.substr(0, comment);
+    stringstream ss(line_str);
+    vector<string> entries;
+    string entry;
+    while( ss>>entry ) entries.push_back(entry);
+    if( entries.empty() ) continue;
+    if( entries.at(0)=="End" ) break;
+    if( entries.size()!=9 ) {
+      cerr<<" ---> Error "<<filename<<" line "<<line<<": "<<entries.size()<<" entries, expected 9 (run index support target xsflux det add mcstat mcstatcor)"<<endl;
+      exit(1);
+    }
+    for(int idx=0; idx<9; idx++) {
+      if( idx==2 || idx==3 ) continue;
+      TString val = entries.at(idx);
+      bool flag_ok = (idx==1) ? (val.IsDigit() && val!="") : (val=="0" || val=="1");
+      if( !flag_ok ) {
+        cerr<<" ---> Error "<<filename<<" line "<<line<<": entry "<<idx+1<<" \""<<val<<"\" should be "<<((idx==1) ? "an index" : "0 or 1")<<endl;
+        exit(1);
+      }
+    }
+    if( entries.at(0)=="0" ) continue;
+
+    TLeeConfigTest test;
+    test.line = line;
+    test.index = atoi( entries.at(1).c_str() );
+    test.support_bins = parse_bin_list( entries.at(2), filename, line );
+    test.target_bins = parse_bin_list( entries.at(3), filename, line );
+    test.flag_syst_flux_Xs     = (entries.at(4)=="1");
+    test.flag_syst_detector    = (entries.at(5)=="1");
+    test.flag_syst_additional  = (entries.at(6)=="1");
+    test.flag_syst_mc_stat     = (entries.at(7)=="1");
+    test.flag_syst_mc_stat_cor = (entries.at(8)=="1");
+    tests.push_back( test );
+  }
+  cout<<" ---> "<<filename<<": "<<tests.size()<<" goodness-of-fit tests to run"<<endl;
+  return tests;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////// MAIN //////////////////////////////////////////////////
@@ -36,6 +130,7 @@ int main(int argc, char** argv)
   double scaleF_POT = 1;
   int ifile = 1;
   int moveleg = 0;
+  TString TLee_config_file = "./configurations/TLee_config.txt";
 
   for(int i=1; i<argc; i++) {
     if( strcmp(argv[i],"-p")==0 ) {
@@ -52,7 +147,14 @@ int main(int argc, char** argv)
       stringstream convert( argv[i+1] );
       if(  !( convert>>moveleg ) ) { cerr<<" ---> Error moveleg !"<<endl; exit(1); }
     }
+
+    if( strcmp(argv[i],"-c")==0 ) {
+      TLee_config_file = argv[i+1];
+    }
   }
+
+  // goodness-of-fit tests (conditional constraints) to run, from the configuration file
+  vector<TLeeConfigTest> vc_config_tests = read_TLee_config( TLee_config_file );
 
   cout<<endl<<" ---> check, scaleF_POT "<<scaleF_POT<<", ifile "<<ifile<<", moveleg "<<moveleg<<endl<<endl;
 
@@ -85,14 +187,24 @@ int main(int argc, char** argv)
 
   TLee *Lee_test = new TLee();
 
-  Lee_test->flag_syst_flux_Xs    = config_Lee::flag_syst_flux_Xs;
+  // systematics read in Set_Spectra_MatrixCov: those of Configure_Lee.h and those of any test of TLee_config.txt
+  bool flag_load_flux_Xs = config_Lee::flag_syst_flux_Xs;
+  bool flag_load_detector = config_Lee::flag_syst_detector;
+  bool flag_load_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;
+  for(size_t itest=0; itest<vc_config_tests.size(); itest++) {
+    if( vc_config_tests.at(itest).flag_syst_flux_Xs ) flag_load_flux_Xs = true;
+    if( vc_config_tests.at(itest).flag_syst_detector ) flag_load_detector = true;
+    if( vc_config_tests.at(itest).flag_syst_mc_stat_cor ) flag_load_mc_stat_cor = true;
+  }
+
+  Lee_test->flag_syst_flux_Xs    = flag_load_flux_Xs;
   Lee_test->flag_syst_reweight    = config_Lee::flag_syst_reweight;
   Lee_test->flag_syst_reweight_cor    = config_Lee::flag_syst_reweight_cor;
   //Erin
   Lee_test->flag_syst_time    = config_Lee::flag_syst_time;
-  Lee_test->flag_syst_detector   = config_Lee::flag_syst_detector;
+  Lee_test->flag_syst_detector   = flag_load_detector;
   //
-  Lee_test->flag_syst_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;// needed in Set_Spectra_MatrixCov (loads the stat correlations)
+  Lee_test->flag_syst_mc_stat_cor = flag_load_mc_stat_cor;// needed in Set_Spectra_MatrixCov (loads the stat correlations)
 
   ////////// just do it one time in the whole procedure
 
@@ -309,6 +421,48 @@ int main(int argc, char** argv)
     tree_config->Fill();
     tree_config->Write();
     file_collapsed_covariance_matrix->Close();
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////// tests of TLee_config.txt
+
+  if( !vc_config_tests.empty() ) {
+    vector<double> vc_chi2_no, vc_chi2_wi;
+    for(size_t itest=0; itest<vc_config_tests.size(); itest++) {
+      TLeeConfigTest& test = vc_config_tests.at(itest);
+      cout<<endl<<TString::Format(" ---> TLee_config.txt line %d: index %d, %d target bins, %d support bins, xsflux %d det %d add %d mcstat %d mcstatcor %d",
+                                  test.line, test.index, (int)test.target_bins.size(), (int)test.support_bins.size(),
+                                  test.flag_syst_flux_Xs, test.flag_syst_detector, test.flag_syst_additional,
+                                  test.flag_syst_mc_stat, test.flag_syst_mc_stat_cor)<<endl;
+      Lee_test->flag_syst_flux_Xs     = test.flag_syst_flux_Xs;
+      Lee_test->flag_syst_detector    = test.flag_syst_detector;
+      Lee_test->flag_syst_additional  = test.flag_syst_additional;
+      Lee_test->flag_syst_mc_stat     = test.flag_syst_mc_stat;
+      Lee_test->flag_syst_mc_stat_cor = test.flag_syst_mc_stat_cor;
+      Lee_test->Set_Collapse();
+
+      Lee_test->Exe_Goodness_of_fit_detailed( test.target_bins, test.support_bins, test.index );
+      vc_chi2_no.push_back( Lee_test->val_GOF_noConstrain );
+      vc_chi2_wi.push_back( test.support_bins.empty() ? -1 : Lee_test->val_GOF_wiConstrain );
+    }
+
+    cout<<endl<<" ---> Summary of the TLee_config.txt tests"<<endl;
+    cout<<"      index   ndf   chi2 (no constraint)   p-value     chi2 (with constraint)   p-value"<<endl;
+    for(size_t itest=0; itest<vc_config_tests.size(); itest++) {
+      int ndf = vc_config_tests.at(itest).target_bins.size();
+      TString str_wi = (vc_chi2_wi.at(itest)<0) ? TString("            -               -") :
+        TString::Format("%13.2f   %13.3e", vc_chi2_wi.at(itest), TMath::Prob(vc_chi2_wi.at(itest), ndf));
+      cout<<TString::Format("     %6d %5d %13.2f        %13.3e   %s", vc_config_tests.at(itest).index, ndf,
+                            vc_chi2_no.at(itest), TMath::Prob(vc_chi2_no.at(itest), ndf), str_wi.Data())<<endl;
+    }
+    cout<<endl;
+
+    // back to the systematics of Configure_Lee.h for the rest
+    Lee_test->flag_syst_flux_Xs     = config_Lee::flag_syst_flux_Xs;
+    Lee_test->flag_syst_detector    = config_Lee::flag_syst_detector;
+    Lee_test->flag_syst_additional  = config_Lee::flag_syst_additional;
+    Lee_test->flag_syst_mc_stat     = config_Lee::flag_syst_mc_stat;
+    Lee_test->flag_syst_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;
+    Lee_test->Set_Collapse();
   }
 
   bool flag_both_numuCC            = config_Lee::flag_both_numuCC;// 1

@@ -65,6 +65,31 @@ using namespace RooStats;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// TLee
 
+// Plot settings of a goodness-of-fit test, chosen by the test index (TLee::Get_GoF_plot_style in src/PlotTLee.h)
+struct TLeeGoFPlotStyle {
+  // user x axes (bin index -> variable value) of up to two segments of the target bins, e.g. FC and PC
+  bool flag_axis_userAA = 0;
+  bool flag_axis_userAB = 0;
+  TString title_axis_user = "E_{#nu}^{rec}";
+  int axis_user_divisions = 508;
+  double userAA_index_low = 0;
+  double userAA_index_hgh = 16;
+  double userAA_value_low = -1;
+  double userAA_value_hgh = 1;
+  double userAB_index_low = 0;
+  double userAB_index_hgh = 16;
+  double userAB_value_low = -1;
+  double userAB_value_hgh = 1;
+  // legend x range (< 0: default) of all plots, and of the total plot only
+  double legend_x1 = -1;
+  double legend_x2 = -1;
+  double legend_total_x1 = -1;
+  double legend_total_x2 = -1;
+  // total plot: extra legend entry with the LEE strength (e.g. "LEEx"), x title of the bottom pad
+  TString lee_legend = "";
+  TString total_xtitle = "";
+};
+
 class TLee {
 public:
   TLee() {
@@ -219,6 +244,12 @@ public:
 
   // target detailed channels are constrained by supported detailed channels
   int Exe_Goodness_of_fit_detailed(vector<int>vc_target_detailed_chs, vector<int>vc_support_detailed_chs, int index);
+
+  // plots of a goodness-of-fit test (src/PlotTLee.h): settings per test index, and the spectra before / after the
+  // constraint (column vectors; without constraint, num_X = 0, the constrained ones are not used)
+  TLeeGoFPlotStyle Get_GoF_plot_style(int index);
+  void Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y, TMatrixD matrix_data_Y, TMatrixD matrix_YY,
+                    double val_chi2_noConstraint, TMatrixD matrix_Y_under_X, TMatrixD matrix_YY_under_XX, double val_chi2_wiConstraint);
 
   // Significance corrected by look elsewhere effect
   double GetChi2(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_temp, TMatrixD matrix_syst_abscov_temp);
