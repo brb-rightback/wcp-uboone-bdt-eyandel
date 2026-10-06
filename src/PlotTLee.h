@@ -18,11 +18,24 @@ static void draw_gof_segments(const TLeeGoFPlotStyle& style, bool flag_axis_labe
   for(int iseg=0; iseg<nseg; iseg++) {
 	const TLeeGoFAxisSegment& seg = style.segments.at(iseg);
 
-	TGaxis *axis = new TGaxis(seg.index_low, ymin, seg.index_hgh, ymin, seg.value_low, seg.value_hgh, style.segment_divisions, "S");
-	axis->SetTickSize(tick_size);
-	axis->SetLabelSize(flag_axis_labels ? label_size : 0);
-	axis->SetLabelFont(42);
-	axis->Draw();
+	if( seg.bin_labels!="" ) {// categories: one label below each bin
+	  if( flag_axis_labels ) {
+		TObjArray *tokens = seg.bin_labels.Tokenize(",");
+		for(int ibin=0; ibin<tokens->GetEntries(); ibin++) {
+		  TLatex *latex_bin = new TLatex();
+		  latex_bin->SetNDC(); latex_bin->SetTextFont(42); latex_bin->SetTextAlign(23); latex_bin->SetTextSize(label_size);
+		  latex_bin->DrawLatex(x_ndc(seg.index_low + ibin + 0.5), bot - 0.01, ((TObjString*)tokens->At(ibin))->GetString());
+		}
+		delete tokens;
+	  }
+	}
+	else {
+	  TGaxis *axis = new TGaxis(seg.index_low, ymin, seg.index_hgh, ymin, seg.value_low, seg.value_hgh, style.segment_divisions, "S");
+	  axis->SetTickSize(tick_size);
+	  axis->SetLabelSize(flag_axis_labels ? label_size : 0);
+	  axis->SetLabelFont(42);
+	  axis->Draw();
+	}
 
 	if( iseg>0 ) {
 	  TLine *line_seg = new TLine();

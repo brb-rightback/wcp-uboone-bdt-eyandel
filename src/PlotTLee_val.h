@@ -6,6190 +6,6466 @@ static bool get_val_plot_style(int index, TLeeGoFPlotStyle& style)
 {
   switch( index ) {
   case 10001:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 10002:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 10003:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 10004:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 10005:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, "LFCHFC"}, {17, 27, -50, 1450, "LFCHPC"}, {28, 44, -50, 1550, "LPCHFC"}, {45, 55, -50, 1450, "LPCHPC"} };
 	return true;
   case 10006:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 10007:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 10008:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 10009:   // KEmuon_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, "LFCHPC"}, {11, 27, -50, 1550, "LPCHFC"}, {28, 38, -50, 1450, "LPCHPC"} };
 	return true;
   case 10101:   // KEmuon_Ehadron_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 10201:   // KEmuon_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 10202:   // KEmuon_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 10203:   // KEmuon_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, "LFCHFC"}, {17, 33, -50, 1550, "LPCorHPC"} };
 	return true;
   case 10204:   // KEmuon_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 11001:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 11002:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 11003:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 11004:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 11005:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, "LFCHFC"}, {17, 30, 0, 2600, "LFCHPC"}, {31, 46, 0, 3000, "LPCHFC"}, {47, 62, 0, 3000, "LPCHPC"} };
 	return true;
   case 11006:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 11007:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 11008:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 11009:   // KEmuon_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, "LFCHPC"}, {14, 29, 0, 3000, "LPCHFC"}, {30, 45, 0, 3000, "LPCHPC"} };
 	return true;
   case 11101:   // KEmuon_Enu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 11201:   // KEmuon_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 11202:   // KEmuon_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 11203:   // KEmuon_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, "LFCHFC"}, {17, 32, 0, 3000, "LPCorHPC"} };
 	return true;
   case 11204:   // KEmuon_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 12001:   // KEmuon_costhetamu_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 12002:   // KEmuon_costhetamu_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 12003:   // KEmuon_costhetamu_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 12004:   // KEmuon_costhetamu_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 12005:   // KEmuon_costhetamu_Ehadron_inc_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, "LFCHFC"}, {17, 27, -50, 1450, "LFCHPC"}, {28, 44, -50, 1550, "LPCHFC"}, {45, 55, -50, 1450, "LPCHPC"} };
 	return true;
   case 12101:   // KEmuon_costhetamu_Ehadron_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 12201:   // KEmuon_costhetamu_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 12202:   // KEmuon_costhetamu_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 12203:   // KEmuon_costhetamu_Ehadron_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, "LFCHFC"}, {17, 33, -50, 1550, "LPCorHPC"} };
 	return true;
   case 13001:   // KEmuon_costhetamu_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 13002:   // KEmuon_costhetamu_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 13003:   // KEmuon_costhetamu_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 13004:   // KEmuon_costhetamu_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 13005:   // KEmuon_costhetamu_Enu_inc_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, "LFCHFC"}, {17, 30, 0, 2600, "LFCHPC"}, {31, 46, 0, 3000, "LPCHFC"}, {47, 62, 0, 3000, "LPCHPC"} };
 	return true;
   case 13101:   // KEmuon_costhetamu_Enu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 13201:   // KEmuon_costhetamu_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 13202:   // KEmuon_costhetamu_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 13203:   // KEmuon_costhetamu_Enu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, "LFCHFC"}, {17, 32, 0, 3000, "LPCorHPC"} };
 	return true;
   case 14001:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14002:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14003:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14004:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14005:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14006:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 14007:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14008:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 14009:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -50, 1350, ""} };
 	return true;
   case 14010:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, -50, 750, ""} };
 	return true;
   case 14011:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -50, 750, ""} };
 	return true;
   case 14012:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1200, ""} };
 	return true;
   case 14013:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 750, ""} };
 	return true;
   case 14014:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, -50, 300, ""} };
 	return true;
   case 14015:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -50, 250, ""} };
 	return true;
   case 14016:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, -50, 550, ""} };
 	return true;
   case 14017:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 950, ""} };
 	return true;
   case 14018:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -50, 750, ""} };
 	return true;
   case 14019:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 14020:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 14021:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -50, 1300, ""} };
 	return true;
   case 14022:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1450, ""} };
 	return true;
   case 14023:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 14024:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 14025:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np LFCHFC"}, {17, 27, -50, 1450, "Np LFCHPC"}, {28, 44, -50, 1550, "Np LPCHFC"}, {45, 55, -50, 1450, "Np LPCHPC"}, {56, 66, -50, 1450, "PorLNp LFCHFC"}, {67, 75, -50, 1550, "PorLNp LFCHPC"}, {76, 86, -50, 1450, "PorLNp LPCHFC"}, {87, 95, -50, 1550, "PorLNp LPCHPC"}, {96, 103, -50, 1350, "Scat0p LFCHFC"}, {104, 106, -50, 750, "Scat0p LFCHPC"}, {107, 111, -50, 750, "Scat0p LPCHFC"}, {112, 117, -50, 1200, "Scat0p LPCHPC"}, {118, 126, -50, 750, "Act0p LFCHFC"}, {127, 128, -50, 300, "Act0p LFCHPC"}, {129, 132, -50, 250, "Act0p LPCHFC"}, {133, 135, -50, 550, "Act0p LPCHPC"}, {136, 146, -50, 950, "Trk0p LFCHFC"}, {147, 151, -50, 750, "Trk0p LFCHPC"}, {152, 157, -50, 700, "Trk0p LPCHFC"}, {158, 163, -50, 700, "Trk0p LPCHPC"}, {164, 173, -50, 1300, "G0p LFCHFC"}, {174, 179, -50, 1450, "G0p LFCHPC"}, {180, 193, -50, 1250, "G0p LPCHFC"}, {194, 202, -50, 1550, "G0p LPCHPC"} };
 	return true;
   case 14026:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14027:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14028:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14029:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 14030:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14031:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 14032:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, -50, 750, ""} };
 	return true;
   case 14033:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -50, 750, ""} };
 	return true;
   case 14034:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1200, ""} };
 	return true;
   case 14035:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, -50, 300, ""} };
 	return true;
   case 14036:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -50, 250, ""} };
 	return true;
   case 14037:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, -50, 550, ""} };
 	return true;
   case 14038:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -50, 750, ""} };
 	return true;
   case 14039:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 14040:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 14041:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1450, ""} };
 	return true;
   case 14042:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 14043:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 14044:   // KEmuon_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 10, -50, 1450, "Np LFCHPC"}, {11, 27, -50, 1550, "Np LPCHFC"}, {28, 38, -50, 1450, "Np LPCHPC"}, {39, 47, -50, 1550, "PorLNp LFCHPC"}, {48, 58, -50, 1450, "PorLNp LPCHFC"}, {59, 67, -50, 1550, "PorLNp LPCHPC"}, {68, 70, -50, 750, "Scat0p LFCHPC"}, {71, 75, -50, 750, "Scat0p LPCHFC"}, {76, 81, -50, 1200, "Scat0p LPCHPC"}, {82, 83, -50, 300, "Act0p LFCHPC"}, {84, 87, -50, 250, "Act0p LPCHFC"}, {88, 90, -50, 550, "Act0p LPCHPC"}, {91, 95, -50, 750, "Trk0p LFCHPC"}, {96, 101, -50, 700, "Trk0p LPCHFC"}, {102, 107, -50, 700, "Trk0p LPCHPC"}, {108, 113, -50, 1450, "G0p LFCHPC"}, {114, 127, -50, 1250, "G0p LPCHFC"}, {128, 136, -50, 1550, "G0p LPCHPC"} };
 	return true;
   case 14101:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14102:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14103:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -50, 1350, ""} };
 	return true;
   case 14104:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 750, ""} };
 	return true;
   case 14105:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 950, ""} };
 	return true;
   case 14106:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 14107:   // KEmuon_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np"}, {17, 27, -50, 1450, "PorLNp"}, {28, 35, -50, 1350, "Scat0p"}, {36, 44, -50, 750, "Act0p"}, {45, 55, -50, 950, "Trk0p"}, {56, 69, -50, 1250, "G0p"} };
 	return true;
   case 14201:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14202:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14203:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14204:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14205:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -50, 1350, ""} };
 	return true;
   case 14206:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1200, ""} };
 	return true;
   case 14207:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 750, ""} };
 	return true;
   case 14208:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -50, 250, ""} };
 	return true;
   case 14209:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 950, ""} };
 	return true;
   case 14210:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 14211:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -50, 1300, ""} };
 	return true;
   case 14212:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 14213:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np LFCHFC"}, {17, 33, -50, 1550, "Np LPCorHPC"}, {34, 44, -50, 1450, "PorLNp LFCHFC"}, {45, 55, -50, 1450, "PorLNp LPCorHPC"}, {56, 63, -50, 1350, "Scat0p LFCHFC"}, {64, 69, -50, 1200, "Scat0p LPCorHPC"}, {70, 78, -50, 750, "Act0p LFCHFC"}, {79, 82, -50, 250, "Act0p LPCorHPC"}, {83, 93, -50, 950, "Trk0p LFCHFC"}, {94, 99, -50, 700, "Trk0p LPCorHPC"}, {100, 109, -50, 1300, "G0p LFCHFC"}, {110, 123, -50, 1250, "G0p LPCorHPC"} };
 	return true;
   case 14214:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 14215:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 14216:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1200, ""} };
 	return true;
   case 14217:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -50, 250, ""} };
 	return true;
   case 14218:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 14219:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 14220:   // KEmuon_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "FC hadronic energy #rightarrow hadronic energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np LPCorHPC"}, {17, 27, -50, 1450, "PorLNp LPCorHPC"}, {28, 33, -50, 1200, "Scat0p LPCorHPC"}, {34, 37, -50, 250, "Act0p LPCorHPC"}, {38, 43, -50, 700, "Trk0p LPCorHPC"}, {44, 57, -50, 1250, "G0p LPCorHPC"} };
 	return true;
   case 15001:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15002:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 15003:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15004:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15005:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 15006:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 2700, ""} };
 	return true;
   case 15007:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15008:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 3000, ""} };
 	return true;
   case 15009:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15010:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 1200, ""} };
 	return true;
   case 15011:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15012:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 2400, ""} };
 	return true;
   case 15013:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 15014:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 1200, ""} };
 	return true;
   case 15015:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 2700, ""} };
 	return true;
   case 15016:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 15017:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1600, ""} };
 	return true;
   case 15018:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1500, ""} };
 	return true;
   case 15019:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15020:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 15021:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 15022:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15023:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15024:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 3000, ""} };
 	return true;
   case 15025:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 14, 0, 2800, "Np LFCHFC"}, {15, 28, 0, 2600, "Np LFCHPC"}, {29, 44, 0, 3000, "Np LPCHFC"}, {45, 60, 0, 3000, "Np LPCHPC"}, {61, 74, 0, 2600, "PorLNp LFCHFC"}, {75, 84, 0, 2700, "PorLNp LFCHPC"}, {85, 100, 0, 3000, "PorLNp LPCHFC"}, {101, 111, 0, 3000, "PorLNp LPCHPC"}, {112, 119, 0, 2100, "Scat0p LFCHFC"}, {120, 123, 0, 1200, "Scat0p LFCHPC"}, {124, 131, 0, 2100, "Scat0p LPCHFC"}, {132, 135, 0, 2400, "Scat0p LPCHPC"}, {136, 152, 0, 1600, "Act0p LFCHFC"}, {153, 156, 0, 1200, "Act0p LFCHPC"}, {157, 166, 0, 2700, "Act0p LPCHFC"}, {167, 179, 0, 2400, "Act0p LPCHPC"}, {180, 188, 0, 1600, "Trk0p LFCHFC"}, {189, 194, 0, 1500, "Trk0p LFCHPC"}, {195, 209, 0, 2800, "Trk0p LPCHFC"}, {210, 222, 0, 2400, "Trk0p LPCHPC"}, {223, 233, 0, 2000, "G0p LFCHFC"}, {234, 241, 0, 2100, "G0p LFCHPC"}, {242, 257, 0, 3000, "G0p LPCHFC"}, {258, 268, 0, 3000, "G0p LPCHPC"} };
 	return true;
   case 15026:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 15027:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15028:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15029:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 2700, ""} };
 	return true;
   case 15030:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15031:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 3000, ""} };
 	return true;
   case 15032:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 1200, ""} };
 	return true;
   case 15033:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15034:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 2400, ""} };
 	return true;
   case 15035:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 1200, ""} };
 	return true;
   case 15036:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 2700, ""} };
 	return true;
   case 15037:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 15038:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1500, ""} };
 	return true;
   case 15039:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15040:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 15041:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15042:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15043:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 3000, ""} };
 	return true;
   case 15044:   // KEmuon_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 2600, "Np LFCHPC"}, {14, 29, 0, 3000, "Np LPCHFC"}, {30, 45, 0, 3000, "Np LPCHPC"}, {46, 55, 0, 2700, "PorLNp LFCHPC"}, {56, 71, 0, 3000, "PorLNp LPCHFC"}, {72, 82, 0, 3000, "PorLNp LPCHPC"}, {83, 86, 0, 1200, "Scat0p LFCHPC"}, {87, 94, 0, 2100, "Scat0p LPCHFC"}, {95, 98, 0, 2400, "Scat0p LPCHPC"}, {99, 102, 0, 1200, "Act0p LFCHPC"}, {103, 112, 0, 2700, "Act0p LPCHFC"}, {113, 125, 0, 2400, "Act0p LPCHPC"}, {126, 131, 0, 1500, "Trk0p LFCHPC"}, {132, 146, 0, 2800, "Trk0p LPCHFC"}, {147, 159, 0, 2400, "Trk0p LPCHPC"}, {160, 167, 0, 2100, "G0p LFCHPC"}, {168, 183, 0, 3000, "G0p LPCHFC"}, {184, 194, 0, 3000, "G0p LPCHPC"} };
 	return true;
   case 15101:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15102:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15103:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15104:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 15105:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15106:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15107:   // KEmuon_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 15, 0, 3000, "Np"}, {16, 31, 0, 3000, "PorLNp"}, {32, 39, 0, 2100, "Scat0p"}, {40, 56, 0, 1600, "Act0p"}, {57, 71, 0, 2800, "Trk0p"}, {72, 87, 0, 3000, "G0p"} };
 	return true;
   case 15201:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15202:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15203:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 15204:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15205:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15206:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15207:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 15208:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 15209:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1600, ""} };
 	return true;
   case 15210:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15211:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 15212:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15213:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 14, 0, 2800, "Np LFCHFC"}, {15, 30, 0, 3000, "Np LPCorHPC"}, {31, 44, 0, 2600, "PorLNp LFCHFC"}, {45, 60, 0, 3000, "PorLNp LPCorHPC"}, {61, 68, 0, 2100, "Scat0p LFCHFC"}, {69, 76, 0, 2100, "Scat0p LPCorHPC"}, {77, 93, 0, 1600, "Act0p LFCHFC"}, {94, 106, 0, 2400, "Act0p LPCorHPC"}, {107, 115, 0, 1600, "Trk0p LFCHFC"}, {116, 130, 0, 2800, "Trk0p LPCorHPC"}, {131, 141, 0, 2000, "G0p LFCHFC"}, {142, 157, 0, 3000, "G0p LPCorHPC"} };
 	return true;
   case 15214:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15215:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15216:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 15217:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 15218:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 15219:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 15220:   // KEmuon_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "FC neutrino energy #rightarrow neutrino energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 15, 0, 3000, "Np LPCorHPC"}, {16, 31, 0, 3000, "PorLNp LPCorHPC"}, {32, 39, 0, 2100, "Scat0p LPCorHPC"}, {40, 52, 0, 2400, "Act0p LPCorHPC"}, {53, 67, 0, 2800, "Trk0p LPCorHPC"}, {68, 83, 0, 3000, "G0p LPCorHPC"} };
 	return true;
   case 16001:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 16002:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16003:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 16004:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16005:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16006:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 16007:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16008:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 16009:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -50, 1350, ""} };
 	return true;
   case 16010:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, -50, 750, ""} };
 	return true;
   case 16011:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -50, 750, ""} };
 	return true;
   case 16012:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1200, ""} };
 	return true;
   case 16013:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 750, ""} };
 	return true;
   case 16014:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, -50, 300, ""} };
 	return true;
   case 16015:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -50, 250, ""} };
 	return true;
   case 16016:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, -50, 550, ""} };
 	return true;
   case 16017:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 950, ""} };
 	return true;
   case 16018:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -50, 750, ""} };
 	return true;
   case 16019:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 16020:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 16021:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -50, 1300, ""} };
 	return true;
   case 16022:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1450, ""} };
 	return true;
   case 16023:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 16024:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 1550, ""} };
 	return true;
   case 16025:   // KEmuon_costhetamu_Ehadron_bdt_1d_val
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np LFCHFC"}, {17, 27, -50, 1450, "Np LFCHPC"}, {28, 44, -50, 1550, "Np LPCHFC"}, {45, 55, -50, 1450, "Np LPCHPC"}, {56, 66, -50, 1450, "PorLNp LFCHFC"}, {67, 75, -50, 1550, "PorLNp LFCHPC"}, {76, 86, -50, 1450, "PorLNp LPCHFC"}, {87, 95, -50, 1550, "PorLNp LPCHPC"}, {96, 103, -50, 1350, "Scat0p LFCHFC"}, {104, 106, -50, 750, "Scat0p LFCHPC"}, {107, 111, -50, 750, "Scat0p LPCHFC"}, {112, 117, -50, 1200, "Scat0p LPCHPC"}, {118, 126, -50, 750, "Act0p LFCHFC"}, {127, 128, -50, 300, "Act0p LFCHPC"}, {129, 132, -50, 250, "Act0p LPCHFC"}, {133, 135, -50, 550, "Act0p LPCHPC"}, {136, 146, -50, 950, "Trk0p LFCHFC"}, {147, 151, -50, 750, "Trk0p LFCHPC"}, {152, 157, -50, 700, "Trk0p LPCHFC"}, {158, 163, -50, 700, "Trk0p LPCHPC"}, {164, 173, -50, 1300, "G0p LFCHFC"}, {174, 179, -50, 1450, "G0p LFCHPC"}, {180, 193, -50, 1250, "G0p LPCHFC"}, {194, 202, -50, 1550, "G0p LPCHPC"} };
 	return true;
   case 16101:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 16102:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16103:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -50, 1350, ""} };
 	return true;
   case 16104:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 750, ""} };
 	return true;
   case 16105:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 950, ""} };
 	return true;
   case 16106:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 16107:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np"}, {17, 27, -50, 1450, "PorLNp"}, {28, 35, -50, 1350, "Scat0p"}, {36, 44, -50, 750, "Act0p"}, {45, 55, -50, 950, "Trk0p"}, {56, 69, -50, 1250, "G0p"} };
 	return true;
   case 16201:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 16202:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -50, 1550, ""} };
 	return true;
   case 16203:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16204:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 1450, ""} };
 	return true;
   case 16205:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -50, 1350, ""} };
 	return true;
   case 16206:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 1200, ""} };
 	return true;
   case 16207:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -50, 750, ""} };
 	return true;
   case 16208:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -50, 250, ""} };
 	return true;
   case 16209:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -50, 950, ""} };
 	return true;
   case 16210:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -50, 700, ""} };
 	return true;
   case 16211:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -50, 1300, ""} };
 	return true;
   case 16212:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -50, 1250, ""} };
 	return true;
   case 16213:   // KEmuon_costhetamu_Ehadron_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{had} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{had} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow hadronic energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 16, -50, 1550, "Np LFCHFC"}, {17, 33, -50, 1550, "Np LPCorHPC"}, {34, 44, -50, 1450, "PorLNp LFCHFC"}, {45, 55, -50, 1450, "PorLNp LPCorHPC"}, {56, 63, -50, 1350, "Scat0p LFCHFC"}, {64, 69, -50, 1200, "Scat0p LPCorHPC"}, {70, 78, -50, 750, "Act0p LFCHFC"}, {79, 82, -50, 250, "Act0p LPCorHPC"}, {83, 93, -50, 950, "Trk0p LFCHFC"}, {94, 99, -50, 700, "Trk0p LPCorHPC"}, {100, 109, -50, 1300, "G0p LFCHFC"}, {110, 123, -50, 1250, "G0p LPCorHPC"} };
 	return true;
   case 17001:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 17002:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 17003:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17004:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17005:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 17006:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 2700, ""} };
 	return true;
   case 17007:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17008:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 3000, ""} };
 	return true;
   case 17009:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 17010:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 1200, ""} };
 	return true;
   case 17011:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 17012:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 2400, ""} };
 	return true;
   case 17013:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 17014:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 1200, ""} };
 	return true;
   case 17015:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 2700, ""} };
 	return true;
   case 17016:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 17017:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1600, ""} };
 	return true;
   case 17018:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1500, ""} };
 	return true;
   case 17019:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 17020:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 17021:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 17022:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 17023:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17024:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 3000, ""} };
 	return true;
   case 17025:   // KEmuon_costhetamu_Enu_bdt_1d_val
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 14, 0, 2800, "Np LFCHFC"}, {15, 28, 0, 2600, "Np LFCHPC"}, {29, 44, 0, 3000, "Np LPCHFC"}, {45, 60, 0, 3000, "Np LPCHPC"}, {61, 74, 0, 2600, "PorLNp LFCHFC"}, {75, 84, 0, 2700, "PorLNp LFCHPC"}, {85, 100, 0, 3000, "PorLNp LPCHFC"}, {101, 111, 0, 3000, "PorLNp LPCHPC"}, {112, 119, 0, 2100, "Scat0p LFCHFC"}, {120, 123, 0, 1200, "Scat0p LFCHPC"}, {124, 131, 0, 2100, "Scat0p LPCHFC"}, {132, 135, 0, 2400, "Scat0p LPCHPC"}, {136, 152, 0, 1600, "Act0p LFCHFC"}, {153, 156, 0, 1200, "Act0p LFCHPC"}, {157, 166, 0, 2700, "Act0p LPCHFC"}, {167, 179, 0, 2400, "Act0p LPCHPC"}, {180, 188, 0, 1600, "Trk0p LFCHFC"}, {189, 194, 0, 1500, "Trk0p LFCHPC"}, {195, 209, 0, 2800, "Trk0p LPCHFC"}, {210, 222, 0, 2400, "Trk0p LPCHPC"}, {223, 233, 0, 2000, "G0p LFCHFC"}, {234, 241, 0, 2100, "G0p LFCHPC"}, {242, 257, 0, 3000, "G0p LPCHFC"}, {258, 268, 0, 3000, "G0p LPCHPC"} };
 	return true;
   case 17101:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17102:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17103:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 17104:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 17105:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 17106:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17107:   // KEmuon_costhetamu_Enu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 15, 0, 3000, "Np"}, {16, 31, 0, 3000, "PorLNp"}, {32, 39, 0, 2100, "Scat0p"}, {40, 56, 0, 1600, "Act0p"}, {57, 71, 0, 2800, "Trk0p"}, {72, 87, 0, 3000, "G0p"} };
 	return true;
   case 17201:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 17202:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17203:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 2600, ""} };
 	return true;
   case 17204:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17205:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 17206:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 2100, ""} };
 	return true;
   case 17207:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, 0, 1600, ""} };
 	return true;
   case 17208:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 2400, ""} };
 	return true;
   case 17209:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1600, ""} };
 	return true;
   case 17210:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 14, 0, 2800, ""} };
 	return true;
   case 17211:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 17212:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 15, 0, 3000, ""} };
 	return true;
   case 17213:   // KEmuon_costhetamu_Enu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{#nu} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{#nu} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow neutrino energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 14, 0, 2800, "Np LFCHFC"}, {15, 30, 0, 3000, "Np LPCorHPC"}, {31, 44, 0, 2600, "PorLNp LFCHFC"}, {45, 60, 0, 3000, "PorLNp LPCorHPC"}, {61, 68, 0, 2100, "Scat0p LFCHFC"}, {69, 76, 0, 2100, "Scat0p LPCorHPC"}, {77, 93, 0, 1600, "Act0p LFCHFC"}, {94, 106, 0, 2400, "Act0p LPCorHPC"}, {107, 115, 0, 1600, "Trk0p LFCHFC"}, {116, 130, 0, 2800, "Trk0p LPCorHPC"}, {131, 141, 0, 2000, "G0p LFCHFC"}, {142, 157, 0, 3000, "G0p LPCorHPC"} };
 	return true;
   case 18001:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 18002:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 18003:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 18004:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 18005:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, "LFCHFC"}, {14, 27, 0, 1300, "LFCHPC"}, {28, 54, 0, 1300, "LPCHFC"}, {55, 68, 0, 1300, "LPCHPC"} };
 	return true;
   case 18006:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 18007:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 18008:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 18009:   // KEmuon_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, "LFCHPC"}, {14, 40, 0, 1300, "LPCHFC"}, {41, 54, 0, 1300, "LPCHPC"} };
 	return true;
   case 18101:   // KEmuon_Eavail_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 18201:   // KEmuon_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 18202:   // KEmuon_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 18203:   // KEmuon_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, "LFCHFC"}, {14, 40, 0, 1300, "LPCorHPC"} };
 	return true;
   case 18204:   // KEmuon_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 19001:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19002:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19003:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 19004:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19005:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19006:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 19007:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19008:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 19009:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1250, ""} };
 	return true;
   case 19010:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 800, ""} };
 	return true;
   case 19011:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 19012:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1000, ""} };
 	return true;
   case 19013:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19014:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, 0, 300, ""} };
 	return true;
   case 19015:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 300, ""} };
 	return true;
   case 19016:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 600, ""} };
 	return true;
   case 19017:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 19018:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 600, ""} };
 	return true;
   case 19019:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19020:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19021:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19022:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 19023:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 19024:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 19025:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 1300, "Np LFCHFC"}, {14, 27, 0, 1300, "Np LFCHPC"}, {28, 54, 0, 1300, "Np LPCHFC"}, {55, 68, 0, 1300, "Np LPCHPC"}, {69, 82, 0, 1300, "PorLNp LFCHFC"}, {83, 89, 0, 1200, "PorLNp LFCHPC"}, {90, 103, 0, 1300, "PorLNp LPCHFC"}, {104, 112, 0, 1200, "PorLNp LPCHPC"}, {113, 118, 0, 1250, "Scat0p LFCHFC"}, {119, 123, 0, 800, "Scat0p LFCHPC"}, {124, 128, 0, 600, "Scat0p LPCHFC"}, {129, 134, 0, 1000, "Scat0p LPCHPC"}, {135, 141, 0, 600, "Act0p LFCHFC"}, {142, 143, 0, 300, "Act0p LFCHPC"}, {144, 147, 0, 300, "Act0p LPCHFC"}, {148, 151, 0, 600, "Act0p LPCHPC"}, {152, 160, 0, 800, "Trk0p LFCHFC"}, {161, 163, 0, 600, "Trk0p LFCHPC"}, {164, 170, 0, 600, "Trk0p LPCHFC"}, {171, 177, 0, 600, "Trk0p LPCHPC"}, {178, 191, 0, 1300, "G0p LFCHFC"}, {192, 198, 0, 1200, "G0p LFCHPC"}, {199, 211, 0, 1200, "G0p LPCHFC"}, {212, 220, 0, 1200, "G0p LPCHPC"} };
 	return true;
   case 19026:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19027:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 19028:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19029:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 19030:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19031:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 19032:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 800, ""} };
 	return true;
   case 19033:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 19034:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1000, ""} };
 	return true;
   case 19035:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, 0, 300, ""} };
 	return true;
   case 19036:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 300, ""} };
 	return true;
   case 19037:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 600, ""} };
 	return true;
   case 19038:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 600, ""} };
 	return true;
   case 19039:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19040:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19041:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 19042:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 19043:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 19044:   // KEmuon_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 1300, "Np LFCHPC"}, {14, 40, 0, 1300, "Np LPCHFC"}, {41, 54, 0, 1300, "Np LPCHPC"}, {55, 61, 0, 1200, "PorLNp LFCHPC"}, {62, 75, 0, 1300, "PorLNp LPCHFC"}, {76, 84, 0, 1200, "PorLNp LPCHPC"}, {85, 89, 0, 800, "Scat0p LFCHPC"}, {90, 94, 0, 600, "Scat0p LPCHFC"}, {95, 100, 0, 1000, "Scat0p LPCHPC"}, {101, 102, 0, 300, "Act0p LFCHPC"}, {103, 106, 0, 300, "Act0p LPCHFC"}, {107, 110, 0, 600, "Act0p LPCHPC"}, {111, 113, 0, 600, "Trk0p LFCHPC"}, {114, 120, 0, 600, "Trk0p LPCHFC"}, {121, 127, 0, 600, "Trk0p LPCHPC"}, {128, 134, 0, 1200, "G0p LFCHPC"}, {135, 147, 0, 1200, "G0p LPCHFC"}, {148, 156, 0, 1200, "G0p LPCHPC"} };
 	return true;
   case 19101:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 19102:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19103:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1250, ""} };
 	return true;
   case 19104:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19105:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 19106:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19107:   // KEmuon_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 26, 0, 1300, "Np"}, {27, 40, 0, 1300, "PorLNp"}, {41, 46, 0, 1250, "Scat0p"}, {47, 53, 0, 600, "Act0p"}, {54, 62, 0, 800, "Trk0p"}, {63, 76, 0, 1300, "G0p"} };
 	return true;
   case 19201:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19202:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 19203:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19204:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19205:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1250, ""} };
 	return true;
   case 19206:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1000, ""} };
 	return true;
   case 19207:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19208:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 600, ""} };
 	return true;
   case 19209:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 19210:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19211:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19212:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 19213:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy #rightarrow available energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 1300, "Np LFCHFC"}, {14, 40, 0, 1300, "Np LPCorHPC"}, {41, 54, 0, 1300, "PorLNp LFCHFC"}, {55, 68, 0, 1300, "PorLNp LPCorHPC"}, {69, 74, 0, 1250, "Scat0p LFCHFC"}, {75, 80, 0, 1000, "Scat0p LPCorHPC"}, {81, 87, 0, 600, "Act0p LFCHFC"}, {88, 91, 0, 600, "Act0p LPCorHPC"}, {92, 100, 0, 800, "Trk0p LFCHFC"}, {101, 107, 0, 600, "Trk0p LPCorHPC"}, {108, 121, 0, 1300, "G0p LFCHFC"}, {122, 134, 0, 1200, "G0p LPCorHPC"} };
 	return true;
   case 19214:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 19215:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 19216:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1000, ""} };
 	return true;
   case 19217:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 600, ""} };
 	return true;
   case 19218:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 19219:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 19220:   // KEmuon_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "FC available energy #rightarrow available energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 26, 0, 1300, "Np LPCorHPC"}, {27, 40, 0, 1300, "PorLNp LPCorHPC"}, {41, 46, 0, 1000, "Scat0p LPCorHPC"}, {47, 50, 0, 600, "Act0p LPCorHPC"}, {51, 57, 0, 600, "Trk0p LPCorHPC"}, {58, 70, 0, 1200, "G0p LPCorHPC"} };
 	return true;
   case 20001:   // KEmuon_costhetamu_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 20002:   // KEmuon_costhetamu_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 20003:   // KEmuon_costhetamu_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 20004:   // KEmuon_costhetamu_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 20005:   // KEmuon_costhetamu_Eavail_inc_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, "LFCHFC"}, {14, 27, 0, 1300, "LFCHPC"}, {28, 54, 0, 1300, "LPCHFC"}, {55, 68, 0, 1300, "LPCHPC"} };
 	return true;
   case 20101:   // KEmuon_costhetamu_Eavail_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 20201:   // KEmuon_costhetamu_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 20202:   // KEmuon_costhetamu_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 20203:   // KEmuon_costhetamu_Eavail_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, "LFCHFC"}, {14, 40, 0, 1300, "LPCorHPC"} };
 	return true;
   case 21001:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21002:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21003:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 21004:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21005:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21006:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 21007:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21008:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 21009:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1250, ""} };
 	return true;
   case 21010:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 800, ""} };
 	return true;
   case 21011:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 21012:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1000, ""} };
 	return true;
   case 21013:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 21014:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, 0, 300, ""} };
 	return true;
   case 21015:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 300, ""} };
 	return true;
   case 21016:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 600, ""} };
 	return true;
   case 21017:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 21018:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 600, ""} };
 	return true;
   case 21019:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 21020:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 21021:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21022:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 21023:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 21024:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 21025:   // KEmuon_costhetamu_Eavail_bdt_1d_val
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 1300, "Np LFCHFC"}, {14, 27, 0, 1300, "Np LFCHPC"}, {28, 54, 0, 1300, "Np LPCHFC"}, {55, 68, 0, 1300, "Np LPCHPC"}, {69, 82, 0, 1300, "PorLNp LFCHFC"}, {83, 89, 0, 1200, "PorLNp LFCHPC"}, {90, 103, 0, 1300, "PorLNp LPCHFC"}, {104, 112, 0, 1200, "PorLNp LPCHPC"}, {113, 118, 0, 1250, "Scat0p LFCHFC"}, {119, 123, 0, 800, "Scat0p LFCHPC"}, {124, 128, 0, 600, "Scat0p LPCHFC"}, {129, 134, 0, 1000, "Scat0p LPCHPC"}, {135, 141, 0, 600, "Act0p LFCHFC"}, {142, 143, 0, 300, "Act0p LFCHPC"}, {144, 147, 0, 300, "Act0p LPCHFC"}, {148, 151, 0, 600, "Act0p LPCHPC"}, {152, 160, 0, 800, "Trk0p LFCHFC"}, {161, 163, 0, 600, "Trk0p LFCHPC"}, {164, 170, 0, 600, "Trk0p LPCHFC"}, {171, 177, 0, 600, "Trk0p LPCHPC"}, {178, 191, 0, 1300, "G0p LFCHFC"}, {192, 198, 0, 1200, "G0p LFCHPC"}, {199, 211, 0, 1200, "G0p LPCHFC"}, {212, 220, 0, 1200, "G0p LPCHPC"} };
 	return true;
   case 21101:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 21102:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21103:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1250, ""} };
 	return true;
   case 21104:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 21105:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 21106:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21107:   // KEmuon_costhetamu_Eavail_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 26, 0, 1300, "Np"}, {27, 40, 0, 1300, "PorLNp"}, {41, 46, 0, 1250, "Scat0p"}, {47, 53, 0, 600, "Act0p"}, {54, 62, 0, 800, "Trk0p"}, {63, 76, 0, 1300, "G0p"} };
 	return true;
   case 21201:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21202:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 26, 0, 1300, ""} };
 	return true;
   case 21203:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21204:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21205:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1250, ""} };
 	return true;
   case 21206:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1000, ""} };
 	return true;
   case 21207:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 21208:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 600, ""} };
 	return true;
   case 21209:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 21210:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 21211:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 21212:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 21213:   // KEmuon_costhetamu_Eavail_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco E_{avail} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco E_{avail} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow available energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 1300, "Np LFCHFC"}, {14, 40, 0, 1300, "Np LPCorHPC"}, {41, 54, 0, 1300, "PorLNp LFCHFC"}, {55, 68, 0, 1300, "PorLNp LPCorHPC"}, {69, 74, 0, 1250, "Scat0p LFCHFC"}, {75, 80, 0, 1000, "Scat0p LPCorHPC"}, {81, 87, 0, 600, "Act0p LFCHFC"}, {88, 91, 0, 600, "Act0p LPCorHPC"}, {92, 100, 0, 800, "Trk0p LFCHFC"}, {101, 107, 0, 600, "Trk0p LPCorHPC"}, {108, 121, 0, 1300, "G0p LFCHFC"}, {122, 134, 0, 1200, "G0p LPCorHPC"} };
 	return true;
   case 22001:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 22002:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 22003:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 22004:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 22005:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, "LFCHFC"}, {18, 26, 0, 800, "LFCHPC"}, {27, 39, 0, 1200, "LPCHFC"}, {40, 52, 0, 1200, "LPCHPC"} };
 	return true;
   case 22006:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 22007:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 22008:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 22009:   // KEmuon_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T}, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, "LFCHPC"}, {9, 21, 0, 1200, "LPCHFC"}, {22, 34, 0, 1200, "LPCHPC"} };
 	return true;
   case 22101:   // KEmuon_ptmu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 22201:   // KEmuon_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 22202:   // KEmuon_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 22203:   // KEmuon_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, "LFCHFC"}, {18, 30, 0, 1200, "LPCorHPC"} };
 	return true;
   case 22204:   // KEmuon_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23001:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 23002:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 23003:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23004:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23005:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 11, 0, 1100, ""} };
 	return true;
   case 23006:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 23007:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23008:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23009:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 600, ""} };
 	return true;
   case 23010:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 300, ""} };
 	return true;
   case 23011:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23012:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23013:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 650, ""} };
 	return true;
   case 23014:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 450, ""} };
 	return true;
   case 23015:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23016:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 23017:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 23018:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 500, ""} };
 	return true;
   case 23019:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23020:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23021:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 23022:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 23023:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23024:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23025:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 17, 0, 850, "Np LFCHFC"}, {18, 26, 0, 800, "Np LFCHPC"}, {27, 39, 0, 1200, "Np LPCHFC"}, {40, 52, 0, 1200, "Np LPCHPC"}, {53, 64, 0, 1100, "PorLNp LFCHFC"}, {65, 69, 0, 600, "PorLNp LFCHPC"}, {70, 78, 0, 1200, "PorLNp LPCHFC"}, {79, 87, 0, 1200, "PorLNp LPCHPC"}, {88, 100, 0, 600, "Scat0p LFCHFC"}, {101, 104, 0, 300, "Scat0p LFCHPC"}, {105, 111, 0, 900, "Scat0p LPCHFC"}, {112, 118, 0, 900, "Scat0p LPCHPC"}, {119, 132, 0, 650, "Act0p LFCHFC"}, {133, 136, 0, 450, "Act0p LFCHPC"}, {137, 145, 0, 1200, "Act0p LPCHFC"}, {146, 152, 0, 1200, "Act0p LPCHPC"}, {153, 159, 0, 600, "Trk0p LFCHFC"}, {160, 165, 0, 500, "Trk0p LFCHPC"}, {166, 174, 0, 1200, "Trk0p LPCHFC"}, {175, 181, 0, 900, "Trk0p LPCHPC"}, {182, 199, 0, 850, "G0p LFCHFC"}, {200, 204, 0, 600, "G0p LFCHPC"}, {205, 217, 0, 1200, "G0p LPCHFC"}, {218, 230, 0, 1200, "G0p LPCHPC"} };
 	return true;
   case 23026:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 23027:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23028:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23029:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 23030:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23031:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23032:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 300, ""} };
 	return true;
   case 23033:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23034:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23035:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 450, ""} };
 	return true;
   case 23036:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23037:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 23038:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 500, ""} };
 	return true;
   case 23039:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23040:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23041:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 23042:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23043:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23044:   // KEmuon_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T}, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 8, 0, 800, "Np LFCHPC"}, {9, 21, 0, 1200, "Np LPCHFC"}, {22, 34, 0, 1200, "Np LPCHPC"}, {35, 39, 0, 600, "PorLNp LFCHPC"}, {40, 48, 0, 1200, "PorLNp LPCHFC"}, {49, 57, 0, 1200, "PorLNp LPCHPC"}, {58, 61, 0, 300, "Scat0p LFCHPC"}, {62, 68, 0, 900, "Scat0p LPCHFC"}, {69, 75, 0, 900, "Scat0p LPCHPC"}, {76, 79, 0, 450, "Act0p LFCHPC"}, {80, 88, 0, 1200, "Act0p LPCHFC"}, {89, 95, 0, 1200, "Act0p LPCHPC"}, {96, 101, 0, 500, "Trk0p LFCHPC"}, {102, 110, 0, 1200, "Trk0p LPCHFC"}, {111, 117, 0, 900, "Trk0p LPCHPC"}, {118, 122, 0, 600, "G0p LFCHPC"}, {123, 135, 0, 1200, "G0p LPCHFC"}, {136, 148, 0, 1200, "G0p LPCHPC"} };
 	return true;
   case 23101:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 23102:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 11, 0, 1100, ""} };
 	return true;
   case 23103:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 600, ""} };
 	return true;
   case 23104:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 650, ""} };
 	return true;
   case 23105:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23106:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 23107:   // KEmuon_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 17, 0, 850, "Np"}, {18, 29, 0, 1100, "PorLNp"}, {30, 42, 0, 600, "Scat0p"}, {43, 56, 0, 650, "Act0p"}, {57, 65, 0, 1200, "Trk0p"}, {66, 83, 0, 850, "G0p"} };
 	return true;
   case 23201:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 23202:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23203:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 11, 0, 1100, ""} };
 	return true;
   case 23204:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23205:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 600, ""} };
 	return true;
   case 23206:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23207:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 650, ""} };
 	return true;
   case 23208:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23209:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 23210:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23211:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 23212:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T} G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23213:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 17, 0, 850, "Np LFCHFC"}, {18, 30, 0, 1200, "Np LPCorHPC"}, {31, 42, 0, 1100, "PorLNp LFCHFC"}, {43, 51, 0, 1200, "PorLNp LPCorHPC"}, {52, 64, 0, 600, "Scat0p LFCHFC"}, {65, 71, 0, 900, "Scat0p LPCorHPC"}, {72, 85, 0, 650, "Act0p LFCHFC"}, {86, 94, 0, 1200, "Act0p LPCorHPC"}, {95, 101, 0, 600, "Trk0p LFCHFC"}, {102, 110, 0, 1200, "Trk0p LPCorHPC"}, {111, 128, 0, 850, "G0p LFCHFC"}, {129, 141, 0, 1200, "G0p LPCorHPC"} };
 	return true;
   case 23214:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23215:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23216:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 23217:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23218:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 23219:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T} G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 23220:   // KEmuon_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "FC muon p_{T} #rightarrow muon p_{T}, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 12, 0, 1200, "Np LPCorHPC"}, {13, 21, 0, 1200, "PorLNp LPCorHPC"}, {22, 28, 0, 900, "Scat0p LPCorHPC"}, {29, 37, 0, 1200, "Act0p LPCorHPC"}, {38, 46, 0, 1200, "Trk0p LPCorHPC"}, {47, 59, 0, 1200, "G0p LPCorHPC"} };
 	return true;
   case 24001:   // KEmuon_costhetamu_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 24002:   // KEmuon_costhetamu_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 24003:   // KEmuon_costhetamu_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 24004:   // KEmuon_costhetamu_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 24005:   // KEmuon_costhetamu_ptmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, "LFCHFC"}, {18, 26, 0, 800, "LFCHPC"}, {27, 39, 0, 1200, "LPCHFC"}, {40, 52, 0, 1200, "LPCHPC"} };
 	return true;
   case 24101:   // KEmuon_costhetamu_ptmu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 24201:   // KEmuon_costhetamu_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 24202:   // KEmuon_costhetamu_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 24203:   // KEmuon_costhetamu_ptmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, "LFCHFC"}, {18, 30, 0, 1200, "LPCorHPC"} };
 	return true;
   case 25001:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 25002:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 800, ""} };
 	return true;
   case 25003:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 25004:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 25005:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 11, 0, 1100, ""} };
 	return true;
   case 25006:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 25007:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25008:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25009:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 600, ""} };
 	return true;
   case 25010:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 300, ""} };
 	return true;
   case 25011:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 25012:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 25013:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 650, ""} };
 	return true;
   case 25014:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 450, ""} };
 	return true;
   case 25015:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25016:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 25017:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 25018:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 500, ""} };
 	return true;
   case 25019:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25020:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 25021:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 25022:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, 0, 600, ""} };
 	return true;
   case 25023:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 25024:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 25025:   // KEmuon_costhetamu_ptmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 17, 0, 850, "Np LFCHFC"}, {18, 26, 0, 800, "Np LFCHPC"}, {27, 39, 0, 1200, "Np LPCHFC"}, {40, 52, 0, 1200, "Np LPCHPC"}, {53, 64, 0, 1100, "PorLNp LFCHFC"}, {65, 69, 0, 600, "PorLNp LFCHPC"}, {70, 78, 0, 1200, "PorLNp LPCHFC"}, {79, 87, 0, 1200, "PorLNp LPCHPC"}, {88, 100, 0, 600, "Scat0p LFCHFC"}, {101, 104, 0, 300, "Scat0p LFCHPC"}, {105, 111, 0, 900, "Scat0p LPCHFC"}, {112, 118, 0, 900, "Scat0p LPCHPC"}, {119, 132, 0, 650, "Act0p LFCHFC"}, {133, 136, 0, 450, "Act0p LFCHPC"}, {137, 145, 0, 1200, "Act0p LPCHFC"}, {146, 152, 0, 1200, "Act0p LPCHPC"}, {153, 159, 0, 600, "Trk0p LFCHFC"}, {160, 165, 0, 500, "Trk0p LFCHPC"}, {166, 174, 0, 1200, "Trk0p LPCHFC"}, {175, 181, 0, 900, "Trk0p LPCHPC"}, {182, 199, 0, 850, "G0p LFCHFC"}, {200, 204, 0, 600, "G0p LFCHPC"}, {205, 217, 0, 1200, "G0p LPCHFC"}, {218, 230, 0, 1200, "G0p LPCHPC"} };
 	return true;
   case 25101:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 25102:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 11, 0, 1100, ""} };
 	return true;
   case 25103:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 600, ""} };
 	return true;
   case 25104:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 650, ""} };
 	return true;
   case 25105:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25106:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 25107:   // KEmuon_costhetamu_ptmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 17, 0, 850, "Np"}, {18, 29, 0, 1100, "PorLNp"}, {30, 42, 0, 600, "Scat0p"}, {43, 56, 0, 650, "Act0p"}, {57, 65, 0, 1200, "Trk0p"}, {66, 83, 0, 850, "G0p"} };
 	return true;
   case 25201:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 25202:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 25203:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 11, 0, 1100, ""} };
 	return true;
   case 25204:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25205:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 600, ""} };
 	return true;
   case 25206:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 900, ""} };
 	return true;
   case 25207:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 650, ""} };
 	return true;
   case 25208:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25209:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 600, ""} };
 	return true;
   case 25210:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 1200, ""} };
 	return true;
   case 25211:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, 0, 850, ""} };
 	return true;
   case 25212:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T} G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 25213:   // KEmuon_costhetamu_ptmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{T} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{T} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{T}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 17, 0, 850, "Np LFCHFC"}, {18, 30, 0, 1200, "Np LPCorHPC"}, {31, 42, 0, 1100, "PorLNp LFCHFC"}, {43, 51, 0, 1200, "PorLNp LPCorHPC"}, {52, 64, 0, 600, "Scat0p LFCHFC"}, {65, 71, 0, 900, "Scat0p LPCorHPC"}, {72, 85, 0, 650, "Act0p LFCHFC"}, {86, 94, 0, 1200, "Act0p LPCorHPC"}, {95, 101, 0, 600, "Trk0p LFCHFC"}, {102, 110, 0, 1200, "Trk0p LPCorHPC"}, {111, 128, 0, 850, "G0p LFCHFC"}, {129, 141, 0, 1200, "G0p LPCorHPC"} };
 	return true;
   case 26001:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 26002:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, ""} };
 	return true;
   case 26003:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 26004:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 26005:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, "LFCHFC"}, {23, 33, -500, 1500, "LFCHPC"}, {34, 59, -500, 2000, "LPCHFC"}, {60, 76, -500, 1900, "LPCHPC"} };
 	return true;
   case 26006:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, ""} };
 	return true;
   case 26007:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 26008:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 26009:   // KEmuon_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L}, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, "LFCHPC"}, {11, 36, -500, 2000, "LPCHFC"}, {37, 53, -500, 1900, "LPCHPC"} };
 	return true;
   case 26101:   // KEmuon_plmu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 26201:   // KEmuon_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 26202:   // KEmuon_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 26203:   // KEmuon_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, "LFCHFC"}, {23, 48, -500, 2000, "LPCorHPC"} };
 	return true;
   case 26204:   // KEmuon_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 27001:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 27002:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, ""} };
 	return true;
   case 27003:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 27004:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27005:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 27006:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1250, ""} };
 	return true;
   case 27007:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27008:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 27009:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 850, ""} };
 	return true;
   case 27010:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -500, 300, ""} };
 	return true;
   case 27011:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1600, ""} };
 	return true;
   case 27012:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, -500, 1900, ""} };
 	return true;
   case 27013:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, -500, 1200, ""} };
 	return true;
   case 27014:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -500, 700, ""} };
 	return true;
   case 27015:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27016:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 27017:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, -500, 1300, ""} };
 	return true;
   case 27018:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -500, 700, ""} };
 	return true;
   case 27019:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27020:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -500, 1900, ""} };
 	return true;
   case 27021:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 27022:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 1300, ""} };
 	return true;
   case 27023:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27024:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 27025:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 22, -500, 1700, "Np LFCHFC"}, {23, 33, -500, 1500, "Np LFCHPC"}, {34, 59, -500, 2000, "Np LPCHFC"}, {60, 76, -500, 1900, "Np LPCHPC"}, {77, 97, -500, 1500, "PorLNp LFCHFC"}, {98, 105, -500, 1250, "PorLNp LFCHPC"}, {106, 122, -500, 1900, "PorLNp LPCHFC"}, {123, 135, -500, 1900, "PorLNp LPCHPC"}, {136, 145, -500, 850, "Scat0p LFCHFC"}, {146, 150, -500, 300, "Scat0p LFCHPC"}, {151, 158, -500, 1600, "Scat0p LPCHFC"}, {159, 165, -500, 1900, "Scat0p LPCHPC"}, {166, 183, -500, 1200, "Act0p LFCHFC"}, {184, 188, -500, 700, "Act0p LFCHPC"}, {189, 205, -500, 1900, "Act0p LPCHFC"}, {206, 218, -500, 1900, "Act0p LPCHPC"}, {219, 237, -500, 1300, "Trk0p LFCHFC"}, {238, 241, -500, 700, "Trk0p LFCHPC"}, {242, 258, -500, 1900, "Trk0p LPCHFC"}, {259, 267, -500, 1900, "Trk0p LPCHPC"}, {268, 288, -500, 1500, "G0p LFCHFC"}, {289, 298, -500, 1300, "G0p LFCHPC"}, {299, 315, -500, 1900, "G0p LPCHFC"}, {316, 328, -500, 1900, "G0p LPCHPC"} };
 	return true;
   case 27026:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, ""} };
 	return true;
   case 27027:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 27028:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27029:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1250, ""} };
 	return true;
   case 27030:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27031:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 27032:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -500, 300, ""} };
 	return true;
   case 27033:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1600, ""} };
 	return true;
   case 27034:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, -500, 1900, ""} };
 	return true;
   case 27035:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -500, 700, ""} };
 	return true;
   case 27036:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27037:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 27038:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -500, 700, ""} };
 	return true;
   case 27039:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27040:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -500, 1900, ""} };
 	return true;
   case 27041:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 1300, ""} };
 	return true;
   case 27042:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27043:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 27044:   // KEmuon_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L}, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 10, -500, 1500, "Np LFCHPC"}, {11, 36, -500, 2000, "Np LPCHFC"}, {37, 53, -500, 1900, "Np LPCHPC"}, {54, 61, -500, 1250, "PorLNp LFCHPC"}, {62, 78, -500, 1900, "PorLNp LPCHFC"}, {79, 91, -500, 1900, "PorLNp LPCHPC"}, {92, 96, -500, 300, "Scat0p LFCHPC"}, {97, 104, -500, 1600, "Scat0p LPCHFC"}, {105, 111, -500, 1900, "Scat0p LPCHPC"}, {112, 116, -500, 700, "Act0p LFCHPC"}, {117, 133, -500, 1900, "Act0p LPCHFC"}, {134, 146, -500, 1900, "Act0p LPCHPC"}, {147, 150, -500, 700, "Trk0p LFCHPC"}, {151, 167, -500, 1900, "Trk0p LPCHFC"}, {168, 176, -500, 1900, "Trk0p LPCHPC"}, {177, 186, -500, 1300, "G0p LFCHPC"}, {187, 203, -500, 1900, "G0p LPCHFC"}, {204, 216, -500, 1900, "G0p LPCHPC"} };
 	return true;
   case 27101:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 27102:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 27103:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 850, ""} };
 	return true;
   case 27104:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, -500, 1200, ""} };
 	return true;
   case 27105:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, -500, 1300, ""} };
 	return true;
   case 27106:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 27107:   // KEmuon_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 25, -500, 2000, "Np"}, {26, 46, -500, 1500, "PorLNp"}, {47, 56, -500, 850, "Scat0p"}, {57, 74, -500, 1200, "Act0p"}, {75, 93, -500, 1300, "Trk0p"}, {94, 114, -500, 1500, "G0p"} };
 	return true;
   case 27201:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 27202:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 27203:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 27204:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27205:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 850, ""} };
 	return true;
   case 27206:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1600, ""} };
 	return true;
   case 27207:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, -500, 1200, ""} };
 	return true;
   case 27208:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27209:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, -500, 1300, ""} };
 	return true;
   case 27210:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27211:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 27212:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L} G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27213:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 22, -500, 1700, "Np LFCHFC"}, {23, 48, -500, 2000, "Np LPCorHPC"}, {49, 69, -500, 1500, "PorLNp LFCHFC"}, {70, 86, -500, 1900, "PorLNp LPCorHPC"}, {87, 96, -500, 850, "Scat0p LFCHFC"}, {97, 104, -500, 1600, "Scat0p LPCorHPC"}, {105, 122, -500, 1200, "Act0p LFCHFC"}, {123, 139, -500, 1900, "Act0p LPCorHPC"}, {140, 158, -500, 1300, "Trk0p LFCHFC"}, {159, 175, -500, 1900, "Trk0p LPCorHPC"}, {176, 196, -500, 1500, "G0p LFCHFC"}, {197, 213, -500, 1900, "G0p LPCorHPC"} };
 	return true;
   case 27214:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 27215:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27216:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1600, ""} };
 	return true;
   case 27217:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27218:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27219:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L} G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 27220:   // KEmuon_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "FC muon p_{L} #rightarrow muon p_{L}, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 25, -500, 2000, "Np LPCorHPC"}, {26, 42, -500, 1900, "PorLNp LPCorHPC"}, {43, 50, -500, 1600, "Scat0p LPCorHPC"}, {51, 67, -500, 1900, "Act0p LPCorHPC"}, {68, 84, -500, 1900, "Trk0p LPCorHPC"}, {85, 101, -500, 1900, "G0p LPCorHPC"} };
 	return true;
   case 28001:   // KEmuon_costhetamu_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 28002:   // KEmuon_costhetamu_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, ""} };
 	return true;
   case 28003:   // KEmuon_costhetamu_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 28004:   // KEmuon_costhetamu_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 28005:   // KEmuon_costhetamu_plmu_inc_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, "LFCHFC"}, {23, 33, -500, 1500, "LFCHPC"}, {34, 59, -500, 2000, "LPCHFC"}, {60, 76, -500, 1900, "LPCHPC"} };
 	return true;
   case 28101:   // KEmuon_costhetamu_plmu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 28201:   // KEmuon_costhetamu_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 28202:   // KEmuon_costhetamu_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 28203:   // KEmuon_costhetamu_plmu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, "LFCHFC"}, {23, 48, -500, 2000, "LPCorHPC"} };
 	return true;
   case 29001:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 29002:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, -500, 1500, ""} };
 	return true;
   case 29003:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 29004:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29005:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 29006:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1250, ""} };
 	return true;
   case 29007:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29008:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 29009:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 850, ""} };
 	return true;
   case 29010:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -500, 300, ""} };
 	return true;
   case 29011:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1600, ""} };
 	return true;
   case 29012:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, -500, 1900, ""} };
 	return true;
   case 29013:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, -500, 1200, ""} };
 	return true;
   case 29014:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -500, 700, ""} };
 	return true;
   case 29015:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29016:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 29017:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, -500, 1300, ""} };
 	return true;
   case 29018:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -500, 700, ""} };
 	return true;
   case 29019:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29020:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, -500, 1900, ""} };
 	return true;
   case 29021:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 29022:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 1300, ""} };
 	return true;
   case 29023:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29024:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, -500, 1900, ""} };
 	return true;
   case 29025:   // KEmuon_costhetamu_plmu_bdt_1d_val
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 22, -500, 1700, "Np LFCHFC"}, {23, 33, -500, 1500, "Np LFCHPC"}, {34, 59, -500, 2000, "Np LPCHFC"}, {60, 76, -500, 1900, "Np LPCHPC"}, {77, 97, -500, 1500, "PorLNp LFCHFC"}, {98, 105, -500, 1250, "PorLNp LFCHPC"}, {106, 122, -500, 1900, "PorLNp LPCHFC"}, {123, 135, -500, 1900, "PorLNp LPCHPC"}, {136, 145, -500, 850, "Scat0p LFCHFC"}, {146, 150, -500, 300, "Scat0p LFCHPC"}, {151, 158, -500, 1600, "Scat0p LPCHFC"}, {159, 165, -500, 1900, "Scat0p LPCHPC"}, {166, 183, -500, 1200, "Act0p LFCHFC"}, {184, 188, -500, 700, "Act0p LFCHPC"}, {189, 205, -500, 1900, "Act0p LPCHFC"}, {206, 218, -500, 1900, "Act0p LPCHPC"}, {219, 237, -500, 1300, "Trk0p LFCHFC"}, {238, 241, -500, 700, "Trk0p LFCHPC"}, {242, 258, -500, 1900, "Trk0p LPCHFC"}, {259, 267, -500, 1900, "Trk0p LPCHPC"}, {268, 288, -500, 1500, "G0p LFCHFC"}, {289, 298, -500, 1300, "G0p LFCHPC"}, {299, 315, -500, 1900, "G0p LPCHFC"}, {316, 328, -500, 1900, "G0p LPCHPC"} };
 	return true;
   case 29101:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 29102:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 29103:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 850, ""} };
 	return true;
   case 29104:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, -500, 1200, ""} };
 	return true;
   case 29105:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, -500, 1300, ""} };
 	return true;
   case 29106:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 29107:   // KEmuon_costhetamu_plmu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 25, -500, 2000, "Np"}, {26, 46, -500, 1500, "PorLNp"}, {47, 56, -500, 850, "Scat0p"}, {57, 74, -500, 1200, "Act0p"}, {75, 93, -500, 1300, "Trk0p"}, {94, 114, -500, 1500, "G0p"} };
 	return true;
   case 29201:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 22, -500, 1700, ""} };
 	return true;
   case 29202:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 25, -500, 2000, ""} };
 	return true;
   case 29203:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 29204:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29205:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -500, 850, ""} };
 	return true;
   case 29206:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, -500, 1600, ""} };
 	return true;
   case 29207:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 17, -500, 1200, ""} };
 	return true;
   case 29208:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29209:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, -500, 1300, ""} };
 	return true;
   case 29210:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29211:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 20, -500, 1500, ""} };
 	return true;
   case 29212:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L} G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 16, -500, 1900, ""} };
 	return true;
   case 29213:   // KEmuon_costhetamu_plmu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon p_{L} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon p_{L} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow muon p_{L}, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 22, -500, 1700, "Np LFCHFC"}, {23, 48, -500, 2000, "Np LPCorHPC"}, {49, 69, -500, 1500, "PorLNp LFCHFC"}, {70, 86, -500, 1900, "PorLNp LPCorHPC"}, {87, 96, -500, 850, "Scat0p LFCHFC"}, {97, 104, -500, 1600, "Scat0p LPCorHPC"}, {105, 122, -500, 1200, "Act0p LFCHFC"}, {123, 139, -500, 1900, "Act0p LPCorHPC"}, {140, 158, -500, 1300, "Trk0p LFCHFC"}, {159, 175, -500, 1900, "Trk0p LPCorHPC"}, {176, 196, -500, 1500, "G0p LFCHFC"}, {197, 213, -500, 1900, "G0p LPCorHPC"} };
 	return true;
   case 30001:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30002:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 30003:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30004:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30005:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "LFCHFC"}, {40, 59, -1, 0.9, "LFCHPC"}, {60, 99, -1, 0.95, "LPCHFC"}, {100, 139, -1, 0.95, "LPCHPC"} };
 	return true;
   case 30006:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, ""} };
 	return true;
   case 30007:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 1400, ""} };
 	return true;
   case 30008:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 30009:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 30010:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, "LFCHFC"}, {34, 41, 0, 1400, "LFCHPC"}, {42, 55, 0, 1950, "LPCHFC"}, {56, 69, 0, 1950, "LPCHPC"} };
 	return true;
   case 30011:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 1400, ""} };
 	return true;
   case 30012:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 30013:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 30014:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 1400, "LFCHPC"}, {8, 21, 0, 1950, "LPCHFC"}, {22, 35, 0, 1950, "LPCHPC"} };
 	return true;
   case 30015:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 30016:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30017:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30018:   // KEmuon_vs_costhetamu_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "LFCHPC"}, {20, 59, -1, 0.95, "LPCHFC"}, {60, 99, -1, 0.95, "LPCHPC"} };
 	return true;
   case 30101:   // KEmuon_vs_costhetamu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30102:   // KEmuon_vs_costhetamu_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy all events";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, ""} };
 	return true;
   case 30201:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30202:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 30203:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "LFCHFC"}, {40, 79, -1, 0.95, "LPCorHPC"} };
 	return true;
   case 30204:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, ""} };
 	return true;
   case 30205:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 30206:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, "LFCHFC"}, {34, 47, 0, 1950, "LPCorHPC"} };
 	return true;
   case 30207:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 30208:   // KEmuon_vs_costhetamu_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31001:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31002:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31003:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31004:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31005:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 31006:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31007:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31008:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31009:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -1, 0.8, ""} };
 	return true;
   case 31010:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, -1, 0.95, ""} };
 	return true;
   case 31011:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31012:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -1, 0.5, ""} };
 	return true;
   case 31013:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31014:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -1, 0.75, ""} };
 	return true;
   case 31015:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31016:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31017:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31018:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -1, 0.95, ""} };
 	return true;
   case 31019:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31020:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 31021:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31022:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -1, 0.75, ""} };
 	return true;
   case 31023:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31024:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 31025:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 59, -1, 0.9, "Np LFCHPC"}, {60, 99, -1, 0.95, "Np LPCHFC"}, {100, 139, -1, 0.95, "Np LPCHPC"}, {140, 153, -1, 0.95, "PorLNp LFCHFC"}, {154, 163, -1, 0.8, "PorLNp LFCHPC"}, {164, 203, -1, 0.95, "PorLNp LPCHFC"}, {204, 223, -1, 0.9, "PorLNp LPCHPC"}, {224, 228, -1, 0.8, "Scat0p LFCHFC"}, {229, 230, -1, 0.95, "Scat0p LFCHPC"}, {231, 240, -1, 0.8, "Scat0p LPCHFC"}, {241, 244, -1, 0.5, "Scat0p LPCHPC"}, {245, 264, -1, 0.9, "Act0p LFCHFC"}, {265, 270, -1, 0.75, "Act0p LFCHPC"}, {271, 290, -1, 0.9, "Act0p LPCHFC"}, {291, 300, -1, 0.8, "Act0p LPCHPC"}, {301, 310, -1, 0.8, "Trk0p LFCHFC"}, {311, 314, -1, 0.95, "Trk0p LFCHPC"}, {315, 334, -1, 0.9, "Trk0p LPCHFC"}, {335, 348, -1, 0.95, "Trk0p LPCHPC"}, {349, 368, -1, 0.9, "G0p LFCHFC"}, {369, 374, -1, 0.75, "G0p LFCHPC"}, {375, 394, -1, 0.9, "G0p LPCHFC"}, {395, 408, -1, 0.95, "G0p LPCHPC"} };
 	return true;
   case 31026:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, ""} };
 	return true;
   case 31027:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 1400, ""} };
 	return true;
   case 31028:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31029:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31030:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 32, 0, 1600, ""} };
 	return true;
   case 31031:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 31032:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31033:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31034:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 900, ""} };
 	return true;
   case 31035:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 450, ""} };
 	return true;
   case 31036:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1500, ""} };
 	return true;
   case 31037:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1750, ""} };
 	return true;
   case 31038:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 31039:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 700, ""} };
 	return true;
   case 31040:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 2000, ""} };
 	return true;
   case 31041:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31042:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 31043:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 700, ""} };
 	return true;
   case 31044:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31045:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 2000, ""} };
 	return true;
   case 31046:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 32, 0, 1600, ""} };
 	return true;
   case 31047:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 31048:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31049:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31050:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 33, 0, 1650, "Np LFCHFC"}, {34, 41, 0, 1400, "Np LFCHPC"}, {42, 55, 0, 1950, "Np LPCHFC"}, {56, 69, 0, 1950, "Np LPCHPC"}, {70, 102, 0, 1600, "PorLNp LFCHFC"}, {103, 109, 0, 1200, "PorLNp LFCHPC"}, {110, 123, 0, 1950, "PorLNp LPCHFC"}, {124, 134, 0, 2000, "PorLNp LPCHPC"}, {135, 144, 0, 900, "Scat0p LFCHFC"}, {145, 148, 0, 450, "Scat0p LFCHPC"}, {149, 154, 0, 1500, "Scat0p LPCHFC"}, {155, 160, 0, 1750, "Scat0p LPCHPC"}, {161, 173, 0, 1200, "Act0p LFCHFC"}, {174, 176, 0, 700, "Act0p LFCHPC"}, {177, 185, 0, 2000, "Act0p LPCHFC"}, {186, 196, 0, 2000, "Act0p LPCHPC"}, {197, 210, 0, 1300, "Trk0p LFCHFC"}, {211, 213, 0, 700, "Trk0p LFCHPC"}, {214, 227, 0, 1950, "Trk0p LPCHFC"}, {228, 236, 0, 2000, "Trk0p LPCHPC"}, {237, 269, 0, 1600, "G0p LFCHFC"}, {270, 276, 0, 1200, "G0p LFCHPC"}, {277, 290, 0, 1950, "G0p LPCHFC"}, {291, 301, 0, 2000, "G0p LPCHPC"} };
 	return true;
   case 31051:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 7, 0, 1400, ""} };
 	return true;
   case 31052:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31053:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31054:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 31055:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31056:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31057:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, 0, 450, ""} };
 	return true;
   case 31058:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1500, ""} };
 	return true;
   case 31059:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1750, ""} };
 	return true;
   case 31060:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 700, ""} };
 	return true;
   case 31061:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 2000, ""} };
 	return true;
   case 31062:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31063:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 2, 0, 700, ""} };
 	return true;
   case 31064:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31065:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 8, 0, 2000, ""} };
 	return true;
   case 31066:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 6, 0, 1200, ""} };
 	return true;
   case 31067:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31068:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31069:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 7, 0, 1400, "Np LFCHPC"}, {8, 21, 0, 1950, "Np LPCHFC"}, {22, 35, 0, 1950, "Np LPCHPC"}, {36, 42, 0, 1200, "PorLNp LFCHPC"}, {43, 56, 0, 1950, "PorLNp LPCHFC"}, {57, 67, 0, 2000, "PorLNp LPCHPC"}, {68, 71, 0, 450, "Scat0p LFCHPC"}, {72, 77, 0, 1500, "Scat0p LPCHFC"}, {78, 83, 0, 1750, "Scat0p LPCHPC"}, {84, 86, 0, 700, "Act0p LFCHPC"}, {87, 95, 0, 2000, "Act0p LPCHFC"}, {96, 106, 0, 2000, "Act0p LPCHPC"}, {107, 109, 0, 700, "Trk0p LFCHPC"}, {110, 123, 0, 1950, "Trk0p LPCHFC"}, {124, 132, 0, 2000, "Trk0p LPCHPC"}, {133, 139, 0, 1200, "G0p LFCHPC"}, {140, 153, 0, 1950, "G0p LPCHFC"}, {154, 164, 0, 2000, "G0p LPCHPC"} };
 	return true;
   case 31070:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31071:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31072:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31073:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta PorLNp LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31074:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta PorLNp LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31075:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta PorLNp LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31076:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Scat0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 1, -1, 0.95, ""} };
 	return true;
   case 31077:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Scat0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31078:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Scat0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -1, 0.5, ""} };
 	return true;
   case 31079:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Act0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -1, 0.75, ""} };
 	return true;
   case 31080:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Act0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31081:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Act0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31082:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Trk0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 3, -1, 0.95, ""} };
 	return true;
   case 31083:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Trk0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31084:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Trk0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 31085:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta G0p LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, -1, 0.75, ""} };
 	return true;
   case 31086:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta G0p LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31087:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta G0p LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 31088:   // KEmuon_vs_costhetamu_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHPC"}, {20, 59, -1, 0.95, "Np LPCHFC"}, {60, 99, -1, 0.95, "Np LPCHPC"}, {100, 109, -1, 0.8, "PorLNp LFCHPC"}, {110, 149, -1, 0.95, "PorLNp LPCHFC"}, {150, 169, -1, 0.9, "PorLNp LPCHPC"}, {170, 171, -1, 0.95, "Scat0p LFCHPC"}, {172, 181, -1, 0.8, "Scat0p LPCHFC"}, {182, 185, -1, 0.5, "Scat0p LPCHPC"}, {186, 191, -1, 0.75, "Act0p LFCHPC"}, {192, 211, -1, 0.9, "Act0p LPCHFC"}, {212, 221, -1, 0.8, "Act0p LPCHPC"}, {222, 225, -1, 0.95, "Trk0p LFCHPC"}, {226, 245, -1, 0.9, "Trk0p LPCHFC"}, {246, 259, -1, 0.95, "Trk0p LPCHPC"}, {260, 265, -1, 0.75, "G0p LFCHPC"}, {266, 285, -1, 0.9, "G0p LPCHFC"}, {286, 299, -1, 0.95, "G0p LPCHPC"} };
 	return true;
   case 31101:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31102:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31103:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31104:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31105:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31106:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31107:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 39, -1, 0.95, "Np"}, {40, 79, -1, 0.95, "PorLNp"}, {80, 89, -1, 0.8, "Scat0p"}, {90, 109, -1, 0.9, "Act0p"}, {110, 129, -1, 0.9, "Trk0p"}, {130, 149, -1, 0.9, "G0p"} };
 	return true;
   case 31108:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, ""} };
 	return true;
   case 31109:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp";
 	style.segment_divisions = 505;
 	style.segments = { {0, 32, 0, 1600, ""} };
 	return true;
   case 31110:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 900, ""} };
 	return true;
   case 31111:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 31112:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31113:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p";
 	style.segment_divisions = 505;
 	style.segments = { {0, 32, 0, 1600, ""} };
 	return true;
   case 31114:   // KEmuon_vs_costhetamu_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 33, 0, 1650, "Np"}, {34, 66, 0, 1600, "PorLNp"}, {67, 76, 0, 900, "Scat0p"}, {77, 89, 0, 1200, "Act0p"}, {90, 103, 0, 1950, "Trk0p"}, {104, 136, 0, 1600, "G0p"} };
 	return true;
   case 31201:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31202:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31203:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 31204:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31205:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 4, -1, 0.8, ""} };
 	return true;
   case 31206:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31207:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31208:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31209:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31210:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31211:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31212:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31213:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "muon energy #rightarrow muon cos#theta, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LPCorHPC"}, {80, 93, -1, 0.95, "PorLNp LFCHFC"}, {94, 133, -1, 0.95, "PorLNp LPCorHPC"}, {134, 138, -1, 0.8, "Scat0p LFCHFC"}, {139, 148, -1, 0.8, "Scat0p LPCorHPC"}, {149, 168, -1, 0.9, "Act0p LFCHFC"}, {169, 188, -1, 0.9, "Act0p LPCorHPC"}, {189, 198, -1, 0.8, "Trk0p LFCHFC"}, {199, 218, -1, 0.9, "Trk0p LPCorHPC"}, {219, 238, -1, 0.9, "G0p LFCHFC"}, {239, 258, -1, 0.9, "G0p LPCorHPC"} };
 	return true;
   case 31214:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 33, 0, 1650, ""} };
 	return true;
   case 31215:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31216:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 32, 0, 1600, ""} };
 	return true;
   case 31217:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31218:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 0, 900, ""} };
 	return true;
   case 31219:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1750, ""} };
 	return true;
   case 31220:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 12, 0, 1200, ""} };
 	return true;
   case 31221:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31222:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1300, ""} };
 	return true;
   case 31223:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31224:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 32, 0, 1600, ""} };
 	return true;
   case 31225:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31226:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "muon cos#theta #rightarrow muon energy, all channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 33, 0, 1650, "Np LFCHFC"}, {34, 47, 0, 1950, "Np LPCorHPC"}, {48, 80, 0, 1600, "PorLNp LFCHFC"}, {81, 94, 0, 1950, "PorLNp LPCorHPC"}, {95, 104, 0, 900, "Scat0p LFCHFC"}, {105, 110, 0, 1750, "Scat0p LPCorHPC"}, {111, 123, 0, 1200, "Act0p LFCHFC"}, {124, 134, 0, 2000, "Act0p LPCorHPC"}, {135, 148, 0, 1300, "Trk0p LFCHFC"}, {149, 162, 0, 1950, "Trk0p LPCorHPC"}, {163, 195, 0, 1600, "G0p LFCHFC"}, {196, 209, 0, 1950, "G0p LPCorHPC"} };
 	return true;
   case 31227:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31228:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31229:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 5, 0, 1750, ""} };
 	return true;
   case 31230:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 10, 0, 2000, ""} };
 	return true;
   case 31231:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31232:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, 0, 1950, ""} };
 	return true;
   case 31233:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco muon kinetic energy (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco muon kinetic energy (MeV)";
 	style.description = "FC muon energy #rightarrow muon energy, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 13, 0, 1950, "Np LPCorHPC"}, {14, 27, 0, 1950, "PorLNp LPCorHPC"}, {28, 33, 0, 1750, "Scat0p LPCorHPC"}, {34, 44, 0, 2000, "Act0p LPCorHPC"}, {45, 58, 0, 1950, "Trk0p LPCorHPC"}, {59, 72, 0, 1950, "G0p LPCorHPC"} };
 	return true;
   case 31234:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31235:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta PorLNp LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 31236:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Scat0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, -1, 0.8, ""} };
 	return true;
   case 31237:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Act0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31238:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta Trk0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31239:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta G0p LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 31240:   // KEmuon_vs_costhetamu_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu}";
 	style.description = "FC muon cos#theta #rightarrow muon cos#theta, all PC channels";
 	style.segment_divisions = 503;
 	style.segments = { {0, 39, -1, 0.95, "Np LPCorHPC"}, {40, 79, -1, 0.95, "PorLNp LPCorHPC"}, {80, 89, -1, 0.8, "Scat0p LPCorHPC"}, {90, 109, -1, 0.9, "Act0p LPCorHPC"}, {110, 129, -1, 0.9, "Trk0p LPCorHPC"}, {130, 149, -1, 0.9, "G0p LPCorHPC"} };
 	return true;
   case 32001:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32002:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 32003:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32004:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32005:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 28, 45, 495, "Np LFCHPC"}, {29, 47, 45, 495, "Np LPCHFC"}, {48, 66, 45, 495, "Np LPCHPC"} };
 	return true;
   case 32006:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 32007:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32008:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32009:   // KEmuon_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, "Np LFCHPC"}, {10, 28, 45, 495, "Np LPCHFC"}, {29, 47, 45, 495, "Np LPCHPC"} };
 	return true;
   case 32101:   // KEmuon_Kp_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32201:   // KEmuon_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32202:   // KEmuon_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 32203:   // KEmuon_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 37, 45, 495, "Np LPCorHPC"} };
 	return true;
   case 32204:   // KEmuon_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33001:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33002:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 33003:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33004:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33005:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 28, 45, 495, "Np LFCHPC"}, {29, 47, 45, 495, "Np LPCHFC"}, {48, 66, 45, 495, "Np LPCHPC"} };
 	return true;
   case 33006:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 33007:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33008:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33009:   // KEmuon_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, "Np LFCHPC"}, {10, 28, 45, 495, "Np LPCHFC"}, {29, 47, 45, 495, "Np LPCHPC"} };
 	return true;
   case 33101:   // KEmuon_Kp_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33201:   // KEmuon_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33202:   // KEmuon_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 33203:   // KEmuon_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 37, 45, 495, "Np LPCorHPC"} };
 	return true;
   case 33204:   // KEmuon_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34001:   // KEmuon_costhetamu_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34002:   // KEmuon_costhetamu_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 34003:   // KEmuon_costhetamu_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34004:   // KEmuon_costhetamu_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34005:   // KEmuon_costhetamu_Kp_inc_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 28, 45, 495, "Np LFCHPC"}, {29, 47, 45, 495, "Np LPCHFC"}, {48, 66, 45, 495, "Np LPCHPC"} };
 	return true;
   case 34101:   // KEmuon_costhetamu_Kp_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34201:   // KEmuon_costhetamu_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34202:   // KEmuon_costhetamu_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 34203:   // KEmuon_costhetamu_Kp_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 37, 45, 495, "Np LPCorHPC"} };
 	return true;
   case 35001:   // KEmuon_costhetamu_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 35002:   // KEmuon_costhetamu_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 35003:   // KEmuon_costhetamu_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 35004:   // KEmuon_costhetamu_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 35005:   // KEmuon_costhetamu_Kp_bdt_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 28, 45, 495, "Np LFCHPC"}, {29, 47, 45, 495, "Np LPCHFC"}, {48, 66, 45, 495, "Np LPCHPC"} };
 	return true;
   case 35101:   // KEmuon_costhetamu_Kp_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 35201:   // KEmuon_costhetamu_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 35202:   // KEmuon_costhetamu_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 35203:   // KEmuon_costhetamu_Kp_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "muon energy and muon cos#theta #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 37, 45, 495, "Np LPCorHPC"} };
 	return true;
   case 36001:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36002:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36003:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36004:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36005:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LFCHPC"}, {80, 119, -1, 0.95, "Np LPCHFC"}, {120, 159, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 36006:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36007:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36008:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36009:   // KEmuon_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHPC"}, {40, 79, -1, 0.95, "Np LPCHFC"}, {80, 119, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 36101:   // KEmuon_costhetap_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36201:   // KEmuon_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36202:   // KEmuon_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 36203:   // KEmuon_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LPCorHPC"} };
 	return true;
   case 36204:   // KEmuon_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37001:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37002:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37003:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37004:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37005:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LFCHPC"}, {80, 119, -1, 0.95, "Np LPCHFC"}, {120, 159, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 37006:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37007:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37008:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37009:   // KEmuon_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHPC"}, {40, 79, -1, 0.95, "Np LPCHFC"}, {80, 119, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 37101:   // KEmuon_costhetap_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37201:   // KEmuon_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37202:   // KEmuon_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 37203:   // KEmuon_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LPCorHPC"} };
 	return true;
   case 37204:   // KEmuon_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38001:   // KEmuon_costhetamu_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38002:   // KEmuon_costhetamu_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38003:   // KEmuon_costhetamu_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38004:   // KEmuon_costhetamu_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38005:   // KEmuon_costhetamu_costhetap_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LFCHPC"}, {80, 119, -1, 0.95, "Np LPCHFC"}, {120, 159, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 38101:   // KEmuon_costhetamu_costhetap_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38201:   // KEmuon_costhetamu_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38202:   // KEmuon_costhetamu_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 38203:   // KEmuon_costhetamu_costhetap_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LPCorHPC"} };
 	return true;
   case 39001:   // KEmuon_costhetamu_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39002:   // KEmuon_costhetamu_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39003:   // KEmuon_costhetamu_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39004:   // KEmuon_costhetamu_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39005:   // KEmuon_costhetamu_costhetap_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LFCHPC"}, {80, 119, -1, 0.95, "Np LPCHFC"}, {120, 159, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 39101:   // KEmuon_costhetamu_costhetap_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39201:   // KEmuon_costhetamu_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39202:   // KEmuon_costhetamu_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 39203:   // KEmuon_costhetamu_costhetap_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "muon energy and muon cos#theta #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LPCorHPC"} };
 	return true;
   case 40001:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40002:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 40003:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40004:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40005:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 33, -1, 0.95, "Np LFCHPC"}, {34, 53, -1, 0.9, "Np LPCHFC"}, {54, 73, -1, 0.9, "Np LPCHPC"} };
 	return true;
   case 40006:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 40007:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40008:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40009:   // KEmuon_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, "Np LFCHPC"}, {14, 33, -1, 0.9, "Np LPCHFC"}, {34, 53, -1, 0.9, "Np LPCHPC"} };
 	return true;
   case 40101:   // KEmuon_costhetamup_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40201:   // KEmuon_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40202:   // KEmuon_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 40203:   // KEmuon_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 39, -1, 0.9, "Np LPCorHPC"} };
 	return true;
   case 40204:   // KEmuon_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41001:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41002:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 41003:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41004:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41005:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 33, -1, 0.95, "Np LFCHPC"}, {34, 53, -1, 0.9, "Np LPCHFC"}, {54, 73, -1, 0.9, "Np LPCHPC"} };
 	return true;
   case 41006:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 41007:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41008:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41009:   // KEmuon_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, "Np LFCHPC"}, {14, 33, -1, 0.9, "Np LPCHFC"}, {34, 53, -1, 0.9, "Np LPCHPC"} };
 	return true;
   case 41101:   // KEmuon_costhetamup_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41201:   // KEmuon_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41202:   // KEmuon_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 41203:   // KEmuon_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 39, -1, 0.9, "Np LPCorHPC"} };
 	return true;
   case 41204:   // KEmuon_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "FC muon-proton cos#theta #rightarrow muon-proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42001:   // KEmuon_costhetamu_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42002:   // KEmuon_costhetamu_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 42003:   // KEmuon_costhetamu_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42004:   // KEmuon_costhetamu_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42005:   // KEmuon_costhetamu_costhetamup_inc_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 33, -1, 0.95, "Np LFCHPC"}, {34, 53, -1, 0.9, "Np LPCHFC"}, {54, 73, -1, 0.9, "Np LPCHPC"} };
 	return true;
   case 42101:   // KEmuon_costhetamu_costhetamup_inc_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42201:   // KEmuon_costhetamu_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42202:   // KEmuon_costhetamu_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 42203:   // KEmuon_costhetamu_costhetamup_inc_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 39, -1, 0.9, "Np LPCorHPC"} };
 	return true;
   case 43001:   // KEmuon_costhetamu_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 43002:   // KEmuon_costhetamu_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 13, -1, 0.95, ""} };
 	return true;
   case 43003:   // KEmuon_costhetamu_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 43004:   // KEmuon_costhetamu_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 43005:   // KEmuon_costhetamu_costhetamup_bdt_1d_val
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 33, -1, 0.95, "Np LFCHPC"}, {34, 53, -1, 0.9, "Np LPCHFC"}, {54, 73, -1, 0.9, "Np LPCHPC"} };
 	return true;
   case 43101:   // KEmuon_costhetamu_costhetamup_bdt_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 43201:   // KEmuon_costhetamu_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 43202:   // KEmuon_costhetamu_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, ""} };
 	return true;
   case 43203:   // KEmuon_costhetamu_costhetamup_bdt_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{#mu p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{#mu p}";
 	style.description = "muon energy and muon cos#theta #rightarrow muon-proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 19, -1, 0.9, "Np LFCHFC"}, {20, 39, -1, 0.9, "Np LPCorHPC"} };
 	return true;
   case 44001:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44002:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44003:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44004:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44005:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LFCHPC"}, {80, 119, -1, 0.95, "Np LPCHFC"}, {120, 159, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 44006:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44007:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 44008:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44009:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44010:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 28, 45, 495, "Np LFCHPC"}, {29, 47, 45, 495, "Np LPCHFC"}, {48, 66, 45, 495, "Np LPCHPC"} };
 	return true;
   case 44011:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, ""} };
 	return true;
   case 44012:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44013:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44014:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 9, 45, 495, "Np LFCHPC"}, {10, 28, 45, 495, "Np LPCHFC"}, {29, 47, 45, 495, "Np LPCHPC"} };
 	return true;
   case 44015:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LFCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44016:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44017:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44018:   // Kp_vs_costhetap_Np_1d_val
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta, all PC channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHPC"}, {40, 79, -1, 0.95, "Np LPCHFC"}, {80, 119, -1, 0.95, "Np LPCHPC"} };
 	return true;
   case 44101:   // Kp_vs_costhetap_Np_1d_val/noFCPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44102:   // Kp_vs_costhetap_Np_1d_val/noFCPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44201:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44202:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
 	return true;
   case 44203:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "proton energy #rightarrow proton cos#theta, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, "Np LFCHFC"}, {40, 79, -1, 0.95, "Np LPCorHPC"} };
 	return true;
   case 44204:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np LFCHFC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44205:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44206:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin of each channel: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "proton cos#theta #rightarrow proton energy, all channels";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, "Np LFCHFC"}, {19, 37, 45, 495, "Np LPCorHPC"} };
 	return true;
   case 44207:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco leading proton K_{p} (MeV)  (last bin: overflow)";
+	style.title_axis_user = "Reco leading proton K_{p} (MeV)";
 	style.description = "FC proton energy #rightarrow proton energy Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 18, 45, 495, ""} };
 	return true;
   case 44208:   // Kp_vs_costhetap_Np_1d_val/FC_anyPC
-	style.title_axis_user = "Reco cos#theta_{p}  (last bin: overflow)";
+	style.title_axis_user = "Reco cos#theta_{p}";
 	style.description = "FC proton cos#theta #rightarrow proton cos#theta Np LPCorHPC";
 	style.segment_divisions = 505;
 	style.segments = { {0, 39, -1, 0.95, ""} };
+	return true;
+  case 45001:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45002:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LFCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45003:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LPCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45004:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LPCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45005:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LFCHPC", "1p,2p,#geq3p"}, {6, 8, 0.5, 2.5, "Np LPCHFC", "1p,2p,#geq3p"}, {9, 11, 0.5, 2.5, "Np LPCHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 45006:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LFCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45007:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LPCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45008:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LPCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45009:   // KEmuon_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity, all PC channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHPC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LPCHFC", "1p,2p,#geq3p"}, {6, 8, 0.5, 2.5, "Np LPCHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 45101:   // KEmuon_Npmult_inc_1d_val/noFCPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45201:   // KEmuon_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45202:   // KEmuon_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LPCorHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 45203:   // KEmuon_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LPCorHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 45204:   // KEmuon_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LPCorHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46001:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46002:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LFCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46003:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LPCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46004:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LPCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46005:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LFCHPC", "1p,2p,#geq3p"}, {6, 8, 0.5, 2.5, "Np LPCHFC", "1p,2p,#geq3p"}, {9, 11, 0.5, 2.5, "Np LPCHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 46006:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LFCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46007:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LPCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46008:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LPCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46009:   // KEmuon_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity, all PC channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHPC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LPCHFC", "1p,2p,#geq3p"}, {6, 8, 0.5, 2.5, "Np LPCHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 46101:   // KEmuon_Npmult_bdt_1d_val/noFCPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46201:   // KEmuon_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46202:   // KEmuon_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity Np LPCorHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 46203:   // KEmuon_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LPCorHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 46204:   // KEmuon_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "FC proton multiplicity #rightarrow proton multiplicity Np LPCorHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47001:   // KEmuon_costhetamu_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47002:   // KEmuon_costhetamu_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LFCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47003:   // KEmuon_costhetamu_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LPCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47004:   // KEmuon_costhetamu_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LPCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47005:   // KEmuon_costhetamu_Npmult_inc_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LFCHPC", "1p,2p,#geq3p"}, {6, 8, 0.5, 2.5, "Np LPCHFC", "1p,2p,#geq3p"}, {9, 11, 0.5, 2.5, "Np LPCHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 47101:   // KEmuon_costhetamu_Npmult_inc_1d_val/noFCPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47201:   // KEmuon_costhetamu_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47202:   // KEmuon_costhetamu_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LPCorHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 47203:   // KEmuon_costhetamu_Npmult_inc_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LPCorHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 48001:   // KEmuon_costhetamu_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48002:   // KEmuon_costhetamu_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LFCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48003:   // KEmuon_costhetamu_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LPCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48004:   // KEmuon_costhetamu_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LPCHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48005:   // KEmuon_costhetamu_Npmult_bdt_1d_val
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LFCHPC", "1p,2p,#geq3p"}, {6, 8, 0.5, 2.5, "Np LPCHFC", "1p,2p,#geq3p"}, {9, 11, 0.5, 2.5, "Np LPCHPC", "1p,2p,#geq3p"} };
+	return true;
+  case 48101:   // KEmuon_costhetamu_Npmult_bdt_1d_val/noFCPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48201:   // KEmuon_costhetamu_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LFCHFC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48202:   // KEmuon_costhetamu_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity Np LPCorHPC";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "", "1p,2p,#geq3p"} };
+	return true;
+  case 48203:   // KEmuon_costhetamu_Npmult_bdt_1d_val/FC_anyPC
+	style.title_axis_user = "Reco proton multiplicity (K_{p} #geq 45 MeV)";
+	style.description = "muon energy and muon cos#theta #rightarrow proton multiplicity, all channels";
+	style.segment_divisions = 505;
+	style.segments = { {0, 2, 0.5, 2.5, "Np LFCHFC", "1p,2p,#geq3p"}, {3, 5, 0.5, 2.5, "Np LPCorHPC", "1p,2p,#geq3p"} };
 	return true;
   default:
 	return false;

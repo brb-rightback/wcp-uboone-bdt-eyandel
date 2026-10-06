@@ -42,6 +42,8 @@ using namespace std;
 #include "TPad.h"
 #include "TLegend.h"
 #include "TString.h"
+#include "TObjArray.h"
+#include "TObjString.h"
 #include "TColor.h"
 
 #include "TPrincipal.h"
@@ -64,6 +66,19 @@ using namespace RooStats;
 //#include "draw.icc"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// TLee
+
+// x axis segment of the target bins of a goodness-of-fit test: bins index_low..index_hgh show the variable from value_low
+// to value_high (the bin after index_hgh is the overflow bin of the channel), with a label (e.g. the channel); for a
+// variable with categories (e.g. the proton multiplicity), bin_labels: one label per bin, overflow bin included,
+// separated by commas (e.g. "1p,2p,#geq3p"), drawn instead of the value axis (empty if not given)
+struct TLeeGoFAxisSegment {
+  double index_low;
+  double index_hgh;
+  double value_low;
+  double value_hgh;
+  TString label;
+  TString bin_labels;
+};
 
 // Plot settings of a goodness-of-fit test, chosen by the test index (TLee::Get_GoF_plot_style in src/PlotTLee.h)
 struct TLeeGoFPlotStyle {
@@ -88,6 +103,12 @@ struct TLeeGoFPlotStyle {
   // total plot: extra legend entry with the LEE strength (e.g. "LEEx"), x title of the bottom pad
   TString lee_legend = "";
   TString total_xtitle = "";
+  // any number of x axis segments (one per target channel), with separators and labels; used for the validation tests
+  // (src/PlotTLee_val.h), x title title_axis_user
+  std::vector<TLeeGoFAxisSegment> segments;
+  int segment_divisions = 505;
+  // description of the test, written above the plots (e.g. "muon energy #rightarrow hadronic energy LFCHFC")
+  TString description = "";
 };
 
 class TLee {
@@ -248,6 +269,8 @@ public:
   // plots of a goodness-of-fit test (src/PlotTLee.h): settings per test index, and the spectra before / after the
   // constraint (column vectors; without constraint, num_X = 0, the constrained ones are not used)
   TLeeGoFPlotStyle Get_GoF_plot_style(int index);
+  // x axis segments of the test index (variable values per target channel) in the current pad, e.g. for the decomposition plots
+  void Draw_GoF_segments(int index, bool flag_axis_labels, double tick_size, double label_size, bool flag_names);
   void Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y, TMatrixD matrix_data_Y, TMatrixD matrix_YY,
                     double val_chi2_noConstraint, TMatrixD matrix_Y_under_X, TMatrixD matrix_YY_under_XX, double val_chi2_wiConstraint);
 
