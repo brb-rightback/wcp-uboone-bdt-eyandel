@@ -2652,11 +2652,16 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
   //   _HFC / _HPC                            hadronic system contained or not (flag_FC_hadron)
   //   _LFCHFC / _LFCHPC / _LPCHFC / _LPCHPC  lepton and hadronic system
   //   _LPCorHPC                              lepton or hadronic system PC (everything but _LFCHFC)
+  // and before it an optional copy index "_<n>" (the very last token), e.g. numuCC_part_bdt_sig_LFCHFC_1: the same selection
+  // in more than one channel of a cov_input.txt (channel names must be unique), e.g. with different variables.
   int require_FC = -1;       // -1: no requirement, 1: FC, 0: PC
   int require_lepton = -1;
   int require_hadron = -1;
   bool require_any_PC = false;
   if(pos != std::string::npos){
+    size_t posCopy = ch_name_string.rfind('_');
+    if(posCopy != std::string::npos && posCopy+1 < ch_name_string.size()
+       && ch_name_string.find_first_not_of("0123456789", posCopy+1) == std::string::npos) ch_name_string.erase(posCopy);
     size_t posSuffix = ch_name_string.rfind('_');
     std::string suffix = (posSuffix != std::string::npos) ? ch_name_string.substr(posSuffix+1) : "";
     bool flag_suffix = true;

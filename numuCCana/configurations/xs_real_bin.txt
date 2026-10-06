@@ -1,50 +1,13 @@
-1       77              numucc0p.inside.Enu.le.540.gt.200      142859         0.022           0.011
-2       77              numucc0p.inside.Enu.le.705.gt.540      78445.2        0.022           0.011
-3       77              numucc0p.inside.Enu.le.805.gt.705      45700.2        0.022           0.011
-4       77              numucc0p.inside.Enu.le.920.gt.805      48773          0.022           0.011
-5       77              numucc0p.inside.Enu.le.1050.gt.920     48878.7        0.022           0.011
-6       77              numucc0p.inside.Enu.le.1200.gt.1050    47183.1        0.022           0.011
-7       77              numucc0p.inside.Enu.le.1375.gt.1200    42078.9        0.022           0.011
-8       77              numucc0p.inside.Enu.le.1570.gt.1375    30673.2        0.022           0.011
-9       77              numucc0p.inside.Enu.le.2050.gt.1570    27264.9        0.022           0.011
-10      77              numucc0p.inside.Enu.le.4000.gt.2050    8405.28        0.022           0.011
-
-11       77             numuccNp.inside.Enu.le.540.gt.200     142859          0.022           0.011
-12       77             numuccNp.inside.Enu.le.705.gt.540     78445.2         0.022           0.011
-13       77             numuccNp.inside.Enu.le.805.gt.705     45700.2         0.022           0.011
-14       77             numuccNp.inside.Enu.le.920.gt.805     48773           0.022           0.011
-15       77             numuccNp.inside.Enu.le.1050.gt.920    48878.7         0.022           0.011
-16       77             numuccNp.inside.Enu.le.1200.gt.1050   47183.1         0.022           0.011
-17       77             numuccNp.inside.Enu.le.1375.gt.1200   42078.9         0.022           0.011
-18       77             numuccNp.inside.Enu.le.1570.gt.1375   30673.2         0.022           0.011
-19       77             numuccNp.inside.Enu.le.2050.gt.1570   27264.9         0.022           0.011
-20       77             numuccNp.inside.Enu.le.4000.gt.2050   8405.28         0.022           0.011
--1              -1                      End                                                                             -1                              -1                      -1
-#bin    #cut_file       #cut
-
-1       79              numuCC0p.inside.Emuon.le.226.gt.106    66978.4         0.022           0.011
-2       79              numuCC0p.inside.Emuon.le.296.gt.226    39070.7         0.022           0.011
-3       79              numuCC0p.inside.Emuon.le.386.gt.296    50233.8         0.022           0.011
-4       79              numuCC0p.inside.Emuon.le.505.gt.386    66420.2         0.022           0.011
-5       79              numuCC0p.inside.Emuon.le.577.gt.505    40187           0.022           0.011
-6       79              numuCC0p.inside.Emuon.le.659.gt.577    45768.6         0.022           0.011
-7       79              numuCC0p.inside.Emuon.le.753.gt.659    52466.4         0.022           0.011
-8       79              numuCC0p.inside.Emuon.le.861.gt.753    60280.5         0.022           0.011
-9       79              numuCC0p.inside.Emuon.le.984.gt.861    68652.8         0.022           0.011
-10      79              numuCC0p.inside.Emuon.le.1285.gt.984   168004          0.022           0.011
-11      79              numuCC0p.inside.Emuon.le.2506.gt.1285  681505          0.022           0.011
-
-12      79              numuCCNp.inside.Emuon.le.226.gt.106    66978.4         0.022           0.011
-13      79              numuCCNp.inside.Emuon.le.296.gt.226    39070.7         0.022           0.011
-14      79              numuCCNp.inside.Emuon.le.386.gt.296    50233.8         0.022           0.011
-15      79              numuCCNp.inside.Emuon.le.505.gt.386    66420.2         0.022           0.011
-16      79              numuCCNp.inside.Emuon.le.577.gt.505    40187           0.022           0.011
-17      79              numuCCNp.inside.Emuon.le.659.gt.577    45768.6         0.022           0.011
-18      79              numuCCNp.inside.Emuon.le.753.gt.659    52466.4         0.022           0.011
-19      79              numuCCNp.inside.Emuon.le.861.gt.753    60280.5         0.022           0.011
-20      79              numuCCNp.inside.Emuon.le.984.gt.861    68652.8         0.022           0.011
-21      79              numuCCNp.inside.Emuon.le.1285.gt.984   168004          0.022           0.011
-22      79              numuCCNp.inside.Emuon.le.2506.gt.1285  681505          0.022           0.011
--1              -1                      End                                                                             -1                              -1                      -1
-#bin    #cut_file       #cut
-
+1       9     numuCC.0p.inside                                                                            43672.2         0.022  0.011
+2       9     numuCC.Np.inside.Kp.le.70                                                                   1091.8          0.022  0.011
+3       9     numuCC.Np.inside.Kp.le.95.gt.70                                                             1091.8          0.022  0.011
+4       9     numuCC.Np.inside.Kp.le.120.gt.95                                                            1091.8          0.022  0.011
+5       9     numuCC.Np.inside.Kp.le.145.gt.120                                                           1091.8          0.022  0.011
+6       9     numuCC.Np.inside.Kp.le.170.gt.145                                                           1091.8          0.022  0.011
+7       9     numuCC.Np.inside.Kp.le.220.gt.170                                                           2183.61         0.022  0.011
+8       9     numuCC.Np.inside.Kp.le.270.gt.220                                                           2183.61         0.022  0.011
+9       9     numuCC.Np.inside.Kp.le.345.gt.270                                                           3275.41         0.022  0.011
+10      9     numuCC.Np.inside.Kp.le.470.gt.345                                                           5459.02         0.022  0.011
+11      9     numuCC.Np.inside.Kp.gt.470                                                                  10918           0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err

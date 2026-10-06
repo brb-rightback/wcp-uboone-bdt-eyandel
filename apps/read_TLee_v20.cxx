@@ -32,6 +32,12 @@ struct TLeeConfigTest {
   bool flag_syst_mc_stat_cor;
 };
 
+// Global options, the first row of TLee_config.txt (Configure_Lee.h values without the file)
+struct TLeeConfigGlobal {
+  int channels_observation;     // number of observation channels (hdata_obsch_# in the spectra file)
+  bool flag_lookelsewhere;      // chi2 decomposition (Plotting_singlecase) in the goodness-of-fit tests
+};
+
 // Bin list "1,3-6" -> 1,3,4,5,6 (global bin indices); "none" -> empty
 vector<int> parse_bin_list(TString str, TString filename, int line)
 {
@@ -53,19 +59,23 @@ vector<int> parse_bin_list(TString str, TString filename, int line)
   return bins;
 }
 
-// TLee_config.txt: one test per row, entries separated by spaces,
-//   run(0/1)  index  support_bins  target_bins  xsflux(0/1)  det(0/1)  add(0/1)  mcstat(0/1)  mcstatcor(0/1)
+// TLee_config.txt, entries separated by spaces:
+//   first row (global options):  channels_observation  flag_lookelsewhere(0/1)
+//   then one test per row:       run(0/1)  index  support_bins  target_bins  xsflux(0/1)  det(0/1)  add(0/1)  mcstat(0/1)  mcstatcor(0/1)
 // Rows with run 0 are skipped; "#" starts a comment; reading stops at a row starting with "End".
-vector<TLeeConfigTest> read_TLee_config(TString filename)
+vector<TLeeConfigTest> read_TLee_config(TString filename, TLeeConfigGlobal& global)
 {
   vector<TLeeConfigTest> tests;
+  global.channels_observation = config_Lee::channels_observation;
+  global.flag_lookelsewhere = config_Lee::flag_lookelsewhere;
   ifstream infile(filename);
   if( !infile ) {
-    cout<<" ---> No "<<filename<<": no goodness-of-fit tests from the configuration file"<<endl;
+    cout<<" ---> No "<<filename<<": no goodness-of-fit tests from the configuration file, global options of Configure_Lee.h"<<endl;
     return tests;
   }
   string line_str;
   int line = 0;
+  bool flag_global_read = false;
   while( getline(infile, line_str) ) {
     line++;
     size_t comment = line_str.find('#');
@@ -76,6 +86,23 @@ vector<TLeeConfigTest> read_TLee_config(TString filename)
     while( ss>>entry ) entries.push_back(entry);
     if( entries.empty() ) continue;
     if( entries.at(0)=="End" ) break;
+
+    if( !flag_global_read ) {// the first row: global options
+      if( entries.size()!=2 ) {
+        cerr<<" ---> Error "<<filename<<" line "<<line<<": the first row has "<<entries.size()<<" entries, expected 2 global options (channels_observation flag_lookelsewhere)"<<endl;
+        exit(1);
+      }
+      TString val_ch = entries.at(0), val_look = entries.at(1);
+      if( !val_ch.IsDigit() || val_ch=="" || val_ch.Atoi()<1 || !(val_look=="0" || val_look=="1") ) {
+        cerr<<" ---> Error "<<filename<<" line "<<line<<": global options \""<<val_ch<<" "<<val_look<<"\", expected channels_observation (>= 1) and flag_lookelsewhere (0 or 1)"<<endl;
+        exit(1);
+      }
+      global.channels_observation = val_ch.Atoi();
+      global.flag_lookelsewhere = (val_look=="1");
+      flag_global_read = true;
+      continue;
+    }
+
     if( entries.size()!=9 ) {
       cerr<<" ---> Error "<<filename<<" line "<<line<<": "<<entries.size()<<" entries, expected 9 (run index support target xsflux det add mcstat mcstatcor)"<<endl;
       exit(1);
@@ -103,7 +130,12 @@ vector<TLeeConfigTest> read_TLee_config(TString filename)
     test.flag_syst_mc_stat_cor = (entries.at(8)=="1");
     tests.push_back( test );
   }
-  cout<<" ---> "<<filename<<": "<<tests.size()<<" goodness-of-fit tests to run"<<endl;
+  if( !flag_global_read ) {
+    cerr<<" ---> Error "<<filename<<": no global options row (channels_observation flag_lookelsewhere)"<<endl;
+    exit(1);
+  }
+  cout<<" ---> "<<filename<<": channels_observation "<<global.channels_observation<<", flag_lookelsewhere "<<global.flag_lookelsewhere
+      <<", "<<tests.size()<<" goodness-of-fit tests to run"<<endl;
   return tests;
 }
 
@@ -154,7 +186,8 @@ int main(int argc, char** argv)
   }
 
   // goodness-of-fit tests (conditional constraints) to run, from the configuration file
-  vector<TLeeConfigTest> vc_config_tests = read_TLee_config( TLee_config_file );
+  TLeeConfigGlobal config_global;
+  vector<TLeeConfigTest> vc_config_tests = read_TLee_config( TLee_config_file, config_global );
 
   cout<<endl<<" ---> check, scaleF_POT "<<scaleF_POT<<", ifile "<<ifile<<", moveleg "<<moveleg<<endl<<endl;
 
@@ -208,13 +241,13 @@ int main(int argc, char** argv)
 
   ////////// just do it one time in the whole procedure
 
-  Lee_test->channels_observation   = config_Lee::channels_observation;
+  Lee_test->channels_observation   = config_global.channels_observation;
   Lee_test->syst_cov_flux_Xs_begin = config_Lee::syst_cov_flux_Xs_begin;
   Lee_test->syst_cov_flux_Xs_end   = config_Lee::syst_cov_flux_Xs_end;
   Lee_test->syst_cov_mc_stat_begin = config_Lee::syst_cov_mc_stat_begin;
   Lee_test->syst_cov_mc_stat_end   = config_Lee::syst_cov_mc_stat_end;
 
-  Lee_test->flag_lookelsewhere     = config_Lee::flag_lookelsewhere;
+  Lee_test->flag_lookelsewhere     = config_global.flag_lookelsewhere;
   //Erin
   Lee_test->moveleg = moveleg;
   Lee_test->scaleF_POT = scaleF_POT;
