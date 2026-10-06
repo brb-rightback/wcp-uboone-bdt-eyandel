@@ -9,6 +9,8 @@
 using namespace std;
 
 #include<map>
+#include<vector>
+#include<algorithm>
 
 #include "TROOT.h"
 #include "TH1.h"
@@ -47,6 +49,7 @@ using namespace std;
 #include "TVectorD.h"
 #include "TMatrixDSym.h"
 #include "TMatrixDSymEigen.h"
+#include "Math/QuantFuncMathCore.h"
 
 /// minuit2
 #include "Math/Functor.h"
@@ -70,6 +73,8 @@ public:
     flag_Lee_minimization_after_constraint = false;
 
     flag_lookelsewhere = false;
+    num_universes_p_global = 0;
+    flag_syst_mc_stat_cor = false;
   }
 
   /////////////////////////////////////////////////////// data memeber
@@ -96,6 +101,7 @@ public:
   //
 
   bool flag_lookelsewhere;
+  long num_universes_p_global;// > 0: also the frequentist p_global of the chi2 decomposition, from this many pseudo-experiments
 
   TString spectra_file;
   //Erin 
@@ -216,6 +222,11 @@ public:
 
   // Significance corrected by look elsewhere effect
   double GetChi2(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_temp, TMatrixD matrix_syst_abscov_temp);
+  // statistical variance of a bin (Pearson, with the DocDB-32520 low-count protection)
+  static double get_stat_variance(double val_pred, double val_meas);
+  // chi2 decomposition: smallest local p-value of the k most extreme epsilon_i (any k), and its frequentist global p-value
+  double calculate_p_local_min(std::vector<double> p_bins);
+  double calculate_frequentist_p_global(const std::vector<double>& p_bins, long num_universes);
   void Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_temp, TMatrixD matrix_syst_abscov_temp, bool saveFIG, TString ffstr, int index);
 
   // produceing pseudo-experiments

@@ -509,6 +509,61 @@ RANDOM_AGAIN:
 
 ///////////////////////////////////////////////////////// ccc
 
+// Statistical variance of a bin for the chi2: the prediction (Pearson), or, when the prediction is sufficiently low for a
+// measurement of 1-10 events, the likelihood-equivalent variance (docDB 32520). A prediction <= 0 (possible after a
+// constraint, or in an empty bin) has no Pearson variance: the measurement is used instead (1e-6 if it is 0 too).
+double TLee::get_stat_variance(double val_pred, double val_meas)
+{
+  static const double array_pred_protect[11] = {0, 0.461, 0.916, 1.382, 1.833, 2.298, 2.767, 3.225, 3.669, 4.141, 4.599};
+
+  if( val_pred<=0 ) return (val_meas>0) ? val_meas : 1e-6;
+
+  int int_meas = (int)(val_meas+0.1);
+  if( int_meas>=1 && int_meas<=10 ) {
+	if( val_pred<array_pred_protect[int_meas] ) {
+	  double numerator = pow(val_pred-val_meas, 2);
+	  double denominator = 2*( val_pred - val_meas + val_meas*log(val_meas/val_pred) );
+	  return numerator/denominator;
+	}
+  }
+  return val_pred;
+}
+
+// Smallest local p-value of the chi2 decomposition: for every k, the local p-value of the k most extreme epsilon_i
+// (the k smallest single-bin p-values p_bins), chi2 = sum of their squared significances with k dof.
+double TLee::calculate_p_local_min(std::vector<double> p_bins)
+{
+  std::sort(p_bins.begin(), p_bins.end());
+  double p_local_min = 1.0;
+  double total_extreme_chi2 = 0.0;
+  for(int num_extreme_included=1; num_extreme_included<=(int)p_bins.size(); num_extreme_included++) {
+	double p_bin = std::max(p_bins.at(num_extreme_included-1), 1e-300);
+	double extreme_sigma = TMath::Sqrt(2.0) * TMath::ErfcInverse(p_bin);
+	total_extreme_chi2 += extreme_sigma * extreme_sigma;
+	double p_local = TMath::Prob(total_extreme_chi2, num_extreme_included);
+	if( p_local<p_local_min ) p_local_min = p_local;
+  }
+  return p_local_min;
+}
+
+// Frequentist global p-value of the chi2 decomposition: fraction of pseudo-experiments (num_universes sets of
+// independent single-bin p-values, uniform under the null hypothesis) with a p_local_min as small as the data's.
+double TLee::calculate_frequentist_p_global(const std::vector<double>& p_bins, long num_universes)
+{
+  int num_bins = p_bins.size();
+  double data_p_local_min = calculate_p_local_min(p_bins);
+
+  long count_below = 0;
+  std::vector<double> uni(num_bins);
+  for(long i=0; i<num_universes; i++) {
+	for(int j=0; j<num_bins; j++) uni[j] = rand->Uniform(0, 1);
+	if( calculate_p_local_min(uni)<=data_p_local_min ) count_below++;
+  }
+  if( count_below==0 ) cout<<" ---> frequentist p_global < 1/"<<num_universes<<" (no pseudo-experiment as extreme as the data)"<<endl;
+
+  return static_cast<double>(count_below) / num_universes;
+}
+
 double TLee::GetChi2(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_temp, TMatrixD matrix_syst_abscov_temp)
 {
   double chi2 = 0;
@@ -518,38 +573,8 @@ double TLee::GetChi2(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_temp, TMatr
 
   int rows = matrix_pred_temp.GetNcols();
 
-  /// docDB 32520, when the prediction is sufficiently low
-  double array_pred_protect[11] = {0, 0.461, 0.916, 1.382, 1.833, 2.298, 2.767, 3.225, 3.669, 4.141, 4.599};
-
   TMatrixD matrix_stat_cov(rows, rows);
-  for(int idx=0; idx<rows; idx++) {
-	matrix_stat_cov(idx, idx) = matrix_pred_temp(0, idx);
-
-	double val_meas = matrix_meas_temp(0, idx);
-	double val_pred = matrix_pred_temp(0, idx);
-	int int_meas = (int)(val_meas+0.1);
-
-	/*
-	   if( val_meas==1 ) {
-	   if( val_pred<0.461 ) {// DocDB-32520, when the prediction is sufficiently low
-	    double numerator = pow(val_pred-val_meas, 2);
-	    double denominator = 2*( val_pred - val_meas + val_meas*log(val_meas/val_pred) );
-	    matrix_stat_cov(idx,idx) = numerator/denominator;
-	   }
-	   }
-	 */
-
-
-	if( int_meas>=1 && int_meas<=10) {
-	  if( val_pred<array_pred_protect[int_meas] ) {
-		double numerator = pow(val_pred-val_meas, 2);
-		double denominator = 2*( val_pred - val_meas + val_meas*log(val_meas/val_pred) );
-		matrix_stat_cov(idx, idx) = numerator/denominator;
-	  }
-	}
-
-
-  }
+  for(int idx=0; idx<rows; idx++) matrix_stat_cov(idx, idx) = get_stat_variance( matrix_pred_temp(0, idx), matrix_meas_temp(0, idx) );
 
   TMatrixD matrix_total_cov(rows, rows); matrix_total_cov = matrix_syst_abscov_temp + matrix_stat_cov;
   TMatrixD matrix_total_cov_inv = matrix_total_cov; matrix_total_cov_inv.Invert();
@@ -566,39 +591,8 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
   //TMatrixD matrix_stat_cov(rows, rows);
   //for(int idx=0; idx<rows; idx++) matrix_stat_cov(idx, idx) = matrix_pred_temp(0, idx);
 
-  /// docDB 32520, when the prediction is sufficiently low
-  double array_pred_protect[11] = {0, 0.461, 0.916, 1.382, 1.833, 2.298, 2.767, 3.225, 3.669, 4.141, 4.599};
-
   TMatrixD matrix_stat_cov(rows, rows);
-  for(int idx=0; idx<rows; idx++) {
-	matrix_stat_cov(idx, idx) = matrix_pred_temp(0, idx);
-
-	double val_meas = matrix_meas_temp(0, idx);
-	double val_pred = matrix_pred_temp(0, idx);
-	int int_meas = (int)(val_meas+0.1);
-
-	/*
-	   if( val_meas==1 ) {
-	   if( val_pred<0.461 ) {// DocDB-32520, when the prediction is sufficiently low
-	    double numerator = pow(val_pred-val_meas, 2);
-	    double denominator = 2*( val_pred - val_meas + val_meas*log(val_meas/val_pred) );
-	    matrix_stat_cov(idx,idx) = numerator/denominator;
-	   }
-	   }
-	 */
-
-
-	if( int_meas>=1 && int_meas<=10) {
-	  if( val_pred<array_pred_protect[int_meas] ) {
-		double numerator = pow(val_pred-val_meas, 2);
-		double denominator = 2*( val_pred - val_meas + val_meas*log(val_meas/val_pred) );
-		matrix_stat_cov(idx, idx) = numerator/denominator;
-	  }
-	}
-
-
-  }
-
+  for(int idx=0; idx<rows; idx++) matrix_stat_cov(idx, idx) = get_stat_variance( matrix_pred_temp(0, idx), matrix_meas_temp(0, idx) );
 
   TMatrixD matrix_total_cov(rows, rows); matrix_total_cov = matrix_syst_abscov_temp + matrix_stat_cov;
 
@@ -719,7 +713,6 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
   // double lambda_sigma_11 = h1_lambda_absigma_dis->GetBinContent( 1 );
   // double lambda_sigma_12 = h1_lambda_absigma_dis->GetBinContent( 2 );
   // double lambda_sigma_23 = h1_lambda_absigma_dis->GetBinContent( 3 );
-  double lambda_sigma_3p = h1_lambda_absigma_dis->Integral(4, 10);
 
   /////////////////////////////////////////////////////////////
 
@@ -875,77 +868,46 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
   // lg_lambda_sigma->AddEntry("", TString::Format("#color[%d]{|#sigma_{i}\'| > 3: %1.0f, expect. %3.2f}",
   // 						kBlue, lambda_sigma_3p, rows*0.0027), "");
 
+  // p-values: overall chi2; global p-value of the decomposition from the largest |epsilon_i| (p_global = 1-(1-p_local)^n),
+  // from all |epsilon_i| >= 2 (p_global = 1-(1-p_local)^C(n,r), biased, printed only) and, if num_universes_p_global > 0,
+  // frequentist (pseudo-experiments, any number of extreme epsilon_i). Significances two-sided; stable for tiny p-values.
+  auto p_to_sigma = [](double p) { return (p>0) ? ROOT::Math::normal_quantile_c(std::min(p, 1.)/2, 1) : 40.; };
+  auto p_local_to_global = [](double p_local, double n_trials) { return -std::expm1( n_trials*std::log1p(-std::min(p_local, 1-1e-16)) ); };
+
   double pvalue_default = TMath::Prob( chi2, rows );
-  double sigma_default = sqrt( TMath::ChisquareQuantile( 1-pvalue_default, 1 ) );
-  double pvalue_global = 0;
-  double sigma_global = 0;
-  //double sigma_global_AA = 0;
-  //double sigma_global_BB = 0;
-  double sum_AA = 0;
+  double sigma_default = p_to_sigma( pvalue_default );
 
-/*
-  if( (int)(map_above3sigma.size())>=1 ) {
-	if( (int)(map_above3sigma.size())==1 ) {
-	  double chi2_local = pow(map_above3sigma.begin()->second, 2);
-	  double pvalue_local = TMath::Prob( chi2_local, 1 );
-	  pvalue_global = 1 - pow(1-pvalue_local, rows);
-	  sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global, 1 ) );
-	  sum_AA = chi2_local;
-	}
-	else {
-	  int user_vec_size = vec_above3sigma.size();
-
-	  sum_AA = 0;
-	  for(int idx=0; idx<user_vec_size; idx++) {
-		sum_AA += pow( vec_above3sigma.at(idx), 2 );
-	  }
-	  double pvalue_local_AA = TMath::Prob( sum_AA, user_vec_size );
-
-	  double coeff = TMath::Factorial(rows)/TMath::Factorial(rows-user_vec_size)/TMath::Factorial(user_vec_size);
-	  double pvalue_global_AA = coeff*pvalue_local_AA;
-	  sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global_AA, 1 ) );
-	}
-  }
-*/
-
-  if( (int)(map_above3sigma.size())>=1 ) {
-    if( (int)(map_above3sigma.size())==1 ) {
-      double chi2_local = pow(map_above3sigma.begin()->second, 2);
-      double pvalue_local = TMath::Prob( chi2_local, 1 );
-      pvalue_global = 1 - pow(1-pvalue_local, rows);
-      sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global, 1 ) );
-      sum_AA = chi2_local;
-      std::cout<<"\n\n"<<"pvalue_global:  "<<pvalue_global<<"   pvalue_default: "<<pvalue_default<<std::endl;
-    }
-    else {
-      int user_vec_size = vec_above3sigma.size();
-      sum_AA = 0;
-      for(int idx=0; idx<user_vec_size; idx++) {
-        sum_AA += pow( vec_above3sigma.at(idx), 2 );
-      }
-      double pvalue_local_AA = TMath::Prob( sum_AA, user_vec_size );
-
-      double coeff = TMath::Factorial(rows)/TMath::Factorial(rows-user_vec_size)/TMath::Factorial(user_vec_size);
-      double pvalue_global_AA = coeff*pvalue_local_AA;
-      pvalue_global_AA = coeff*pvalue_local_AA; //this is using the approximation
-      sigma_global = sqrt( TMath::ChisquareQuantile( 1-pvalue_global_AA, 1 ) );
-      std::cout<<"\n\n"<<"pvalue_global:  "<<pvalue_global_AA<<"   pvalue_default: "<<pvalue_default<<std::endl;
-    }
-  }
   double pvalue_local_largest_chi = TMath::Prob( pow(largest_chi,2) , 1 );
-  double pvalue_global_largest_chi = 1 - pow(1-pvalue_local_largest_chi, rows);
-  double sigma_global_largest_chi = sqrt( TMath::ChisquareQuantile( 1-pvalue_global_largest_chi, 1 ) );
-  std::cout<<"\n single bin 2 \n"<<"pvalue_local_largest_chi "<<pvalue_local_largest_chi<<"  pvalue_global_largest_chi:  "<<pvalue_global_largest_chi<<"   sigma_global_largest_chi: "<<sigma_global_largest_chi<<std::endl;
+  double pvalue_global_largest_chi = p_local_to_global( pvalue_local_largest_chi, rows );
+  double sigma_global_largest_chi = p_to_sigma( pvalue_global_largest_chi );
+  std::cout<<"\n largest epsilon: "<<largest_chi<<"  pvalue_local "<<pvalue_local_largest_chi<<"  pvalue_global "<<pvalue_global_largest_chi
+           <<"  sigma_global "<<sigma_global_largest_chi<<std::endl;
 
+  if( (int)(map_above3sigma.size())>=1 ) {
+	int user_vec_size = vec_above3sigma.size();
+	double sum_AA = 0;
+	for(int idx=0; idx<user_vec_size; idx++) sum_AA += pow( vec_above3sigma.at(idx), 2 );
+	double pvalue_local_AA = TMath::Prob( sum_AA, user_vec_size );
+	double n_choose_r = exp( TMath::LnGamma(rows+1) - TMath::LnGamma(rows-user_vec_size+1) - TMath::LnGamma(user_vec_size+1) );
+	double pvalue_global_AA = p_local_to_global( pvalue_local_AA, n_choose_r );
+	std::cout<<" |epsilon| >= 2 ("<<user_vec_size<<" of "<<rows<<"): chi2_local "<<sum_AA<<"  pvalue_local "<<pvalue_local_AA
+	         <<"  pvalue_global "<<pvalue_global_AA<<"  sigma_global "<<p_to_sigma(pvalue_global_AA)<<std::endl;
+  }
+
+  double pvalue_global_freq = -1;
+  if( num_universes_p_global>0 ) {
+	pvalue_global_freq = calculate_frequentist_p_global( p_values, num_universes_p_global );
+	std::cout<<" frequentist ("<<num_universes_p_global<<" pseudo-experiments): pvalue_local_min "<<calculate_p_local_min(p_values)
+	         <<"  pvalue_global "<<pvalue_global_freq<<"  sigma_global "<<p_to_sigma(pvalue_global_freq)<<std::endl;
+  }
+  std::cout<<std::endl;
 
   lg_lambda_sigma->AddEntry("", TString::Format("#color[%d]{%3.1f#sigma:        overall #chi^{2}/dof: %3.1f/%d}", kBlue, sigma_default, chi2, rows), "");
-  if( lambda_sigma_3p>=1 ) {
-	lg_lambda_sigma->AddEntry("", TString::Format("#color[%d]{%3.1f#sigma (LEE corr.): #chi^{2}/dof: %3.1f/%d (|#epsilon_{i}\'|>3)}",
-	                                              kRed, sigma_global, sum_AA, (int)(map_above3sigma.size())), "");
-  }
-  else {
-	lg_lambda_sigma->AddEntry("", "", "");
-  }
+  lg_lambda_sigma->AddEntry("", TString::Format("#color[%d]{%3.1f#sigma: largest |#epsilon_{i}|, p_{global} = %3.1e}",
+                                                kRed, sigma_global_largest_chi, pvalue_global_largest_chi), "");
+  if( pvalue_global_freq>=0 )
+	lg_lambda_sigma->AddEntry("", TString::Format("#color[%d]{%3.1f#sigma: frequentist p_{global} = %3.1e}",
+	                                              kRed, p_to_sigma(pvalue_global_freq), pvalue_global_freq), "");
   lg_lambda_sigma->Draw();
   lg_lambda_sigma->SetBorderSize(0); lg_lambda_sigma->SetFillStyle(0); lg_lambda_sigma->SetTextSize(0.05);
 
@@ -986,6 +948,27 @@ int TLee::Exe_Goodness_of_fit_detailed(vector<int>vc_target_detailed_chs, vector
 {
   int num_Y = vc_target_detailed_chs.size();
   int num_X = vc_support_detailed_chs.size();
+
+  // the bins are 0-based global bin indices (all observation channels with their overflow bins): every bin must exist and
+  // appear only once, in the target or in the support
+  if( num_Y==0 ) {
+	cout<<endl<<" ERROR Exe_Goodness_of_fit_detailed "<<index<<": no target bin"<<endl<<endl;
+	exit(1);
+  }
+  map<int, TString>map_bin_list;
+  for(int idx=0; idx<num_Y+num_X; idx++) {
+	int bin = (idx<num_Y) ? vc_target_detailed_chs.at(idx) : vc_support_detailed_chs.at(idx-num_Y);
+	TString list = (idx<num_Y) ? "target" : "support";
+	if( bin<0 || bin>=bins_newworld ) {
+	  cout<<endl<<" ERROR Exe_Goodness_of_fit_detailed "<<index<<": "<<list<<" bin "<<bin<<" outside 0-"<<bins_newworld-1<<endl<<endl;
+	  exit(1);
+	}
+	if( map_bin_list.find(bin)!=map_bin_list.end() ) {
+	  cout<<endl<<" ERROR Exe_Goodness_of_fit_detailed "<<index<<": bin "<<bin<<" twice ("<<map_bin_list[bin]<<" and "<<list<<")"<<endl<<endl;
+	  exit(1);
+	}
+	map_bin_list[bin] = list;
+  }
 
   TMatrixD matrix_gof_trans( bins_newworld, num_Y+num_X );// oldworld, newworld
   int new_ch = -1;
@@ -1364,42 +1347,9 @@ int TLee::Exe_Goodness_of_fit(int num_Y, int num_X, TMatrixD matrix_pred, TMatri
 
   ///////////////////////////// goodness of fit, Pearson's format test
 
-  /// docDB 32520, when the prediction is sufficiently low
-  double array_pred_protect[11] = {0, 0.461, 0.916, 1.382, 1.833, 2.298, 2.767, 3.225, 3.669, 4.141, 4.599};
-  //double array_pred_protect[11] = {0};
-  //array_pred_protect[1] = {0.461};
-
+  // statistics: get_stat_variance (Pearson, docDB 32520 protection when the prediction is sufficiently low)
   TMatrixD matrix_goodness_cov_total_noConstraint(num_Y, num_Y);
-  for( int i=0; i<num_Y; i++ ) {
-	double val_pred = matrix_pred_Y(i, 0);
-	double val_data = matrix_data_Y(i, 0);
-	matrix_goodness_cov_total_noConstraint(i,i) = val_pred;
-
-
-	// if( val_data==1 ) {
-	//   if( val_pred<0.461 ) {// DocDB-32520, when the prediction is sufficiently low
-	// 	double numerator = pow(val_pred-val_data, 2);
-	// 	double denominator = 2*( val_pred - val_data + val_data*log(val_data/val_pred) );
-	// 	matrix_goodness_cov_total_noConstraint(i,i) = numerator/denominator;
-	//   }
-	// }
-
-
-
-	int int_data = (int)(val_data+0.1);
-	if( int_data>=1 && int_data<=10 ) {
-	  if( val_pred<array_pred_protect[int_data] ) {
-		double numerator = pow(val_pred-val_data, 2);
-		double denominator = 2*( val_pred - val_data + val_data*log(val_data/val_pred) );
-		matrix_goodness_cov_total_noConstraint(i,i) = numerator/denominator;
-
-		cout<<" --------> Protection Protection"<<endl;
-	  }
-	}
-
-
-	if( (val_pred==val_data) && (val_pred==0) ) matrix_goodness_cov_total_noConstraint(i,i) = 1e-6;
-  }
+  for( int i=0; i<num_Y; i++ ) matrix_goodness_cov_total_noConstraint(i,i) = get_stat_variance( matrix_pred_Y(i, 0), matrix_data_Y(i, 0) );
   matrix_goodness_cov_total_noConstraint = matrix_goodness_cov_total_noConstraint + matrix_YY;
 
   matrix_pred_Y.T(); matrix_data_Y.T();
@@ -1608,24 +1558,9 @@ int TLee::Exe_Goodness_of_fit(int num_Y, int num_X, TMatrixD matrix_pred, TMatri
 
   TMatrixD matrix_XX = matrix_cov_total.GetSub(num_Y, num_Y+num_X-1, num_Y, num_Y+num_X-1);
   for(int ibin=1; ibin<=num_X; ibin++) {
-
-	//matrix_XX(ibin-1, ibin-1) += matrix_pred_X(ibin-1, 0);// Pearson's term for statistics test
-
-	double user_stat = matrix_pred_X(ibin-1, 0);
-	double val_meas = matrix_data_X(ibin-1,0);
-	double val_pred = matrix_pred_X(ibin-1,0);
-	int int_meas = (int)(val_meas+0.1);
-	if( int_meas>=1 && int_meas<=10) {
-	  if( val_pred<array_pred_protect[int_meas] ) {
-		double numerator = pow(val_pred-val_meas, 2);
-		double denominator = 2*( val_pred - val_meas + val_meas*log(val_meas/val_pred) );
-		user_stat = numerator/denominator;
-	  }
-	}
-	matrix_XX(ibin-1, ibin-1) += user_stat;
-
-
+	matrix_XX(ibin-1, ibin-1) += get_stat_variance( matrix_pred_X(ibin-1, 0), matrix_data_X(ibin-1, 0) );// statistics of the constraining channels
   }
+
   TMatrixD matrix_XX_inv = matrix_XX;
   matrix_XX_inv.Invert();
 
@@ -1662,10 +1597,10 @@ int TLee::Exe_Goodness_of_fit(int num_Y, int num_X, TMatrixD matrix_pred, TMatri
 	}
   }
 
-  // cout<<endl;
-  // cout<<TString::Format(" ---> %6d befor constraint: %6.2f %6.2f", index, pred_cv_before, sqrt(pred_err_before) )<<endl;
-  // cout<<TString::Format(" ---> %6d after constraint: %6.2f %6.2f", index, pred_cv_after, sqrt(pred_err_after) )<<endl;
-  // cout<<endl;
+  cout<<endl;
+  cout<<TString::Format(" ---> %6d befor constraint: %6.2f %6.2f", index, pred_cv_before, sqrt(pred_err_before) )<<endl;
+  cout<<TString::Format(" ---> %6d after constraint: %6.2f %6.2f", index, pred_cv_after, sqrt(pred_err_after) )<<endl;
+  cout<<endl;
 
   // for(int idx=0; idx<num_Y; idx++) {
   //   cout<<TString::Format(" ---> bin %3d, before/after  %3.1f  %3.1f", idx+1, matrix_pred_Y(idx, 0), matrix_Y_under_X(idx, 0))<<endl;
@@ -1677,28 +1612,8 @@ int TLee::Exe_Goodness_of_fit(int num_Y, int num_X, TMatrixD matrix_pred, TMatri
 
   TMatrixD matrix_goodness_cov_total_wiConstraint(num_Y, num_Y);
   for( int i=0; i<num_Y; i++ ) {
-	double val_pred = matrix_Y_under_X(i, 0);
-	double val_data = matrix_data_Y(i, 0);
-	matrix_goodness_cov_total_wiConstraint(i,i) = val_pred;
-
-	// if( val_data==1 ) {
-	//   if( val_pred<0.461 ) {// DocDB-32520, when the prediction is sufficiently low
-	//     double numerator = pow(val_pred-val_data, 2);
-	//     double dewiminator = 2*( val_pred - val_data + val_data*log(val_data/val_pred) );
-	//     matrix_goodness_cov_total_wiConstraint(i,i) = numerator/dewiminator;
-	//   }
-	// }
-
-	int int_data = (int)(val_data+0.1);
-	if( int_data>=1 && int_data<=10) {
-	  if( val_pred<array_pred_protect[int_data] ) {
-		double numerator = pow(val_pred-val_data, 2);
-		double denominator = 2*( val_pred - val_data + val_data*log(val_data/val_pred) );
-		matrix_goodness_cov_total_wiConstraint(i,i) = numerator/denominator;
-	  }
-	}
-
-	if( (val_pred==val_data) && (val_pred==0) ) matrix_goodness_cov_total_wiConstraint(i,i) = 1e-6;
+	if( matrix_Y_under_X(i, 0)<=0 ) cout<<TString::Format(" ---> Warning: constrained prediction %g <= 0 in bin %d", matrix_Y_under_X(i, 0), i)<<endl;
+	matrix_goodness_cov_total_wiConstraint(i,i) = get_stat_variance( matrix_Y_under_X(i, 0), matrix_data_Y(i, 0) );
   }
   matrix_goodness_cov_total_wiConstraint = matrix_goodness_cov_total_wiConstraint + matrix_YY_under_XX;
 
@@ -2554,28 +2469,9 @@ void TLee::Set_Collapse()
   if( flag_syst_mc_stat_cor ) {
     for(int idx=0; idx<bins_newworld; idx++) {
       for(int jdx=0; jdx<bins_newworld; jdx++) {
-        double array_pred_protect[11] = {0, 0.461, 0.916, 1.382, 1.833, 2.298, 2.767, 3.225, 3.669, 4.141, 4.599};
-        /// Data_stat
-        double data_sigma_i = sqrt( matrix_pred_newworld(0, idx) );
-        double val_data_i = sqrt( matrix_data_newworld(0, idx) );
-        int int_data_i = (int)(val_data_i+0.1);
-        if( int_data_i>=1 && val_data_i<=10) {
-          if( data_sigma_i<array_pred_protect[int_data_i] ) {
-            double numerator = pow(data_sigma_i-val_data_i, 2);
-            double denominator = 2*( data_sigma_i - val_data_i + val_data_i*log(val_data_i/data_sigma_i) );
-            data_sigma_i = numerator/denominator;
-          }
-         }
-        double data_sigma_j = sqrt( matrix_pred_newworld(0, jdx) );
-        double val_data_j = sqrt( matrix_data_newworld(0, jdx) );
-        int int_data_j = (int)(val_data_j+0.1);
-        if( int_data_j>=1 && val_data_j<=10) {
-          if( data_sigma_j<array_pred_protect[int_data_j] ) {
-            double numerator = pow(data_sigma_j-val_data_j, 2);
-            double denominator = 2*( data_sigma_j - val_data_j + val_data_j*log(val_data_j/data_sigma_j) );
-            data_sigma_j = numerator/denominator;
-          }
-         }
+        /// Data_stat: sigma from the statistical variance of each bin, as in the goodness of fit (get_stat_variance)
+        double data_sigma_i = sqrt( get_stat_variance( matrix_pred_newworld(0, idx), matrix_data_newworld(0, idx) ) );
+        double data_sigma_j = sqrt( get_stat_variance( matrix_pred_newworld(0, jdx), matrix_data_newworld(0, jdx) ) );
         double data_correlation = matrix_data_MCstat_correlation(idx, jdx);
         double data_stat_cov = data_correlation * data_sigma_i * data_sigma_j;
 
@@ -2606,10 +2502,10 @@ void TLee::Set_Collapse()
   matrix_absolute_cov_newworld = matrix_transform_Lee_T * matrix_absolute_cov_oldworld * matrix_transform_Lee;
 
   if(flag_syst_mc_stat_cor){
-    matrix_absolute_cov_newworld += matrix_absolute_data_stat_cov;
-    matrix_absolute_cov_newworld += matrix_absolute_pred_stat_cov;
+    matrix_absolute_cov_newworld += matrix_absolute_data_stat_cov;// off-diagonal only (the diagonal is added in the goodness of fit)
+    matrix_absolute_cov_newworld += matrix_absolute_pred_stat_cov;// includes the MC stat on the diagonal
   }
-  if( flag_syst_mc_stat ) {
+  else if( flag_syst_mc_stat ) {
 	for(int ibin=0; ibin<bins_newworld; ibin++) {
 	  double val_mc_stat_cov = gh_mc_stat_bin[ibin]->Eval( scaleF_Lee );
 	  //if( scaleF_Lee<=0 ) val_mc_stat_cov = gh_mc_stat_bin[ibin]->Eval( 0 );
@@ -3317,27 +3213,41 @@ void TLee::Set_Spectra_MatrixCov()
 
 ///////////////////////////////
 if(flag_syst_mc_stat_cor){
-  matrix_data_MCstat_correlation.Clear();
-  matrix_data_MCstat_correlation.ResizeTo(bins_newworld, bins_newworld);
+  // Correlations of the statistical fluctuations between bins (bins that share events), from bootstrapping
+  // (numuCCana/run_stat.pl, run period 0 = all): the data statistics from the data events (stat_cov_matrix,
+  // run_data_stat.root), the MC statistics from the prediction (stat_pred_cov_matrix, run_pred_stat.root).
+  // Correlation = cov_ij/sqrt(cov_ii cov_jj), 1 on the diagonal, 0 for a bin without entries.
+  TString stat_files[2] = {mc_directory+"run_data_stat.root", mc_directory+"run_pred_stat.root"};
+  TMatrixD *stat_correlations[2] = {&matrix_data_MCstat_correlation, &matrix_pred_MCstat_correlation};
 
-  matrix_pred_MCstat_correlation.Clear();
-  matrix_pred_MCstat_correlation.ResizeTo(bins_newworld, bins_newworld);
-
-  TFile *roofile_data = new TFile(mc_directory+"run_pred_stat.root", "read");
-  TMatrixD *matrix_datastat = (TMatrixD*)roofile_data->Get("cov_mat_0");
-  //TMatrixD *matrix_datastat = (TMatrixD*)roofile_data->Get("cov_mat_1");
-  //cout<<endl<<" check matrix_datastat "<<matrix_datastat->GetNrows()<<endl<<endl;
-
-  for(int idx=0; idx<matrix_datastat->GetNrows(); idx++ ) {
-    for(int jdx=0; jdx<matrix_datastat->GetNrows(); jdx++ ) {
-      double val_cov = (*matrix_datastat)(idx, jdx);
-      double ii = sqrt((*matrix_datastat)(idx,idx));
-      double jj = sqrt((*matrix_datastat)(jdx,jdx));
-      if( ii!=0 && jj!=0 ) matrix_data_MCstat_correlation(idx, jdx) = val_cov/ii/jj;
-      if( idx==jdx) matrix_data_MCstat_correlation(idx, jdx) = 1;
+  for(int ifile=0; ifile<2; ifile++) {
+    TFile *roofile_stat = new TFile(stat_files[ifile], "read");
+    TMatrixD *matrix_stat = (roofile_stat->IsZombie()) ? 0 : (TMatrixD*)roofile_stat->Get("cov_mat_0");
+    if( !matrix_stat ) {
+      cerr<<endl<<" ERROR: no cov_mat_0 in "<<stat_files[ifile]<<" (needed for flag_syst_mc_stat_cor)"<<endl<<endl;
+      exit(1);
     }
+    if( matrix_stat->GetNrows()!=bins_newworld || matrix_stat->GetNcols()!=bins_newworld ) {
+      cerr<<endl<<" ERROR: cov_mat_0 in "<<stat_files[ifile]<<" is "<<matrix_stat->GetNrows()<<"x"<<matrix_stat->GetNcols()
+          <<", expected "<<bins_newworld<<"x"<<bins_newworld<<endl<<endl;
+      exit(1);
+    }
+
+    TMatrixD& matrix_correlation = *stat_correlations[ifile];
+    matrix_correlation.Clear();
+    matrix_correlation.ResizeTo(bins_newworld, bins_newworld);
+    for(int idx=0; idx<bins_newworld; idx++ ) {
+      for(int jdx=0; jdx<bins_newworld; jdx++ ) {
+        double val_cov = (*matrix_stat)(idx, jdx);
+        double ii = sqrt((*matrix_stat)(idx,idx));
+        double jj = sqrt((*matrix_stat)(jdx,jdx));
+        if( ii!=0 && jj!=0 ) matrix_correlation(idx, jdx) = val_cov/ii/jj;
+        if( idx==jdx) matrix_correlation(idx, jdx) = 1;
+      }
+    }
+    cout<<" Stat correlations: "<<stat_files[ifile]<<endl;
+    roofile_stat->Close();
   }
-  matrix_pred_MCstat_correlation = matrix_data_MCstat_correlation;
 }
 /////////////////////
 

@@ -92,6 +92,7 @@ int main(int argc, char** argv)
   Lee_test->flag_syst_time    = config_Lee::flag_syst_time;
   Lee_test->flag_syst_detector   = config_Lee::flag_syst_detector;
   //
+  Lee_test->flag_syst_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;// needed in Set_Spectra_MatrixCov (loads the stat correlations)
 
   ////////// just do it one time in the whole procedure
 
@@ -118,6 +119,7 @@ int main(int argc, char** argv)
   Lee_test->flag_syst_detector   = config_Lee::flag_syst_detector;
   Lee_test->flag_syst_additional = config_Lee::flag_syst_additional;
   Lee_test->flag_syst_mc_stat    = config_Lee::flag_syst_mc_stat;
+  Lee_test->flag_syst_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;
 
   Lee_test->scaleF_Lee = config_Lee::Lee_strength_for_outputfile_covariance_matrix;
   Lee_test->scaleF_Lee = config_Lee::Lee_strength_for_GoF;
