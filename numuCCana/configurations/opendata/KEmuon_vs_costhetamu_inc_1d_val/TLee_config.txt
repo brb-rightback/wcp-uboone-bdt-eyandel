@@ -1,0 +1,52 @@
+# KEmuon_vs_costhetamu_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LFCHPC                           KE_muon_new3_5               34-41
+#   numuCC_part_bdt_LPCHFC                           KE_muon_new3_5               42-55
+#   numuCC_part_bdt_LPCHPC                           KE_muon_new3_5               56-69
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                70-109
+#   numuCC_part_bdt_LFCHPC_1                         muon_costheta                110-129
+#   numuCC_part_bdt_LPCHFC_1                         muon_costheta                130-169
+#   numuCC_part_bdt_LPCHPC_1                         muon_costheta                170-209
+#
+# channels_observation flag_lookelsewhere
+  8 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> muon costheta LFCHFC
+  1 30001 0-33,34-41,42-55,56-69 70-109 1 0 1 1 1
+# muon energy -> muon costheta LFCHPC
+  1 30002 0-33,34-41,42-55,56-69 110-129 1 0 1 1 1
+# muon energy -> muon costheta LPCHFC
+  1 30003 0-33,34-41,42-55,56-69 130-169 1 0 1 1 1
+# muon energy -> muon costheta LPCHPC
+  1 30004 0-33,34-41,42-55,56-69 170-209 1 0 1 1 1
+# muon energy -> muon costheta, all channels
+  1 30005 0-33,34-41,42-55,56-69 70-109,110-129,130-169,170-209 1 0 1 1 1
+# muon costheta -> muon energy LFCHFC
+  1 30006 70-109,110-129,130-169,170-209 0-33 1 0 1 1 1
+# muon costheta -> muon energy LFCHPC
+  1 30007 70-109,110-129,130-169,170-209 34-41 1 0 1 1 1
+# muon costheta -> muon energy LPCHFC
+  1 30008 70-109,110-129,130-169,170-209 42-55 1 0 1 1 1
+# muon costheta -> muon energy LPCHPC
+  1 30009 70-109,110-129,130-169,170-209 56-69 1 0 1 1 1
+# muon costheta -> muon energy, all channels
+  1 30010 70-109,110-129,130-169,170-209 0-33,34-41,42-55,56-69 1 0 1 1 1
+# FC muon energy -> muon energy LFCHPC
+  1 30011 0-33 34-41 1 0 1 1 1
+# FC muon energy -> muon energy LPCHFC
+  1 30012 0-33 42-55 1 0 1 1 1
+# FC muon energy -> muon energy LPCHPC
+  1 30013 0-33 56-69 1 0 1 1 1
+# FC muon energy -> muon energy, all PC channels
+  1 30014 0-33 34-41,42-55,56-69 1 0 1 1 1
+# FC muon costheta -> muon costheta LFCHPC
+  1 30015 70-109 110-129 1 0 1 1 1
+# FC muon costheta -> muon costheta LPCHFC
+  1 30016 70-109 130-169 1 0 1 1 1
+# FC muon costheta -> muon costheta LPCHPC
+  1 30017 70-109 170-209 1 0 1 1 1
+# FC muon costheta -> muon costheta, all PC channels
+  1 30018 70-109 110-129,130-169,170-209 1 0 1 1 1
+End

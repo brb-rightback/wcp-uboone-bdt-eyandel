@@ -1,6 +1,52 @@
 // Plotting of TLee (included by TLee.cxx, as the mcm_*.h files by master_cov_matrix.cxx): the visualization only, the
 // calculations are in TLee.cxx.
 
+#include "PlotTLee_val.h"
+
+// x axis segments of the style in the current pad: an axis with the variable values below the bins of each segment
+// (labels if flag_axis_labels), separators between the segments, the segment labels and the test description at the top
+// if flag_names
+static void draw_gof_segments(const TLeeGoFPlotStyle& style, bool flag_axis_labels, double tick_size, double label_size, bool flag_names)
+{
+  if( style.segments.empty() ) return;
+  gPad->Update();
+  double xmin = gPad->GetUxmin(), xmax = gPad->GetUxmax(), ymin = gPad->GetUymin();
+  double left = gPad->GetLeftMargin(), right = gPad->GetRightMargin(), bot = gPad->GetBottomMargin(), top = gPad->GetTopMargin();
+  auto x_ndc = [&](double x) { return left + (x-xmin)/(xmax-xmin)*(1-left-right); };
+  int nseg = style.segments.size();
+
+  for(int iseg=0; iseg<nseg; iseg++) {
+	const TLeeGoFAxisSegment& seg = style.segments.at(iseg);
+
+	TGaxis *axis = new TGaxis(seg.index_low, ymin, seg.index_hgh, ymin, seg.value_low, seg.value_hgh, style.segment_divisions, "S");
+	axis->SetTickSize(tick_size);
+	axis->SetLabelSize(flag_axis_labels ? label_size : 0);
+	axis->SetLabelFont(42);
+	axis->Draw();
+
+	if( iseg>0 ) {
+	  TLine *line_seg = new TLine();
+	  line_seg->SetLineColor(kGray+1); line_seg->SetLineWidth(2);
+	  line_seg->DrawLineNDC(x_ndc(seg.index_low), bot, x_ndc(seg.index_low), 1-top);
+	}
+
+	if( flag_names && seg.label!="" ) {
+	  TLatex *latex_seg = new TLatex();
+	  latex_seg->SetNDC(); latex_seg->SetTextFont(42);
+	  double x_center = x_ndc( 0.5*(seg.index_low + seg.index_hgh + 1) );
+	  if( nseg>8 ) { latex_seg->SetTextAngle(90); latex_seg->SetTextAlign(32); latex_seg->SetTextSize(0.03); }
+	  else { latex_seg->SetTextAlign(23); latex_seg->SetTextSize(0.045); }
+	  latex_seg->DrawLatex(x_center, 1-top-0.015, seg.label);
+	}
+  }
+
+  if( flag_names && style.description!="" ) {// above the frame
+	TLatex *latex_desc = new TLatex();
+	latex_desc->SetNDC(); latex_desc->SetTextFont(42); latex_desc->SetTextAlign(11); latex_desc->SetTextSize(0.045);
+	latex_desc->DrawLatex(left, 1-top+0.015, style.description);
+  }
+}
+
 // Plot settings per goodness-of-fit index: the x axes of the target bins (bin index -> variable value, up to two
 // segments, e.g. FC and PC), legend positions and labels. Add a case for a new test index; other indices get the
 // defaults (bin index axis).
@@ -74,10 +120,17 @@ TLeeGoFPlotStyle TLee::Get_GoF_plot_style(int index)
 	break;
 
   default:
+	get_val_plot_style(index, style);// model-validation tests (src/PlotTLee_val.h)
 	break;
   }
 
   return style;
+}
+
+// x axis segments of the test index in the current pad (see draw_gof_segments)
+void TLee::Draw_GoF_segments(int index, bool flag_axis_labels, double tick_size, double label_size, bool flag_names)
+{
+  draw_gof_segments(Get_GoF_plot_style(index), flag_axis_labels, tick_size, label_size, flag_names);
 }
 
 // Plots of a goodness-of-fit test (Exe_Goodness_of_fit): prediction with uncertainties and data, data/prediction,
@@ -97,6 +150,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 
   bool flag_axis_userAA = style.flag_axis_userAA;
   bool flag_axis_userAB = style.flag_axis_userAB;
+  bool flag_axis_user = flag_axis_userAA || flag_axis_userAB || !style.segments.empty();
   int axis_user_divisions = style.axis_user_divisions;
   TString title_axis_user = style.title_axis_user;
 
@@ -295,7 +349,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 
   h1_pred_Y_noConstraint_rel_error->Draw("same axis");
 
-  if( flag_axis_userAA || flag_axis_userAB ) {
+  if( flag_axis_user ) {
 	///////////////////// bot
 	h1_pred_Y_noConstraint_rel_error->GetXaxis()->SetTickLength(0);
 	h1_pred_Y_noConstraint_rel_error->GetXaxis()->SetLabelSize(0);
@@ -305,6 +359,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 
 	if( flag_axis_userAA ) axis_userAA->Draw();
 	if( flag_axis_userAB ) axis_userAB->Draw();
+	draw_gof_segments(style, true, 0.06, 0.06, false);
 
 	///////////////////// top
 	canv_spectra_GoF_no->cd(); pad_top_no->cd();
@@ -312,6 +367,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 	h1_pred_Y_noConstraint->GetXaxis()->SetLabelSize(0);
 	if( flag_axis_userAA ) axis_userAA_clone->Draw();
 	if( flag_axis_userAB ) axis_userAB_clone->Draw();
+	draw_gof_segments(style, false, 0.05, 0, true);
   }
 
   if( num_X==0 ) {
@@ -419,18 +475,20 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 
   h1_pred_Y_wiConstraint_rel_error->Draw("same axis");
 
-  if( flag_axis_userAA || flag_axis_userAB ) {
+  if( flag_axis_user ) {
 	///////////////////// bot
 
 	if( flag_axis_userAA && flag_axis_userAB ) line_FC_PC->Draw("same");
 
 	if( flag_axis_userAA ) axis_userAA->Draw();
 	if( flag_axis_userAB ) axis_userAB->Draw();
+	draw_gof_segments(style, true, 0.06, 0.06, false);
 
 	///////////////////// top
 	canv_spectra_GoF_wi->cd(); pad_top_wi->cd();
 	if( flag_axis_userAA ) axis_userAA_clone->Draw();
 	if( flag_axis_userAB ) axis_userAB_clone->Draw();
+	draw_gof_segments(style, false, 0.05, 0, true);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -484,11 +542,12 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   h1_spectra_wi2no->GetYaxis()->SetTitleOffset(1.18);
   h1_spectra_wi2no->GetYaxis()->SetNdivisions(509);
   h1_spectra_wi2no->GetYaxis()->SetTickLength(0.03);
-  if( flag_axis_userAA || flag_axis_userAB ) {/// ttt
+  if( flag_axis_user ) {/// ttt
 	func_xy_title(h1_spectra_wi2no, title_axis_user, "Prediction wi/no constraint");
 	h1_spectra_wi2no->GetXaxis()->SetLabelSize(0);
 	if( flag_axis_userAA ) axis_userAA_wi2no->Draw();
 	if( flag_axis_userAB ) axis_userAB_wi2no->Draw();
+	draw_gof_segments(style, true, 0.03, 0.04, true);
   }
 
   //roostr = TString::Format("canv_spectra_wi2no_%02d.png", index); canv_spectra_wi2no->SaveAs(roostr);
@@ -517,7 +576,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   pad_top_total->Draw(); pad_top_total->cd();
 
   h1_pred_Y_wiConstraint->Draw("e2");
-  h1_pred_Y_wiConstraint->SetXTitle("Energy (#times 100 MeV)");
+  h1_pred_Y_wiConstraint->SetXTitle("");// top pad: the x axis is labelled in the bottom pad
   //if( index==7 ) h1_pred_Y_wiConstraint->SetMaximum(25);
   //if( index==9 ) h1_pred_Y_wiConstraint->SetMaximum(50);
   h1_pred_Y_noConstraint->Draw("same e2");
@@ -577,18 +636,20 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   gh_ratio_noConstraint->Draw("same pe");
   gh_ratio_wiConstraint->Draw("same pe");
 
-  if( flag_axis_userAA || flag_axis_userAB ) {
+  if( flag_axis_user ) {
 	///////////////////// bot
 
 	if( flag_axis_userAA && flag_axis_userAB ) line_FC_PC->Draw("same");
 
 	if( flag_axis_userAA ) axis_userAA->Draw();
 	if( flag_axis_userAB ) axis_userAB->Draw();
+	draw_gof_segments(style, true, 0.06, 0.06, false);
 
 	///////////////////// top
 	canv_spectra_GoF_total->cd(); pad_top_total->cd();
 	if( flag_axis_userAA ) axis_userAA_clone->Draw();
 	if( flag_axis_userAB ) axis_userAB_clone->Draw();
+	draw_gof_segments(style, false, 0.05, 0, true);
   }
 
   if( style.total_xtitle!="" ) h1_pred_Y_noConstraint_rel_error->SetXTitle( style.total_xtitle );
@@ -671,7 +732,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   h1_spectra_relerr->GetYaxis()->SetTitleOffset(1.18);
   h1_spectra_relerr->GetYaxis()->SetNdivisions(509);
   h1_spectra_relerr->GetYaxis()->SetTickLength(0.03);
-  if( flag_axis_userAA || flag_axis_userAB ) {/// ttt
+  if( flag_axis_user ) {/// ttt
 	func_xy_title(h1_spectra_relerr, title_axis_user,"Rel.Err to Pred no constraint");
 
 	if( flag_axis_userAA && flag_axis_userAB ) {
@@ -692,6 +753,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 	  axis_userAB->SetTickSize(0.06);
 	  axis_userAB->SetLabelSize(0.05);
 	}
+	draw_gof_segments(style, true, 0.03, 0.04, true);
   }
 
   roostr = TString::Format("canv_spectra_relerr_%02d.png", index); canv_spectra_relerr->SaveAs(roostr);

@@ -1,0 +1,72 @@
+# KEmuon_Ehadron_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LPCorHPC                      KE_muon_new3_5               34-47
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               48-80
+#   numuCC_part_bdt_PorLNp_LPCorHPC                  KE_muon_new3_5               81-94
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               95-104
+#   numuCC_part_bdt_Scat0p_LPCorHPC                  KE_muon_new3_5               105-110
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               111-123
+#   numuCC_part_bdt_Act0p_LPCorHPC                   KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               135-148
+#   numuCC_part_bdt_Trk0p_LPCorHPC                   KE_muon_new3_5               149-162
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               163-195
+#   numuCC_part_bdt_G0p_LPCorHPC                     KE_muon_new3_5               196-209
+#   numuCC_part_bdt_Np_LFCHFC_1                      Ehadron_new3_5_drop15_95     210-226
+#   numuCC_part_bdt_Np_LPCorHPC_1                    Ehadron_new3_5_drop15_95     227-243
+#   numuCC_part_bdt_PorLNp_LFCHFC_1                  Ehadron_new3_5_drop15_95     244-254
+#   numuCC_part_bdt_PorLNp_LPCorHPC_1                Ehadron_new3_5_drop15_95     255-265
+#   numuCC_part_bdt_Scat0p_LFCHFC_1                  Ehadron_new3_5_drop15_95     266-273
+#   numuCC_part_bdt_Scat0p_LPCorHPC_1                Ehadron_new3_5_drop15_95     274-279
+#   numuCC_part_bdt_Act0p_LFCHFC_1                   Ehadron_new3_5_drop15_95     280-288
+#   numuCC_part_bdt_Act0p_LPCorHPC_1                 Ehadron_new3_5_drop15_95     289-292
+#   numuCC_part_bdt_Trk0p_LFCHFC_1                   Ehadron_new3_5_drop15_95     293-303
+#   numuCC_part_bdt_Trk0p_LPCorHPC_1                 Ehadron_new3_5_drop15_95     304-309
+#   numuCC_part_bdt_G0p_LFCHFC_1                     Ehadron_new3_5_drop15_95     310-319
+#   numuCC_part_bdt_G0p_LPCorHPC_1                   Ehadron_new3_5_drop15_95     320-333
+#
+# channels_observation flag_lookelsewhere
+  24 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> hadronic energy Np LFCHFC
+  1 14201 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-226 1 0 1 1 1
+# muon energy -> hadronic energy Np LPCorHPC
+  1 14202 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 227-243 1 0 1 1 1
+# muon energy -> hadronic energy PorLNp LFCHFC
+  1 14203 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 244-254 1 0 1 1 1
+# muon energy -> hadronic energy PorLNp LPCorHPC
+  1 14204 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 255-265 1 0 1 1 1
+# muon energy -> hadronic energy Scat0p LFCHFC
+  1 14205 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 266-273 1 0 1 1 1
+# muon energy -> hadronic energy Scat0p LPCorHPC
+  1 14206 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 274-279 1 0 1 1 1
+# muon energy -> hadronic energy Act0p LFCHFC
+  1 14207 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 280-288 1 0 1 1 1
+# muon energy -> hadronic energy Act0p LPCorHPC
+  1 14208 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 289-292 1 0 1 1 1
+# muon energy -> hadronic energy Trk0p LFCHFC
+  1 14209 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 293-303 1 0 1 1 1
+# muon energy -> hadronic energy Trk0p LPCorHPC
+  1 14210 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 304-309 1 0 1 1 1
+# muon energy -> hadronic energy G0p LFCHFC
+  1 14211 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 310-319 1 0 1 1 1
+# muon energy -> hadronic energy G0p LPCorHPC
+  1 14212 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 320-333 1 0 1 1 1
+# muon energy -> hadronic energy, all channels
+  1 14213 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-226,227-243,244-254,255-265,266-273,274-279,280-288,289-292,293-303,304-309,310-319,320-333 1 0 1 1 1
+# FC hadronic energy -> hadronic energy Np LPCorHPC
+  1 14214 210-226,244-254,266-273,280-288,293-303,310-319 227-243 1 0 1 1 1
+# FC hadronic energy -> hadronic energy PorLNp LPCorHPC
+  1 14215 210-226,244-254,266-273,280-288,293-303,310-319 255-265 1 0 1 1 1
+# FC hadronic energy -> hadronic energy Scat0p LPCorHPC
+  1 14216 210-226,244-254,266-273,280-288,293-303,310-319 274-279 1 0 1 1 1
+# FC hadronic energy -> hadronic energy Act0p LPCorHPC
+  1 14217 210-226,244-254,266-273,280-288,293-303,310-319 289-292 1 0 1 1 1
+# FC hadronic energy -> hadronic energy Trk0p LPCorHPC
+  1 14218 210-226,244-254,266-273,280-288,293-303,310-319 304-309 1 0 1 1 1
+# FC hadronic energy -> hadronic energy G0p LPCorHPC
+  1 14219 210-226,244-254,266-273,280-288,293-303,310-319 320-333 1 0 1 1 1
+# FC hadronic energy -> hadronic energy, all PC channels
+  1 14220 210-226,244-254,266-273,280-288,293-303,310-319 227-243,255-265,274-279,289-292,304-309,320-333 1 0 1 1 1
+End

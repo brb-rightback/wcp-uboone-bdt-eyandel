@@ -1,0 +1,12 @@
+# KEmuon_Enu_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt                                  KE_muon_new3_5               0-33
+#   numuCC_part_bdt_1                                kine_reco_Enu_new3_5_drop15_95 34-50
+#
+# channels_observation flag_lookelsewhere
+  2 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> neutrino energy all events
+  1 11101 0-33 34-50 1 0 1 1 1
+End

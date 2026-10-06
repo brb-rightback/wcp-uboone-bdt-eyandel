@@ -1,14 +1,20 @@
-# muon energy constrains hadronic energy (make_val_configs.py)
-# channels (global bins): numuCC_part_bdt_LFCHFC 0-33, numuCC_part_bdt_LPCorHPC 34-47, numuCC_part_bdt_LFCHFC_1 48-64, numuCC_part_bdt_LPCorHPC_1 65-81
+# KEmuon_Ehadron_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LPCorHPC                         KE_muon_new3_5               34-47
+#   numuCC_part_bdt_LFCHFC_1                         Ehadron_new3_5_drop15_95     48-64
+#   numuCC_part_bdt_LPCorHPC_1                       Ehadron_new3_5_drop15_95     65-81
 #
 # channels_observation flag_lookelsewhere
   4 1
 #
 # run index support target xsflux det add mcstat mcstatcor
-# hadronic energy LFCHFC
-  1 2001 0-33,34-47 48-64 1 0 1 1 1
-# hadronic energy LPCorHPC
-  1 2002 0-33,34-47 65-81 1 0 1 1 1
-# hadronic energy all channels
-  1 2003 0-33,34-47 48-64,65-81 1 0 1 1 1
+# muon energy -> hadronic energy LFCHFC
+  1 10201 0-33,34-47 48-64 1 0 1 1 1
+# muon energy -> hadronic energy LPCorHPC
+  1 10202 0-33,34-47 65-81 1 0 1 1 1
+# muon energy -> hadronic energy, all channels
+  1 10203 0-33,34-47 48-64,65-81 1 0 1 1 1
+# FC hadronic energy -> hadronic energy LPCorHPC
+  1 10204 48-64 65-81 1 0 1 1 1
 End

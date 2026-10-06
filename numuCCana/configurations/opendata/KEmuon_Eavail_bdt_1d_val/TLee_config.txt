@@ -1,0 +1,144 @@
+# KEmuon_Eavail_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LFCHPC                        KE_muon_new3_5               34-41
+#   numuCC_part_bdt_Np_LPCHFC                        KE_muon_new3_5               42-55
+#   numuCC_part_bdt_Np_LPCHPC                        KE_muon_new3_5               56-69
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               70-102
+#   numuCC_part_bdt_PorLNp_LFCHPC                    KE_muon_new3_5               103-109
+#   numuCC_part_bdt_PorLNp_LPCHFC                    KE_muon_new3_5               110-123
+#   numuCC_part_bdt_PorLNp_LPCHPC                    KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               135-144
+#   numuCC_part_bdt_Scat0p_LFCHPC                    KE_muon_new3_5               145-148
+#   numuCC_part_bdt_Scat0p_LPCHFC                    KE_muon_new3_5               149-154
+#   numuCC_part_bdt_Scat0p_LPCHPC                    KE_muon_new3_5               155-160
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               161-173
+#   numuCC_part_bdt_Act0p_LFCHPC                     KE_muon_new3_5               174-176
+#   numuCC_part_bdt_Act0p_LPCHFC                     KE_muon_new3_5               177-185
+#   numuCC_part_bdt_Act0p_LPCHPC                     KE_muon_new3_5               186-196
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               197-210
+#   numuCC_part_bdt_Trk0p_LFCHPC                     KE_muon_new3_5               211-213
+#   numuCC_part_bdt_Trk0p_LPCHFC                     KE_muon_new3_5               214-227
+#   numuCC_part_bdt_Trk0p_LPCHPC                     KE_muon_new3_5               228-236
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               237-269
+#   numuCC_part_bdt_G0p_LFCHPC                       KE_muon_new3_5               270-276
+#   numuCC_part_bdt_G0p_LPCHFC                       KE_muon_new3_5               277-290
+#   numuCC_part_bdt_G0p_LPCHPC                       KE_muon_new3_5               291-301
+#   numuCC_part_bdt_Np_LFCHFC_1                      Eavail_new3_5_drop15_95      302-315
+#   numuCC_part_bdt_Np_LFCHPC_1                      Eavail_new3_5_drop15_95      316-329
+#   numuCC_part_bdt_Np_LPCHFC_1                      Eavail_new3_5_drop15_95      330-356
+#   numuCC_part_bdt_Np_LPCHPC_1                      Eavail_new3_5_drop15_95      357-370
+#   numuCC_part_bdt_PorLNp_LFCHFC_1                  Eavail_new3_5_drop15_95      371-384
+#   numuCC_part_bdt_PorLNp_LFCHPC_1                  Eavail_new3_5_drop15_95      385-391
+#   numuCC_part_bdt_PorLNp_LPCHFC_1                  Eavail_new3_5_drop15_95      392-405
+#   numuCC_part_bdt_PorLNp_LPCHPC_1                  Eavail_new3_5_drop15_95      406-414
+#   numuCC_part_bdt_Scat0p_LFCHFC_1                  Eavail_new3_5_drop15_95      415-420
+#   numuCC_part_bdt_Scat0p_LFCHPC_1                  Eavail_new3_5_drop15_95      421-425
+#   numuCC_part_bdt_Scat0p_LPCHFC_1                  Eavail_new3_5_drop15_95      426-430
+#   numuCC_part_bdt_Scat0p_LPCHPC_1                  Eavail_new3_5_drop15_95      431-436
+#   numuCC_part_bdt_Act0p_LFCHFC_1                   Eavail_new3_5_drop15_95      437-443
+#   numuCC_part_bdt_Act0p_LFCHPC_1                   Eavail_new3_5_drop15_95      444-445
+#   numuCC_part_bdt_Act0p_LPCHFC_1                   Eavail_new3_5_drop15_95      446-449
+#   numuCC_part_bdt_Act0p_LPCHPC_1                   Eavail_new3_5_drop15_95      450-453
+#   numuCC_part_bdt_Trk0p_LFCHFC_1                   Eavail_new3_5_drop15_95      454-462
+#   numuCC_part_bdt_Trk0p_LFCHPC_1                   Eavail_new3_5_drop15_95      463-465
+#   numuCC_part_bdt_Trk0p_LPCHFC_1                   Eavail_new3_5_drop15_95      466-472
+#   numuCC_part_bdt_Trk0p_LPCHPC_1                   Eavail_new3_5_drop15_95      473-479
+#   numuCC_part_bdt_G0p_LFCHFC_1                     Eavail_new3_5_drop15_95      480-493
+#   numuCC_part_bdt_G0p_LFCHPC_1                     Eavail_new3_5_drop15_95      494-500
+#   numuCC_part_bdt_G0p_LPCHFC_1                     Eavail_new3_5_drop15_95      501-513
+#   numuCC_part_bdt_G0p_LPCHPC_1                     Eavail_new3_5_drop15_95      514-522
+#
+# channels_observation flag_lookelsewhere
+  48 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> available energy Np LFCHFC
+  1 19001 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 302-315 1 0 1 1 1
+# muon energy -> available energy Np LFCHPC
+  1 19002 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 316-329 1 0 1 1 1
+# muon energy -> available energy Np LPCHFC
+  1 19003 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 330-356 1 0 1 1 1
+# muon energy -> available energy Np LPCHPC
+  1 19004 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 357-370 1 0 1 1 1
+# muon energy -> available energy PorLNp LFCHFC
+  1 19005 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 371-384 1 0 1 1 1
+# muon energy -> available energy PorLNp LFCHPC
+  1 19006 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 385-391 1 0 1 1 1
+# muon energy -> available energy PorLNp LPCHFC
+  1 19007 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 392-405 1 0 1 1 1
+# muon energy -> available energy PorLNp LPCHPC
+  1 19008 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 406-414 1 0 1 1 1
+# muon energy -> available energy Scat0p LFCHFC
+  1 19009 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 415-420 1 0 1 1 1
+# muon energy -> available energy Scat0p LFCHPC
+  1 19010 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 421-425 1 0 1 1 1
+# muon energy -> available energy Scat0p LPCHFC
+  1 19011 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 426-430 1 0 1 1 1
+# muon energy -> available energy Scat0p LPCHPC
+  1 19012 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 431-436 1 0 1 1 1
+# muon energy -> available energy Act0p LFCHFC
+  1 19013 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 437-443 1 0 1 1 1
+# muon energy -> available energy Act0p LFCHPC
+  1 19014 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 444-445 1 0 1 1 1
+# muon energy -> available energy Act0p LPCHFC
+  1 19015 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 446-449 1 0 1 1 1
+# muon energy -> available energy Act0p LPCHPC
+  1 19016 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 450-453 1 0 1 1 1
+# muon energy -> available energy Trk0p LFCHFC
+  1 19017 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 454-462 1 0 1 1 1
+# muon energy -> available energy Trk0p LFCHPC
+  1 19018 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 463-465 1 0 1 1 1
+# muon energy -> available energy Trk0p LPCHFC
+  1 19019 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 466-472 1 0 1 1 1
+# muon energy -> available energy Trk0p LPCHPC
+  1 19020 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 473-479 1 0 1 1 1
+# muon energy -> available energy G0p LFCHFC
+  1 19021 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 480-493 1 0 1 1 1
+# muon energy -> available energy G0p LFCHPC
+  1 19022 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 494-500 1 0 1 1 1
+# muon energy -> available energy G0p LPCHFC
+  1 19023 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 501-513 1 0 1 1 1
+# muon energy -> available energy G0p LPCHPC
+  1 19024 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 514-522 1 0 1 1 1
+# muon energy -> available energy, all channels
+  1 19025 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301 302-315,316-329,330-356,357-370,371-384,385-391,392-405,406-414,415-420,421-425,426-430,431-436,437-443,444-445,446-449,450-453,454-462,463-465,466-472,473-479,480-493,494-500,501-513,514-522 1 0 1 1 1
+# FC available energy -> available energy Np LFCHPC
+  1 19026 302-315,371-384,415-420,437-443,454-462,480-493 316-329 1 0 1 1 1
+# FC available energy -> available energy Np LPCHFC
+  1 19027 302-315,371-384,415-420,437-443,454-462,480-493 330-356 1 0 1 1 1
+# FC available energy -> available energy Np LPCHPC
+  1 19028 302-315,371-384,415-420,437-443,454-462,480-493 357-370 1 0 1 1 1
+# FC available energy -> available energy PorLNp LFCHPC
+  1 19029 302-315,371-384,415-420,437-443,454-462,480-493 385-391 1 0 1 1 1
+# FC available energy -> available energy PorLNp LPCHFC
+  1 19030 302-315,371-384,415-420,437-443,454-462,480-493 392-405 1 0 1 1 1
+# FC available energy -> available energy PorLNp LPCHPC
+  1 19031 302-315,371-384,415-420,437-443,454-462,480-493 406-414 1 0 1 1 1
+# FC available energy -> available energy Scat0p LFCHPC
+  1 19032 302-315,371-384,415-420,437-443,454-462,480-493 421-425 1 0 1 1 1
+# FC available energy -> available energy Scat0p LPCHFC
+  1 19033 302-315,371-384,415-420,437-443,454-462,480-493 426-430 1 0 1 1 1
+# FC available energy -> available energy Scat0p LPCHPC
+  1 19034 302-315,371-384,415-420,437-443,454-462,480-493 431-436 1 0 1 1 1
+# FC available energy -> available energy Act0p LFCHPC
+  1 19035 302-315,371-384,415-420,437-443,454-462,480-493 444-445 1 0 1 1 1
+# FC available energy -> available energy Act0p LPCHFC
+  1 19036 302-315,371-384,415-420,437-443,454-462,480-493 446-449 1 0 1 1 1
+# FC available energy -> available energy Act0p LPCHPC
+  1 19037 302-315,371-384,415-420,437-443,454-462,480-493 450-453 1 0 1 1 1
+# FC available energy -> available energy Trk0p LFCHPC
+  1 19038 302-315,371-384,415-420,437-443,454-462,480-493 463-465 1 0 1 1 1
+# FC available energy -> available energy Trk0p LPCHFC
+  1 19039 302-315,371-384,415-420,437-443,454-462,480-493 466-472 1 0 1 1 1
+# FC available energy -> available energy Trk0p LPCHPC
+  1 19040 302-315,371-384,415-420,437-443,454-462,480-493 473-479 1 0 1 1 1
+# FC available energy -> available energy G0p LFCHPC
+  1 19041 302-315,371-384,415-420,437-443,454-462,480-493 494-500 1 0 1 1 1
+# FC available energy -> available energy G0p LPCHFC
+  1 19042 302-315,371-384,415-420,437-443,454-462,480-493 501-513 1 0 1 1 1
+# FC available energy -> available energy G0p LPCHPC
+  1 19043 302-315,371-384,415-420,437-443,454-462,480-493 514-522 1 0 1 1 1
+# FC available energy -> available energy, all PC channels
+  1 19044 302-315,371-384,415-420,437-443,454-462,480-493 316-329,330-356,357-370,385-391,392-405,406-414,421-425,426-430,431-436,444-445,446-449,450-453,463-465,466-472,473-479,494-500,501-513,514-522 1 0 1 1 1
+End

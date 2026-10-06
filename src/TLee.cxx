@@ -934,6 +934,14 @@ void TLee::Plotting_singlecase(TMatrixD matrix_pred_temp, TMatrixD matrix_meas_t
   func_xy_title(h2_lambda_transform_matrix, "Measurement bin index", "Decomposition bin index");
   func_title_size(h2_lambda_transform_matrix, 0.05, 0.05, 0.05, 0.05);
   h2_lambda_transform_matrix->GetXaxis()->CenterTitle(); h2_lambda_transform_matrix->GetYaxis()->CenterTitle();
+  // tests with x axis segments (validation tests, PlotTLee_val.h): the measurement bins in the variable of each channel
+  TLeeGoFPlotStyle style_singlecase = Get_GoF_plot_style(index);
+  if( !style_singlecase.segments.empty() ) {
+	h2_lambda_transform_matrix->SetXTitle( style_singlecase.title_axis_user );
+	h2_lambda_transform_matrix->GetXaxis()->SetLabelSize(0);
+	h2_lambda_transform_matrix->GetXaxis()->SetTickLength(0);
+	Draw_GoF_segments(index, true, 0.02, 0.03, false);
+  }
   if( saveFIG ) {
 	roostr = TString::Format("canv_h2_lambda_transform_matrix_%d_%s.png", index, ffstr.Data());
 	canv_h2_lambda_transform_matrix->SaveAs(roostr);

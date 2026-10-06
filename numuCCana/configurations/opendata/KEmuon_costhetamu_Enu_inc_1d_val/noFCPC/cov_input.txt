@@ -1,0 +1,19 @@
+numuCC_part_bdt                               KE_muon_new3_5                    33      0       1650            1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig                           KE_muon_new3_5                    33      0       1650            1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_bck                           KE_muon_new3_5                    33      0       1650            1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt                          KE_muon_new3_5                    33      0       1650            1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_ext                           KE_muon_new3_5                    33      0       1650            1       0               0       0               0               7               3       unity               0
+
+numuCC_part_bdt_1                             muon_costheta                     39      -1      0.95            2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_1                         muon_costheta                     39      -1      0.95            2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_1                         muon_costheta                     39      -1      0.95            2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_1                        muon_costheta                     39      -1      0.95            2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_1                         muon_costheta                     39      -1      0.95            2       0               0       0               0               8               3       unity               0
+
+numuCC_part_bdt_2                             kine_reco_Enu_new3_5_drop15_95    16      0       1600            3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_2                         kine_reco_Enu_new3_5_drop15_95    16      0       1600            3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_2                         kine_reco_Enu_new3_5_drop15_95    16      0       1600            3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_2                        kine_reco_Enu_new3_5_drop15_95    16      0       1600            3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_2                         kine_reco_Enu_new3_5_drop15_95    16      0       1600            3       0               0       0               0               9               3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

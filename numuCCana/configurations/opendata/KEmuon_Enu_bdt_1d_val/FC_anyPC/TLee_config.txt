@@ -1,0 +1,72 @@
+# KEmuon_Enu_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LPCorHPC                      KE_muon_new3_5               34-47
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               48-80
+#   numuCC_part_bdt_PorLNp_LPCorHPC                  KE_muon_new3_5               81-94
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               95-104
+#   numuCC_part_bdt_Scat0p_LPCorHPC                  KE_muon_new3_5               105-110
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               111-123
+#   numuCC_part_bdt_Act0p_LPCorHPC                   KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               135-148
+#   numuCC_part_bdt_Trk0p_LPCorHPC                   KE_muon_new3_5               149-162
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               163-195
+#   numuCC_part_bdt_G0p_LPCorHPC                     KE_muon_new3_5               196-209
+#   numuCC_part_bdt_Np_LFCHFC_1                      kine_reco_Enu_new3_5_drop15_95 210-224
+#   numuCC_part_bdt_Np_LPCorHPC_1                    kine_reco_Enu_new3_5_drop15_95 225-240
+#   numuCC_part_bdt_PorLNp_LFCHFC_1                  kine_reco_Enu_new3_5_drop15_95 241-254
+#   numuCC_part_bdt_PorLNp_LPCorHPC_1                kine_reco_Enu_new3_5_drop15_95 255-270
+#   numuCC_part_bdt_Scat0p_LFCHFC_1                  kine_reco_Enu_new3_5_drop15_95 271-278
+#   numuCC_part_bdt_Scat0p_LPCorHPC_1                kine_reco_Enu_new3_5_drop15_95 279-286
+#   numuCC_part_bdt_Act0p_LFCHFC_1                   kine_reco_Enu_new3_5_drop15_95 287-303
+#   numuCC_part_bdt_Act0p_LPCorHPC_1                 kine_reco_Enu_new3_5_drop15_95 304-316
+#   numuCC_part_bdt_Trk0p_LFCHFC_1                   kine_reco_Enu_new3_5_drop15_95 317-325
+#   numuCC_part_bdt_Trk0p_LPCorHPC_1                 kine_reco_Enu_new3_5_drop15_95 326-340
+#   numuCC_part_bdt_G0p_LFCHFC_1                     kine_reco_Enu_new3_5_drop15_95 341-351
+#   numuCC_part_bdt_G0p_LPCorHPC_1                   kine_reco_Enu_new3_5_drop15_95 352-367
+#
+# channels_observation flag_lookelsewhere
+  24 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> neutrino energy Np LFCHFC
+  1 15201 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-224 1 0 1 1 1
+# muon energy -> neutrino energy Np LPCorHPC
+  1 15202 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 225-240 1 0 1 1 1
+# muon energy -> neutrino energy PorLNp LFCHFC
+  1 15203 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 241-254 1 0 1 1 1
+# muon energy -> neutrino energy PorLNp LPCorHPC
+  1 15204 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 255-270 1 0 1 1 1
+# muon energy -> neutrino energy Scat0p LFCHFC
+  1 15205 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 271-278 1 0 1 1 1
+# muon energy -> neutrino energy Scat0p LPCorHPC
+  1 15206 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 279-286 1 0 1 1 1
+# muon energy -> neutrino energy Act0p LFCHFC
+  1 15207 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 287-303 1 0 1 1 1
+# muon energy -> neutrino energy Act0p LPCorHPC
+  1 15208 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 304-316 1 0 1 1 1
+# muon energy -> neutrino energy Trk0p LFCHFC
+  1 15209 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 317-325 1 0 1 1 1
+# muon energy -> neutrino energy Trk0p LPCorHPC
+  1 15210 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 326-340 1 0 1 1 1
+# muon energy -> neutrino energy G0p LFCHFC
+  1 15211 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 341-351 1 0 1 1 1
+# muon energy -> neutrino energy G0p LPCorHPC
+  1 15212 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 352-367 1 0 1 1 1
+# muon energy -> neutrino energy, all channels
+  1 15213 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-224,225-240,241-254,255-270,271-278,279-286,287-303,304-316,317-325,326-340,341-351,352-367 1 0 1 1 1
+# FC neutrino energy -> neutrino energy Np LPCorHPC
+  1 15214 210-224,241-254,271-278,287-303,317-325,341-351 225-240 1 0 1 1 1
+# FC neutrino energy -> neutrino energy PorLNp LPCorHPC
+  1 15215 210-224,241-254,271-278,287-303,317-325,341-351 255-270 1 0 1 1 1
+# FC neutrino energy -> neutrino energy Scat0p LPCorHPC
+  1 15216 210-224,241-254,271-278,287-303,317-325,341-351 279-286 1 0 1 1 1
+# FC neutrino energy -> neutrino energy Act0p LPCorHPC
+  1 15217 210-224,241-254,271-278,287-303,317-325,341-351 304-316 1 0 1 1 1
+# FC neutrino energy -> neutrino energy Trk0p LPCorHPC
+  1 15218 210-224,241-254,271-278,287-303,317-325,341-351 326-340 1 0 1 1 1
+# FC neutrino energy -> neutrino energy G0p LPCorHPC
+  1 15219 210-224,241-254,271-278,287-303,317-325,341-351 352-367 1 0 1 1 1
+# FC neutrino energy -> neutrino energy, all PC channels
+  1 15220 210-224,241-254,271-278,287-303,317-325,341-351 225-240,255-270,279-286,304-316,326-340,352-367 1 0 1 1 1
+End

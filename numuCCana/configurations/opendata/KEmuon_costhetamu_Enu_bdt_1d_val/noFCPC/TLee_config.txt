@@ -1,0 +1,40 @@
+# KEmuon_costhetamu_Enu_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np                               KE_muon_new3_5               0-33
+#   numuCC_part_bdt_PorLNp                           KE_muon_new3_5               34-66
+#   numuCC_part_bdt_Scat0p                           KE_muon_new3_5               67-76
+#   numuCC_part_bdt_Act0p                            KE_muon_new3_5               77-89
+#   numuCC_part_bdt_Trk0p                            KE_muon_new3_5               90-103
+#   numuCC_part_bdt_G0p                              KE_muon_new3_5               104-136
+#   numuCC_part_bdt_Np_1                             muon_costheta                137-176
+#   numuCC_part_bdt_PorLNp_1                         muon_costheta                177-216
+#   numuCC_part_bdt_Scat0p_1                         muon_costheta                217-226
+#   numuCC_part_bdt_Act0p_1                          muon_costheta                227-246
+#   numuCC_part_bdt_Trk0p_1                          muon_costheta                247-266
+#   numuCC_part_bdt_G0p_1                            muon_costheta                267-286
+#   numuCC_part_bdt_Np_2                             kine_reco_Enu_new3_5_drop15_95 287-302
+#   numuCC_part_bdt_PorLNp_2                         kine_reco_Enu_new3_5_drop15_95 303-318
+#   numuCC_part_bdt_Scat0p_2                         kine_reco_Enu_new3_5_drop15_95 319-326
+#   numuCC_part_bdt_Act0p_2                          kine_reco_Enu_new3_5_drop15_95 327-343
+#   numuCC_part_bdt_Trk0p_2                          kine_reco_Enu_new3_5_drop15_95 344-358
+#   numuCC_part_bdt_G0p_2                            kine_reco_Enu_new3_5_drop15_95 359-374
+#
+# channels_observation flag_lookelsewhere
+  18 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> neutrino energy Np
+  1 17101 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 287-302 1 0 1 1 1
+# muon energy and muon costheta -> neutrino energy PorLNp
+  1 17102 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 303-318 1 0 1 1 1
+# muon energy and muon costheta -> neutrino energy Scat0p
+  1 17103 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 319-326 1 0 1 1 1
+# muon energy and muon costheta -> neutrino energy Act0p
+  1 17104 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 327-343 1 0 1 1 1
+# muon energy and muon costheta -> neutrino energy Trk0p
+  1 17105 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 344-358 1 0 1 1 1
+# muon energy and muon costheta -> neutrino energy G0p
+  1 17106 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 359-374 1 0 1 1 1
+# muon energy and muon costheta -> neutrino energy, all channels
+  1 17107 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 287-302,303-318,319-326,327-343,344-358,359-374 1 0 1 1 1
+End

@@ -1,0 +1,28 @@
+# Kp_vs_costhetap_Np_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        reco_Kp                      0-18
+#   numuCC_part_bdt_Np_LPCorHPC                      reco_Kp                      19-37
+#   numuCC_part_bdt_Np_LFCHFC_1                      reco_costhetap               38-77
+#   numuCC_part_bdt_Np_LPCorHPC_1                    reco_costhetap               78-117
+#
+# channels_observation flag_lookelsewhere
+  4 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# proton energy -> proton costheta Np LFCHFC
+  1 44201 0-18,19-37 38-77 1 0 1 1 1
+# proton energy -> proton costheta Np LPCorHPC
+  1 44202 0-18,19-37 78-117 1 0 1 1 1
+# proton energy -> proton costheta, all channels
+  1 44203 0-18,19-37 38-77,78-117 1 0 1 1 1
+# proton costheta -> proton energy Np LFCHFC
+  1 44204 38-77,78-117 0-18 1 0 1 1 1
+# proton costheta -> proton energy Np LPCorHPC
+  1 44205 38-77,78-117 19-37 1 0 1 1 1
+# proton costheta -> proton energy, all channels
+  1 44206 38-77,78-117 0-18,19-37 1 0 1 1 1
+# FC proton energy -> proton energy Np LPCorHPC
+  1 44207 0-18 19-37 1 0 1 1 1
+# FC proton costheta -> proton costheta Np LPCorHPC
+  1 44208 38-77 78-117 1 0 1 1 1
+End

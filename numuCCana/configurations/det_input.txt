@@ -1,0 +1,13 @@
+2  nu_overlay  1   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_lyd_surprise_reco2_hist_4d.root        ./hist_rootfiles/DetVar/cov_LYDown.root      0  1  5.91e20  42
+2  nu_overlay  2   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_lyr_surprise_reco2_hist_4d.root        ./hist_rootfiles/DetVar/cov_LYRayleigh.root  0  2  5.91e20  42
+2  nu_overlay  3   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_recomb2_surprise_reco2_hist_4d.root    ./hist_rootfiles/DetVar/cov_Recomb2.root     0  3  5.91e20  42
+2  nu_overlay  4   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_sce_surprise_reco2_hist_4d.root        ./hist_rootfiles/DetVar/cov_SCE.root         0  4  5.91e20  42
+2  nu_overlay  6   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_WMthetaXZ_surprise_reco2_hist_4d.root  ./hist_rootfiles/DetVar/cov_WMThetaXZ.root   0  5  5.91e20  42
+2  nu_overlay  7   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_WMthetaYZ_surprise_reco2_hist_4d.root  ./hist_rootfiles/DetVar/cov_WMThetaYZ.root   0  6  5.91e20  42
+2  nu_overlay  8   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_WMX_surprise_reco2_hist_4d.root        ./hist_rootfiles/DetVar/cov_WMX.root         0  7  5.91e20  42
+2  nu_overlay  9   /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_WMYZ_surprise_reco2_hist_4d.root       ./hist_rootfiles/DetVar/cov_WMYZ.root        0  8  5.91e20  42
+2  nu_overlay  10  /pnfs/uboone/persistent/users/uboonepro/surprise/detvar/BNB/run4d/merge_det_DetVar_Run45_v10_04_07_19_BNB_nu_overlay_lya_surprise_reco2_hist_4d.root        ./hist_rootfiles/DetVar/cov_LYatt.root       0  9  5.91e20  42
+
+-1      end                     -1              end                                                                                                                                                             end                                             -1              -1      -1      -1
+#file   #type  #period  #filename  #outfile_name  #ext_pot  #file_no  #norm #norm_period
+

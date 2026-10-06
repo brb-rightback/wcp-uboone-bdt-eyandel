@@ -1,0 +1,37 @@
+numuCC_part_bdt_LFCHFC                        KE_muon_new3_5                    33      0       1650            1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LFCHFC                    KE_muon_new3_5                    33      0       1650            1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LFCHFC                    KE_muon_new3_5                    33      0       1650            1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LFCHFC                   KE_muon_new3_5                    33      0       1650            1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LFCHFC                    KE_muon_new3_5                    33      0       1650            1       0               0       0               0               13              3       unity               0
+
+numuCC_part_bdt_LPCorHPC                      KE_muon_new3_5                    13      0       1950            2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LPCorHPC                  KE_muon_new3_5                    13      0       1950            2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LPCorHPC                  KE_muon_new3_5                    13      0       1950            2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LPCorHPC                 KE_muon_new3_5                    13      0       1950            2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LPCorHPC                  KE_muon_new3_5                    13      0       1950            2       0               0       0               0               14              3       unity               0
+
+numuCC_part_bdt_LFCHFC_1                      muon_costheta                     39      -1      0.95            3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LFCHFC_1                  muon_costheta                     39      -1      0.95            3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LFCHFC_1                  muon_costheta                     39      -1      0.95            3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LFCHFC_1                 muon_costheta                     39      -1      0.95            3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LFCHFC_1                  muon_costheta                     39      -1      0.95            3       0               0       0               0               15              3       unity               0
+
+numuCC_part_bdt_LPCorHPC_1                    muon_costheta                     39      -1      0.95            4       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LPCorHPC_1                muon_costheta                     39      -1      0.95            4       1               1       0               0               7               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LPCorHPC_1                muon_costheta                     39      -1      0.95            4       1               1       0               0               8               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LPCorHPC_1               muon_costheta                     39      -1      0.95            4       0               0       0.5             0               8               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LPCorHPC_1                muon_costheta                     39      -1      0.95            4       0               0       0               0               16              3       unity               0
+
+numuCC_part_bdt_LFCHFC_2                      Eavail_new3_5_drop15_95           13      0       1300            5       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LFCHFC_2                  Eavail_new3_5_drop15_95           13      0       1300            5       1               1       0               0               9               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LFCHFC_2                  Eavail_new3_5_drop15_95           13      0       1300            5       1               1       0               0               10              2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LFCHFC_2                 Eavail_new3_5_drop15_95           13      0       1300            5       0               0       0.5             0               10              4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LFCHFC_2                  Eavail_new3_5_drop15_95           13      0       1300            5       0               0       0               0               17              3       unity               0
+
+numuCC_part_bdt_LPCorHPC_2                    Eavail_new3_5_drop15_95           26      0       1300            6       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LPCorHPC_2                Eavail_new3_5_drop15_95           26      0       1300            6       1               1       0               0               11              2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LPCorHPC_2                Eavail_new3_5_drop15_95           26      0       1300            6       1               1       0               0               12              2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LPCorHPC_2               Eavail_new3_5_drop15_95           26      0       1300            6       0               0       0.5             0               12              4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LPCorHPC_2                Eavail_new3_5_drop15_95           26      0       1300            6       0               0       0               0               18              3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

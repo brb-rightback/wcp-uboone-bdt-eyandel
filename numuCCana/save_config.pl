@@ -25,6 +25,12 @@ print "Moving old files to hist_rootfiles_$old_config\_$counter\n";
 system("mv hist_rootfiles hist_rootfiles_$old_config\_$counter");
 system("mv mcstat hist_rootfiles_$old_config\_$counter/");
 system("mv merge_xs.root hist_rootfiles_$old_config\_$counter/");
+system("mv merge.root hist_rootfiles_$old_config\_$counter/");
+system("mv file_collapsed_covariance_matrix.root hist_rootfiles_$old_config\_$counter/");
+system("mkdir hist_rootfiles_$old_config\_$counter/plots/");
+system("mv *.png hist_rootfiles_$old_config\_$counter/plots/");
+system("mv *.pdf hist_rootfiles_$old_config\_$counter/plots/");
+system("mv *.root hist_rootfiles_$old_config\_$counter/plots/");
 system("mkdir hist_rootfiles_$old_config\_$counter/configuration/");
 system("cp configurations/*.txt hist_rootfiles_$old_config\_$counter/configuration/");
 

@@ -1,0 +1,34 @@
+# KEmuon_Enu_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np                               KE_muon_new3_5               0-33
+#   numuCC_part_bdt_PorLNp                           KE_muon_new3_5               34-66
+#   numuCC_part_bdt_Scat0p                           KE_muon_new3_5               67-76
+#   numuCC_part_bdt_Act0p                            KE_muon_new3_5               77-89
+#   numuCC_part_bdt_Trk0p                            KE_muon_new3_5               90-103
+#   numuCC_part_bdt_G0p                              KE_muon_new3_5               104-136
+#   numuCC_part_bdt_Np_1                             kine_reco_Enu_new3_5_drop15_95 137-152
+#   numuCC_part_bdt_PorLNp_1                         kine_reco_Enu_new3_5_drop15_95 153-168
+#   numuCC_part_bdt_Scat0p_1                         kine_reco_Enu_new3_5_drop15_95 169-176
+#   numuCC_part_bdt_Act0p_1                          kine_reco_Enu_new3_5_drop15_95 177-193
+#   numuCC_part_bdt_Trk0p_1                          kine_reco_Enu_new3_5_drop15_95 194-208
+#   numuCC_part_bdt_G0p_1                            kine_reco_Enu_new3_5_drop15_95 209-224
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> neutrino energy Np
+  1 15101 0-33,34-66,67-76,77-89,90-103,104-136 137-152 1 0 1 1 1
+# muon energy -> neutrino energy PorLNp
+  1 15102 0-33,34-66,67-76,77-89,90-103,104-136 153-168 1 0 1 1 1
+# muon energy -> neutrino energy Scat0p
+  1 15103 0-33,34-66,67-76,77-89,90-103,104-136 169-176 1 0 1 1 1
+# muon energy -> neutrino energy Act0p
+  1 15104 0-33,34-66,67-76,77-89,90-103,104-136 177-193 1 0 1 1 1
+# muon energy -> neutrino energy Trk0p
+  1 15105 0-33,34-66,67-76,77-89,90-103,104-136 194-208 1 0 1 1 1
+# muon energy -> neutrino energy G0p
+  1 15106 0-33,34-66,67-76,77-89,90-103,104-136 209-224 1 0 1 1 1
+# muon energy -> neutrino energy, all channels
+  1 15107 0-33,34-66,67-76,77-89,90-103,104-136 137-152,153-168,169-176,177-193,194-208,209-224 1 0 1 1 1
+End

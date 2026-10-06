@@ -1,0 +1,30 @@
+# KEmuon_costhetamu_costhetamup_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LFCHPC                           KE_muon_new3_5               34-41
+#   numuCC_part_bdt_LPCHFC                           KE_muon_new3_5               42-55
+#   numuCC_part_bdt_LPCHPC                           KE_muon_new3_5               56-69
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                70-109
+#   numuCC_part_bdt_LFCHPC_1                         muon_costheta                110-129
+#   numuCC_part_bdt_LPCHFC_1                         muon_costheta                130-169
+#   numuCC_part_bdt_LPCHPC_1                         muon_costheta                170-209
+#   numuCC_part_bdt_Np_LFCHFC_2                      reco_costhetamup             210-229
+#   numuCC_part_bdt_Np_LFCHPC_2                      reco_costhetamup             230-243
+#   numuCC_part_bdt_Np_LPCHFC_2                      reco_costhetamup             244-263
+#   numuCC_part_bdt_Np_LPCHPC_2                      reco_costhetamup             264-283
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> muon-proton costheta Np LFCHFC
+  1 42001 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-229 1 0 1 1 1
+# muon energy and muon costheta -> muon-proton costheta Np LFCHPC
+  1 42002 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 230-243 1 0 1 1 1
+# muon energy and muon costheta -> muon-proton costheta Np LPCHFC
+  1 42003 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 244-263 1 0 1 1 1
+# muon energy and muon costheta -> muon-proton costheta Np LPCHPC
+  1 42004 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 264-283 1 0 1 1 1
+# muon energy and muon costheta -> muon-proton costheta, all channels
+  1 42005 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-229,230-243,244-263,264-283 1 0 1 1 1
+End

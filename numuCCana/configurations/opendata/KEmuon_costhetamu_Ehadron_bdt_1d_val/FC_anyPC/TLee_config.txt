@@ -1,0 +1,70 @@
+# KEmuon_costhetamu_Ehadron_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LPCorHPC                      KE_muon_new3_5               34-47
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               48-80
+#   numuCC_part_bdt_PorLNp_LPCorHPC                  KE_muon_new3_5               81-94
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               95-104
+#   numuCC_part_bdt_Scat0p_LPCorHPC                  KE_muon_new3_5               105-110
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               111-123
+#   numuCC_part_bdt_Act0p_LPCorHPC                   KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               135-148
+#   numuCC_part_bdt_Trk0p_LPCorHPC                   KE_muon_new3_5               149-162
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               163-195
+#   numuCC_part_bdt_G0p_LPCorHPC                     KE_muon_new3_5               196-209
+#   numuCC_part_bdt_Np_LFCHFC_1                      muon_costheta                210-249
+#   numuCC_part_bdt_Np_LPCorHPC_1                    muon_costheta                250-289
+#   numuCC_part_bdt_PorLNp_LFCHFC_1                  muon_costheta                290-303
+#   numuCC_part_bdt_PorLNp_LPCorHPC_1                muon_costheta                304-343
+#   numuCC_part_bdt_Scat0p_LFCHFC_1                  muon_costheta                344-348
+#   numuCC_part_bdt_Scat0p_LPCorHPC_1                muon_costheta                349-358
+#   numuCC_part_bdt_Act0p_LFCHFC_1                   muon_costheta                359-378
+#   numuCC_part_bdt_Act0p_LPCorHPC_1                 muon_costheta                379-398
+#   numuCC_part_bdt_Trk0p_LFCHFC_1                   muon_costheta                399-408
+#   numuCC_part_bdt_Trk0p_LPCorHPC_1                 muon_costheta                409-428
+#   numuCC_part_bdt_G0p_LFCHFC_1                     muon_costheta                429-448
+#   numuCC_part_bdt_G0p_LPCorHPC_1                   muon_costheta                449-468
+#   numuCC_part_bdt_Np_LFCHFC_2                      Ehadron_new3_5_drop15_95     469-485
+#   numuCC_part_bdt_Np_LPCorHPC_2                    Ehadron_new3_5_drop15_95     486-502
+#   numuCC_part_bdt_PorLNp_LFCHFC_2                  Ehadron_new3_5_drop15_95     503-513
+#   numuCC_part_bdt_PorLNp_LPCorHPC_2                Ehadron_new3_5_drop15_95     514-524
+#   numuCC_part_bdt_Scat0p_LFCHFC_2                  Ehadron_new3_5_drop15_95     525-532
+#   numuCC_part_bdt_Scat0p_LPCorHPC_2                Ehadron_new3_5_drop15_95     533-538
+#   numuCC_part_bdt_Act0p_LFCHFC_2                   Ehadron_new3_5_drop15_95     539-547
+#   numuCC_part_bdt_Act0p_LPCorHPC_2                 Ehadron_new3_5_drop15_95     548-551
+#   numuCC_part_bdt_Trk0p_LFCHFC_2                   Ehadron_new3_5_drop15_95     552-562
+#   numuCC_part_bdt_Trk0p_LPCorHPC_2                 Ehadron_new3_5_drop15_95     563-568
+#   numuCC_part_bdt_G0p_LFCHFC_2                     Ehadron_new3_5_drop15_95     569-578
+#   numuCC_part_bdt_G0p_LPCorHPC_2                   Ehadron_new3_5_drop15_95     579-592
+#
+# channels_observation flag_lookelsewhere
+  36 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> hadronic energy Np LFCHFC
+  1 16201 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 469-485 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Np LPCorHPC
+  1 16202 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 486-502 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy PorLNp LFCHFC
+  1 16203 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 503-513 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy PorLNp LPCorHPC
+  1 16204 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 514-524 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Scat0p LFCHFC
+  1 16205 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 525-532 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Scat0p LPCorHPC
+  1 16206 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 533-538 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Act0p LFCHFC
+  1 16207 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 539-547 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Act0p LPCorHPC
+  1 16208 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 548-551 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Trk0p LFCHFC
+  1 16209 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 552-562 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy Trk0p LPCorHPC
+  1 16210 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 563-568 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy G0p LFCHFC
+  1 16211 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 569-578 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy G0p LPCorHPC
+  1 16212 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 579-592 1 0 1 1 1
+# muon energy and muon costheta -> hadronic energy, all channels
+  1 16213 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209,210-249,250-289,290-303,304-343,344-348,349-358,359-378,379-398,399-408,409-428,429-448,449-468 469-485,486-502,503-513,514-524,525-532,533-538,539-547,548-551,552-562,563-568,569-578,579-592 1 0 1 1 1
+End

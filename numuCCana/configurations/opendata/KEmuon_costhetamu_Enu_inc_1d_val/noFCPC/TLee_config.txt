@@ -1,0 +1,13 @@
+# KEmuon_costhetamu_Enu_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt                                  KE_muon_new3_5               0-33
+#   numuCC_part_bdt_1                                muon_costheta                34-73
+#   numuCC_part_bdt_2                                kine_reco_Enu_new3_5_drop15_95 74-90
+#
+# channels_observation flag_lookelsewhere
+  3 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> neutrino energy all events
+  1 13101 0-33,34-73 74-90 1 0 1 1 1
+End

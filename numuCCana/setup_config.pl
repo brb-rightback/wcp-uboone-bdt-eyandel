@@ -1,12 +1,11 @@
 #!/usr/bin/perl
 
 my $new_config_string = $ARGV[0];
-my $save = $ARGV[1] // 1;
-
+$new_config_string =~ s/configurations\///g;
 print "New configuration is $new_config_string\n";
-
 my @new_config = split(/\//, $new_config_string);
 
+my $save = $ARGV[1] // 1;
 if(${save} != 0){
   system("perl save_config.pl");
 }

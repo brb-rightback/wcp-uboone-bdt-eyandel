@@ -1,0 +1,30 @@
+# KEmuon_costhetamu_costhetap_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LFCHPC                           KE_muon_new3_5               34-41
+#   numuCC_part_bdt_LPCHFC                           KE_muon_new3_5               42-55
+#   numuCC_part_bdt_LPCHPC                           KE_muon_new3_5               56-69
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                70-109
+#   numuCC_part_bdt_LFCHPC_1                         muon_costheta                110-129
+#   numuCC_part_bdt_LPCHFC_1                         muon_costheta                130-169
+#   numuCC_part_bdt_LPCHPC_1                         muon_costheta                170-209
+#   numuCC_part_bdt_Np_LFCHFC_2                      reco_costhetap               210-249
+#   numuCC_part_bdt_Np_LFCHPC_2                      reco_costhetap               250-289
+#   numuCC_part_bdt_Np_LPCHFC_2                      reco_costhetap               290-329
+#   numuCC_part_bdt_Np_LPCHPC_2                      reco_costhetap               330-369
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> proton costheta Np LFCHFC
+  1 38001 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-249 1 0 1 1 1
+# muon energy and muon costheta -> proton costheta Np LFCHPC
+  1 38002 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 250-289 1 0 1 1 1
+# muon energy and muon costheta -> proton costheta Np LPCHFC
+  1 38003 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 290-329 1 0 1 1 1
+# muon energy and muon costheta -> proton costheta Np LPCHPC
+  1 38004 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 330-369 1 0 1 1 1
+# muon energy and muon costheta -> proton costheta, all channels
+  1 38005 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-249,250-289,290-329,330-369 1 0 1 1 1
+End

@@ -1,0 +1,14 @@
+# Kp_vs_costhetap_Np_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np                               reco_Kp                      0-18
+#   numuCC_part_bdt_Np_1                             reco_costhetap               19-58
+#
+# channels_observation flag_lookelsewhere
+  2 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# proton energy -> proton costheta Np
+  1 44101 0-18 19-58 1 0 1 1 1
+# proton costheta -> proton energy Np
+  1 44102 19-58 0-18 1 0 1 1 1
+End
