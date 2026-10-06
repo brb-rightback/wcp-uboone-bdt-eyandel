@@ -2187,6 +2187,10 @@ void TLee::Set_Spectra_MatrixCov()
 	roostr = TString::Format(flux_Xs_directory+"cov_%d.root", idx);
 	map_file_flux_Xs_frac[idx] = new TFile(roostr, "read");
 	map_matrix_flux_Xs_frac[idx] = (TMatrixD*)map_file_flux_Xs_frac[idx]->Get(TString::Format("frac_cov_xf_mat_%d", idx));
+	if( map_file_flux_Xs_frac[idx]->IsZombie() || !map_matrix_flux_Xs_frac[idx] ) {
+	  cerr<<endl<<" ERROR: no frac_cov_xf_mat_"<<idx<<" in "<<roostr<<" (flux/Xs systematics are on)"<<endl<<endl;
+	  exit(1);
+	}
 	cout<<TString::Format(" %2d %s", idx, roostr.Data())<<endl;
 
 	matrix_sub_flux_geant4_Xs_oldworld[idx].Clear();
@@ -2246,6 +2250,10 @@ void TLee::Set_Spectra_MatrixCov()
 
 	map_file_detector_frac[idx] = new TFile(roostr, "read");
 	map_matrix_detector_frac[idx] = (TMatrixD*)map_file_detector_frac[idx]->Get(TString::Format("frac_cov_det_mat_%d", idx));
+	if( map_file_detector_frac[idx]->IsZombie() || !map_matrix_detector_frac[idx] ) {
+	  cerr<<endl<<" ERROR: no frac_cov_det_mat_"<<idx<<" in "<<roostr<<" (detector systematics are on)"<<endl<<endl;
+	  exit(1);
+	}
 
 	matrix_detector_frac += (*map_matrix_detector_frac[idx]);
 

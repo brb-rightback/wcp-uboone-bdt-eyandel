@@ -36,6 +36,7 @@ struct TLeeConfigTest {
 struct TLeeConfigGlobal {
   int channels_observation;     // number of observation channels (hdata_obsch_# in the spectra file)
   bool flag_lookelsewhere;      // chi2 decomposition (Plotting_singlecase) in the goodness-of-fit tests
+  bool flag_file;               // TLee_config.txt was read (otherwise Configure_Lee.h values)
 };
 
 // Bin list "1,3-6" -> 1,3,4,5,6 (global bin indices); "none" -> empty
@@ -68,11 +69,13 @@ vector<TLeeConfigTest> read_TLee_config(TString filename, TLeeConfigGlobal& glob
   vector<TLeeConfigTest> tests;
   global.channels_observation = config_Lee::channels_observation;
   global.flag_lookelsewhere = config_Lee::flag_lookelsewhere;
+  global.flag_file = false;
   ifstream infile(filename);
   if( !infile ) {
     cout<<" ---> No "<<filename<<": no goodness-of-fit tests from the configuration file, global options of Configure_Lee.h"<<endl;
     return tests;
   }
+  global.flag_file = true;
   string line_str;
   int line = 0;
   bool flag_global_read = false;
@@ -220,14 +223,32 @@ int main(int argc, char** argv)
 
   TLee *Lee_test = new TLee();
 
-  // systematics read in Set_Spectra_MatrixCov: those of Configure_Lee.h and those of any test of TLee_config.txt
+  // systematics read in Set_Spectra_MatrixCov (flux/Xs and detector covariance files, statistical correlations): with
+  // TLee_config.txt only those its tests use (so the files of the others are not needed), otherwise those of Configure_Lee.h
   bool flag_load_flux_Xs = config_Lee::flag_syst_flux_Xs;
   bool flag_load_detector = config_Lee::flag_syst_detector;
   bool flag_load_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;
-  for(size_t itest=0; itest<vc_config_tests.size(); itest++) {
-    if( vc_config_tests.at(itest).flag_syst_flux_Xs ) flag_load_flux_Xs = true;
-    if( vc_config_tests.at(itest).flag_syst_detector ) flag_load_detector = true;
-    if( vc_config_tests.at(itest).flag_syst_mc_stat_cor ) flag_load_mc_stat_cor = true;
+  if( config_global.flag_file ) {
+    flag_load_flux_Xs = false;
+    flag_load_detector = false;
+    flag_load_mc_stat_cor = false;
+    for(size_t itest=0; itest<vc_config_tests.size(); itest++) {
+      if( vc_config_tests.at(itest).flag_syst_flux_Xs ) flag_load_flux_Xs = true;
+      if( vc_config_tests.at(itest).flag_syst_detector ) flag_load_detector = true;
+      if( vc_config_tests.at(itest).flag_syst_mc_stat_cor ) flag_load_mc_stat_cor = true;
+    }
+  }
+  // the rest of the app (covariance output, systematics plots, other goodness-of-fit tests) uses Configure_Lee.h, but only
+  // with what was loaded
+  bool flag_global_flux_Xs = config_Lee::flag_syst_flux_Xs && flag_load_flux_Xs;
+  bool flag_global_detector = config_Lee::flag_syst_detector && flag_load_detector;
+  bool flag_global_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor && flag_load_mc_stat_cor;
+  if( flag_global_flux_Xs!=config_Lee::flag_syst_flux_Xs || flag_global_detector!=config_Lee::flag_syst_detector
+      || flag_global_mc_stat_cor!=config_Lee::flag_syst_mc_stat_cor ) {
+    cout<<" ---> Not loaded (no test of "<<TLee_config_file<<" uses them), so off outside its tests:"
+        <<( flag_global_flux_Xs!=config_Lee::flag_syst_flux_Xs ? " flux_Xs" : "" )
+        <<( flag_global_detector!=config_Lee::flag_syst_detector ? " detector" : "" )
+        <<( flag_global_mc_stat_cor!=config_Lee::flag_syst_mc_stat_cor ? " mc_stat_cor" : "" )<<endl;
   }
 
   Lee_test->flag_syst_flux_Xs    = flag_load_flux_Xs;
@@ -260,11 +281,11 @@ int main(int argc, char** argv)
 
   ////////// can do any times
 
-  Lee_test->flag_syst_flux_Xs    = config_Lee::flag_syst_flux_Xs;
-  Lee_test->flag_syst_detector   = config_Lee::flag_syst_detector;
+  Lee_test->flag_syst_flux_Xs    = flag_global_flux_Xs;
+  Lee_test->flag_syst_detector   = flag_global_detector;
   Lee_test->flag_syst_additional = config_Lee::flag_syst_additional;
   Lee_test->flag_syst_mc_stat    = config_Lee::flag_syst_mc_stat;
-  Lee_test->flag_syst_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;
+  Lee_test->flag_syst_mc_stat_cor = flag_global_mc_stat_cor;
 
   Lee_test->scaleF_Lee = config_Lee::Lee_strength_for_outputfile_covariance_matrix;
   Lee_test->scaleF_Lee = config_Lee::Lee_strength_for_GoF;
@@ -362,8 +383,8 @@ int main(int argc, char** argv)
   TFile *file_collapsed_covariance_matrix = new TFile("file_collapsed_covariance_matrix.root", "recreate");
 
   TTree *tree_config = new TTree("tree", "configure information");
-  int flag_syst_flux_Xs = config_Lee::flag_syst_flux_Xs;
-  int flag_syst_detector = config_Lee::flag_syst_detector;
+  int flag_syst_flux_Xs = flag_global_flux_Xs;
+  int flag_syst_detector = flag_global_detector;
   int flag_syst_additional = config_Lee::flag_syst_additional;
   int flag_syst_mc_stat = config_Lee::flag_syst_mc_stat;
   int flag_syst_reweight = config_Lee::flag_syst_reweight;
@@ -490,11 +511,11 @@ int main(int argc, char** argv)
     cout<<endl;
 
     // back to the systematics of Configure_Lee.h for the rest
-    Lee_test->flag_syst_flux_Xs     = config_Lee::flag_syst_flux_Xs;
-    Lee_test->flag_syst_detector    = config_Lee::flag_syst_detector;
+    Lee_test->flag_syst_flux_Xs     = flag_global_flux_Xs;
+    Lee_test->flag_syst_detector    = flag_global_detector;
     Lee_test->flag_syst_additional  = config_Lee::flag_syst_additional;
     Lee_test->flag_syst_mc_stat     = config_Lee::flag_syst_mc_stat;
-    Lee_test->flag_syst_mc_stat_cor = config_Lee::flag_syst_mc_stat_cor;
+    Lee_test->flag_syst_mc_stat_cor = flag_global_mc_stat_cor;
     Lee_test->Set_Collapse();
   }
 
