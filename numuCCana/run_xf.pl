@@ -23,12 +23,10 @@ system("./bin/xf_cov_matrix -r12 -h1&");
 system("./bin/xf_cov_matrix -r13 -h1&");
 
 print "Running xs sys";
-if($config =~ /val/ ){
-  system("./bin/xf_cov_matrix -r17 -h1&");}
-else{
+if($config =~ /unfold/ ){
   system("./bin/xs_cov_matrix -r17 -n0 -h1&");
-  system("./bin/xf_cov_matrix -r17 -h1&");
 }
+ system("./bin/xf_cov_matrix -r17 -h1&");
 
 print "Running reint sys";
 system("./bin/xf_cov_matrix -r14 -h1&");

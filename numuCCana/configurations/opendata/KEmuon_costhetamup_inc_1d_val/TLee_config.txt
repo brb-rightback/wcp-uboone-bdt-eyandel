@@ -14,21 +14,21 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> muon-proton costheta Np LFCHFC
-  1 40001 0-33,34-41,42-55,56-69 70-89 1 0 1 1 1
+  1 40001 0-33,34-41,42-55,56-69 70-89 1 1 1 1 1
 # muon energy -> muon-proton costheta Np LFCHPC
-  1 40002 0-33,34-41,42-55,56-69 90-103 1 0 1 1 1
+  1 40002 0-33,34-41,42-55,56-69 90-103 1 1 1 1 1
 # muon energy -> muon-proton costheta Np LPCHFC
-  1 40003 0-33,34-41,42-55,56-69 104-123 1 0 1 1 1
+  1 40003 0-33,34-41,42-55,56-69 104-123 1 1 1 1 1
 # muon energy -> muon-proton costheta Np LPCHPC
-  1 40004 0-33,34-41,42-55,56-69 124-143 1 0 1 1 1
+  1 40004 0-33,34-41,42-55,56-69 124-143 1 1 1 1 1
 # muon energy -> muon-proton costheta, all channels
-  1 40005 0-33,34-41,42-55,56-69 70-89,90-103,104-123,124-143 1 0 1 1 1
+  1 40005 0-33,34-41,42-55,56-69 70-89,90-103,104-123,124-143 1 1 1 1 1
 # FC muon-proton costheta -> muon-proton costheta Np LFCHPC
-  1 40006 70-89 90-103 1 0 1 1 1
+  1 40006 70-89 90-103 1 1 1 1 1
 # FC muon-proton costheta -> muon-proton costheta Np LPCHFC
-  1 40007 70-89 104-123 1 0 1 1 1
+  1 40007 70-89 104-123 1 1 1 1 1
 # FC muon-proton costheta -> muon-proton costheta Np LPCHPC
-  1 40008 70-89 124-143 1 0 1 1 1
+  1 40008 70-89 124-143 1 1 1 1 1
 # FC muon-proton costheta -> muon-proton costheta, all PC channels
-  1 40009 70-89 90-103,104-123,124-143 1 0 1 1 1
+  1 40009 70-89 90-103,104-123,124-143 1 1 1 1 1
 End

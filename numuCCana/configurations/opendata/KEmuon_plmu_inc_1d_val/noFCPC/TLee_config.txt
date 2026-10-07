@@ -8,5 +8,5 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> muon p_{L} all events
-  1 26101 0-33 34-59 1 0 1 1 1
+  1 26101 0-33 34-59 1 1 1 1 1
 End

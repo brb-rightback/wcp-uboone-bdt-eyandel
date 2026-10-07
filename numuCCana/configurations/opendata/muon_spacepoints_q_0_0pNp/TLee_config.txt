@@ -5,29 +5,29 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # numuCC_part_bdt_Np_LFCHFC
-  1 51001 none 0-30 1 0 1 1 0
+  1 51001 none 0-30 1 1 1 1 0
 # numuCC_part_bdt_Np_LFCHPC
-  1 51002 none 31-61 1 0 1 1 0
+  1 51002 none 31-61 1 1 1 1 0
 # numuCC_part_bdt_Np_LPCHFC
-  1 51003 none 62-92 1 0 1 1 0
+  1 51003 none 62-92 1 1 1 1 0
 # numuCC_part_bdt_Np_LPCHPC
-  1 51004 none 93-123 1 0 1 1 0
+  1 51004 none 93-123 1 1 1 1 0
 # numuCC_part_bdt_PorLNp_LFCHFC
-  1 51005 none 124-154 1 0 1 1 0
+  1 51005 none 124-154 1 1 1 1 0
 # numuCC_part_bdt_PorLNp_LFCHPC
-  1 51006 none 155-185 1 0 1 1 0
+  1 51006 none 155-185 1 1 1 1 0
 # numuCC_part_bdt_PorLNp_LPCHFC
-  1 51007 none 186-216 1 0 1 1 0
+  1 51007 none 186-216 1 1 1 1 0
 # numuCC_part_bdt_PorLNp_LPCHPC
-  1 51008 none 217-247 1 0 1 1 0
+  1 51008 none 217-247 1 1 1 1 0
 # numuCC_part_bdt_0p_LFCHFC
-  1 51009 none 248-278 1 0 1 1 0
+  1 51009 none 248-278 1 1 1 1 0
 # numuCC_part_bdt_0p_LFCHPC
-  1 51010 none 279-309 1 0 1 1 0
+  1 51010 none 279-309 1 1 1 1 0
 # numuCC_part_bdt_0p_LPCHFC
-  1 51011 none 310-340 1 0 1 1 0
+  1 51011 none 310-340 1 1 1 1 0
 # numuCC_part_bdt_0p_LPCHPC
-  1 51012 none 341-371 1 0 1 1 0
+  1 51012 none 341-371 1 1 1 1 0
 # all channels
-  1 51013 none 0-30,31-61,62-92,93-123,124-154,155-185,186-216,217-247,248-278,279-309,310-340,341-371 1 0 1 1 0
+  1 51013 none 0-30,31-61,62-92,93-123,124-154,155-185,186-216,217-247,248-278,279-309,310-340,341-371 1 1 1 1 0
 End

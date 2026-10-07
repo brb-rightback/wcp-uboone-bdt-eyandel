@@ -5,5 +5,5 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # numuCC_part_bdt
-  1 64101 none 0-24 1 0 1 1 0
+  1 64101 none 0-24 1 1 1 1 0
 End

@@ -8,7 +8,7 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> muon costheta all events
-  1 30101 0-33 34-73 1 0 1 1 1
+  1 30101 0-33 34-73 1 1 1 1 1
 # muon costheta -> muon energy all events
-  1 30102 34-73 0-33 1 0 1 1 1
+  1 30102 34-73 0-33 1 1 1 1 1
 End

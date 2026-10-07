@@ -12,9 +12,9 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy and muon costheta -> muon p_{T} LFCHFC
-  1 24201 0-33,34-47,48-87,88-127 128-145 1 0 1 1 1
+  1 24201 0-33,34-47,48-87,88-127 128-145 1 1 1 1 1
 # muon energy and muon costheta -> muon p_{T} LPCorHPC
-  1 24202 0-33,34-47,48-87,88-127 146-158 1 0 1 1 1
+  1 24202 0-33,34-47,48-87,88-127 146-158 1 1 1 1 1
 # muon energy and muon costheta -> muon p_{T}, all channels
-  1 24203 0-33,34-47,48-87,88-127 128-145,146-158 1 0 1 1 1
+  1 24203 0-33,34-47,48-87,88-127 128-145,146-158 1 1 1 1 1
 End

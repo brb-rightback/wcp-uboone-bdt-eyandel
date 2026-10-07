@@ -14,21 +14,21 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> proton multiplicity Np LFCHFC
-  1 45001 0-33,34-41,42-55,56-69 70-72 1 0 1 1 1
+  1 45001 0-33,34-41,42-55,56-69 70-72 1 1 1 1 1
 # muon energy -> proton multiplicity Np LFCHPC
-  1 45002 0-33,34-41,42-55,56-69 73-75 1 0 1 1 1
+  1 45002 0-33,34-41,42-55,56-69 73-75 1 1 1 1 1
 # muon energy -> proton multiplicity Np LPCHFC
-  1 45003 0-33,34-41,42-55,56-69 76-78 1 0 1 1 1
+  1 45003 0-33,34-41,42-55,56-69 76-78 1 1 1 1 1
 # muon energy -> proton multiplicity Np LPCHPC
-  1 45004 0-33,34-41,42-55,56-69 79-81 1 0 1 1 1
+  1 45004 0-33,34-41,42-55,56-69 79-81 1 1 1 1 1
 # muon energy -> proton multiplicity, all channels
-  1 45005 0-33,34-41,42-55,56-69 70-72,73-75,76-78,79-81 1 0 1 1 1
+  1 45005 0-33,34-41,42-55,56-69 70-72,73-75,76-78,79-81 1 1 1 1 1
 # FC proton multiplicity -> proton multiplicity Np LFCHPC
-  1 45006 70-72 73-75 1 0 1 1 1
+  1 45006 70-72 73-75 1 1 1 1 1
 # FC proton multiplicity -> proton multiplicity Np LPCHFC
-  1 45007 70-72 76-78 1 0 1 1 1
+  1 45007 70-72 76-78 1 1 1 1 1
 # FC proton multiplicity -> proton multiplicity Np LPCHPC
-  1 45008 70-72 79-81 1 0 1 1 1
+  1 45008 70-72 79-81 1 1 1 1 1
 # FC proton multiplicity -> proton multiplicity, all PC channels
-  1 45009 70-72 73-75,76-78,79-81 1 0 1 1 1
+  1 45009 70-72 73-75,76-78,79-81 1 1 1 1 1
 End

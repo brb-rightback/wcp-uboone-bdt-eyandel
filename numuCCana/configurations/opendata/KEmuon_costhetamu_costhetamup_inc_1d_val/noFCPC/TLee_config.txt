@@ -9,5 +9,5 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy and muon costheta -> muon-proton costheta Np
-  1 42101 0-33,34-73 74-93 1 0 1 1 1
+  1 42101 0-33,34-73 74-93 1 1 1 1 1
 End

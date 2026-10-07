@@ -5,9 +5,9 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # numuCC_part_bdt_LFCHFC
-  1 60201 none 0-20 1 0 1 1 0
+  1 60201 none 0-20 1 1 1 1 0
 # numuCC_part_bdt_LPCorHPC
-  1 60202 none 21-41 1 0 1 1 0
+  1 60202 none 21-41 1 1 1 1 0
 # all channels
-  1 60203 none 0-20,21-41 1 0 1 1 0
+  1 60203 none 0-20,21-41 1 1 1 1 0
 End

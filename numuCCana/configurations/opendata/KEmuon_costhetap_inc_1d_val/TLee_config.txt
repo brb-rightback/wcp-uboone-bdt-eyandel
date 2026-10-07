@@ -14,21 +14,21 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> proton costheta Np LFCHFC
-  1 36001 0-33,34-41,42-55,56-69 70-109 1 0 1 1 1
+  1 36001 0-33,34-41,42-55,56-69 70-109 1 1 1 1 1
 # muon energy -> proton costheta Np LFCHPC
-  1 36002 0-33,34-41,42-55,56-69 110-149 1 0 1 1 1
+  1 36002 0-33,34-41,42-55,56-69 110-149 1 1 1 1 1
 # muon energy -> proton costheta Np LPCHFC
-  1 36003 0-33,34-41,42-55,56-69 150-189 1 0 1 1 1
+  1 36003 0-33,34-41,42-55,56-69 150-189 1 1 1 1 1
 # muon energy -> proton costheta Np LPCHPC
-  1 36004 0-33,34-41,42-55,56-69 190-229 1 0 1 1 1
+  1 36004 0-33,34-41,42-55,56-69 190-229 1 1 1 1 1
 # muon energy -> proton costheta, all channels
-  1 36005 0-33,34-41,42-55,56-69 70-109,110-149,150-189,190-229 1 0 1 1 1
+  1 36005 0-33,34-41,42-55,56-69 70-109,110-149,150-189,190-229 1 1 1 1 1
 # FC proton costheta -> proton costheta Np LFCHPC
-  1 36006 70-109 110-149 1 0 1 1 1
+  1 36006 70-109 110-149 1 1 1 1 1
 # FC proton costheta -> proton costheta Np LPCHFC
-  1 36007 70-109 150-189 1 0 1 1 1
+  1 36007 70-109 150-189 1 1 1 1 1
 # FC proton costheta -> proton costheta Np LPCHPC
-  1 36008 70-109 190-229 1 0 1 1 1
+  1 36008 70-109 190-229 1 1 1 1 1
 # FC proton costheta -> proton costheta, all PC channels
-  1 36009 70-109 110-149,150-189,190-229 1 0 1 1 1
+  1 36009 70-109 110-149,150-189,190-229 1 1 1 1 1
 End

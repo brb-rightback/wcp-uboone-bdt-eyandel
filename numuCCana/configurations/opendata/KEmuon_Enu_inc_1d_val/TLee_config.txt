@@ -14,21 +14,21 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> neutrino energy LFCHFC
-  1 11001 0-33,34-41,42-55,56-69 70-86 1 0 1 1 1
+  1 11001 0-33,34-41,42-55,56-69 70-86 1 1 1 1 1
 # muon energy -> neutrino energy LFCHPC
-  1 11002 0-33,34-41,42-55,56-69 87-100 1 0 1 1 1
+  1 11002 0-33,34-41,42-55,56-69 87-100 1 1 1 1 1
 # muon energy -> neutrino energy LPCHFC
-  1 11003 0-33,34-41,42-55,56-69 101-116 1 0 1 1 1
+  1 11003 0-33,34-41,42-55,56-69 101-116 1 1 1 1 1
 # muon energy -> neutrino energy LPCHPC
-  1 11004 0-33,34-41,42-55,56-69 117-132 1 0 1 1 1
+  1 11004 0-33,34-41,42-55,56-69 117-132 1 1 1 1 1
 # muon energy -> neutrino energy, all channels
-  1 11005 0-33,34-41,42-55,56-69 70-86,87-100,101-116,117-132 1 0 1 1 1
+  1 11005 0-33,34-41,42-55,56-69 70-86,87-100,101-116,117-132 1 1 1 1 1
 # FC neutrino energy -> neutrino energy LFCHPC
-  1 11006 70-86 87-100 1 0 1 1 1
+  1 11006 70-86 87-100 1 1 1 1 1
 # FC neutrino energy -> neutrino energy LPCHFC
-  1 11007 70-86 101-116 1 0 1 1 1
+  1 11007 70-86 101-116 1 1 1 1 1
 # FC neutrino energy -> neutrino energy LPCHPC
-  1 11008 70-86 117-132 1 0 1 1 1
+  1 11008 70-86 117-132 1 1 1 1 1
 # FC neutrino energy -> neutrino energy, all PC channels
-  1 11009 70-86 87-100,101-116,117-132 1 0 1 1 1
+  1 11009 70-86 87-100,101-116,117-132 1 1 1 1 1
 End

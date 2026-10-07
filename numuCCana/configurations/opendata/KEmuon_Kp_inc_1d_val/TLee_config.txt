@@ -14,21 +14,21 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> proton energy Np LFCHFC
-  1 32001 0-33,34-41,42-55,56-69 70-88 1 0 1 1 1
+  1 32001 0-33,34-41,42-55,56-69 70-88 1 1 1 1 1
 # muon energy -> proton energy Np LFCHPC
-  1 32002 0-33,34-41,42-55,56-69 89-98 1 0 1 1 1
+  1 32002 0-33,34-41,42-55,56-69 89-98 1 1 1 1 1
 # muon energy -> proton energy Np LPCHFC
-  1 32003 0-33,34-41,42-55,56-69 99-117 1 0 1 1 1
+  1 32003 0-33,34-41,42-55,56-69 99-117 1 1 1 1 1
 # muon energy -> proton energy Np LPCHPC
-  1 32004 0-33,34-41,42-55,56-69 118-136 1 0 1 1 1
+  1 32004 0-33,34-41,42-55,56-69 118-136 1 1 1 1 1
 # muon energy -> proton energy, all channels
-  1 32005 0-33,34-41,42-55,56-69 70-88,89-98,99-117,118-136 1 0 1 1 1
+  1 32005 0-33,34-41,42-55,56-69 70-88,89-98,99-117,118-136 1 1 1 1 1
 # FC proton energy -> proton energy Np LFCHPC
-  1 32006 70-88 89-98 1 0 1 1 1
+  1 32006 70-88 89-98 1 1 1 1 1
 # FC proton energy -> proton energy Np LPCHFC
-  1 32007 70-88 99-117 1 0 1 1 1
+  1 32007 70-88 99-117 1 1 1 1 1
 # FC proton energy -> proton energy Np LPCHPC
-  1 32008 70-88 118-136 1 0 1 1 1
+  1 32008 70-88 118-136 1 1 1 1 1
 # FC proton energy -> proton energy, all PC channels
-  1 32009 70-88 89-98,99-117,118-136 1 0 1 1 1
+  1 32009 70-88 89-98,99-117,118-136 1 1 1 1 1
 End

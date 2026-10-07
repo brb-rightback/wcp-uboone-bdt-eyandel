@@ -8,5 +8,5 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> neutrino energy all events
-  1 11101 0-33 34-50 1 0 1 1 1
+  1 11101 0-33 34-50 1 1 1 1 1
 End

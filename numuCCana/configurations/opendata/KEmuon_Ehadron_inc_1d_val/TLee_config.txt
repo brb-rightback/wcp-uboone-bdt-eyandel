@@ -14,21 +14,21 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> hadronic energy LFCHFC
-  1 10001 0-33,34-41,42-55,56-69 70-85 1 0 1 1 1
+  1 10001 0-33,34-41,42-55,56-69 70-85 1 1 1 1 1
 # muon energy -> hadronic energy LFCHPC
-  1 10002 0-33,34-41,42-55,56-69 86-96 1 0 1 1 1
+  1 10002 0-33,34-41,42-55,56-69 86-96 1 1 1 1 1
 # muon energy -> hadronic energy LPCHFC
-  1 10003 0-33,34-41,42-55,56-69 97-112 1 0 1 1 1
+  1 10003 0-33,34-41,42-55,56-69 97-112 1 1 1 1 1
 # muon energy -> hadronic energy LPCHPC
-  1 10004 0-33,34-41,42-55,56-69 113-123 1 0 1 1 1
+  1 10004 0-33,34-41,42-55,56-69 113-123 1 1 1 1 1
 # muon energy -> hadronic energy, all channels
-  1 10005 0-33,34-41,42-55,56-69 70-85,86-96,97-112,113-123 1 0 1 1 1
+  1 10005 0-33,34-41,42-55,56-69 70-85,86-96,97-112,113-123 1 1 1 1 1
 # FC hadronic energy -> hadronic energy LFCHPC
-  1 10006 70-85 86-96 1 0 1 1 1
+  1 10006 70-85 86-96 1 1 1 1 1
 # FC hadronic energy -> hadronic energy LPCHFC
-  1 10007 70-85 97-112 1 0 1 1 1
+  1 10007 70-85 97-112 1 1 1 1 1
 # FC hadronic energy -> hadronic energy LPCHPC
-  1 10008 70-85 113-123 1 0 1 1 1
+  1 10008 70-85 113-123 1 1 1 1 1
 # FC hadronic energy -> hadronic energy, all PC channels
-  1 10009 70-85 86-96,97-112,113-123 1 0 1 1 1
+  1 10009 70-85 86-96,97-112,113-123 1 1 1 1 1
 End

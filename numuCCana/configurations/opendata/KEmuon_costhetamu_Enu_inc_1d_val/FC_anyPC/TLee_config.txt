@@ -12,9 +12,9 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy and muon costheta -> neutrino energy LFCHFC
-  1 13201 0-33,34-47,48-87,88-127 128-144 1 0 1 1 1
+  1 13201 0-33,34-47,48-87,88-127 128-144 1 1 1 1 1
 # muon energy and muon costheta -> neutrino energy LPCorHPC
-  1 13202 0-33,34-47,48-87,88-127 145-160 1 0 1 1 1
+  1 13202 0-33,34-47,48-87,88-127 145-160 1 1 1 1 1
 # muon energy and muon costheta -> neutrino energy, all channels
-  1 13203 0-33,34-47,48-87,88-127 128-144,145-160 1 0 1 1 1
+  1 13203 0-33,34-47,48-87,88-127 128-144,145-160 1 1 1 1 1
 End

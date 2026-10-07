@@ -14,39 +14,39 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # proton energy -> proton costheta Np LFCHFC
-  1 44001 0-18,19-28,29-47,48-66 67-106 1 0 1 1 1
+  1 44001 0-18,19-28,29-47,48-66 67-106 1 1 1 1 1
 # proton energy -> proton costheta Np LFCHPC
-  1 44002 0-18,19-28,29-47,48-66 107-146 1 0 1 1 1
+  1 44002 0-18,19-28,29-47,48-66 107-146 1 1 1 1 1
 # proton energy -> proton costheta Np LPCHFC
-  1 44003 0-18,19-28,29-47,48-66 147-186 1 0 1 1 1
+  1 44003 0-18,19-28,29-47,48-66 147-186 1 1 1 1 1
 # proton energy -> proton costheta Np LPCHPC
-  1 44004 0-18,19-28,29-47,48-66 187-226 1 0 1 1 1
+  1 44004 0-18,19-28,29-47,48-66 187-226 1 1 1 1 1
 # proton energy -> proton costheta, all channels
-  1 44005 0-18,19-28,29-47,48-66 67-106,107-146,147-186,187-226 1 0 1 1 1
+  1 44005 0-18,19-28,29-47,48-66 67-106,107-146,147-186,187-226 1 1 1 1 1
 # proton costheta -> proton energy Np LFCHFC
-  1 44006 67-106,107-146,147-186,187-226 0-18 1 0 1 1 1
+  1 44006 67-106,107-146,147-186,187-226 0-18 1 1 1 1 1
 # proton costheta -> proton energy Np LFCHPC
-  1 44007 67-106,107-146,147-186,187-226 19-28 1 0 1 1 1
+  1 44007 67-106,107-146,147-186,187-226 19-28 1 1 1 1 1
 # proton costheta -> proton energy Np LPCHFC
-  1 44008 67-106,107-146,147-186,187-226 29-47 1 0 1 1 1
+  1 44008 67-106,107-146,147-186,187-226 29-47 1 1 1 1 1
 # proton costheta -> proton energy Np LPCHPC
-  1 44009 67-106,107-146,147-186,187-226 48-66 1 0 1 1 1
+  1 44009 67-106,107-146,147-186,187-226 48-66 1 1 1 1 1
 # proton costheta -> proton energy, all channels
-  1 44010 67-106,107-146,147-186,187-226 0-18,19-28,29-47,48-66 1 0 1 1 1
+  1 44010 67-106,107-146,147-186,187-226 0-18,19-28,29-47,48-66 1 1 1 1 1
 # FC proton energy -> proton energy Np LFCHPC
-  1 44011 0-18 19-28 1 0 1 1 1
+  1 44011 0-18 19-28 1 1 1 1 1
 # FC proton energy -> proton energy Np LPCHFC
-  1 44012 0-18 29-47 1 0 1 1 1
+  1 44012 0-18 29-47 1 1 1 1 1
 # FC proton energy -> proton energy Np LPCHPC
-  1 44013 0-18 48-66 1 0 1 1 1
+  1 44013 0-18 48-66 1 1 1 1 1
 # FC proton energy -> proton energy, all PC channels
-  1 44014 0-18 19-28,29-47,48-66 1 0 1 1 1
+  1 44014 0-18 19-28,29-47,48-66 1 1 1 1 1
 # FC proton costheta -> proton costheta Np LFCHPC
-  1 44015 67-106 107-146 1 0 1 1 1
+  1 44015 67-106 107-146 1 1 1 1 1
 # FC proton costheta -> proton costheta Np LPCHFC
-  1 44016 67-106 147-186 1 0 1 1 1
+  1 44016 67-106 147-186 1 1 1 1 1
 # FC proton costheta -> proton costheta Np LPCHPC
-  1 44017 67-106 187-226 1 0 1 1 1
+  1 44017 67-106 187-226 1 1 1 1 1
 # FC proton costheta -> proton costheta, all PC channels
-  1 44018 67-106 107-146,147-186,187-226 1 0 1 1 1
+  1 44018 67-106 107-146,147-186,187-226 1 1 1 1 1
 End

@@ -10,11 +10,11 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> proton multiplicity Np LFCHFC
-  1 45201 0-33,34-47 48-50 1 0 1 1 1
+  1 45201 0-33,34-47 48-50 1 1 1 1 1
 # muon energy -> proton multiplicity Np LPCorHPC
-  1 45202 0-33,34-47 51-53 1 0 1 1 1
+  1 45202 0-33,34-47 51-53 1 1 1 1 1
 # muon energy -> proton multiplicity, all channels
-  1 45203 0-33,34-47 48-50,51-53 1 0 1 1 1
+  1 45203 0-33,34-47 48-50,51-53 1 1 1 1 1
 # FC proton multiplicity -> proton multiplicity Np LPCorHPC
-  1 45204 48-50 51-53 1 0 1 1 1
+  1 45204 48-50 51-53 1 1 1 1 1
 End

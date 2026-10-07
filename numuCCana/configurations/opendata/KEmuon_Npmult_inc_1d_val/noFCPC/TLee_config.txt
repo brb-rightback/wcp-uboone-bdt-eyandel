@@ -8,5 +8,5 @@
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy -> proton multiplicity Np
-  1 45101 0-33 34-36 1 0 1 1 1
+  1 45101 0-33 34-36 1 1 1 1 1
 End
