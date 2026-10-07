@@ -114,7 +114,7 @@ struct ParticleInfo{
     float track_len_ratio;
 
     // Secondary segment: the longest stored block of spacepoints that is not part of the main (start -> end) sequence,
-    // ordered from its end nearest to the main sequence. (q+10000)*10, -999 if there is no secondary segment / fewer points.
+    // ordered from its end nearest to the main sequence. (q+1000)*10, -999 if there is no secondary segment / fewer points.
     float spacepoints_q_sec_0;
     float spacepoints_q_sec_1;
     float spacepoints_q_sec_2;
@@ -289,8 +289,8 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
                            &particle_info.spacepoints_q_sec_bck_3, &particle_info.spacepoints_q_sec_bck_4};
     int n_sec = segments.sec.size();
     for(int k=0; k<5; k++){
-      *q_sec[k] = (k<n_sec) ? (temp_spacepoints_q.at(segments.sec.at(k))+10000)*10 : -999;
-      *q_sec_bck[k] = (k<n_sec) ? (temp_spacepoints_q.at(segments.sec.at(n_sec-1-k))+10000)*10 : -999;
+      *q_sec[k] = (k<n_sec) ? (temp_spacepoints_q.at(segments.sec.at(k))+1000)*10 : -999;
+      *q_sec_bck[k] = (k<n_sec) ? (temp_spacepoints_q.at(segments.sec.at(n_sec-1-k))+1000)*10 : -999;
     }
 
     // Summary of the pieces
@@ -307,9 +307,9 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
     std::sort(sorted_spacepoints_q.begin(), sorted_spacepoints_q.end());
     size_t size = sorted_spacepoints_q.size();
     if (size % 2 == 0) {
-      particle_info.spacepoints_q_med = (((sorted_spacepoints_q.at(size / 2 - 1) + sorted_spacepoints_q.at(size / 2)) / 2.0)+10000)*10;
+      particle_info.spacepoints_q_med = (((sorted_spacepoints_q.at(size / 2 - 1) + sorted_spacepoints_q.at(size / 2)) / 2.0)+1000)*10;
     }else{
-      particle_info.spacepoints_q_med  = ((sorted_spacepoints_q.at(size / 2))+10000)*10;
+      particle_info.spacepoints_q_med  = ((sorted_spacepoints_q.at(size / 2))+1000)*10;
     }
 
     // Find the mother that was larpid matched and add some extra info on it
@@ -413,172 +413,172 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
 
     // Save the individual spacepoints for easier use in the BDT (from the ordered main sequence)
     int n_main = particle_info.spacepoints_q->size();
-    particle_info.spacepoints_q_0 = (particle_info.spacepoints_q->at(0)+10000)*10;
-    particle_info.spacepoints_q_bck_0 = (particle_info.spacepoints_q->at(n_main-1-0)+10000)*10;
+    particle_info.spacepoints_q_0 = (particle_info.spacepoints_q->at(0)+1000)*10;
+    particle_info.spacepoints_q_bck_0 = (particle_info.spacepoints_q->at(n_main-1-0)+1000)*10;
     if(n_main>1){
-      particle_info.spacepoints_q_1 = (particle_info.spacepoints_q->at(1)+10000)*10;
-      particle_info.spacepoints_q_bck_1 = (particle_info.spacepoints_q->at(n_main-1-1)+10000)*10;
+      particle_info.spacepoints_q_1 = (particle_info.spacepoints_q->at(1)+1000)*10;
+      particle_info.spacepoints_q_bck_1 = (particle_info.spacepoints_q->at(n_main-1-1)+1000)*10;
     }else{
       particle_info.spacepoints_q_1 = -999;
       particle_info.spacepoints_q_bck_1 = -999;
     }
     if(n_main>2){
-      particle_info.spacepoints_q_2 = (particle_info.spacepoints_q->at(2)+10000)*10;
-      particle_info.spacepoints_q_bck_2 = (particle_info.spacepoints_q->at(n_main-1-2)+10000)*10;
+      particle_info.spacepoints_q_2 = (particle_info.spacepoints_q->at(2)+1000)*10;
+      particle_info.spacepoints_q_bck_2 = (particle_info.spacepoints_q->at(n_main-1-2)+1000)*10;
     }else{
       particle_info.spacepoints_q_2 = -999;
       particle_info.spacepoints_q_bck_2 = -999;
     }
     if(n_main>3){
-      particle_info.spacepoints_q_3 = (particle_info.spacepoints_q->at(3)+10000)*10;
-      particle_info.spacepoints_q_bck_3 = (particle_info.spacepoints_q->at(n_main-1-3)+10000)*10;
+      particle_info.spacepoints_q_3 = (particle_info.spacepoints_q->at(3)+1000)*10;
+      particle_info.spacepoints_q_bck_3 = (particle_info.spacepoints_q->at(n_main-1-3)+1000)*10;
     }else{
       particle_info.spacepoints_q_3 = -999;
       particle_info.spacepoints_q_bck_3 = -999;
     }
     if(n_main>4){
-      particle_info.spacepoints_q_4 = (particle_info.spacepoints_q->at(4)+10000)*10;
-      particle_info.spacepoints_q_bck_4 = (particle_info.spacepoints_q->at(n_main-1-4)+10000)*10;
+      particle_info.spacepoints_q_4 = (particle_info.spacepoints_q->at(4)+1000)*10;
+      particle_info.spacepoints_q_bck_4 = (particle_info.spacepoints_q->at(n_main-1-4)+1000)*10;
     }else{
       particle_info.spacepoints_q_4 = -999;
       particle_info.spacepoints_q_bck_4 = -999;
     }
     if(n_main>5){
-      particle_info.spacepoints_q_5 = (particle_info.spacepoints_q->at(5)+10000)*10;
-      particle_info.spacepoints_q_bck_5 = (particle_info.spacepoints_q->at(n_main-1-5)+10000)*10;
+      particle_info.spacepoints_q_5 = (particle_info.spacepoints_q->at(5)+1000)*10;
+      particle_info.spacepoints_q_bck_5 = (particle_info.spacepoints_q->at(n_main-1-5)+1000)*10;
     }else{
       particle_info.spacepoints_q_5 = -999;
       particle_info.spacepoints_q_bck_5 = -999;
     }
     if(n_main>6){
-      particle_info.spacepoints_q_6 = (particle_info.spacepoints_q->at(6)+10000)*10;
-      particle_info.spacepoints_q_bck_6 = (particle_info.spacepoints_q->at(n_main-1-6)+10000)*10;
+      particle_info.spacepoints_q_6 = (particle_info.spacepoints_q->at(6)+1000)*10;
+      particle_info.spacepoints_q_bck_6 = (particle_info.spacepoints_q->at(n_main-1-6)+1000)*10;
     }else{
       particle_info.spacepoints_q_6 = -999;
       particle_info.spacepoints_q_bck_6 = -999;
     }
     if(n_main>7){
-      particle_info.spacepoints_q_7 = (particle_info.spacepoints_q->at(7)+10000)*10;
-      particle_info.spacepoints_q_bck_7 = (particle_info.spacepoints_q->at(n_main-1-7)+10000)*10;
+      particle_info.spacepoints_q_7 = (particle_info.spacepoints_q->at(7)+1000)*10;
+      particle_info.spacepoints_q_bck_7 = (particle_info.spacepoints_q->at(n_main-1-7)+1000)*10;
     }else{
       particle_info.spacepoints_q_7 = -999;
       particle_info.spacepoints_q_bck_7 = -999;
     }
     if(n_main>8){
-      particle_info.spacepoints_q_8 = (particle_info.spacepoints_q->at(8)+10000)*10;
-      particle_info.spacepoints_q_bck_8 = (particle_info.spacepoints_q->at(n_main-1-8)+10000)*10;
+      particle_info.spacepoints_q_8 = (particle_info.spacepoints_q->at(8)+1000)*10;
+      particle_info.spacepoints_q_bck_8 = (particle_info.spacepoints_q->at(n_main-1-8)+1000)*10;
     }else{
       particle_info.spacepoints_q_8 = -999;
       particle_info.spacepoints_q_bck_8 = -999;
     }
     if(n_main>9){
-      particle_info.spacepoints_q_9 = (particle_info.spacepoints_q->at(9)+10000)*10;
-      particle_info.spacepoints_q_bck_9 = (particle_info.spacepoints_q->at(n_main-1-9)+10000)*10;
+      particle_info.spacepoints_q_9 = (particle_info.spacepoints_q->at(9)+1000)*10;
+      particle_info.spacepoints_q_bck_9 = (particle_info.spacepoints_q->at(n_main-1-9)+1000)*10;
     }else{
       particle_info.spacepoints_q_9 = -999;
       particle_info.spacepoints_q_bck_9 = -999;
     }
     if(n_main>10){
-      particle_info.spacepoints_q_10 = (particle_info.spacepoints_q->at(10)+10000)*10;
-      particle_info.spacepoints_q_bck_10 = (particle_info.spacepoints_q->at(n_main-1-10)+10000)*10;
+      particle_info.spacepoints_q_10 = (particle_info.spacepoints_q->at(10)+1000)*10;
+      particle_info.spacepoints_q_bck_10 = (particle_info.spacepoints_q->at(n_main-1-10)+1000)*10;
     }else{
       particle_info.spacepoints_q_10 = -999;
       particle_info.spacepoints_q_bck_10 = -999;
     }
     if(n_main>11){
-      particle_info.spacepoints_q_11 = (particle_info.spacepoints_q->at(11)+10000)*10;
-      particle_info.spacepoints_q_bck_11 = (particle_info.spacepoints_q->at(n_main-1-11)+10000)*10;
+      particle_info.spacepoints_q_11 = (particle_info.spacepoints_q->at(11)+1000)*10;
+      particle_info.spacepoints_q_bck_11 = (particle_info.spacepoints_q->at(n_main-1-11)+1000)*10;
     }else{
       particle_info.spacepoints_q_11 = -999;
       particle_info.spacepoints_q_bck_11 = -999;
     }
     if(n_main>12){
-      particle_info.spacepoints_q_12 = (particle_info.spacepoints_q->at(12)+10000)*10;
-      particle_info.spacepoints_q_bck_12 = (particle_info.spacepoints_q->at(n_main-1-12)+10000)*10;
+      particle_info.spacepoints_q_12 = (particle_info.spacepoints_q->at(12)+1000)*10;
+      particle_info.spacepoints_q_bck_12 = (particle_info.spacepoints_q->at(n_main-1-12)+1000)*10;
     }else{
       particle_info.spacepoints_q_12 = -999;
       particle_info.spacepoints_q_bck_12 = -999;
     }
     if(n_main>13){
-      particle_info.spacepoints_q_13 = (particle_info.spacepoints_q->at(13)+10000)*10;
-      particle_info.spacepoints_q_bck_13 = (particle_info.spacepoints_q->at(n_main-1-13)+10000)*10;
+      particle_info.spacepoints_q_13 = (particle_info.spacepoints_q->at(13)+1000)*10;
+      particle_info.spacepoints_q_bck_13 = (particle_info.spacepoints_q->at(n_main-1-13)+1000)*10;
     }else{
       particle_info.spacepoints_q_13 = -999;
       particle_info.spacepoints_q_bck_13 = -999;
     }
     if(n_main>14){
-      particle_info.spacepoints_q_14 = (particle_info.spacepoints_q->at(14)+10000)*10;
-      particle_info.spacepoints_q_bck_14 = (particle_info.spacepoints_q->at(n_main-1-14)+10000)*10;
+      particle_info.spacepoints_q_14 = (particle_info.spacepoints_q->at(14)+1000)*10;
+      particle_info.spacepoints_q_bck_14 = (particle_info.spacepoints_q->at(n_main-1-14)+1000)*10;
     }else{
       particle_info.spacepoints_q_14 = -999;
       particle_info.spacepoints_q_bck_14 = -999;
     }
     if(n_main>15){
-      particle_info.spacepoints_q_15 = (particle_info.spacepoints_q->at(15)+10000)*10;
-      particle_info.spacepoints_q_bck_15 = (particle_info.spacepoints_q->at(n_main-1-15)+10000)*10;
+      particle_info.spacepoints_q_15 = (particle_info.spacepoints_q->at(15)+1000)*10;
+      particle_info.spacepoints_q_bck_15 = (particle_info.spacepoints_q->at(n_main-1-15)+1000)*10;
     }else{
       particle_info.spacepoints_q_15 = -999;
       particle_info.spacepoints_q_bck_15 = -999;
     }
     if(n_main>16){
-      particle_info.spacepoints_q_16 = (particle_info.spacepoints_q->at(16)+10000)*10;
-      particle_info.spacepoints_q_bck_16 = (particle_info.spacepoints_q->at(n_main-1-16)+10000)*10;
+      particle_info.spacepoints_q_16 = (particle_info.spacepoints_q->at(16)+1000)*10;
+      particle_info.spacepoints_q_bck_16 = (particle_info.spacepoints_q->at(n_main-1-16)+1000)*10;
     }else{
       particle_info.spacepoints_q_16 = -999;
       particle_info.spacepoints_q_bck_16 = -999;
     }
     if(n_main>17){
-      particle_info.spacepoints_q_17 = (particle_info.spacepoints_q->at(17)+10000)*10;
-      particle_info.spacepoints_q_bck_17 = (particle_info.spacepoints_q->at(n_main-1-17)+10000)*10;
+      particle_info.spacepoints_q_17 = (particle_info.spacepoints_q->at(17)+1000)*10;
+      particle_info.spacepoints_q_bck_17 = (particle_info.spacepoints_q->at(n_main-1-17)+1000)*10;
     }else{
       particle_info.spacepoints_q_17 = -999;
       particle_info.spacepoints_q_bck_17 = -999;
     }
     if(n_main>18){
-      particle_info.spacepoints_q_18 = (particle_info.spacepoints_q->at(18)+10000)*10;
-      particle_info.spacepoints_q_bck_18 = (particle_info.spacepoints_q->at(n_main-1-18)+10000)*10;
+      particle_info.spacepoints_q_18 = (particle_info.spacepoints_q->at(18)+1000)*10;
+      particle_info.spacepoints_q_bck_18 = (particle_info.spacepoints_q->at(n_main-1-18)+1000)*10;
     }else{
       particle_info.spacepoints_q_18 = -999;
       particle_info.spacepoints_q_bck_18 = -999;
     }
     if(n_main>19){
-      particle_info.spacepoints_q_19 = (particle_info.spacepoints_q->at(19)+10000)*10;
-      particle_info.spacepoints_q_bck_19 = (particle_info.spacepoints_q->at(n_main-1-19)+10000)*10;
+      particle_info.spacepoints_q_19 = (particle_info.spacepoints_q->at(19)+1000)*10;
+      particle_info.spacepoints_q_bck_19 = (particle_info.spacepoints_q->at(n_main-1-19)+1000)*10;
     }else{
       particle_info.spacepoints_q_19 = -999;
       particle_info.spacepoints_q_bck_19 = -999;
     }
     if(n_main>20){
-      particle_info.spacepoints_q_20 = (particle_info.spacepoints_q->at(20)+10000)*10;
-      particle_info.spacepoints_q_bck_20 = (particle_info.spacepoints_q->at(n_main-1-20)+10000)*10;
+      particle_info.spacepoints_q_20 = (particle_info.spacepoints_q->at(20)+1000)*10;
+      particle_info.spacepoints_q_bck_20 = (particle_info.spacepoints_q->at(n_main-1-20)+1000)*10;
     }else{
       particle_info.spacepoints_q_20 = -999;
       particle_info.spacepoints_q_bck_20 = -999;
     }
     if(n_main>21){
-      particle_info.spacepoints_q_21 = (particle_info.spacepoints_q->at(21)+10000)*10;
-      particle_info.spacepoints_q_bck_21 = (particle_info.spacepoints_q->at(n_main-1-21)+10000)*10;
+      particle_info.spacepoints_q_21 = (particle_info.spacepoints_q->at(21)+1000)*10;
+      particle_info.spacepoints_q_bck_21 = (particle_info.spacepoints_q->at(n_main-1-21)+1000)*10;
     }else{
       particle_info.spacepoints_q_21 = -999;
       particle_info.spacepoints_q_bck_21 = -999;
     }
     if(n_main>22){
-      particle_info.spacepoints_q_22 = (particle_info.spacepoints_q->at(22)+10000)*10;
-      particle_info.spacepoints_q_bck_22 = (particle_info.spacepoints_q->at(n_main-1-22)+10000)*10;
+      particle_info.spacepoints_q_22 = (particle_info.spacepoints_q->at(22)+1000)*10;
+      particle_info.spacepoints_q_bck_22 = (particle_info.spacepoints_q->at(n_main-1-22)+1000)*10;
     }else{
       particle_info.spacepoints_q_22 = -999;
       particle_info.spacepoints_q_bck_22 = -999;
     }
     if(n_main>23){
-      particle_info.spacepoints_q_23 = (particle_info.spacepoints_q->at(23)+10000)*10;
-      particle_info.spacepoints_q_bck_23 = (particle_info.spacepoints_q->at(n_main-1-23)+10000)*10;
+      particle_info.spacepoints_q_23 = (particle_info.spacepoints_q->at(23)+1000)*10;
+      particle_info.spacepoints_q_bck_23 = (particle_info.spacepoints_q->at(n_main-1-23)+1000)*10;
     }else{
       particle_info.spacepoints_q_23 = -999;
       particle_info.spacepoints_q_bck_23 = -999;
     }
     if(n_main>24){
-      particle_info.spacepoints_q_24 = (particle_info.spacepoints_q->at(24)+10000)*10;
-      particle_info.spacepoints_q_bck_24 = (particle_info.spacepoints_q->at(n_main-1-24)+10000)*10;
+      particle_info.spacepoints_q_24 = (particle_info.spacepoints_q->at(24)+1000)*10;
+      particle_info.spacepoints_q_bck_24 = (particle_info.spacepoints_q->at(n_main-1-24)+1000)*10;
     }else{
       particle_info.spacepoints_q_24 = -999;
       particle_info.spacepoints_q_bck_24 = -999;

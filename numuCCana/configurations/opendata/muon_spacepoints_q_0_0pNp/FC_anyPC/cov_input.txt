@@ -1,0 +1,37 @@
+numuCC_part_bdt_Np_LFCHFC                     muon_spacepoints_q_0              30      0       150000          1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig_LFCHFC                 muon_spacepoints_q_0              30      0       150000          1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck_LFCHFC                 muon_spacepoints_q_0              30      0       150000          1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt_LFCHFC                muon_spacepoints_q_0              30      0       150000          1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext_LFCHFC                 muon_spacepoints_q_0              30      0       150000          1       0               0       0               0               13              3       unity               0
+
+numuCC_part_bdt_Np_LPCorHPC                   muon_spacepoints_q_0              30      0       150000          2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig_LPCorHPC               muon_spacepoints_q_0              30      0       150000          2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck_LPCorHPC               muon_spacepoints_q_0              30      0       150000          2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt_LPCorHPC              muon_spacepoints_q_0              30      0       150000          2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext_LPCorHPC               muon_spacepoints_q_0              30      0       150000          2       0               0       0               0               14              3       unity               0
+
+numuCC_part_bdt_PorLNp_LFCHFC                 muon_spacepoints_q_0              30      0       150000          3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig_LFCHFC             muon_spacepoints_q_0              30      0       150000          3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck_LFCHFC             muon_spacepoints_q_0              30      0       150000          3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt_LFCHFC            muon_spacepoints_q_0              30      0       150000          3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext_LFCHFC             muon_spacepoints_q_0              30      0       150000          3       0               0       0               0               15              3       unity               0
+
+numuCC_part_bdt_PorLNp_LPCorHPC               muon_spacepoints_q_0              30      0       150000          4       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig_LPCorHPC           muon_spacepoints_q_0              30      0       150000          4       1               1       0               0               7               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck_LPCorHPC           muon_spacepoints_q_0              30      0       150000          4       1               1       0               0               8               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt_LPCorHPC          muon_spacepoints_q_0              30      0       150000          4       0               0       0.5             0               8               4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext_LPCorHPC           muon_spacepoints_q_0              30      0       150000          4       0               0       0               0               16              3       unity               0
+
+numuCC_part_bdt_0p_LFCHFC                     muon_spacepoints_q_0              30      0       150000          5       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_0p_sig_LFCHFC                 muon_spacepoints_q_0              30      0       150000          5       1               1       0               0               9               2       cv_spline_rootino   0
+numuCC_part_bdt_0p_bck_LFCHFC                 muon_spacepoints_q_0              30      0       150000          5       1               1       0               0               10              2       cv_spline_rootino   0
+numuCC_part_bdt_0p_dirt_LFCHFC                muon_spacepoints_q_0              30      0       150000          5       0               0       0.5             0               10              4       cv_spline_rootino   0
+numuCC_part_bdt_0p_ext_LFCHFC                 muon_spacepoints_q_0              30      0       150000          5       0               0       0               0               17              3       unity               0
+
+numuCC_part_bdt_0p_LPCorHPC                   muon_spacepoints_q_0              30      0       150000          6       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_0p_sig_LPCorHPC               muon_spacepoints_q_0              30      0       150000          6       1               1       0               0               11              2       cv_spline_rootino   0
+numuCC_part_bdt_0p_bck_LPCorHPC               muon_spacepoints_q_0              30      0       150000          6       1               1       0               0               12              2       cv_spline_rootino   0
+numuCC_part_bdt_0p_dirt_LPCorHPC              muon_spacepoints_q_0              30      0       150000          6       0               0       0.5             0               12              4       cv_spline_rootino   0
+numuCC_part_bdt_0p_ext_LPCorHPC               muon_spacepoints_q_0              30      0       150000          6       0               0       0               0               18              3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

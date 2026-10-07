@@ -1,0 +1,19 @@
+numuCC_part_bdt_Np                            VtxAct_bdt_score                  27      -2.65   4.1             1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig                        VtxAct_bdt_score                  27      -2.65   4.1             1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck                        VtxAct_bdt_score                  27      -2.65   4.1             1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt                       VtxAct_bdt_score                  27      -2.65   4.1             1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext                        VtxAct_bdt_score                  27      -2.65   4.1             1       0               0       0               0               7               3       unity               0
+
+numuCC_part_bdt_PorLNp                        VtxAct_bdt_score                  27      -2.65   4.1             2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig                    VtxAct_bdt_score                  27      -2.65   4.1             2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck                    VtxAct_bdt_score                  27      -2.65   4.1             2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt                   VtxAct_bdt_score                  27      -2.65   4.1             2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext                    VtxAct_bdt_score                  27      -2.65   4.1             2       0               0       0               0               8               3       unity               0
+
+numuCC_part_bdt_0p                            VtxAct_bdt_score                  27      -2.65   4.1             3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_0p_sig                        VtxAct_bdt_score                  27      -2.65   4.1             3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_0p_bck                        VtxAct_bdt_score                  27      -2.65   4.1             3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_0p_dirt                       VtxAct_bdt_score                  27      -2.65   4.1             3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_0p_ext                        VtxAct_bdt_score                  27      -2.65   4.1             3       0               0       0               0               9               3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

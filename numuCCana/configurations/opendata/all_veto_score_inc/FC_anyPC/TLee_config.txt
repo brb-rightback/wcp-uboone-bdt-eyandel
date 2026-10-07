@@ -1,0 +1,13 @@
+# all_veto_score_inc/FC_anyPC (make_var_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  2 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# numuCC_part_bdt_LFCHFC
+  1 64201 none 0-24 1 0 1 1 0
+# numuCC_part_bdt_LPCorHPC
+  1 64202 none 25-49 1 0 1 1 0
+# all channels
+  1 64203 none 0-24,25-49 1 0 1 1 0
+End

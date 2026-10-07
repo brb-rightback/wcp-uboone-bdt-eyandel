@@ -2056,23 +2056,27 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
   }else if(var_name == "VtxAct_bdt_score"){
   return tagger.VtxAct_bdt_score;
   }else if(var_name.BeginsWith("muon_spacepoints_q_")){
-    // primary muon spacepoint charges (main sequence, ordered as in particle.h), raw charge: the particle.h BDT inputs are
-    // (q+10000)*10. muon_spacepoints_q_0 ... _4: the first five, _sum5: their sum, _med: the median (dQ/dx); -999 if missing
+    // primary muon spacepoint charges (main sequence, ordered as in particle.h), transformed as the particle.h BDT inputs,
+    // (q+1000)*10, truncated at 0. muon_spacepoints_q_0 ... _4: the first five, _sum5: their sum, _med: the median (dQ/dx);
+    // -999 if missing
     std::vector<double> q = get_reco_muon_spacepoints_q(pfeval, space);
+    auto q_feature = [](double q_raw){ return std::max(0., (q_raw+1000)*10); };
     if(var_name == "muon_spacepoints_q_med"){
       if(q.empty()) return -999;
       std::sort(q.begin(), q.end());
       size_t size = q.size();
-      return (size % 2 == 0) ? (q.at(size / 2 - 1) + q.at(size / 2)) / 2.0 : q.at(size / 2);
+      return q_feature((size % 2 == 0) ? (q.at(size / 2 - 1) + q.at(size / 2)) / 2.0 : q.at(size / 2));
     }
     if(var_name == "muon_spacepoints_q_sum5"){
       if(q.size()<5) return -999;
-      return q.at(0) + q.at(1) + q.at(2) + q.at(3) + q.at(4);
+      double sum = 0;
+      for(int k=0; k<5; k++) sum += q_feature(q.at(k));
+      return sum;
     }
     TString k_str = var_name(19, var_name.Length()-19);
     if(!k_str.IsDigit()) return -999;
     size_t k = k_str.Atoi();
-    return (k<q.size()) ? q.at(k) : -999;
+    return (k<q.size()) ? q_feature(q.at(k)) : -999;
 
 
   }else if (var_name == "kine_reco_Eproton"){

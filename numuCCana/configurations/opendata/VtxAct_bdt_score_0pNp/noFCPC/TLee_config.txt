@@ -1,15 +1,15 @@
-# muon_spacepoints_q_0_0pNp/noFCPC (make_var_configs.py)
+# VtxAct_bdt_score_0pNp/noFCPC (make_var_configs.py)
 #
 # channels_observation flag_lookelsewhere
   3 1
 #
 # run index support target xsflux det add mcstat mcstatcor
 # numuCC_part_bdt_Np
-  1 51101 none 0-30 1 0 1 1 0
+  1 67101 none 0-27 1 0 1 1 0
 # numuCC_part_bdt_PorLNp
-  1 51102 none 31-61 1 0 1 1 0
+  1 67102 none 28-55 1 0 1 1 0
 # numuCC_part_bdt_0p
-  1 51103 none 62-92 1 0 1 1 0
+  1 67103 none 56-83 1 0 1 1 0
 # all channels
-  1 51104 none 0-30,31-61,62-92 1 0 1 1 0
+  1 67104 none 0-27,28-55,56-83 1 0 1 1 0
 End

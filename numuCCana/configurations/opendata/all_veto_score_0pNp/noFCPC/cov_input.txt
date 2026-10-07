@@ -1,0 +1,19 @@
+numuCC_part_bdt_Np                            all_veto_score                    24      -2.35   3.65            1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig                        all_veto_score                    24      -2.35   3.65            1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_bck                        all_veto_score                    24      -2.35   3.65            1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_Np_dirt                       all_veto_score                    24      -2.35   3.65            1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_Np_ext                        all_veto_score                    24      -2.35   3.65            1       0               0       0               0               7               3       unity               0
+
+numuCC_part_bdt_PorLNp                        all_veto_score                    24      -2.35   3.65            2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig                    all_veto_score                    24      -2.35   3.65            2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_bck                    all_veto_score                    24      -2.35   3.65            2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_dirt                   all_veto_score                    24      -2.35   3.65            2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_PorLNp_ext                    all_veto_score                    24      -2.35   3.65            2       0               0       0               0               8               3       unity               0
+
+numuCC_part_bdt_0p                            all_veto_score                    24      -2.35   3.65            3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_0p_sig                        all_veto_score                    24      -2.35   3.65            3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_0p_bck                        all_veto_score                    24      -2.35   3.65            3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_0p_dirt                       all_veto_score                    24      -2.35   3.65            3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_0p_ext                        all_veto_score                    24      -2.35   3.65            3       0               0       0               0               9               3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

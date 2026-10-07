@@ -1,0 +1,21 @@
+# VtxAct_bdt_score_0pNp/FC_anyPC (make_var_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  6 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# numuCC_part_bdt_Np_LFCHFC
+  1 67201 none 0-27 1 0 1 1 0
+# numuCC_part_bdt_Np_LPCorHPC
+  1 67202 none 28-55 1 0 1 1 0
+# numuCC_part_bdt_PorLNp_LFCHFC
+  1 67203 none 56-83 1 0 1 1 0
+# numuCC_part_bdt_PorLNp_LPCorHPC
+  1 67204 none 84-111 1 0 1 1 0
+# numuCC_part_bdt_0p_LFCHFC
+  1 67205 none 112-139 1 0 1 1 0
+# numuCC_part_bdt_0p_LPCorHPC
+  1 67206 none 140-167 1 0 1 1 0
+# all channels
+  1 67207 none 0-27,28-55,56-83,84-111,112-139,140-167 1 0 1 1 0
+End
