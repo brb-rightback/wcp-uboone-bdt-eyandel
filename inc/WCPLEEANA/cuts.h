@@ -1612,7 +1612,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
          || var_name == "Eavail_costheta_Emu_bin_t" || var_name == "Eavail_pl_pt_bin_t"){
     // Reco variables of the muon (and Eavail) cross-section measurements. Muon energy / momentum as in kine_reco_Enu_new3_5
     // (get_muon_Etot_new / get_muon_momentum_new), muon direction of reco_muonMomentum, Eavail as Eavail_new3_5_drop15_95
-    // (-1000 for negative values, in the first slice).
+    // (0 for negative values, in the first slice).
     //   muon_pt, muon_pl: transverse / longitudinal muon momentum w.r.t. the beam [MeV] (truth bins: cut_file 14, 15).
     //   "*_bin": the reco bin of a multi-differential measurement as the flattened bin index + 0.5, for histograms from 0
     //   to nbin. Same slices as the truth bins of get_xs_signal_no; finer bins (50 MeV), each a part of one truth bin.

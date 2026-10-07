@@ -6,6 +6,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/plot_hist_style.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -138,6 +139,8 @@ int main( int argc, char** argv )
   std::map<int, std::vector<TH1F*> > map_obsch_histos;
   // obsch --> break down histograms (truth label: add_cut) prediction
   std::map<int, std::vector<TH1F*> > map_obsch_subhistos;
+  // obsch --> x axis of the breakdown plots (from the channel name, variable and binning in the cov_input file)
+  std::map<int, HistPlotStyle> map_obsch_plot_style;
   // Bayesian error needed ...
   // obsch --> bin with overflow bin --> vector of all channels (merge certain channels) --> mean and err2
   std::map<int, std::vector< std::vector< std::tuple<double, double, double, int, double> > > > map_obsch_bayes;
@@ -171,6 +174,7 @@ int main( int argc, char** argv )
 
 	// get histograms ...
 	map_obsch_histos[obsch] = vec_histos;
+	map_obsch_plot_style[obsch] = get_hist_plot_style(std::get<5>(*it1), std::get<4>(*it1), std::get<1>(*it1), std::get<2>(*it1), std::get<3>(*it1));
 	//map_obsch_bayes[obsch].resize(htemp->GetNbinsX()+1);
 	// for (Int_t i=0;i!=htemp->GetNbinsX()+1;i++){
 	//   std::vector< std::tuple<double, double, double> > temp;
@@ -1710,7 +1714,10 @@ datapot = 4.0e19;
         }
         else*/ 
         //Erin 
-        gratio_mc[obschannel-1]->GetXaxis()->SetTitle("Reco Shower Energy [MeV]");
+        //gratio_mc[obschannel-1]->GetXaxis()->SetTitle("Reco Shower Energy [MeV]");
+        const HistPlotStyle& plot_style = map_obsch_plot_style[obschannel];
+        bool flag_custom_axis = (plot_style.bin_labels!="" || !plot_style.segments.empty());
+        gratio_mc[obschannel-1]->GetXaxis()->SetTitle(plot_style.xtitle);
         //gratio_mc[obschannel-1]->GetXaxis()->SetTitle("Reco Shower Angle [degrees]");
         //gratio_mc[obschannel-1]->GetXaxis()->SetTitle("Median dE/dx (0-4 cm) [MeV/cm]");
         //gratio_mc[obschannel-1]->GetXaxis()->SetTitle("Median dE/dx (1-5 cm) [MeV/cm]");
@@ -1845,6 +1852,11 @@ datapot = 4.0e19;
         hist->Scale(scalePOT);
         hist->Draw("axis same");
         hist->GetYaxis()->SetNdivisions(405);
+        if(flag_custom_axis){ // labels drawn by draw_hist_axis
+            gratio_mc[obschannel-1]->GetXaxis()->SetLabelSize(0);
+            hist->GetXaxis()->SetLabelSize(0);
+            if(!plot_style.segments.empty()){ gratio_mc[obschannel-1]->GetXaxis()->SetTickLength(0); hist->GetXaxis()->SetTickLength(0); }
+        }
 
         TLine* line;
         line = new TLine(hmc->GetXaxis()->GetXmin(),1,hmc->GetXaxis()->GetXmax(),1);
@@ -1864,6 +1876,7 @@ datapot = 4.0e19;
         legend2[obschannel-1]->SetTextSize(0.08);
         legend2[obschannel-1]->SetFillStyle(0);
         legend2[obschannel-1]->Draw();
+        draw_hist_axis(plot_style, hdata, pad1, pad2);
         pad2->Modified();
 
         canvas[obschannel-1]->Print((TString)hdata->GetTitle()+".png");
