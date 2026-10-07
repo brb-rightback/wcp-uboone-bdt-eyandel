@@ -634,10 +634,18 @@ int main( int argc, char** argv )
   wrangler_pot.map_rs_to_entry();
 
 
+  // The first pass reads the run/subrun/event (and Lantern's haveReco) from a second handle of the input file, with only
+  // these branches enabled, so it does not decompress the full trees (the trees of file1 are the ones being copied)
+  TFile *file1_rse = new TFile(input_file);
+
   // Load Lantern, used when dropping subruns where container failed.
-  int haveReco;
-  TTree *T_lantern = (TTree*)file1->Get("lantern/EventTree");
-  if(T_lantern && remove_lantern_fails==1) T_lantern->SetBranchAddress("haveReco",&haveReco);
+  int haveReco = 1;
+  TTree *T_lantern = (TTree*)file1_rse->Get("lantern/EventTree");
+  if(T_lantern && remove_lantern_fails==1){
+    T_lantern->SetBranchStatus("*",0);
+    T_lantern->SetBranchStatus("haveReco",1);
+    T_lantern->SetBranchAddress("haveReco",&haveReco);
+  }
   if(!T_lantern && remove_lantern_fails==1){
     std::cout<<"WARNING: remove_lantern_fails==1, but Lantern tree not found."<<'\n'<<std::endl;
   }
@@ -647,7 +655,7 @@ int main( int argc, char** argv )
   int subrun;
   int event;
   TTree *T_rse = nullptr;
-  int found_rse_tree = get_T_rse(file1, T_rse, run, subrun, event);
+  int found_rse_tree = get_T_rse(file1_rse, T_rse, run, subrun, event);
   if(!found_rse_tree){
     std::cout<<'\n'<<"Could not find RSE tree. Exiting."<<std::endl;
     return 1;
@@ -708,7 +716,7 @@ int main( int argc, char** argv )
     //               std::unordered_map<int,std::vector<int>>                                                       event_index_map = {{event,indcies}};
     //std::pair<bool,std::unordered_map<int,std::vector<int> >> pair_goodrun_event_index_map = std::make_pair(false,event_index_map);
 
-    if(T_lantern) T_lantern->GetEntry(i);
+    if(T_lantern && remove_lantern_fails==1) T_lantern->GetEntry(i);
     else haveReco=1;
     if (haveReco==0){
       lantern_fail.insert(std::make_pair(run,subrun));
@@ -749,6 +757,11 @@ int main( int argc, char** argv )
   event_counter=0;
   verbose_counter=0;
 
+  // Entries to save. The loop below decides which ones (in run-subrun order, for the event limits), they are then read
+  // and filled in the order of the input file: reading in run-subrun order jumps between the hadd'ed pieces of the
+  // input and decompresses a new basket for nearly every event.
+  std::vector<int> save_indices;
+
   for (auto rs_it = run_sub_event_entry_first_subrun.begin(); rs_it != run_sub_event_entry_first_subrun.end(); rs_it++){
 
     if ((index_counter-verbose_counter)%set_verbose == 0) {
@@ -782,20 +795,7 @@ int main( int argc, char** argv )
           continue;
         }
         event_counter++;
-        int this_index = index_vector.at(i_it);
-        // Now fill all the trees.
-        for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
-          (*tree_it)->GetEntry(this_index);
-        }
-        for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
-          (*tree_it)->Fill();
-        }
-        for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
-          (*tree_it)->GetEntry(this_index);
-        }
-        for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
-          (*tree_it)->Fill();
-        }
+        save_indices.push_back(index_vector.at(i_it));
       } // i_it, loop over duplicates of the event.
 
     } // e_it, loop over all events in the run-subrun.
@@ -818,6 +818,27 @@ int main( int argc, char** argv )
   } // rs_it, loop over all run-subruns
 
   std::cout << "    seen: "<<index_counter<<"    saved: "  << event_counter<< std::endl;
+
+  // Now fill all the trees, in the order of the input file.
+  std::sort(save_indices.begin(), save_indices.end());
+  std::cout<<'\n'<<"Filling "<<save_indices.size()<<" events in input file order."<<std::endl;
+  for (size_t i_save=0; i_save<save_indices.size(); i_save++){
+    if (i_save%set_verbose == 0) std::cout << "    filled: "<<i_save<< std::endl;
+    int this_index = save_indices.at(i_save);
+    for(auto tree_it=wrangler.old_trees->begin(); tree_it!=wrangler.old_trees->end(); tree_it++){
+      (*tree_it)->GetEntry(this_index);
+    }
+    for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
+      (*tree_it)->Fill();
+    }
+    for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
+      (*tree_it)->GetEntry(this_index);
+    }
+    for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
+      (*tree_it)->Fill();
+    }
+  }
+  std::cout << "    filled: "<<save_indices.size()<< std::endl;
 
 
   // If saving the whole file overwrite limits, otherwise recover the events from the first subrun we started at if that is not complete.

@@ -427,6 +427,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("wcpselection/T_eval");
     if(T_rse){
       if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run",1);
         T_rse->SetBranchStatus("subrun",1);
         T_rse->SetBranchStatus("event",1);
@@ -440,6 +441,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("wcpselection/T_PFeval");
     if(T_rse){
       if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run",1);
         T_rse->SetBranchStatus("subrun",1);
         T_rse->SetBranchStatus("event",1);
@@ -453,6 +455,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("wcpselection/T_KINEvars");
     if(T_rse){
       if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run",1);
         T_rse->SetBranchStatus("subrun",1);
         T_rse->SetBranchStatus("event",1);
@@ -466,6 +469,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("wcpselection/T_BDTvars");
     if(T_rse){
       if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run",1);
         T_rse->SetBranchStatus("subrun",1);
         T_rse->SetBranchStatus("event",1);
@@ -481,6 +485,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("nuselection/NeutrinoSelectionFilter");
     if(T_rse){
       if(T_rse->GetBranch("run") && T_rse->GetBranch("sub") && T_rse->GetBranch("evt")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run",1);
         T_rse->SetBranchStatus("sub",1);
         T_rse->SetBranchStatus("evt",1);
@@ -496,6 +501,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("singlephotonana/vertex_tree");
     if(T_rse){
       if(T_rse->GetBranch("run_number") && T_rse->GetBranch("subrun_number") && T_rse->GetBranch("event_number")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run_number",1);
         T_rse->SetBranchStatus("subrun_number",1);
         T_rse->SetBranchStatus("event_number",1);
@@ -511,6 +517,7 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
     T_rse=(TTree*)file1->Get("lantern/EventTree");
     if(T_rse){
       if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("*",0);
         T_rse->SetBranchStatus("run",1);
         T_rse->SetBranchStatus("subrun",1);
         T_rse->SetBranchStatus("event",1);
