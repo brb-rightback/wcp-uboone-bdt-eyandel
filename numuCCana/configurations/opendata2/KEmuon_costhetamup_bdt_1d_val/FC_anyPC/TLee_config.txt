@@ -1,0 +1,30 @@
+# KEmuon_costhetamup_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LPCorHPC                      KE_muon_new3_5               34-47
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               48-80
+#   numuCC_part_bdt_PorLNp_LPCorHPC                  KE_muon_new3_5               81-94
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               95-104
+#   numuCC_part_bdt_Scat0p_LPCorHPC                  KE_muon_new3_5               105-110
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               111-123
+#   numuCC_part_bdt_Act0p_LPCorHPC                   KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               135-148
+#   numuCC_part_bdt_Trk0p_LPCorHPC                   KE_muon_new3_5               149-162
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               163-195
+#   numuCC_part_bdt_G0p_LPCorHPC                     KE_muon_new3_5               196-209
+#   numuCC_part_bdt_Np_LFCHFC_1                      reco_costhetamup             210-229
+#   numuCC_part_bdt_Np_LPCorHPC_1                    reco_costhetamup             230-249
+#
+# channels_observation flag_lookelsewhere
+  14 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> muon-proton costheta Np LFCHFC
+  1 41201 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-229 1 1 1 1 1
+# muon energy -> muon-proton costheta Np LPCorHPC
+  1 41202 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 230-249 1 1 1 1 1
+# muon energy -> muon-proton costheta, all channels
+  1 41203 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-229,230-249 1 1 1 1 1
+# FC muon-proton costheta -> muon-proton costheta Np LPCorHPC
+  1 41204 210-229 230-249 1 1 1 1 1
+End

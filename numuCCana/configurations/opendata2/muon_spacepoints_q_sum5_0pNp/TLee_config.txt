@@ -1,0 +1,33 @@
+# muon_spacepoints_q_sum5_0pNp (make_var_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# numuCC_part_bdt_Np_LFCHFC
+  1 61001 none 0-20 1 1 1 1 0
+# numuCC_part_bdt_Np_LFCHPC
+  1 61002 none 21-41 1 1 1 1 0
+# numuCC_part_bdt_Np_LPCHFC
+  1 61003 none 42-62 1 1 1 1 0
+# numuCC_part_bdt_Np_LPCHPC
+  1 61004 none 63-83 1 1 1 1 0
+# numuCC_part_bdt_PorLNp_LFCHFC
+  1 61005 none 84-104 1 1 1 1 0
+# numuCC_part_bdt_PorLNp_LFCHPC
+  1 61006 none 105-125 1 1 1 1 0
+# numuCC_part_bdt_PorLNp_LPCHFC
+  1 61007 none 126-146 1 1 1 1 0
+# numuCC_part_bdt_PorLNp_LPCHPC
+  1 61008 none 147-167 1 1 1 1 0
+# numuCC_part_bdt_0p_LFCHFC
+  1 61009 none 168-188 1 1 1 1 0
+# numuCC_part_bdt_0p_LFCHPC
+  1 61010 none 189-209 1 1 1 1 0
+# numuCC_part_bdt_0p_LPCHFC
+  1 61011 none 210-230 1 1 1 1 0
+# numuCC_part_bdt_0p_LPCHPC
+  1 61012 none 231-251 1 1 1 1 0
+# all channels
+  1 61013 none 0-20,21-41,42-62,63-83,84-104,105-125,126-146,147-167,168-188,189-209,210-230,231-251 1 1 1 1 0
+End

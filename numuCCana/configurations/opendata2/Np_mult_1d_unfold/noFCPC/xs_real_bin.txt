@@ -1,0 +1,6 @@
+1       8     numuCC.0p.inside                                                                            43672.2         0.022  0.011
+2       8     numuCC.1p.inside                                                                            43672.2         0.022  0.011
+3       8     numuCC.2p.inside                                                                            43672.2         0.022  0.011
+4       8     numuCC.gt2p.inside                                                                          43672.2         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err

@@ -1,0 +1,48 @@
+# KEmuon_vs_costhetamu_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np                               KE_muon_new3_5               0-33
+#   numuCC_part_bdt_PorLNp                           KE_muon_new3_5               34-66
+#   numuCC_part_bdt_Scat0p                           KE_muon_new3_5               67-76
+#   numuCC_part_bdt_Act0p                            KE_muon_new3_5               77-89
+#   numuCC_part_bdt_Trk0p                            KE_muon_new3_5               90-103
+#   numuCC_part_bdt_G0p                              KE_muon_new3_5               104-136
+#   numuCC_part_bdt_Np_1                             muon_costheta                137-176
+#   numuCC_part_bdt_PorLNp_1                         muon_costheta                177-216
+#   numuCC_part_bdt_Scat0p_1                         muon_costheta                217-226
+#   numuCC_part_bdt_Act0p_1                          muon_costheta                227-246
+#   numuCC_part_bdt_Trk0p_1                          muon_costheta                247-266
+#   numuCC_part_bdt_G0p_1                            muon_costheta                267-286
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> muon costheta Np
+  1 31101 0-33,34-66,67-76,77-89,90-103,104-136 137-176 1 1 1 1 1
+# muon energy -> muon costheta PorLNp
+  1 31102 0-33,34-66,67-76,77-89,90-103,104-136 177-216 1 1 1 1 1
+# muon energy -> muon costheta Scat0p
+  1 31103 0-33,34-66,67-76,77-89,90-103,104-136 217-226 1 1 1 1 1
+# muon energy -> muon costheta Act0p
+  1 31104 0-33,34-66,67-76,77-89,90-103,104-136 227-246 1 1 1 1 1
+# muon energy -> muon costheta Trk0p
+  1 31105 0-33,34-66,67-76,77-89,90-103,104-136 247-266 1 1 1 1 1
+# muon energy -> muon costheta G0p
+  1 31106 0-33,34-66,67-76,77-89,90-103,104-136 267-286 1 1 1 1 1
+# muon energy -> muon costheta, all channels
+  1 31107 0-33,34-66,67-76,77-89,90-103,104-136 137-176,177-216,217-226,227-246,247-266,267-286 1 1 1 1 1
+# muon costheta -> muon energy Np
+  1 31108 137-176,177-216,217-226,227-246,247-266,267-286 0-33 1 1 1 1 1
+# muon costheta -> muon energy PorLNp
+  1 31109 137-176,177-216,217-226,227-246,247-266,267-286 34-66 1 1 1 1 1
+# muon costheta -> muon energy Scat0p
+  1 31110 137-176,177-216,217-226,227-246,247-266,267-286 67-76 1 1 1 1 1
+# muon costheta -> muon energy Act0p
+  1 31111 137-176,177-216,217-226,227-246,247-266,267-286 77-89 1 1 1 1 1
+# muon costheta -> muon energy Trk0p
+  1 31112 137-176,177-216,217-226,227-246,247-266,267-286 90-103 1 1 1 1 1
+# muon costheta -> muon energy G0p
+  1 31113 137-176,177-216,217-226,227-246,247-266,267-286 104-136 1 1 1 1 1
+# muon costheta -> muon energy, all channels
+  1 31114 137-176,177-216,217-226,227-246,247-266,267-286 0-33,34-66,67-76,77-89,90-103,104-136 1 1 1 1 1
+End

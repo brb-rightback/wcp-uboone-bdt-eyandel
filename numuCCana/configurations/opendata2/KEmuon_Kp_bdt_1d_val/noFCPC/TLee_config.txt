@@ -1,0 +1,17 @@
+# KEmuon_Kp_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np                               KE_muon_new3_5               0-33
+#   numuCC_part_bdt_PorLNp                           KE_muon_new3_5               34-66
+#   numuCC_part_bdt_Scat0p                           KE_muon_new3_5               67-76
+#   numuCC_part_bdt_Act0p                            KE_muon_new3_5               77-89
+#   numuCC_part_bdt_Trk0p                            KE_muon_new3_5               90-103
+#   numuCC_part_bdt_G0p                              KE_muon_new3_5               104-136
+#   numuCC_part_bdt_Np_1                             reco_Kp                      137-155
+#
+# channels_observation flag_lookelsewhere
+  7 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> proton energy Np
+  1 33101 0-33,34-66,67-76,77-89,90-103,104-136 137-155 1 1 1 1 1
+End

@@ -1,0 +1,37 @@
+numuCC_part_bdt_Np                        muon_pl                           25      -500    2000            1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Np_sig                    muon_pl                           25      -500    2000            1       1               1       0               0               1               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Np_bck                    muon_pl                           25      -500    2000            1       1               1       0               0               2               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Np_dirt                   muon_pl                           25      -500    2000            1       0               0       0.5             0               2               4       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Np_ext                    muon_pl                           25      -500    2000            1       0               0       0               0               13              3       unity               0
+
+numuCC_part_bdt_PorLNp                    muon_pl                           20      -500    1500            2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_PorLNp_sig                muon_pl                           20      -500    1500            2       1               1       0               0               3               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_PorLNp_bck                muon_pl                           20      -500    1500            2       1               1       0               0               4               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_PorLNp_dirt               muon_pl                           20      -500    1500            2       0               0       0.5             0               4               4       cv_spline_rootino_1.675 0
+numuCC_part_bdt_PorLNp_ext                muon_pl                           20      -500    1500            2       0               0       0               0               14              3       unity               0
+
+numuCC_part_bdt_Scat0p                    muon_pl                           9       -500    850             3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Scat0p_sig                muon_pl                           9       -500    850             3       1               1       0               0               5               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Scat0p_bck                muon_pl                           9       -500    850             3       1               1       0               0               6               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Scat0p_dirt               muon_pl                           9       -500    850             3       0               0       0.5             0               6               4       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Scat0p_ext                muon_pl                           9       -500    850             3       0               0       0               0               15              3       unity               0
+
+numuCC_part_bdt_Act0p                     muon_pl                           17      -500    1200            4       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Act0p_sig                 muon_pl                           17      -500    1200            4       1               1       0               0               7               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Act0p_bck                 muon_pl                           17      -500    1200            4       1               1       0               0               8               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Act0p_dirt                muon_pl                           17      -500    1200            4       0               0       0.5             0               8               4       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Act0p_ext                 muon_pl                           17      -500    1200            4       0               0       0               0               16              3       unity               0
+
+numuCC_part_bdt_Trk0p                     muon_pl                           18      -500    1300            5       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_Trk0p_sig                 muon_pl                           18      -500    1300            5       1               1       0               0               9               2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Trk0p_bck                 muon_pl                           18      -500    1300            5       1               1       0               0               10              2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Trk0p_dirt                muon_pl                           18      -500    1300            5       0               0       0.5             0               10              4       cv_spline_rootino_1.675 0
+numuCC_part_bdt_Trk0p_ext                 muon_pl                           18      -500    1300            5       0               0       0               0               17              3       unity               0
+
+numuCC_part_bdt_G0p                       muon_pl                           20      -500    1500            6       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_G0p_sig                   muon_pl                           20      -500    1500            6       1               1       0               0               11              2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_G0p_bck                   muon_pl                           20      -500    1500            6       1               1       0               0               12              2       cv_spline_rootino_1.675 0
+numuCC_part_bdt_G0p_dirt                  muon_pl                           20      -500    1500            6       0               0       0.5             0               12              4       cv_spline_rootino_1.675 0
+numuCC_part_bdt_G0p_ext                   muon_pl                           20      -500    1500            6       0               0       0               0               18              3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

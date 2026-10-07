@@ -1,0 +1,28 @@
+# KEmuon_vs_costhetamu_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LPCorHPC                         KE_muon_new3_5               34-47
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                48-87
+#   numuCC_part_bdt_LPCorHPC_1                       muon_costheta                88-127
+#
+# channels_observation flag_lookelsewhere
+  4 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> muon costheta LFCHFC
+  1 30201 0-33,34-47 48-87 1 1 1 1 1
+# muon energy -> muon costheta LPCorHPC
+  1 30202 0-33,34-47 88-127 1 1 1 1 1
+# muon energy -> muon costheta, all channels
+  1 30203 0-33,34-47 48-87,88-127 1 1 1 1 1
+# muon costheta -> muon energy LFCHFC
+  1 30204 48-87,88-127 0-33 1 1 1 1 1
+# muon costheta -> muon energy LPCorHPC
+  1 30205 48-87,88-127 34-47 1 1 1 1 1
+# muon costheta -> muon energy, all channels
+  1 30206 48-87,88-127 0-33,34-47 1 1 1 1 1
+# FC muon energy -> muon energy LPCorHPC
+  1 30207 0-33 34-47 1 1 1 1 1
+# FC muon costheta -> muon costheta LPCorHPC
+  1 30208 48-87 88-127 1 1 1 1 1
+End

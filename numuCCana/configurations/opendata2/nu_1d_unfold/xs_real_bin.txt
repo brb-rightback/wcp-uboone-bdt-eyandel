@@ -1,0 +1,16 @@
+1       4     numuCC.0p.inside.nu.le.100                                                                  4367.22         0.022  0.011
+2       4     numuCC.0p.inside.nu.le.200.gt.100                                                           4367.22         0.022  0.011
+3       4     numuCC.0p.inside.nu.le.500.gt.200                                                           13101.6         0.022  0.011
+4       4     numuCC.0p.inside.nu.le.950.gt.500                                                           19652.5         0.022  0.011
+5       4     numuCC.0p.inside.nu.gt.950                                                                  39304.9         0.022  0.011
+6       4     numuCC.Np.inside.nu.le.100                                                                  4367.22         0.022  0.011
+7       4     numuCC.Np.inside.nu.le.200.gt.100                                                           4367.22         0.022  0.011
+8       4     numuCC.Np.inside.nu.le.325.gt.200                                                           5459.02         0.022  0.011
+9       4     numuCC.Np.inside.nu.le.500.gt.325                                                           7642.63         0.022  0.011
+10      4     numuCC.Np.inside.nu.le.700.gt.500                                                           8734.43         0.022  0.011
+11      4     numuCC.Np.inside.nu.le.950.gt.700                                                           10918           0.022  0.011
+12      4     numuCC.Np.inside.nu.le.1300.gt.950                                                          15285.3         0.022  0.011
+13      4     numuCC.Np.inside.nu.le.1700.gt.1300                                                         17468.9         0.022  0.011
+14      4     numuCC.Np.inside.nu.gt.1700                                                                 34937.7         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err

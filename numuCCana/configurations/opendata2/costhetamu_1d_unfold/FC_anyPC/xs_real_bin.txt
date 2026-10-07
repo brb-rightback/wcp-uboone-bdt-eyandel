@@ -1,0 +1,24 @@
+1       3     numuCC.0p.inside.costheta.le.-0.3                                                           30570.5         0.022  0.011
+2       3     numuCC.0p.inside.costheta.le.0.gt.-0.3                                                      13101.6         0.022  0.011
+3       3     numuCC.0p.inside.costheta.le.0.15.gt.0                                                      6550.82         0.022  0.011
+4       3     numuCC.0p.inside.costheta.le.0.3.gt.0.15                                                    6550.82         0.022  0.011
+5       3     numuCC.0p.inside.costheta.le.0.5.gt.0.3                                                     8734.43         0.022  0.011
+6       3     numuCC.0p.inside.costheta.le.0.6.gt.0.5                                                     4367.22         0.022  0.011
+7       3     numuCC.0p.inside.costheta.le.0.7.gt.0.6                                                     4367.22         0.022  0.011
+8       3     numuCC.0p.inside.costheta.le.0.8.gt.0.7                                                     4367.22         0.022  0.011
+9       3     numuCC.0p.inside.costheta.le.0.9.gt.0.8                                                     4367.22         0.022  0.011
+10      3     numuCC.0p.inside.costheta.le.0.95.gt.0.9                                                    2183.61         0.022  0.011
+11      3     numuCC.0p.inside.costheta.gt.0.95                                                           2183.61         0.022  0.011
+12      3     numuCC.Np.inside.costheta.le.-0.3                                                           30570.5         0.022  0.011
+13      3     numuCC.Np.inside.costheta.le.0.gt.-0.3                                                      13101.6         0.022  0.011
+14      3     numuCC.Np.inside.costheta.le.0.15.gt.0                                                      6550.82         0.022  0.011
+15      3     numuCC.Np.inside.costheta.le.0.3.gt.0.15                                                    6550.82         0.022  0.011
+16      3     numuCC.Np.inside.costheta.le.0.5.gt.0.3                                                     8734.43         0.022  0.011
+17      3     numuCC.Np.inside.costheta.le.0.6.gt.0.5                                                     4367.22         0.022  0.011
+18      3     numuCC.Np.inside.costheta.le.0.7.gt.0.6                                                     4367.22         0.022  0.011
+19      3     numuCC.Np.inside.costheta.le.0.8.gt.0.7                                                     4367.22         0.022  0.011
+20      3     numuCC.Np.inside.costheta.le.0.9.gt.0.8                                                     4367.22         0.022  0.011
+21      3     numuCC.Np.inside.costheta.le.0.95.gt.0.9                                                    2183.61         0.022  0.011
+22      3     numuCC.Np.inside.costheta.gt.0.95                                                           2183.61         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err

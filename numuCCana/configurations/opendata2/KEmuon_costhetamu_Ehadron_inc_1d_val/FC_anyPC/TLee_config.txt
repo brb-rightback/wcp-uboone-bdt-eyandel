@@ -1,0 +1,20 @@
+# KEmuon_costhetamu_Ehadron_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LPCorHPC                         KE_muon_new3_5               34-47
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                48-87
+#   numuCC_part_bdt_LPCorHPC_1                       muon_costheta                88-127
+#   numuCC_part_bdt_LFCHFC_2                         Ehadron_new3_5_drop15_95     128-143
+#   numuCC_part_bdt_LPCorHPC_2                       Ehadron_new3_5_drop15_95     144-159
+#
+# channels_observation flag_lookelsewhere
+  6 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> hadronic energy LFCHFC
+  1 12201 0-33,34-47,48-87,88-127 128-143 1 1 1 1 1
+# muon energy and muon costheta -> hadronic energy LPCorHPC
+  1 12202 0-33,34-47,48-87,88-127 144-159 1 1 1 1 1
+# muon energy and muon costheta -> hadronic energy, all channels
+  1 12203 0-33,34-47,48-87,88-127 128-143,144-159 1 1 1 1 1
+End

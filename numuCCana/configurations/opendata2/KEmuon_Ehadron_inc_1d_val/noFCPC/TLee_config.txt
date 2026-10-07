@@ -1,0 +1,12 @@
+# KEmuon_Ehadron_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt                                  KE_muon_new3_5               0-33
+#   numuCC_part_bdt_1                                Ehadron_new3_5_drop15_95     34-49
+#
+# channels_observation flag_lookelsewhere
+  2 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> hadronic energy all events
+  1 10101 0-33 34-49 1 1 1 1 1
+End

@@ -1,0 +1,34 @@
+# KEmuon_Eavail_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LFCHPC                           KE_muon_new3_5               34-41
+#   numuCC_part_bdt_LPCHFC                           KE_muon_new3_5               42-55
+#   numuCC_part_bdt_LPCHPC                           KE_muon_new3_5               56-69
+#   numuCC_part_bdt_LFCHFC_1                         Eavail_new3_5_drop15_95      70-83
+#   numuCC_part_bdt_LFCHPC_1                         Eavail_new3_5_drop15_95      84-97
+#   numuCC_part_bdt_LPCHFC_1                         Eavail_new3_5_drop15_95      98-124
+#   numuCC_part_bdt_LPCHPC_1                         Eavail_new3_5_drop15_95      125-138
+#
+# channels_observation flag_lookelsewhere
+  8 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> available energy LFCHFC
+  1 18001 0-33,34-41,42-55,56-69 70-83 1 1 1 1 1
+# muon energy -> available energy LFCHPC
+  1 18002 0-33,34-41,42-55,56-69 84-97 1 1 1 1 1
+# muon energy -> available energy LPCHFC
+  1 18003 0-33,34-41,42-55,56-69 98-124 1 1 1 1 1
+# muon energy -> available energy LPCHPC
+  1 18004 0-33,34-41,42-55,56-69 125-138 1 1 1 1 1
+# muon energy -> available energy, all channels
+  1 18005 0-33,34-41,42-55,56-69 70-83,84-97,98-124,125-138 1 1 1 1 1
+# FC available energy -> available energy LFCHPC
+  1 18006 70-83 84-97 1 1 1 1 1
+# FC available energy -> available energy LPCHFC
+  1 18007 70-83 98-124 1 1 1 1 1
+# FC available energy -> available energy LPCHPC
+  1 18008 70-83 125-138 1 1 1 1 1
+# FC available energy -> available energy, all PC channels
+  1 18009 70-83 84-97,98-124,125-138 1 1 1 1 1
+End

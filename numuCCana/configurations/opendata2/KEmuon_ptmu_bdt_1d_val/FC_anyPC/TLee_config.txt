@@ -1,0 +1,72 @@
+# KEmuon_ptmu_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LPCorHPC                      KE_muon_new3_5               34-47
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               48-80
+#   numuCC_part_bdt_PorLNp_LPCorHPC                  KE_muon_new3_5               81-94
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               95-104
+#   numuCC_part_bdt_Scat0p_LPCorHPC                  KE_muon_new3_5               105-110
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               111-123
+#   numuCC_part_bdt_Act0p_LPCorHPC                   KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               135-148
+#   numuCC_part_bdt_Trk0p_LPCorHPC                   KE_muon_new3_5               149-162
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               163-195
+#   numuCC_part_bdt_G0p_LPCorHPC                     KE_muon_new3_5               196-209
+#   numuCC_part_bdt_Np_LFCHFC_1                      muon_pt                      210-227
+#   numuCC_part_bdt_Np_LPCorHPC_1                    muon_pt                      228-240
+#   numuCC_part_bdt_PorLNp_LFCHFC_1                  muon_pt                      241-252
+#   numuCC_part_bdt_PorLNp_LPCorHPC_1                muon_pt                      253-261
+#   numuCC_part_bdt_Scat0p_LFCHFC_1                  muon_pt                      262-274
+#   numuCC_part_bdt_Scat0p_LPCorHPC_1                muon_pt                      275-281
+#   numuCC_part_bdt_Act0p_LFCHFC_1                   muon_pt                      282-295
+#   numuCC_part_bdt_Act0p_LPCorHPC_1                 muon_pt                      296-304
+#   numuCC_part_bdt_Trk0p_LFCHFC_1                   muon_pt                      305-311
+#   numuCC_part_bdt_Trk0p_LPCorHPC_1                 muon_pt                      312-320
+#   numuCC_part_bdt_G0p_LFCHFC_1                     muon_pt                      321-338
+#   numuCC_part_bdt_G0p_LPCorHPC_1                   muon_pt                      339-351
+#
+# channels_observation flag_lookelsewhere
+  24 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> muon p_{T} Np LFCHFC
+  1 23201 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-227 1 1 1 1 1
+# muon energy -> muon p_{T} Np LPCorHPC
+  1 23202 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 228-240 1 1 1 1 1
+# muon energy -> muon p_{T} PorLNp LFCHFC
+  1 23203 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 241-252 1 1 1 1 1
+# muon energy -> muon p_{T} PorLNp LPCorHPC
+  1 23204 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 253-261 1 1 1 1 1
+# muon energy -> muon p_{T} Scat0p LFCHFC
+  1 23205 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 262-274 1 1 1 1 1
+# muon energy -> muon p_{T} Scat0p LPCorHPC
+  1 23206 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 275-281 1 1 1 1 1
+# muon energy -> muon p_{T} Act0p LFCHFC
+  1 23207 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 282-295 1 1 1 1 1
+# muon energy -> muon p_{T} Act0p LPCorHPC
+  1 23208 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 296-304 1 1 1 1 1
+# muon energy -> muon p_{T} Trk0p LFCHFC
+  1 23209 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 305-311 1 1 1 1 1
+# muon energy -> muon p_{T} Trk0p LPCorHPC
+  1 23210 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 312-320 1 1 1 1 1
+# muon energy -> muon p_{T} G0p LFCHFC
+  1 23211 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 321-338 1 1 1 1 1
+# muon energy -> muon p_{T} G0p LPCorHPC
+  1 23212 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 339-351 1 1 1 1 1
+# muon energy -> muon p_{T}, all channels
+  1 23213 0-33,34-47,48-80,81-94,95-104,105-110,111-123,124-134,135-148,149-162,163-195,196-209 210-227,228-240,241-252,253-261,262-274,275-281,282-295,296-304,305-311,312-320,321-338,339-351 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T} Np LPCorHPC
+  1 23214 210-227,241-252,262-274,282-295,305-311,321-338 228-240 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T} PorLNp LPCorHPC
+  1 23215 210-227,241-252,262-274,282-295,305-311,321-338 253-261 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T} Scat0p LPCorHPC
+  1 23216 210-227,241-252,262-274,282-295,305-311,321-338 275-281 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T} Act0p LPCorHPC
+  1 23217 210-227,241-252,262-274,282-295,305-311,321-338 296-304 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T} Trk0p LPCorHPC
+  1 23218 210-227,241-252,262-274,282-295,305-311,321-338 312-320 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T} G0p LPCorHPC
+  1 23219 210-227,241-252,262-274,282-295,305-311,321-338 339-351 1 1 1 1 1
+# FC muon p_{T} -> muon p_{T}, all PC channels
+  1 23220 210-227,241-252,262-274,282-295,305-311,321-338 228-240,253-261,275-281,296-304,312-320,339-351 1 1 1 1 1
+End

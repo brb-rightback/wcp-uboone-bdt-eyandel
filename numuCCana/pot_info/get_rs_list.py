@@ -32,15 +32,15 @@ if not path.endswith("/"):
 
 output_file = args.output if args.output else f"{name}.txt"
 
-df_file = uproot.open(os.path.join(path, name + ".root"))["wcpselection"]
-df_pot = df_file["T_pot"].pandas.df(
-    ["pot_tor875good", "runNo", "subRunNo"],
+df_file = uproot.open(os.path.join(path, name + ".root"))["nuselection"]
+df_pot = df_file["SubRun"].pandas.df(
+    ["run", "subRun"],
     flatten=False,
 )
 
 df_pot["rs_num"] = (
-    df_pot["runNo"].to_numpy() * 100_000_000_000
-    + df_pot["subRunNo"].to_numpy() * 1_000_000
+    df_pot["run"].to_numpy() * 100_000_000_000
+    + df_pot["subRun"].to_numpy() * 1_000_000
 )
 
 duplicate_rows = df_pot[df_pot.duplicated(keep=False)]
@@ -50,8 +50,8 @@ print(df_pot.shape[0])
 df_pot = df_pot.drop_duplicates(subset=["rs_num"])
 print(df_pot.shape[0])
 
-run = df_pot["runNo"].to_numpy()
-subrun = df_pot["subRunNo"].to_numpy()
+run = df_pot["run"].to_numpy()
+subrun = df_pot["subRun"].to_numpy()
 run_subrun_list = {}
 
 for event in range(len(run)):

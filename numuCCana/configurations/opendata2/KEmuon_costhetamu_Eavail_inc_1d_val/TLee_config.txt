@@ -1,0 +1,30 @@
+# KEmuon_costhetamu_Eavail_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LFCHPC                           KE_muon_new3_5               34-41
+#   numuCC_part_bdt_LPCHFC                           KE_muon_new3_5               42-55
+#   numuCC_part_bdt_LPCHPC                           KE_muon_new3_5               56-69
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                70-109
+#   numuCC_part_bdt_LFCHPC_1                         muon_costheta                110-129
+#   numuCC_part_bdt_LPCHFC_1                         muon_costheta                130-169
+#   numuCC_part_bdt_LPCHPC_1                         muon_costheta                170-209
+#   numuCC_part_bdt_LFCHFC_2                         Eavail_new3_5_drop15_95      210-223
+#   numuCC_part_bdt_LFCHPC_2                         Eavail_new3_5_drop15_95      224-237
+#   numuCC_part_bdt_LPCHFC_2                         Eavail_new3_5_drop15_95      238-264
+#   numuCC_part_bdt_LPCHPC_2                         Eavail_new3_5_drop15_95      265-278
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> available energy LFCHFC
+  1 20001 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-223 1 1 1 1 1
+# muon energy and muon costheta -> available energy LFCHPC
+  1 20002 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 224-237 1 1 1 1 1
+# muon energy and muon costheta -> available energy LPCHFC
+  1 20003 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 238-264 1 1 1 1 1
+# muon energy and muon costheta -> available energy LPCHPC
+  1 20004 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 265-278 1 1 1 1 1
+# muon energy and muon costheta -> available energy, all channels
+  1 20005 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-223,224-237,238-264,265-278 1 1 1 1 1
+End

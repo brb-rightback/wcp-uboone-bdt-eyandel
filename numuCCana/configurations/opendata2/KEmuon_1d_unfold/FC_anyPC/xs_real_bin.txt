@@ -1,0 +1,24 @@
+1       2     numuCC.0p.inside.Emu.le.200                                                                 4120.03         0.022  0.011
+2       2     numuCC.0p.inside.Emu.le.250.gt.200                                                          2183.61         0.022  0.011
+3       2     numuCC.0p.inside.Emu.le.300.gt.250                                                          2183.61         0.022  0.011
+4       2     numuCC.0p.inside.Emu.le.350.gt.300                                                          2183.61         0.022  0.011
+5       2     numuCC.0p.inside.Emu.le.450.gt.350                                                          4367.22         0.022  0.011
+6       2     numuCC.0p.inside.Emu.le.550.gt.450                                                          4367.22         0.022  0.011
+7       2     numuCC.0p.inside.Emu.le.700.gt.550                                                          6550.82         0.022  0.011
+8       2     numuCC.0p.inside.Emu.le.900.gt.700                                                          8734.43         0.022  0.011
+9       2     numuCC.0p.inside.Emu.le.1150.gt.900                                                         10918           0.022  0.011
+10      2     numuCC.0p.inside.Emu.le.1600.gt.1150                                                        19652.5         0.022  0.011
+11      2     numuCC.0p.inside.Emu.gt.1600                                                                39304.9         0.022  0.011
+12      2     numuCC.Np.inside.Emu.le.200                                                                 4120.03         0.022  0.011
+13      2     numuCC.Np.inside.Emu.le.250.gt.200                                                          2183.61         0.022  0.011
+14      2     numuCC.Np.inside.Emu.le.300.gt.250                                                          2183.61         0.022  0.011
+15      2     numuCC.Np.inside.Emu.le.350.gt.300                                                          2183.61         0.022  0.011
+16      2     numuCC.Np.inside.Emu.le.450.gt.350                                                          4367.22         0.022  0.011
+17      2     numuCC.Np.inside.Emu.le.550.gt.450                                                          4367.22         0.022  0.011
+18      2     numuCC.Np.inside.Emu.le.700.gt.550                                                          6550.82         0.022  0.011
+19      2     numuCC.Np.inside.Emu.le.900.gt.700                                                          8734.43         0.022  0.011
+20      2     numuCC.Np.inside.Emu.le.1150.gt.900                                                         10918           0.022  0.011
+21      2     numuCC.Np.inside.Emu.le.1600.gt.1150                                                        19652.5         0.022  0.011
+22      2     numuCC.Np.inside.Emu.gt.1600                                                                39304.9         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err

@@ -1,0 +1,30 @@
+# KEmuon_costhetamu_Kp_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LFCHPC                           KE_muon_new3_5               34-41
+#   numuCC_part_bdt_LPCHFC                           KE_muon_new3_5               42-55
+#   numuCC_part_bdt_LPCHPC                           KE_muon_new3_5               56-69
+#   numuCC_part_bdt_LFCHFC_1                         muon_costheta                70-109
+#   numuCC_part_bdt_LFCHPC_1                         muon_costheta                110-129
+#   numuCC_part_bdt_LPCHFC_1                         muon_costheta                130-169
+#   numuCC_part_bdt_LPCHPC_1                         muon_costheta                170-209
+#   numuCC_part_bdt_Np_LFCHFC_2                      reco_Kp                      210-228
+#   numuCC_part_bdt_Np_LFCHPC_2                      reco_Kp                      229-238
+#   numuCC_part_bdt_Np_LPCHFC_2                      reco_Kp                      239-257
+#   numuCC_part_bdt_Np_LPCHPC_2                      reco_Kp                      258-276
+#
+# channels_observation flag_lookelsewhere
+  12 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> proton energy Np LFCHFC
+  1 34001 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-228 1 1 1 1 1
+# muon energy and muon costheta -> proton energy Np LFCHPC
+  1 34002 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 229-238 1 1 1 1 1
+# muon energy and muon costheta -> proton energy Np LPCHFC
+  1 34003 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 239-257 1 1 1 1 1
+# muon energy and muon costheta -> proton energy Np LPCHPC
+  1 34004 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 258-276 1 1 1 1 1
+# muon energy and muon costheta -> proton energy, all channels
+  1 34005 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-228,229-238,239-257,258-276 1 1 1 1 1
+End

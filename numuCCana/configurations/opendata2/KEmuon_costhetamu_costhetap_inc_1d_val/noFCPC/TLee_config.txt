@@ -1,0 +1,13 @@
+# KEmuon_costhetamu_costhetap_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt                                  KE_muon_new3_5               0-33
+#   numuCC_part_bdt_1                                muon_costheta                34-73
+#   numuCC_part_bdt_Np_2                             reco_costhetap               74-113
+#
+# channels_observation flag_lookelsewhere
+  3 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> proton costheta Np
+  1 38101 0-33,34-73 74-113 1 1 1 1 1
+End

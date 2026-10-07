@@ -1,0 +1,20 @@
+# KEmuon_Kp_inc_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_LFCHFC                           KE_muon_new3_5               0-33
+#   numuCC_part_bdt_LPCorHPC                         KE_muon_new3_5               34-47
+#   numuCC_part_bdt_Np_LFCHFC_1                      reco_Kp                      48-66
+#   numuCC_part_bdt_Np_LPCorHPC_1                    reco_Kp                      67-85
+#
+# channels_observation flag_lookelsewhere
+  4 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy -> proton energy Np LFCHFC
+  1 32201 0-33,34-47 48-66 1 1 1 1 1
+# muon energy -> proton energy Np LPCorHPC
+  1 32202 0-33,34-47 67-85 1 1 1 1 1
+# muon energy -> proton energy, all channels
+  1 32203 0-33,34-47 48-66,67-85 1 1 1 1 1
+# FC proton energy -> proton energy Np LPCorHPC
+  1 32204 48-66 67-85 1 1 1 1 1
+End

@@ -1,0 +1,70 @@
+# KEmuon_costhetamu_costhetamup_bdt_1d_val (make_val_configs.py)
+# channels (global bins):
+#   numuCC_part_bdt_Np_LFCHFC                        KE_muon_new3_5               0-33
+#   numuCC_part_bdt_Np_LFCHPC                        KE_muon_new3_5               34-41
+#   numuCC_part_bdt_Np_LPCHFC                        KE_muon_new3_5               42-55
+#   numuCC_part_bdt_Np_LPCHPC                        KE_muon_new3_5               56-69
+#   numuCC_part_bdt_PorLNp_LFCHFC                    KE_muon_new3_5               70-102
+#   numuCC_part_bdt_PorLNp_LFCHPC                    KE_muon_new3_5               103-109
+#   numuCC_part_bdt_PorLNp_LPCHFC                    KE_muon_new3_5               110-123
+#   numuCC_part_bdt_PorLNp_LPCHPC                    KE_muon_new3_5               124-134
+#   numuCC_part_bdt_Scat0p_LFCHFC                    KE_muon_new3_5               135-144
+#   numuCC_part_bdt_Scat0p_LFCHPC                    KE_muon_new3_5               145-148
+#   numuCC_part_bdt_Scat0p_LPCHFC                    KE_muon_new3_5               149-154
+#   numuCC_part_bdt_Scat0p_LPCHPC                    KE_muon_new3_5               155-160
+#   numuCC_part_bdt_Act0p_LFCHFC                     KE_muon_new3_5               161-173
+#   numuCC_part_bdt_Act0p_LFCHPC                     KE_muon_new3_5               174-176
+#   numuCC_part_bdt_Act0p_LPCHFC                     KE_muon_new3_5               177-185
+#   numuCC_part_bdt_Act0p_LPCHPC                     KE_muon_new3_5               186-196
+#   numuCC_part_bdt_Trk0p_LFCHFC                     KE_muon_new3_5               197-210
+#   numuCC_part_bdt_Trk0p_LFCHPC                     KE_muon_new3_5               211-213
+#   numuCC_part_bdt_Trk0p_LPCHFC                     KE_muon_new3_5               214-227
+#   numuCC_part_bdt_Trk0p_LPCHPC                     KE_muon_new3_5               228-236
+#   numuCC_part_bdt_G0p_LFCHFC                       KE_muon_new3_5               237-269
+#   numuCC_part_bdt_G0p_LFCHPC                       KE_muon_new3_5               270-276
+#   numuCC_part_bdt_G0p_LPCHFC                       KE_muon_new3_5               277-290
+#   numuCC_part_bdt_G0p_LPCHPC                       KE_muon_new3_5               291-301
+#   numuCC_part_bdt_Np_LFCHFC_1                      muon_costheta                302-341
+#   numuCC_part_bdt_Np_LFCHPC_1                      muon_costheta                342-361
+#   numuCC_part_bdt_Np_LPCHFC_1                      muon_costheta                362-401
+#   numuCC_part_bdt_Np_LPCHPC_1                      muon_costheta                402-441
+#   numuCC_part_bdt_PorLNp_LFCHFC_1                  muon_costheta                442-455
+#   numuCC_part_bdt_PorLNp_LFCHPC_1                  muon_costheta                456-465
+#   numuCC_part_bdt_PorLNp_LPCHFC_1                  muon_costheta                466-505
+#   numuCC_part_bdt_PorLNp_LPCHPC_1                  muon_costheta                506-525
+#   numuCC_part_bdt_Scat0p_LFCHFC_1                  muon_costheta                526-530
+#   numuCC_part_bdt_Scat0p_LFCHPC_1                  muon_costheta                531-532
+#   numuCC_part_bdt_Scat0p_LPCHFC_1                  muon_costheta                533-542
+#   numuCC_part_bdt_Scat0p_LPCHPC_1                  muon_costheta                543-546
+#   numuCC_part_bdt_Act0p_LFCHFC_1                   muon_costheta                547-566
+#   numuCC_part_bdt_Act0p_LFCHPC_1                   muon_costheta                567-572
+#   numuCC_part_bdt_Act0p_LPCHFC_1                   muon_costheta                573-592
+#   numuCC_part_bdt_Act0p_LPCHPC_1                   muon_costheta                593-602
+#   numuCC_part_bdt_Trk0p_LFCHFC_1                   muon_costheta                603-612
+#   numuCC_part_bdt_Trk0p_LFCHPC_1                   muon_costheta                613-616
+#   numuCC_part_bdt_Trk0p_LPCHFC_1                   muon_costheta                617-636
+#   numuCC_part_bdt_Trk0p_LPCHPC_1                   muon_costheta                637-650
+#   numuCC_part_bdt_G0p_LFCHFC_1                     muon_costheta                651-670
+#   numuCC_part_bdt_G0p_LFCHPC_1                     muon_costheta                671-676
+#   numuCC_part_bdt_G0p_LPCHFC_1                     muon_costheta                677-696
+#   numuCC_part_bdt_G0p_LPCHPC_1                     muon_costheta                697-710
+#   numuCC_part_bdt_Np_LFCHFC_2                      reco_costhetamup             711-730
+#   numuCC_part_bdt_Np_LFCHPC_2                      reco_costhetamup             731-744
+#   numuCC_part_bdt_Np_LPCHFC_2                      reco_costhetamup             745-764
+#   numuCC_part_bdt_Np_LPCHPC_2                      reco_costhetamup             765-784
+#
+# channels_observation flag_lookelsewhere
+  52 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon energy and muon costheta -> muon-proton costheta Np LFCHFC
+  1 43001 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301,302-341,342-361,362-401,402-441,442-455,456-465,466-505,506-525,526-530,531-532,533-542,543-546,547-566,567-572,573-592,593-602,603-612,613-616,617-636,637-650,651-670,671-676,677-696,697-710 711-730 1 1 1 1 1
+# muon energy and muon costheta -> muon-proton costheta Np LFCHPC
+  1 43002 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301,302-341,342-361,362-401,402-441,442-455,456-465,466-505,506-525,526-530,531-532,533-542,543-546,547-566,567-572,573-592,593-602,603-612,613-616,617-636,637-650,651-670,671-676,677-696,697-710 731-744 1 1 1 1 1
+# muon energy and muon costheta -> muon-proton costheta Np LPCHFC
+  1 43003 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301,302-341,342-361,362-401,402-441,442-455,456-465,466-505,506-525,526-530,531-532,533-542,543-546,547-566,567-572,573-592,593-602,603-612,613-616,617-636,637-650,651-670,671-676,677-696,697-710 745-764 1 1 1 1 1
+# muon energy and muon costheta -> muon-proton costheta Np LPCHPC
+  1 43004 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301,302-341,342-361,362-401,402-441,442-455,456-465,466-505,506-525,526-530,531-532,533-542,543-546,547-566,567-572,573-592,593-602,603-612,613-616,617-636,637-650,651-670,671-676,677-696,697-710 765-784 1 1 1 1 1
+# muon energy and muon costheta -> muon-proton costheta, all channels
+  1 43005 0-33,34-41,42-55,56-69,70-102,103-109,110-123,124-134,135-144,145-148,149-154,155-160,161-173,174-176,177-185,186-196,197-210,211-213,214-227,228-236,237-269,270-276,277-290,291-301,302-341,342-361,362-401,402-441,442-455,456-465,466-505,506-525,526-530,531-532,533-542,543-546,547-566,567-572,573-592,593-602,603-612,613-616,617-636,637-650,651-670,671-676,677-696,697-710 711-730,731-744,745-764,765-784 1 1 1 1 1
+End

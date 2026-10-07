@@ -1,0 +1,18 @@
+1       5     numuCC.0p.inside.Eavail.le.75                                                               3275.41         0.022  0.011
+2       5     numuCC.0p.inside.Eavail.le.150.gt.75                                                        3275.41         0.022  0.011
+3       5     numuCC.0p.inside.Eavail.le.250.gt.150                                                       4367.22         0.022  0.011
+4       5     numuCC.0p.inside.Eavail.le.375.gt.250                                                       5459.02         0.022  0.011
+5       5     numuCC.0p.inside.Eavail.le.550.gt.375                                                       7642.63         0.022  0.011
+6       5     numuCC.0p.inside.Eavail.le.800.gt.550                                                       10918           0.022  0.011
+7       5     numuCC.0p.inside.Eavail.le.1100.gt.800                                                      13101.6         0.022  0.011
+8       5     numuCC.0p.inside.Eavail.gt.1100                                                             26203.3         0.022  0.011
+9       5     numuCC.Np.inside.Eavail.le.75                                                               3275.41         0.022  0.011
+10      5     numuCC.Np.inside.Eavail.le.150.gt.75                                                        3275.41         0.022  0.011
+11      5     numuCC.Np.inside.Eavail.le.250.gt.150                                                       4367.22         0.022  0.011
+12      5     numuCC.Np.inside.Eavail.le.375.gt.250                                                       5459.02         0.022  0.011
+13      5     numuCC.Np.inside.Eavail.le.550.gt.375                                                       7642.63         0.022  0.011
+14      5     numuCC.Np.inside.Eavail.le.800.gt.550                                                       10918           0.022  0.011
+15      5     numuCC.Np.inside.Eavail.le.1100.gt.800                                                      13101.6         0.022  0.011
+16      5     numuCC.Np.inside.Eavail.gt.1100                                                             26203.3         0.022  0.011
+-1      -1    End
+#bin    #cut_file  #cut  #flux_constant  #pot_err  #target_err
