@@ -13,7 +13,7 @@ if($config =~ /val/ ){
   print "Running MC stat cor for $config\n";
   system("bin/stat_cov_matrix -r0 -h1&");
   system("bin/stat_pred_cov_matrix -r0 -h1");
+  system("mv hist_rootfiles/run_pred_stat.root mcstat/");
+  system("mv hist_rootfiles/run_data_stat.root mcstat/");
 }
 
-system("mv hist_rootfiles/run_pred_stat.root mcstat/");
-system("mv hist_rootfiles/run_data_stat.root mcstat/");

@@ -8,23 +8,23 @@
 #   numuCC_part_bdt_LFCHPC_1                         muon_costheta                110-129
 #   numuCC_part_bdt_LPCHFC_1                         muon_costheta                130-169
 #   numuCC_part_bdt_LPCHPC_1                         muon_costheta                170-209
-#   numuCC_part_bdt_LFCHFC_2                         Ehadron_new3_5_drop15_95     210-226
-#   numuCC_part_bdt_LFCHPC_2                         Ehadron_new3_5_drop15_95     227-237
-#   numuCC_part_bdt_LPCHFC_2                         Ehadron_new3_5_drop15_95     238-254
-#   numuCC_part_bdt_LPCHPC_2                         Ehadron_new3_5_drop15_95     255-265
+#   numuCC_part_bdt_LFCHFC_2                         Ehadron_new3_5_drop15_95     210-225
+#   numuCC_part_bdt_LFCHPC_2                         Ehadron_new3_5_drop15_95     226-236
+#   numuCC_part_bdt_LPCHFC_2                         Ehadron_new3_5_drop15_95     237-252
+#   numuCC_part_bdt_LPCHPC_2                         Ehadron_new3_5_drop15_95     253-263
 #
 # channels_observation flag_lookelsewhere
   12 1
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy and muon costheta -> hadronic energy LFCHFC
-  1 12001 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-226 1 0 1 1 1
+  1 12001 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-225 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy LFCHPC
-  1 12002 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 227-237 1 0 1 1 1
+  1 12002 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 226-236 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy LPCHFC
-  1 12003 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 238-254 1 0 1 1 1
+  1 12003 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 237-252 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy LPCHPC
-  1 12004 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 255-265 1 0 1 1 1
+  1 12004 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 253-263 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy, all channels
-  1 12005 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-226,227-237,238-254,255-265 1 0 1 1 1
+  1 12005 0-33,34-41,42-55,56-69,70-109,110-129,130-169,170-209 210-225,226-236,237-252,253-263 1 0 1 1 1
 End

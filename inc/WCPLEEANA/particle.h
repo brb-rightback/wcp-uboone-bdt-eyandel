@@ -387,7 +387,7 @@ void LEEana::create_particle(SpaceInfo& space_info, PFevalInfo& pfeval, Particle
       double temp_proximity_2 = sqrt(pow(part_x-pfeval.reco_endXYZT[other_reco_part][0],2)+pow(part_y-pfeval.reco_endXYZT[other_reco_part][1],2)+pow(part_z-pfeval.reco_endXYZT[other_reco_part][2],2));
       double temp_proximity_3 = sqrt(pow(part_end_x-pfeval.reco_startXYZT[other_reco_part][0],2)+pow(part_end_y-pfeval.reco_startXYZT[other_reco_part][1],2)+pow(part_end_z-pfeval.reco_startXYZT[other_reco_part][2],2));
       double temp_proximity_4 = sqrt(pow(part_end_x-pfeval.reco_endXYZT[other_reco_part][0],2)+pow(part_end_y-pfeval.reco_endXYZT[other_reco_part][1],2)+pow(part_end_z-pfeval.reco_endXYZT[other_reco_part][2],2));
-      double temp_proximity = min({temp_proximity_1,temp_proximity_2,temp_proximity_3,temp_proximity_4});
+      double temp_proximity = std::min({temp_proximity_1,temp_proximity_2,temp_proximity_3,temp_proximity_4});
       if(temp_proximity<particle_info.proximity && temp_proximity<99999) particle_info.proximity=temp_proximity;
     }
 

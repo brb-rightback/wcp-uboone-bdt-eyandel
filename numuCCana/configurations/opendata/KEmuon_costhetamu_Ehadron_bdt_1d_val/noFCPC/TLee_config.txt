@@ -12,29 +12,29 @@
 #   numuCC_part_bdt_Act0p_1                          muon_costheta                227-246
 #   numuCC_part_bdt_Trk0p_1                          muon_costheta                247-266
 #   numuCC_part_bdt_G0p_1                            muon_costheta                267-286
-#   numuCC_part_bdt_Np_2                             Ehadron_new3_5_drop15_95     287-303
-#   numuCC_part_bdt_PorLNp_2                         Ehadron_new3_5_drop15_95     304-314
-#   numuCC_part_bdt_Scat0p_2                         Ehadron_new3_5_drop15_95     315-322
-#   numuCC_part_bdt_Act0p_2                          Ehadron_new3_5_drop15_95     323-331
-#   numuCC_part_bdt_Trk0p_2                          Ehadron_new3_5_drop15_95     332-342
-#   numuCC_part_bdt_G0p_2                            Ehadron_new3_5_drop15_95     343-356
+#   numuCC_part_bdt_Np_2                             Ehadron_new3_5_drop15_95     287-302
+#   numuCC_part_bdt_PorLNp_2                         Ehadron_new3_5_drop15_95     303-313
+#   numuCC_part_bdt_Scat0p_2                         Ehadron_new3_5_drop15_95     314-321
+#   numuCC_part_bdt_Act0p_2                          Ehadron_new3_5_drop15_95     322-329
+#   numuCC_part_bdt_Trk0p_2                          Ehadron_new3_5_drop15_95     330-339
+#   numuCC_part_bdt_G0p_2                            Ehadron_new3_5_drop15_95     340-349
 #
 # channels_observation flag_lookelsewhere
   18 1
 #
 # run index support target xsflux det add mcstat mcstatcor
 # muon energy and muon costheta -> hadronic energy Np
-  1 16101 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 287-303 1 0 1 1 1
+  1 16101 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 287-302 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy PorLNp
-  1 16102 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 304-314 1 0 1 1 1
+  1 16102 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 303-313 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy Scat0p
-  1 16103 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 315-322 1 0 1 1 1
+  1 16103 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 314-321 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy Act0p
-  1 16104 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 323-331 1 0 1 1 1
+  1 16104 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 322-329 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy Trk0p
-  1 16105 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 332-342 1 0 1 1 1
+  1 16105 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 330-339 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy G0p
-  1 16106 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 343-356 1 0 1 1 1
+  1 16106 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 340-349 1 0 1 1 1
 # muon energy and muon costheta -> hadronic energy, all channels
-  1 16107 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 287-303,304-314,315-322,323-331,332-342,343-356 1 0 1 1 1
+  1 16107 0-33,34-66,67-76,77-89,90-103,104-136,137-176,177-216,217-226,227-246,247-266,267-286 287-302,303-313,314-321,322-329,330-339,340-349 1 0 1 1 1
 End

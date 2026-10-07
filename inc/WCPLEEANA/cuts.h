@@ -15,6 +15,7 @@
 #include "pandora.h"
 #include "lantern.h"
 #include "glee.h"
+#include "particle.h"
 
 #include <map>
 #include <sstream>
@@ -60,6 +61,8 @@ namespace LEEana{
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV);
   double get_range_proton_KE_particle(PFevalInfo& pfeval, SpaceInfo& space, int i);
   int get_reco_leading_proton(PFevalInfo& pfeval, SpaceInfo& space, double KE_threshold, double& KE_lead, int& n_protons);
+  // charges of the primary muon's spacepoints, ordered from its start to its end as in create_particle (particle.h)
+  std::vector<double> get_reco_muon_spacepoints_q(PFevalInfo& pfeval, SpaceInfo& space, double tolerance=0.0001);
 
   std::vector<double> get_pandora_proton_KE(PandoraInfo& pandora, double TRACK_SCORE_CUT, bool return_MeV);
   std::vector<double> get_lantern_KE(LanternInfo& lantern, int pdg, double vtx_cut, bool return_MeV);
@@ -1086,6 +1089,50 @@ double LEEana::get_range_proton_KE_particle(PFevalInfo& pfeval, SpaceInfo& space
 // Leading reco proton: the primary WireCell proton (reco_pdg==2212, reco_mother==0) with the largest range KE, the one
 // that sets the reco Np category in get_particle_0pNp_bdt_bin. Returns its index (-1 if none) and fills its KE [MeV]
 // (0 if none) and the number of primary WireCell protons with range KE >= KE_threshold.
+std::vector<double> LEEana::get_reco_muon_spacepoints_q(PFevalInfo& pfeval, SpaceInfo& space, double tolerance){
+  std::vector<double> q;
+  // primary muon: the reco muon matching reco_muonMomentum (flag_prim_mu of particle.h)
+  int index = -1;
+  for(int i=0; i<pfeval.reco_Ntrack; i++){
+    if(pfeval.reco_pdg[i]==13 && pfeval.reco_startMomentum[i][3]>pfeval.reco_muonMomentum[3]-tolerance && pfeval.reco_startMomentum[i][3]<pfeval.reco_muonMomentum[3]+tolerance) index = i;
+  }
+  if(index<0) return q;
+
+  // its spacepoints in stored order (as floats, as in create_particle)
+  std::vector<double> x, y, z, q_stored;
+  for(size_t sp=0; sp<space.Trecchargeblob_spacepoints_real_cluster_id->size(); sp++){
+    if(space.Trecchargeblob_spacepoints_real_cluster_id->at(sp)!=pfeval.reco_id[index]) continue;
+    x.push_back((float)space.Trecchargeblob_spacepoints_x->at(sp));
+    y.push_back((float)space.Trecchargeblob_spacepoints_y->at(sp));
+    z.push_back((float)space.Trecchargeblob_spacepoints_z->at(sp));
+    q_stored.push_back((float)space.Trecchargeblob_spacepoints_q->at(sp));
+  }
+  if(x.empty()) return q;
+
+  // order them from the start to the end: reference point the neutrino vertex for primaries, the nearer of the mother's
+  // reco start/end for secondaries (see create_particle)
+  double part_start[3], part_end[3];
+  for(int c=0; c<3; c++){ part_start[c] = pfeval.reco_startXYZT[index][c]; part_end[c] = pfeval.reco_endXYZT[index][c]; }
+  double ref_point[3] = {0, 0, 0};
+  bool has_ref = false;
+  if(pfeval.reco_mother[index]==0){
+    ref_point[0] = pfeval.reco_nuvtxX; ref_point[1] = pfeval.reco_nuvtxY; ref_point[2] = pfeval.reco_nuvtxZ;
+    has_ref = true;
+  }else{
+    for(int mother_part=0; mother_part<pfeval.reco_Ntrack; mother_part++){
+      if(pfeval.reco_id[mother_part]!=pfeval.reco_mother[index]) continue;
+      double d_mother_end = sqrt(pow(part_start[0]-pfeval.reco_endXYZT[mother_part][0],2)+pow(part_start[1]-pfeval.reco_endXYZT[mother_part][1],2)+pow(part_start[2]-pfeval.reco_endXYZT[mother_part][2],2));
+      double d_mother_start = sqrt(pow(part_start[0]-pfeval.reco_startXYZT[mother_part][0],2)+pow(part_start[1]-pfeval.reco_startXYZT[mother_part][1],2)+pow(part_start[2]-pfeval.reco_startXYZT[mother_part][2],2));
+      for(int c=0; c<3; c++) ref_point[c] = (d_mother_end<=d_mother_start) ? pfeval.reco_endXYZT[mother_part][c] : pfeval.reco_startXYZT[mother_part][c];
+      has_ref = true;
+      break;
+    }
+  }
+  ParticleSegments segments = build_particle_segments(x, y, z, q_stored, part_start, part_end, has_ref ? ref_point : nullptr);
+  for(size_t k=0; k<segments.main.size(); k++) q.push_back(q_stored.at(segments.main.at(k)));
+  return q;
+}
+
 int LEEana::get_reco_leading_proton(PFevalInfo& pfeval, SpaceInfo& space, double KE_threshold, double& KE_lead, int& n_protons){
   int index = -1;
   KE_lead = 0;
@@ -1515,7 +1562,9 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     }
     std::tuple<bool,bool> result_part_FC = get_part_is_FC(pfeval,eval,method,threshold);
     double E_muon = get_muon_energy_new(pfeval, std::get<0>(result_part_FC), false, true);   // total energy, MeV
-    return get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern) - E_muon;
+    double Ehadron = get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern) - E_muon;
+    if (Ehadron<0) return 0;   // no hadronic energy (negative only by rounding)
+    return Ehadron;
   }else if (var_name == "Eavail"){
     // available energy: Enu without the added masses/binding energy (kine_reco_add_energy) and without the muon KE
     double Emu = pfeval.reco_muonMomentum[3]*1000-105.6583755;
@@ -1523,7 +1572,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     double Enu = get_reco_Enu_corr(kine, flag_data);
     double Eadd = kine.kine_reco_add_energy;
     double Eavail = Enu - Eadd - Emu;
-    if (Eavail<0) return -1000; //check for any odd cases
+    if (Eavail<0) return 0;   // no available energy
     return Eavail;
   }else if (var_name == "Eavail_new"
          || var_name == "Eavail_new2_5" || var_name == "Eavail_new2_10" || var_name == "Eavail_new2_15" || var_name == "Eavail_new2_20"
@@ -1554,7 +1603,7 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
       Enu = get_kine_var(kine, eval, pfeval, tagger, flag_data, enu_name, space, pandora, lantern);
     }
     double Eavail = Enu - kine.kine_reco_add_energy - KE_muon;
-    if (Eavail<0) return -1000; //check for any odd cases
+    if (Eavail<0) return 0;   // no available energy
     return Eavail;
 
   }else if (var_name == "muon_pt" || var_name == "muon_pl" || var_name == "Emu_costheta_bin" || var_name == "pl_pt_bin" || var_name == "Eavail_Emu_bin"
@@ -2006,6 +2055,24 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
     return tagger.all_veto_score;
   }else if(var_name == "VtxAct_bdt_score"){
   return tagger.VtxAct_bdt_score;
+  }else if(var_name.BeginsWith("muon_spacepoints_q_")){
+    // primary muon spacepoint charges (main sequence, ordered as in particle.h), raw charge: the particle.h BDT inputs are
+    // (q+10000)*10. muon_spacepoints_q_0 ... _4: the first five, _sum5: their sum, _med: the median (dQ/dx); -999 if missing
+    std::vector<double> q = get_reco_muon_spacepoints_q(pfeval, space);
+    if(var_name == "muon_spacepoints_q_med"){
+      if(q.empty()) return -999;
+      std::sort(q.begin(), q.end());
+      size_t size = q.size();
+      return (size % 2 == 0) ? (q.at(size / 2 - 1) + q.at(size / 2)) / 2.0 : q.at(size / 2);
+    }
+    if(var_name == "muon_spacepoints_q_sum5"){
+      if(q.size()<5) return -999;
+      return q.at(0) + q.at(1) + q.at(2) + q.at(3) + q.at(4);
+    }
+    TString k_str = var_name(19, var_name.Length()-19);
+    if(!k_str.IsDigit()) return -999;
+    size_t k = k_str.Atoi();
+    return (k<q.size()) ? q.at(k) : -999;
 
 
   }else if (var_name == "kine_reco_Eproton"){

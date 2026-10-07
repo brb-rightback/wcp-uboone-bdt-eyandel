@@ -1,0 +1,25 @@
+numuCC_part_bdt_LFCHFC                        all_veto_score                    24      -2.35   3.65            1       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LFCHFC                    all_veto_score                    24      -2.35   3.65            1       1               1       0               0               1               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LFCHFC                    all_veto_score                    24      -2.35   3.65            1       1               1       0               0               2               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LFCHFC                   all_veto_score                    24      -2.35   3.65            1       0               0       0.5             0               2               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LFCHFC                    all_veto_score                    24      -2.35   3.65            1       0               0       0               0               9               3       unity               0
+
+numuCC_part_bdt_LFCHPC                        all_veto_score                    24      -2.35   3.65            2       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LFCHPC                    all_veto_score                    24      -2.35   3.65            2       1               1       0               0               3               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LFCHPC                    all_veto_score                    24      -2.35   3.65            2       1               1       0               0               4               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LFCHPC                   all_veto_score                    24      -2.35   3.65            2       0               0       0.5             0               4               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LFCHPC                    all_veto_score                    24      -2.35   3.65            2       0               0       0               0               10              3       unity               0
+
+numuCC_part_bdt_LPCHFC                        all_veto_score                    24      -2.35   3.65            3       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LPCHFC                    all_veto_score                    24      -2.35   3.65            3       1               1       0               0               5               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LPCHFC                    all_veto_score                    24      -2.35   3.65            3       1               1       0               0               6               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LPCHFC                   all_veto_score                    24      -2.35   3.65            3       0               0       0.5             0               6               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LPCHFC                    all_veto_score                    24      -2.35   3.65            3       0               0       0               0               11              3       unity               0
+
+numuCC_part_bdt_LPCHPC                        all_veto_score                    24      -2.35   3.65            4       0               0       0               0               0               5       unity               0
+numuCC_part_bdt_sig_LPCHPC                    all_veto_score                    24      -2.35   3.65            4       1               1       0               0               7               2       cv_spline_rootino   0
+numuCC_part_bdt_bck_LPCHPC                    all_veto_score                    24      -2.35   3.65            4       1               1       0               0               8               2       cv_spline_rootino   0
+numuCC_part_bdt_dirt_LPCHPC                   all_veto_score                    24      -2.35   3.65            4       0               0       0.5             0               8               4       cv_spline_rootino   0
+numuCC_part_bdt_ext_LPCHPC                    all_veto_score                    24      -2.35   3.65            4       0               0       0               0               12              3       unity               0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le
