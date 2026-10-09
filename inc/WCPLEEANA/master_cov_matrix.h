@@ -33,6 +33,8 @@ namespace LEEana{
 
     void add_xs_config(TString xs_ch_filename = "./configurations/xs_ch.txt", TString xs_real_bin_filename = "./configurations/xs_real_bin.txt");
     void add_osc_config(TString osc_ch_filename = "./configurations/osc_ch.txt", TString osc_pars_filename = "./configurations/osc_parameter.txt");
+    // DetVar files of merge_det -m2 (no CV events): "#det_file #cv_file" per line (cv_file from merge_det -m3), ending with "end end"
+    void add_det_cv_config(TString det_cv_filename = "./configurations/det_cv_input.txt");
 
     void add_rw_config(int run=1);
     void print_rw(std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > > rw_info);
@@ -288,6 +290,11 @@ namespace LEEana{
     bool flag_reweight = false;
     int rw_type = 0;
     int xf_run = 0; // systematic number of gen_xf_cov_matrix / gen_xs_cov_matrix, for the files with all knobs
+
+    // DetVar files without the CV events (merge_det -m2), see add_det_cv_config
+    bool flag_det_cv = false;
+    std::map<TString, TString> map_inputfile_cv; // DetVar file --> CV file with the flag_match_rse_XX branches
+    int det_run = 0; // DetVar number of gen_det_cov_matrix
     std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > >  rw_info;
 
     // special weights ...

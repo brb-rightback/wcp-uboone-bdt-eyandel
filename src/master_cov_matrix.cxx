@@ -564,6 +564,23 @@ void LEEana::CovMatrix::add_osc_config(TString osc_ch_filename, TString osc_pars
 
 }
 
+void LEEana::CovMatrix::add_det_cv_config(TString det_cv_filename){
+  flag_det_cv = true;
+  std::ifstream infile(det_cv_filename);
+  TString det_filename, cv_filename;
+  while(infile >> det_filename >> cv_filename){
+    if (det_filename == "end" || det_filename == "End") break;
+    if (det_filename.BeginsWith("#")) continue;
+    if (map_inputfile_cv.find(det_filename) != map_inputfile_cv.end() && map_inputfile_cv[det_filename] != cv_filename){
+      std::cout << "ERROR! " << det_filename << " has two CV files in " << det_cv_filename << std::endl;
+      exit(1);
+    }
+    if (map_inputfile_info.find(det_filename) == map_inputfile_info.end()) std::cout << "WARNING: " << det_filename << " of " << det_cv_filename << " is not an input file" << std::endl;
+    map_inputfile_cv[det_filename] = cv_filename;
+  }
+  std::cout << "===> DetVar files with a separate CV file (" << det_cv_filename << "): " << map_inputfile_cv.size() << std::endl;
+}
+
 void LEEana::CovMatrix::add_rw_config( int run ){
   if (run==18) rw_type=1;
   if (run==19) rw_type=2;
