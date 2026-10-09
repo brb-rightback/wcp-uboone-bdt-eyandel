@@ -1,6 +1,8 @@
 #ifndef UBOONE_LEE_EVAL
 #define UBOONE_LEE_EVAL
 
+#include "TString.h"
+
 namespace LEEana{
   struct EvalInfo{
     bool is_match_found_int;
@@ -88,6 +90,12 @@ namespace LEEana{
     Bool_t flag_gl;
     Int_t gl_sel_type, gl_file_type;
     Float_t gl_true_Enu, gl_true_Elep, gl_reco_Eshower,gl_reco_shower_dirz, gl_reco_shower_implied_dirz,  gl_simple_pot_weight, gl_rem_orig_wc_pot_weight, gl_new_pot_weight, gl_overlap_weight, gl_overlap_weight_tweaked, gl_wc_total_overlapped_weight;
+
+    // sample definition the file was made from (bdt_convert -a), kept if the input tree has it
+    // (initialized: SetBranchAddress needs a null or valid pointer)
+    int flag_save_samdef = 0;
+    TString* samdef = nullptr;
+
 };
 
  void set_tree_address(TTree *tree0, EvalInfo& eval_info, int flag = 1);
@@ -206,6 +214,14 @@ void LEEana::set_tree_address(TTree *tree0, EvalInfo& eval_info, int flag){
 
     if (tree0->GetBranch("weight_change")) tree0->SetBranchAddress("weight_change",&eval_info.weight_change);
   }
+
+
+  eval_info.flag_save_samdef=0;
+  if (tree0->GetBranch("samdef")){
+    eval_info.flag_save_samdef=1;
+    tree0->SetBranchAddress("samdef",&eval_info.samdef);
+  }
+
 }
 
 void LEEana::put_tree_address(TTree *tree0, EvalInfo& eval_info, int flag){
@@ -310,7 +326,11 @@ void LEEana::put_tree_address(TTree *tree0, EvalInfo& eval_info, int flag){
     tree0->Branch("gl_overlap_weight_tweaked",&eval_info.gl_overlap_weight_tweaked,"gl_overlap_weight_tweaked/F");
     tree0->Branch("gl_wc_total_overlapped_weight",&eval_info.gl_wc_total_overlapped_weight,"gl_wc_total_overlapped_weight/F");
   }
-  
+
+  if (eval_info.flag_save_samdef){
+    tree0->Branch("samdef","TString",&eval_info.samdef);
+  }
+
 }
 
 

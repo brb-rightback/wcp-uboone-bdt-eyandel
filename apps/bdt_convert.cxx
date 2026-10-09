@@ -7,6 +7,10 @@
 #include <map>
 #include <string>
 #include <set>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <unordered_map>
 
 #include "TChain.h"
 #include "TFile.h"
@@ -44,7 +48,7 @@ using namespace LEEana;
 int main( int argc, char** argv )
 {
   if (argc < 3) {
-    std::cout << "bdt_convert #input_file #output_file -c[weight_cut_val] -l[traing_list] -g[global_file_type]" << std::endl;
+    std::cout << "bdt_convert #input_file #output_file -c[weight_cut_val] -l[traing_list] -g[global_file_type] -i[run-subrun removal list] -a[samdef] -b[keep only BDT training subruns]" << std::endl;
     return -1;
   }
 
@@ -56,6 +60,7 @@ int main( int argc, char** argv )
 
   TString training_list = "";
   string global_file_type = "";
+  TString remove_individual_run_list = "";
   int skip_cut = 0;
   int flag_numi = 0;
 
@@ -68,6 +73,11 @@ int main( int argc, char** argv )
   bool flag_spbdt=false;
 
   int remove_lantern_fails = true;
+
+  int flag_set_samdef = 0;
+  TString samdef="";
+
+  int flag_keep_only_bdt_train = 0;
 
   for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
@@ -107,6 +117,16 @@ int main( int argc, char** argv )
     case 'r':
       remove_lantern_fails = atoi(&argv[i][2]);
       break;
+    case 'i':
+      remove_individual_run_list = &argv[i][2]; // runs / subruns to remove, lines of "run subrun1 subrun2 ...", subrun -1 for the whole run
+      break;
+    case 'a':
+      flag_set_samdef = 1;
+      samdef = &argv[i][2]; // sample definition, saved as samdef in the output trees
+      break;
+    case 'b':
+      flag_keep_only_bdt_train = atoi(&argv[i][2]); // with -l: 0 remove the BDT training subruns, 1 keep only them, -1 keep all
+      break;
     }
   }
 
@@ -134,6 +154,42 @@ int main( int argc, char** argv )
     // return 0;
   }
 
+  // Additional runs / subruns to remove (e.g. the overlay periods simulated with 0 electron lifetime)
+  std::unordered_map<int,std::vector<int>> remove_individual_run;
+  if (remove_individual_run_list != ""){
+    ifstream infile(remove_individual_run_list);
+    if (!infile.good()) {
+      std::cout<<"Unable to open list of individual runs to remove. Exiting"<<std::endl;
+      return 1;
+    }
+    std::string lineContent;
+    while(std::getline(infile, lineContent)){
+      int run = -1;
+      std::vector<int> subrun; // the subruns of this line only
+      std::stringstream ss(lineContent);
+      int entry;
+      // Extract each subrun entry from the given line
+      while (ss >> entry) {
+        if(run<0) { run = entry; }
+        else{
+          subrun.push_back(entry);
+        }
+      }
+      if (run<0) continue; // empty line
+      if (subrun.size()==0) {
+        std::cout<<"No subruns given for run "<<run<<" in "<<remove_individual_run_list<<" (use -1 for all subruns). Exiting"<<std::endl;
+        return 1;
+      }
+      remove_individual_run[run] = subrun;
+    }
+  }
+
+
+  if (flag_keep_only_bdt_train) {
+    std::cout<<"Only saving the run-subruns used to train Wire-Cell BDTs"<<std::endl;
+    if(flag_check_run_subrun==0) std::cout<<"WARNING, flag_check_run_subrun=false, so flag_keep_only_bdt_train has no effect"<<std::endl;
+    std::cout<<std::endl;
+  }
 
   if (skip_cut == 0)
     std::cout << "Skip runs for BNB side " << std::endl;
@@ -145,6 +201,9 @@ int main( int argc, char** argv )
 
 
   tree_wrangler wrangler(flag_config, config_file_name, delimiter);
+  if(flag_set_samdef) wrangler.set_samdef(flag_set_samdef, samdef);
+  tree_wrangler wrangler_ex(flag_config, config_file_name, delimiter,2); // "pick" section: selected trees and branches
+  if(flag_set_samdef) wrangler_ex.set_samdef(flag_set_samdef, samdef);
   tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
 
   TFile *file1 = new TFile(input_file);
@@ -159,7 +218,16 @@ int main( int argc, char** argv )
 
   //Load other trees from directories as specified by the config file
   wrangler.get_old_trees(file1);
+  wrangler_ex.get_old_trees(file1);
   wrangler_pot.get_old_trees(file1);
+
+  // wcpselection is written by bdt_convert itself (copying it as well would duplicate its trees, and picking branches
+  // would switch off ones read here)
+  if (wrangler.names_wi_directories_and_trees.count("wcpselection") || wrangler_ex.names_wi_directories_and_trees.count("wcpselection")
+      || wrangler_pot.names_wi_directories_and_trees.count("wcpselection")){
+    std::cout<<"ERROR: the config "<<config_file_name<<" lists wcpselection, which bdt_convert writes itself. Remove it from the config. Exiting"<<std::endl;
+    return 1;
+  }
 
   if (T_eval->GetBranch("weight_cv")) flag_data =false;
   //  if (T_eval->GetBranch("file_type")) flag_use_global_file_type = false;
@@ -181,6 +249,7 @@ int main( int argc, char** argv )
 
   //Setup the directories specified in the config file
   wrangler.set_new_trees(file2);
+  wrangler_ex.set_new_trees(file2);
   wrangler_pot.set_new_trees(file2);
 
   // Build the pairs of pot trees
@@ -3786,7 +3855,12 @@ int main( int argc, char** argv )
   T_BDTvars->SetBranchStatus("numu_cc_flag",1);
 
   int haveReco = 1;
-  if(T_lantern && remove_lantern_fails==1 && T_lantern->GetBranch("haveReco")) T_lantern->SetBranchAddress("haveReco",&haveReco);
+  if(T_lantern && remove_lantern_fails==1 && T_lantern->GetBranch("haveReco")){
+    // a "pick" of lantern/EventTree switches off the branches it does not list on this tree; its copy is already made, so
+    // switching haveReco on here does not add it to the output
+    T_lantern->SetBranchStatus("haveReco",1);
+    T_lantern->SetBranchAddress("haveReco",&haveReco);
+  }
   else if(remove_lantern_fails==1) std::cout<<"WARNING: No lantern/EventTree haveReco branch found, will not remove subruns where Lantern container failed"<<std::endl;
 
   std::set<std::pair<int,int> > remove_set;
@@ -3803,7 +3877,23 @@ int main( int argc, char** argv )
       remove_set.insert(std::make_pair(eval.run, eval.subrun));
       continue;
     }
-  
+
+    // Remove runs if they are in the extra list provided
+    auto rs_it = remove_individual_run.find(eval.run);
+    if (rs_it != remove_individual_run.end()) {
+      // Removing all subruns in this run
+      if ((*rs_it).second.at(0)==-1){
+        remove_set.insert(std::make_pair(eval.run, eval.subrun));
+        continue;
+      }
+      // Check if this subrun is in the list of ones to remove in the given run
+      auto s_it = std::find((*rs_it).second.begin(), (*rs_it).second.end(), eval.subrun);
+      if (s_it != (*rs_it).second.end()) {
+        remove_set.insert(std::make_pair(eval.run, eval.subrun));
+        continue;
+      }
+    }
+
     if (flag_check_run_subrun){
       if (flag_use_global_file_type){
 	(*eval.file_type) = global_file_type;
@@ -3811,12 +3901,21 @@ int main( int argc, char** argv )
       auto it1 = map_type_run_subrun.find(*eval.file_type);
 
       if (it1 != map_type_run_subrun.end()){
-
-	// hack for now ...
-	if (it1->second.find(std::make_pair(eval.run, eval.subrun)) != it1->second.end()) {
+	// removing run-subruns used to train the BDTs
+	if ( it1->second.find(std::make_pair(eval.run, eval.subrun)) != it1->second.end() && flag_keep_only_bdt_train==0 ) {
 	  remove_set.insert(std::make_pair(eval.run, eval.subrun));
 	  continue;
 	}
+        // removing run-subruns NOT used to train the BDTs
+        if ( it1->second.find(std::make_pair(eval.run, eval.subrun)) == it1->second.end() && flag_keep_only_bdt_train==1 ) {
+          remove_set.insert(std::make_pair(eval.run, eval.subrun));
+          continue;
+        }
+      }
+      // removing run-subruns NOT used to train the BDTs
+      else if(it1 == map_type_run_subrun.end() && flag_keep_only_bdt_train==1){
+        remove_set.insert(std::make_pair(eval.run, eval.subrun));
+        continue;
       }
 
       //      std::cout << flag_use_global_file_type << " " << *eval.file_type  << " " << eval.run << " " << eval.subrun << " " << remove_set.size() << std::endl;
@@ -3864,7 +3963,10 @@ int main( int argc, char** argv )
   T_eval->SetBranchStatus("*",1);
   T_BDTvars->SetBranchStatus("*",1);
   T_spacepoints->SetBranchStatus("*",1);
-  //  for (int i=0;i!=100;i++){
+
+  if(flag_set_samdef){
+    t1->Branch("samdef", "TString", &samdef);
+  }
 
   int nentries = T_BDTvars->GetEntries();
   std::cout<<"Begin looping over "<<nentries<<" events"<<std::endl;
@@ -4138,6 +4240,12 @@ int main( int argc, char** argv )
     for(auto tree_it=wrangler.new_trees->begin(); tree_it!=wrangler.new_trees->end(); tree_it++){
         (*tree_it)->Fill();
     }
+    for(auto tree_it=wrangler_ex.old_trees->begin(); tree_it!=wrangler_ex.old_trees->end(); tree_it++){
+        (*tree_it)->GetEntry(i);
+    }
+    for(auto tree_it=wrangler_ex.new_trees->begin(); tree_it!=wrangler_ex.new_trees->end(); tree_it++){
+        (*tree_it)->Fill();
+    }
 
     //    std::cout << pfeval.reco_daughters->size() << std::endl;
     //    break;
@@ -4188,8 +4296,7 @@ int main( int argc, char** argv )
 
       (*pot_tree_it)->old_pot_tree->GetEntry(i);
 
-      // This is dropping run-subruns without and events, don't do this here.
-      //if (remove_set.find(std::make_pair((*pot_tree_it).runNo, (*pot_tree_it).subRunNo)) != remove_set.end()) continue;
+      if (remove_set.find(std::make_pair((*pot_tree_it)->runNo, (*pot_tree_it)->subRunNo)) != remove_set.end()) continue;
       if (flag_data && skip_cut == 0){
         if (good_runlist_set.find((*pot_tree_it)->runNo) == good_runlist_set.end()) continue;
         if (low_lifetime_set.find((*pot_tree_it)->runNo) != low_lifetime_set.end()) continue;

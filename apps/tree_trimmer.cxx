@@ -586,11 +586,10 @@ int main( int argc, char** argv )
       std::cout<<"Unable to open list of individual runs to remove. Exiting"<<std::endl;
       return 1;
     }
-    int run;
-    std::vector<int> subrun;
     std::string lineContent;
     while(std::getline(infile, lineContent)){
-      run=-1;
+      int run = -1;
+      std::vector<int> subrun; // the subruns of this line only
       std::stringstream ss(lineContent);
       int entry;
       // Extract each subrun entry from the given line
@@ -599,6 +598,11 @@ int main( int argc, char** argv )
         else{
           subrun.push_back(entry);
         }
+      }
+      if (run<0) continue; // empty line
+      if (subrun.size()==0) {
+        std::cout<<"No subruns given for run "<<run<<" in "<<remove_individual_run_list<<" (use -1 for all subruns). Exiting"<<std::endl;
+        return 1;
       }
       remove_individual_run[run] = subrun;
     }

@@ -43,6 +43,7 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
 	    if(line == "end" || line == "End") break;
 	    std::getline(config_file, line);
 	  }
+	  if(line == "end" || line == "End") break; // no exclusive section in the config
 	  first_pass = false;
 	  std::getline(config_file, line);
 	}
@@ -52,6 +53,7 @@ LEEana::tree_wrangler::tree_wrangler(bool configure, std::string config_file_nam
             if(line == "end" || line == "End") break;
             std::getline(config_file, line);
           }
+          if(line == "end" || line == "End") break; // no pick section in the config
           first_pass = false;
           std::getline(config_file, line);
         }
@@ -435,6 +437,21 @@ int LEEana::get_T_rse(TFile* file1, TTree*& T_rse, int &run, int &subrun, int &e
         T_rse->SetBranchAddress("subrun",&subrun);
         T_rse->SetBranchAddress("event",&event);
         std::cout<<'\n'<<"Using T_eval for the run-subrun tree"<<'\n'<<std::endl;
+        return 1;
+      }
+    }
+    // merge_det files: the CV trees carry the _cv suffix
+    T_rse=(TTree*)file1->Get("wcpselection/T_eval_cv");
+    if(T_rse){
+      if(T_rse->GetBranch("run") && T_rse->GetBranch("subrun") && T_rse->GetBranch("event")){
+        T_rse->SetBranchStatus("*",0);
+        T_rse->SetBranchStatus("run",1);
+        T_rse->SetBranchStatus("subrun",1);
+        T_rse->SetBranchStatus("event",1);
+        T_rse->SetBranchAddress("run",&run);
+        T_rse->SetBranchAddress("subrun",&subrun);
+        T_rse->SetBranchAddress("event",&event);
+        std::cout<<'\n'<<"Using T_eval_cv for the run-subrun tree"<<'\n'<<std::endl;
         return 1;
       }
     }
