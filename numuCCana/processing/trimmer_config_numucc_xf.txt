@@ -1,0 +1,11 @@
+exclusive
+wcpselection T_pot runNo,subRunNo,pot_tor875good
+nuselection SubRun run,subRun,pot
+singlephotonana run_subrun_tree run,subrun,subrun_pot
+lantern potTree run,subrun,totGoodPOT
+pick
+wcpselection T_BDTvars,T_eval,T_PFeval,T_KINEvars,T_spacepoints,T_weight all all all all Trecchargeblob_spacepoints_x,Trecchargeblob_spacepoints_y,Trecchargeblob_spacepoints_z,Trecchargeblob_spacepoints_q,Trecchargeblob_spacepoints_cluster_id,Trecchargeblob_spacepoints_real_cluster_id,Trecchargeblob_spacepoints_sub_cluster_id all
+nuselection NeutrinoSelectionFilter run,sub,evt,n_pfps,nslice,pfpdg,pfp_generation_v,slice_orig_pass_id,trk_energy_proton_v,trk_llr_pid_score_v,trk_score_v
+lantern EventTree run,subrun,event,haveReco,nTracks,trackDistToVtx,trackElScore,trackIsSecondary,trackMuScore,trackPhScore,trackPID,trackPiScore,trackPrScore,trackRecoE
+singlephotonana eventweight_tree run,subrun,event,GTruth_ResNum
+end

@@ -2,6 +2,7 @@
 
 my $new_config_string = $ARGV[0];
 $new_config_string =~ s/configurations\///g;
+$new_config_string =~ s/\/$//;
 print "New configuration is $new_config_string\n";
 my @new_config = split(/\//, $new_config_string);
 
