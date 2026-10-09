@@ -109,6 +109,15 @@ namespace LEEana{
 
     std::pair<std::vector<int>, std::vector<int> > get_events_weights(TString input_filename, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::pair<int, float> > > > >& map_passed_events, std::map<TString, double>& map_filename_pot, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos);
 
+    // flux / cross section systematics (xf_cov_matrix, xs_cov_matrix -r<run>): a file of xf_input.txt is used for the
+    // systematic number run if its #period is run, or 0 (a file with the weights of all knobs, merge_xf ... all; run 1-17)
+    bool use_xf_file(int period, int run){return period == run || (period == 0 && get_xf_knob_name(run) != "");};
+    // knob of T_weight to use for the systematic number xf_run (see get_xf_knob_name); true for a file with the weights of
+    // several knobs, whose events without weights for this knob are then skipped
+    bool get_xf_option(TTree *T_weight, TString& option, TString input_filename);
+    // switch off the branches without an address (the other knobs of a file with several knobs)
+    void enable_addressed_branches_only(TTree *T);
+
     void fill_xf_histograms(int num, int tot_num, int acc_no, int no, int tot_no, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::pair<int, float> > > > >& map_passed_events, std::vector<TH1F*>& vec_no_hist, std::vector<int>& vec_no_lee,  std::map<TString, TH1F*>& map_histoname_hist);
      void fill_xf_histograms(std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::pair<int, float> > > > >& map_passed_events, std::vector<TH1F*>& vec_no_hist, std::vector<int>& vec_no_lee,  std::map<TString, TH1F*>& map_histoname_hist);
 
@@ -278,6 +287,7 @@ namespace LEEana{
     //reweighting related
     bool flag_reweight = false;
     int rw_type = 0;
+    int xf_run = 0; // systematic number of gen_xf_cov_matrix / gen_xs_cov_matrix, for the files with all knobs
     std::tuple< bool, std::vector< std::tuple<bool, TString, TString, double, double, bool, bool, bool, std::vector<double>, std::vector<double>  > > >  rw_info;
 
     // special weights ...

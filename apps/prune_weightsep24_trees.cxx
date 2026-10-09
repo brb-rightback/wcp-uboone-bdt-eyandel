@@ -56,6 +56,7 @@ int main( int argc, char** argv )
     std::cout << "15 reinteractions_piminus_Geant4" << std::endl;
     std::cout << "16 reinteractions_piplus_Geant4" << std::endl;
     std::cout << "17 reinteractions_proton_Geant4" << std::endl;
+    std::cout << " all: every knob above in one tree (named all)" << std::endl;
 
     return -1;
   }
@@ -138,8 +139,8 @@ int main( int argc, char** argv )
   std::vector<float> weight_f2;
   std::map<std::string, TH1F*> hwmap;
 
-  if (SaveGenieFluxKnob == "UBGenieFluxSmallUni") {
-    UBTree = new TTree("UBGenieFluxSmallUni","UBGenieFluxSmallUni");
+  if (SaveGenieFluxKnob == "UBGenieFluxSmallUni" || SaveGenieFluxKnob == "all") {
+    UBTree = new TTree(SaveGenieFluxKnob.c_str(), SaveGenieFluxKnob.c_str());
     UBTree->Branch("run", &run, "run/I");
     UBTree->Branch("subrun", &subrun, "subrun/I");
     UBTree->Branch("event", &event, "event/I");
@@ -153,6 +154,13 @@ int main( int argc, char** argv )
       weight_f1.emplace(knob, std::vector<float>());
       UBTree->Branch(knob.c_str(), &(weight_f1.at(knob)) );
       hwmap.emplace(knob, new TH1F(("h_"+knob).c_str(), ("h_"+knob).c_str(), 1000, 0,2));
+    }
+    if (SaveGenieFluxKnob == "all") {
+      for (auto const& knob : UBGenieFluxBigUni) {
+        weight_f1.emplace(knob, std::vector<float>());
+        UBTree->Branch(knob.c_str(), &(weight_f1.at(knob)) );
+        hwmap.emplace(knob, new TH1F(("h_"+knob).c_str(), ("h_"+knob).c_str(), 1000, 0,2));
+      }
     }
 
   }
@@ -183,13 +191,15 @@ int main( int argc, char** argv )
     //   cout << ele.first << " " << ele.second.size() << endl;
     // }
 
-    for (auto x: weight_f1) { x.second.clear(); }
+    for (auto& x: weight_f1) { x.second.clear(); }
     weight_f2.clear();
  
     if (mcweight_filled>0) {
       // cout << mcweight_filled << endl;
-      if (SaveGenieFluxKnob=="UBGenieFluxSmallUni") {
-        for(auto const& knob: UBGenieFluxSmallUni) {
+      if (SaveGenieFluxKnob=="UBGenieFluxSmallUni" || SaveGenieFluxKnob=="all") {
+        // the knobs of the tree: the cross section knobs (and for "all" the flux / reinteraction knobs)
+        for(auto& kv: weight_f1) {
+          const std::string& knob = kv.first;
           // weight_f1->push_back(mcweight->at(knob));
           weight_f1.at(knob) = mcweight->at(knob);
 

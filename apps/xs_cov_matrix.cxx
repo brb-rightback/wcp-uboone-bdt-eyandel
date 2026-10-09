@@ -92,7 +92,7 @@ int main( int argc, char** argv )
     int file_no = std::get<4>(it->second);
 
     
-    if (period == run){
+    if (cov.use_xf_file(period, run)){
       outfile_name = out_filename;
       std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = cov.get_histograms(input_filename, 0);
       

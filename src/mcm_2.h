@@ -2,6 +2,7 @@
 #include "TRandom3.h"
 
 void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_covch_hist, std::map<TString, TH1F*>& map_histoname_hist, TVectorD* vec_mean,  TMatrixD* cov_xf_mat){
+  xf_run = run; // knob of the files with the weights of all knobs (get_xf_option)
   // prepare the maps ... name --> no,  covch, lee
   std::map<TString, std::tuple<int, int, int, TString>> map_histoname_infos ;
   std::map<int, TString> map_no_histoname;
@@ -12,7 +13,7 @@ void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_cov
     int filetype = std::get<0>(it->second);
     int period = std::get<1>(it->second);
 
-    if (period != run) continue;
+    if (!use_xf_file(period, run)) continue;
     TString out_filename = std::get<2>(it->second);
     int file_no = std::get<4>(it->second);
     std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = get_histograms(input_filename,0);
@@ -52,7 +53,7 @@ void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_cov
     TString input_filename = it->first;
     //int filetype = std::get<0>(it->second);
     int period = std::get<1>(it->second);
-    if (period != run) continue;
+    if (!use_xf_file(period, run)) continue;
 
 
     //map_all_events[input_filename];
@@ -117,7 +118,7 @@ void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_cov
 	    TString histoname = (*it2).first;
 	    TString input_filename = map_histogram_inputfile[histoname];
 	    auto it3 = map_inputfile_info.find(input_filename);
-	    int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+	    int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
 	    int norm_period = std::get<6>(it3->second);
 	    double mc_pot = map_filename_pot[input_filename];
 	    //std::cout << mc_pot << std::endl;
@@ -132,7 +133,7 @@ void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_cov
 	    TString histoname = (*it2).first;
 	    TString input_filename = map_histogram_inputfile[histoname];
 	    auto it3 = map_inputfile_info.find(input_filename);
-	    int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+	    int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
 	    int norm_period = std::get<6>(it3->second);
 	    data_pot = std::get<5>(map_inputfile_info[input_filename]);
 	    double ratio = data_pot/temp_map_mc_acc_pot[norm_period];
@@ -198,7 +199,7 @@ void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_cov
 	TString histoname = (*it2).first;
 	TString input_filename = map_histogram_inputfile[histoname];
 	auto it3 = map_inputfile_info.find(input_filename);
-	int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+	int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
 	int norm_period = std::get<6>(it3->second);
 	double mc_pot = map_filename_pot[input_filename];
 	//std::cout << mc_pot << std::endl;
@@ -216,7 +217,7 @@ void LEEana::CovMatrix::gen_xf_cov_matrix(int run, std::map<int, TH1F*>& map_cov
 	TString histoname = (*it2).first;
 	TString input_filename = map_histogram_inputfile[histoname];
 	auto it3 = map_inputfile_info.find(input_filename);
-	int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+	int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
 	int norm_period = std::get<6>(it3->second);
 	data_pot = std::get<5>(map_inputfile_info[input_filename]);
 	double ratio = data_pot/temp_map_mc_acc_pot[norm_period];
@@ -696,7 +697,16 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     option = "reinteractions_proton_Geant4";
   }
 
+  // file with the weights of all knobs (merge_xf ... all): the knob of this systematic number, read alone
+  bool flag_xf_combined = get_xf_option(T_weight, option, input_filename);
   set_tree_address(T_weight, weight, option);
+  if (flag_xf_combined){
+    enable_addressed_branches_only(T_weight);
+    if (T_weight->GetEntries() != T_eval->GetEntries()){
+      std::cout << "ERROR: " << input_filename << ": T_weight has " << T_weight->GetEntries() << " entries, T_eval " << T_eval->GetEntries() << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  }
   //std::cout << T_eval->GetEntries() << " " << T_weight->GetEntries() << " " << option << std::endl;
 
   std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = get_histograms(input_filename,0);
@@ -719,6 +729,14 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
     if(T_glee) T_glee->GetEntry(i);
+    if (flag_xf_combined){
+      if (weight.run != eval.run || weight.event != eval.event){
+        std::cout << "ERROR: " << input_filename << " entry " << i << ": T_weight run/event " << weight.run << " " << weight.event << " differs from T_eval " << eval.run << " " << eval.event << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      // only the events with weights for this knob, as in its own merge_xf file
+      if (get_size(weight, option) == 0) continue;
+    }
 
     //std::cout << i << std::endl;
 

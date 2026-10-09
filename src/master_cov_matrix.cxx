@@ -681,6 +681,7 @@ bool LEEana::CovMatrix::is_xs_chname(TString name){
 }
 
 void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_covch_hists, std::map<TString, std::tuple<TH1F*, TH1F*, TH1F*, TH2F*, int> >& map_histoname_hists, TVectorD* vec_mean,  TMatrixD* cov_xs_mat, TVectorD* vec_signal, TMatrixD* mat_R, int flag_save_each_universe){
+  xf_run = run; // knob of the files with the weights of all knobs (get_xf_option)
   // prepare the maps ... name --> no,  covch, lee
   std::map<TString, std::tuple<int, int, int, TString>> map_histoname_infos ;
   std::map<int, TString> map_no_histoname;
@@ -691,7 +692,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     int filetype = std::get<0>(it->second);
     int period = std::get<1>(it->second);
 
-    if (period != run) continue;
+    if (!use_xf_file(period, run)) continue;
     TString out_filename = std::get<2>(it->second);
     int file_no = std::get<4>(it->second);
     std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = get_histograms(input_filename,0);
@@ -729,7 +730,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
     TString input_filename = it->first;
     //int filetype = std::get<0>(it->second);
     int period = std::get<1>(it->second);
-    if (period != run) continue;
+    if (!use_xf_file(period, run)) continue;
 
     //map_all_events[input_filename];
     std::pair<std::vector<int>, std::vector<int>> lengths_pair = get_events_weights_xs(input_filename, map_passed_events, map_filename_pot, map_histoname_infos);
@@ -842,7 +843,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
      	    TString histoname = (*it2).first;
      	    TString input_filename = map_histogram_inputfile[histoname];
      	    auto it3 = map_inputfile_info.find(input_filename);
-     	    int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+     	    int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
      	    int norm_period = std::get<6>(it3->second);
      	    double mc_pot = map_filename_pot[input_filename];
      	    //std::cout << mc_pot << std::endl;
@@ -857,7 +858,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
      	    TString histoname = (*it2).first;
      	    TString input_filename = map_histogram_inputfile[histoname];
      	    auto it3 = map_inputfile_info.find(input_filename);
-     	    int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+     	    int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
      	    int norm_period = std::get<6>(it3->second);
      	    data_pot = std::get<5>(map_inputfile_info[input_filename]);
      	    double ratio = data_pot/temp_map_mc_acc_pot[norm_period];
@@ -1019,7 +1020,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
      	TString histoname = (*it2).first;
      	TString input_filename = map_histogram_inputfile[histoname];
      	auto it3 = map_inputfile_info.find(input_filename);
-     	int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+     	int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
      	int norm_period = std::get<6>(it3->second);
      	double mc_pot = map_filename_pot[input_filename];
      	//std::cout << mc_pot << std::endl;
@@ -1036,7 +1037,7 @@ void LEEana::CovMatrix::gen_xs_cov_matrix(int run, std::map<int, std::tuple<TH1F
      	TString histoname = (*it2).first;
      	TString input_filename = map_histogram_inputfile[histoname];
      	auto it3 = map_inputfile_info.find(input_filename);
-     	int period = std::get<1>(it3->second);  if (period != run) continue; // skip ...
+     	int period = std::get<1>(it3->second);  if (!use_xf_file(period, run)) continue; // skip ...
      	int norm_period = std::get<6>(it3->second);
      	data_pot = std::get<5>(map_inputfile_info[input_filename]);
      	double ratio = data_pot/temp_map_mc_acc_pot[norm_period];
@@ -1402,6 +1403,41 @@ void LEEana::CovMatrix::fill_xs_histograms(std::map<TString, std::set<std::tuple
 
 
 
+}
+
+// Knob of T_weight for the systematic number xf_run. A file with the weights of one knob (one merge_xf file per knob)
+// keeps the knob found from its branches (option); with #period 0 it must be the knob of xf_run. A file with the weights
+// of several knobs (merge_xf ... all) gives the knob of xf_run; returns true for such a file.
+bool LEEana::CovMatrix::get_xf_option(TTree *T_weight, TString& option, TString input_filename){
+  if (rw_type == 1 || rw_type == 2) return false; // reweighting systematics, option given by rw_type
+  int n_knobs = 0;
+  for (int i=1;i<=17;i++){
+    TString knob = get_xf_knob_name(i);
+    if (T_weight->GetBranch(knob == "UBGenieFluxSmallUni" ? "All_UBGenie" : knob.Data())) n_knobs++;
+  }
+  TString knob_run = get_xf_knob_name(xf_run);
+  if (n_knobs > 1){
+    if (knob_run == "" || !T_weight->GetBranch(knob_run == "UBGenieFluxSmallUni" ? "All_UBGenie" : knob_run.Data())){
+      std::cout << "ERROR: " << input_filename << " has the weights of several knobs, but none of systematic number " << xf_run << std::endl;
+      exit(EXIT_FAILURE);
+    }
+    option = knob_run;
+    return true;
+  }
+  auto it = map_inputfile_info.find(input_filename);
+  if (it != map_inputfile_info.end() && std::get<1>(it->second) == 0 && option != knob_run){
+    std::cout << "ERROR: " << input_filename << " (#period 0) has the weights of " << option << " only, not of systematic number " << xf_run << " (" << knob_run << ")" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+  return false;
+}
+
+void LEEana::CovMatrix::enable_addressed_branches_only(TTree *T){
+  TObjArray *branches = T->GetListOfBranches();
+  for (int i=0;i!=branches->GetEntries();i++){
+    TBranch *br = (TBranch*)branches->At(i);
+    if (br->GetAddress() == 0) T->SetBranchStatus(br->GetName(), 0);
+  }
 }
 
 std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_weights_xs(TString input_filename, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::map<TString, double>& map_filename_pot, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos){
@@ -1784,7 +1820,16 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     option = "reinteractions_proton_Geant4";
   }
 
+  // file with the weights of all knobs (merge_xf ... all): the knob of this systematic number, read alone
+  bool flag_xf_combined = get_xf_option(T_weight, option, input_filename);
   set_tree_address(T_weight, weight, option);
+  if (flag_xf_combined){
+    enable_addressed_branches_only(T_weight);
+    if (T_weight->GetEntries() != T_eval->GetEntries()){
+      std::cout << "ERROR: " << input_filename << ": T_weight has " << T_weight->GetEntries() << " entries, T_eval " << T_eval->GetEntries() << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  }
   //std::cout << T_eval->GetEntries() << " " << T_weight->GetEntries() << " " << option << std::endl;
 
   std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = get_histograms(input_filename,0);
@@ -1808,6 +1853,14 @@ std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_wei
     if(T_pandora) T_pandora->GetEntry(i);
     if(T_lantern) T_lantern->GetEntry(i);
     if(T_glee) T_glee->GetEntry(i);
+    if (flag_xf_combined){
+      if (weight.run != eval.run || weight.event != eval.event){
+        std::cout << "ERROR: " << input_filename << " entry " << i << ": T_weight run/event " << weight.run << " " << weight.event << " differs from T_eval " << eval.run << " " << eval.event << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      // only the events with weights for this knob, as in its own merge_xf file
+      if (get_size(weight, option) == 0) continue;
+    }
 
     std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > event_info;
     std::get<0>(event_info) = eval.weight_cv * eval.weight_spline;

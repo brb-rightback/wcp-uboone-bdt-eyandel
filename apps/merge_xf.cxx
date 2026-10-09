@@ -37,6 +37,7 @@ int main( int argc, char** argv )
 {
   if (argc < 5) {
     std::cout << "merge_xf #input_file_cv #input_file_xf #output_file #option" << std::endl;
+    std::cout << "  #option: one knob (e.g. UBGenieFluxSmallUni), or all for every knob in one file" << std::endl;
     return -1;
   }
 
@@ -159,6 +160,9 @@ int main( int argc, char** argv )
     T = (TTree*)file2->Get("reinteractions_piplus_Geant4");
   }else if (option == "reinteractions_proton_Geant4"){
     T = (TTree*)file2->Get("reinteractions_proton_Geant4");
+  }else if (option == "all"){
+    // every knob in one T_weight (prune_weightsep24_trees ... all); events are kept if they have weights for any knob
+    T = (TTree*)file2->Get("all");
   }
 
 

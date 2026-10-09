@@ -77,8 +77,11 @@ int main( int argc, char** argv )
     int file_no = std::get<4>(it->second);
 
     
-    if (period == run){
-      outfile_name = out_filename;
+    if (cov.use_xf_file(period, run)){
+      // output: the #outfile_name of the file of this systematic number; for the files of all knobs (#period 0) the
+      // XsFlux/cov_<run>.root read by TLee
+      if (period == run) outfile_name = out_filename;
+      else if (outfile_name == "") outfile_name = Form("./hist_rootfiles/XsFlux/cov_%d.root", run);
       std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = cov.get_histograms(input_filename, 0);
       
       for (auto it1 = histo_infos.begin(); it1 != histo_infos.end(); it1++){
