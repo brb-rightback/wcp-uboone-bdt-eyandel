@@ -23,6 +23,7 @@ using namespace std;
 using namespace LEEana;
 
 #include "WCPLEEANA/tree_wrangler.h"
+#include "WCPLEEANA/cmd_options.h"
 
 
 using TreeKey = std::pair<std::string,std::string>; // (dir, tree)
@@ -195,6 +196,7 @@ int main( int argc, char** argv )
   int set_verbose=10000;
   int set_verbose_pot=1000;
 
+  argc = LEEana::join_option_values(argc, argv, 4); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i = 4; i < argc; ++i) {
 
     // Skip anything that isn't a flag

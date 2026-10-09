@@ -17,6 +17,7 @@
 #include "WCPLEEANA/cuts.h"
 #include "WCPLEEANA/pot.h"
 #include "WCPLEEANA/pfeval.h"
+#include "WCPLEEANA/cmd_options.h"
 
 using namespace std;
 using namespace LEEana;
@@ -32,6 +33,7 @@ int main( int argc, char** argv )
   TString outfilename = "temp.root";
   bool flag_data = true;
   
+  argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'o':

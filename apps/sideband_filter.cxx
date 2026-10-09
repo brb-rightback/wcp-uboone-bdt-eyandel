@@ -34,6 +34,7 @@ using namespace LEEana;
 #include "WCPLEEANA/pfeval.h"
 #include "WCPLEEANA/kine.h"
 #include "WCPLEEANA/cuts.h"
+#include "WCPLEEANA/cmd_options.h"
 
 int main( int argc, char** argv )
 {
@@ -53,6 +54,7 @@ int main( int argc, char** argv )
   Int_t filter_level = 1;
   Int_t run_filter = 0;
   
+  argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'f':

@@ -3,6 +3,7 @@
 
 #include "WCPLEEANA/master_cov_matrix.h"
 #include "WCPLEEANA/bayes.h"
+#include "WCPLEEANA/cmd_options.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -40,6 +41,7 @@ int main( int argc, char** argv )
   int flag_display = 0;
   int flag_breakdown = 0;
 
+  argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'r':

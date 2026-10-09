@@ -16,6 +16,7 @@
 #include "WCPLEEANA/pandora.h"
 #include "WCPLEEANA/lantern.h"
 #include "WCPLEEANA/glee.h"
+#include "WCPLEEANA/cmd_options.h"
 
 using namespace std;
 using namespace LEEana;
@@ -28,6 +29,7 @@ int main( int argc, char** argv )
   bool flag_data = true;
 
   bool flag_osc = false;
+  argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'o':

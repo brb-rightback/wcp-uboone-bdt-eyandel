@@ -44,6 +44,7 @@ using namespace LEEana;
 #include "WCPLEEANA/particle.h"
 
 #include "WCPLEEANA/tree_wrangler.h"
+#include "WCPLEEANA/cmd_options.h"
 
 int main( int argc, char** argv )
 {
@@ -79,6 +80,7 @@ int main( int argc, char** argv )
 
   int flag_keep_only_bdt_train = 0;
 
+  argc = LEEana::join_option_values(argc, argv, 3); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
     case 'c':

@@ -14,6 +14,7 @@
 #include "TMath.h"
 
 #include "WCPLEEANA/pot.h"
+#include "WCPLEEANA/cmd_options.h"
 
 using namespace std;
 using namespace LEEana;
@@ -28,6 +29,7 @@ int main(int argc, char** argv){
   }
 
   int mode = 1;
+  argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'm':

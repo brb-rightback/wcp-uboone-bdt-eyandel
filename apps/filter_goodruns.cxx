@@ -20,6 +20,7 @@
 #include "TMath.h"
 
 #include "WCPLEEANA/tree_wrangler.h"
+#include "WCPLEEANA/cmd_options.h"
 
 using namespace std;
 using namespace LEEana;
@@ -41,6 +42,7 @@ int main( int argc, char** argv )
   std::string config_file_name="config.txt";
   char delimiter = ',';
 
+  argc = LEEana::join_option_values(argc, argv, 3); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
       case 'n':

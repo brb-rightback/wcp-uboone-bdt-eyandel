@@ -28,6 +28,7 @@ using namespace LEEana;
 #include "WCPLEEANA/pot.h"
 #include "WCPLEEANA/pfeval.h"
 #include "WCPLEEANA/kine.h"
+#include "WCPLEEANA/cmd_options.h"
 
 
 int main( int argc, char** argv )
@@ -42,6 +43,7 @@ int main( int argc, char** argv )
   std::string config_file_name="config.txt";
   char delimiter = ',';
   float fail_percentage = 0.2;
+   argc = LEEana::join_option_values(argc, argv, 3); // also take "-x VALUE" for "-xVALUE"
    for (Int_t i=3;i!=argc;i++){
     switch(argv[i][1]){
     case 'f'://Note switched the flag here

@@ -14,6 +14,7 @@
 #include "TMath.h"
 
 #include "WCPLEEANA/tagger.h"
+#include "WCPLEEANA/cmd_options.h"
 
 #include "TMVA/Factory.h"
 #include "TMVA/DataLoader.h"
@@ -30,6 +31,7 @@ int main( int argc, char** argv )
   int process = 1; // odd  (default training is odd ...)
   // 0 for even ...
 
+  argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
     switch(argv[i][1]){
     case 'p':
