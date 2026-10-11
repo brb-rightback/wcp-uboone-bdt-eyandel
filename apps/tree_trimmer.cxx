@@ -848,12 +848,14 @@ int main( int argc, char** argv )
 
 
   // If saving the whole file overwrite limits, otherwise recover the events from the first subrun we started at if that is not complete.
-  if(max_events>T_rse->GetEntries() && stop_run>last_run && start_events==0 && start_run==0){
-    first_run=-1;
-    first_subrun=-1;
-    last_run=std::numeric_limits<int>::max();
-    last_subrun=std::numeric_limits<int>::max();
-  } 
+  // Without an event limit (-m, -e) the POT is selected with the run-subrun limits (-y -w -z -x, all of it by default),
+  // so subruns without events at the edges of a run range are kept and the run ranges of a file add up to its POT.
+  if(max_events>T_rse->GetEntries() && start_events==0){
+    first_run=start_run;
+    first_subrun=start_subrun;
+    last_run=stop_run;
+    last_subrun=stop_subrun;
+  }
 
 
   // Loop over each POT tree seperatly
