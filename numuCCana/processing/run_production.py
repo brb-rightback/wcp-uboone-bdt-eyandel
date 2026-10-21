@@ -40,7 +40,8 @@ OUT_DIR = '/pnfs/uboone/persistent/users/bbogart/numucc'
 # samples
 # kind: nu_overlay, dirt, beam_on, beam_off, opendata (beam on); train: file type of the BDT training subruns to remove
 # (bdt_convert -g, with -l<trainlist> -b0); zero: zero electron lifetime runs to remove (bdt_convert -i); files: input
-# files when the wiki is wrong; parent / anti: open data made from the checkout of parent with tree_trimmer -i<anti>
+# files when the wiki is wrong; parent / anti / open_runs: open data made from the checkout of parent with tree_trimmer
+# -i<anti> -y<first run> -z<last run> (the production team's run range; the anti lists alone keep runs outside it)
 R123 = 'MCC9.10_Run123_v10_04_07_20_BNB_'
 SAMPLES = [
     dict(name=R123 + 'nu_overlay_surprise_reco2_hist_1', kind='nu_overlay', run='1', train='prodgenie_bnb_nu_overlay_run1'),
@@ -71,15 +72,15 @@ SAMPLES = [
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_on_retuple_retuple_hist_5', kind='beam_on', run='5'),
 
     dict(name=R123 + 'beam_on_data_surprise_reco2_hist_1_5e19opendata', kind='opendata', run='1',
-         parent=R123 + 'beam_on_data_surprise_reco2_hist_1', anti='full_opendata1_anti_list.txt'),
+         parent=R123 + 'beam_on_data_surprise_reco2_hist_1', anti='full_opendata1_anti_list.txt', open_runs=(5122, 5945)),
     dict(name=R123 + 'beam_on_data_surprise_reco2_hist_3_1e19opendata', kind='opendata', run='3',
-         parent=R123 + 'beam_on_data_surprise_reco2_hist_3', anti='full_opendata3_anti_list.txt'),
+         parent=R123 + 'beam_on_data_surprise_reco2_hist_3', anti='full_opendata3_anti_list.txt', open_runs=(14136, 17557)),
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_on_retuple_retuple_hist_opendata_19550', kind='opendata', run='4a'),
     dict(name='MCC9.10_Run4b_v10_04_07_20_BNB_beam_on_metapatch_retuple_retuple_hist_opendata_20700', kind='opendata', run='4b'),
 
-    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_1', kind='beam_off', run='1'),
+    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_1', kind='beam_off', run='1', train='data_extbnb_run1'),
     dict(name=R123 + 'beam_off_data_surprise_reco2_hist_2', kind='beam_off', run='2'),
-    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_3', kind='beam_off', run='3'),
+    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_3', kind='beam_off', run='3', train='data_extbnb_run3'),
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_off_retuple_retuple_hist_4a', kind='beam_off', run='4a'),
     dict(name='MCC9.10_Run4b_v10_04_07_20_BNB_beam_off_metapatch_retuple_retuple_hist', kind='beam_off', run='4b'),
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_off_retuple_retuple_hist_4c', kind='beam_off', run='4c'),
@@ -249,7 +250,8 @@ def build_steps(sample, wiki, a):
     if sample.get('parent'):
         parent_cv = os.path.join(a.out_dir, 'checkout_%s.root' % sample['parent'])
         add('trim_cv', [app('tree_trimmer'), parent_cv, '{tmp}', a.trim_config, '-o1', '-k1', '-c1',
-                        '-i' + os.path.join(HERE, sample['anti'])], [parent_cv], [final_cv],
+                        '-i' + os.path.join(HERE, sample['anti']), '-y%d' % sample['open_runs'][0], '-z%d' % sample['open_runs'][1]],
+            [parent_cv], [final_cv],
             lambda p, out: cv_check(p, out, final=True))
         add('cleanup', None, [], [], tmp=False)
         return steps
