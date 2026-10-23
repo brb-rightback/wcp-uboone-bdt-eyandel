@@ -55,8 +55,6 @@ int main( int argc, char** argv )
   int flag_mode = 1; // 1: CV and DetVar events in one file, 2: DetVar events and CV flags only, 3: CV file with the flags of the -m2 files
   int det_no = -1;
   argc = LEEana::join_option_values(argc, argv, 4); // also take "-x VALUE" for "-xVALUE"
-  int flag_mode = 1; // 1: CV and DetVar events in one file, 2: DetVar events and CV flags only, 3: CV file with the flags of the -m2 files
-  int det_no = -1;
   for (Int_t i=4;i!=argc;i++){
     switch(argv[i][1]){
     case 't':
