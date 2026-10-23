@@ -14,6 +14,18 @@ void LEEana::CovMatrix::gen_det_cov_matrix(int run, std::map<int, TH1F*>& map_co
   std::map<TString, std::tuple<int, int, int, TString>> map_histoname_infos ;
   std::map<int, TString> map_no_histoname;
 
+  // DetVar files of merge_det -m2 need their CV file (det_cv_input.txt)
+  det_run = run;
+  if (flag_det_cv){
+    for (auto it = map_inputfile_info.begin(); it != map_inputfile_info.end(); it++){
+      if (std::get<1>(it->second) != run) continue;
+      if (map_inputfile_cv.find(it->first) == map_inputfile_cv.end()){
+        std::cout << "ERROR! No CV file for " << it->first << " in det_cv_input.txt" << std::endl;
+        exit(1);
+      }
+    }
+  }
+
   int ncount = 0;
   for (auto it = map_inputfile_info.begin(); it != map_inputfile_info.end(); it++){
     TString input_filename = it->first;
@@ -394,11 +406,18 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
 
    //   std::cout << input_filename << std::endl;
   TFile *file = new TFile(input_filename);
+  // merge_det -m2 file: the CV events are in a separate file (merge_det -m3), flagged with flag_match_rse_<DetVar number>
+  TFile *file_cv = file;
+  if (flag_det_cv) file_cv = new TFile(map_inputfile_cv[input_filename]);
 
-  AnalysisTrees trees_cv = get_analysis_trees(file, "_cv");
+  AnalysisTrees trees_cv = get_analysis_trees(file_cv, "_cv");
   TTree *T_BDTvars_cv = trees_cv.T_BDTvars, *T_eval_cv = trees_cv.T_eval, *T_PFeval_cv = trees_cv.T_PFeval, *T_KINEvars_cv = trees_cv.T_KINEvars;
   TTree *T_spacepoints_cv = trees_cv.T_spacepoints, *T_pandora_cv = trees_cv.T_pandora, *T_lantern_cv = trees_cv.T_lantern, *T_glee_cv = trees_cv.T_glee;
-  TTree *T_pot_cv = (TTree*)file->Get("wcpselection/T_pot_cv");
+  TTree *T_pot_cv = (TTree*)file_cv->Get("wcpselection/T_pot_cv");
+  if (file_cv->IsZombie() || !T_eval_cv || !T_pot_cv){
+    std::cout << "ERROR! No T_eval_cv / T_pot_cv in " << file_cv->GetName() << std::endl;
+    exit(1);
+  }
 
   EvalInfo eval_cv;
   POTInfo pot_cv;
@@ -447,13 +466,68 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
   if(T_lantern_det) set_tree_address(T_lantern_det, lantern_det);
   if(T_glee_det) set_tree_address(T_glee_det, glee_det);
 
+  TString flag_name = Form("flag_match_rse_%d", det_run);
   double total_pot = 0;
-  for (Int_t i=0;i!=T_pot_cv->GetEntries();i++){
-    T_pot_cv->GetEntry(i);
-    total_pot += pot_cv.pot_tor875;
+  if (!flag_det_cv){
+    for (Int_t i=0;i!=T_pot_cv->GetEntries();i++){
+      T_pot_cv->GetEntry(i);
+      total_pot += pot_cv.pot_tor875;
+    }
+  }else{
+    // common POT of the flagged subruns, summed in (run, subrun) order as T_pot_cv of merge_det -m1
+    TString pot_name = Form("pot_tor875_rse_%d", det_run);
+    if (!T_pot_cv->GetBranch(flag_name) || !T_pot_cv->GetBranch(pot_name)){
+      std::cout << "ERROR! No " << flag_name << " / " << pot_name << " in T_pot_cv of " << file_cv->GetName() << std::endl;
+      exit(1);
+    }
+    Int_t flag_match = 0;
+    Double_t pot_match = 0;
+    T_pot_cv->SetBranchAddress(flag_name, &flag_match);
+    T_pot_cv->SetBranchAddress(pot_name, &pot_match);
+    std::map<std::pair<int, int>, double> map_rs_pot;
+    for (Int_t i=0;i!=T_pot_cv->GetEntries();i++){
+      T_pot_cv->GetEntry(i);
+      if (!flag_match) continue;
+      if (map_rs_pot.find(std::make_pair(pot_cv.runNo, pot_cv.subRunNo)) != map_rs_pot.end()){
+        std::cout << "ERROR! Subrun " << pot_cv.runNo << " " << pot_cv.subRunNo << " flagged twice in T_pot_cv of " << file_cv->GetName() << std::endl;
+        exit(1);
+      }
+      map_rs_pot[std::make_pair(pot_cv.runNo, pot_cv.subRunNo)] = pot_match;
+    }
+    T_pot_cv->ResetBranchAddress(T_pot_cv->GetBranch(flag_name));
+    T_pot_cv->ResetBranchAddress(T_pot_cv->GetBranch(pot_name));
+    for (auto it = map_rs_pot.begin(); it != map_rs_pot.end(); it++){
+      total_pot += it->second;
+    }
   }
   // total POT calculations ...
   map_filename_pot[input_filename] = total_pot;
+
+  // CV and DetVar entry of each event: the same entry in a merge_det -m1 file, the flagged CV events in order for -m2
+  std::vector<std::pair<Long64_t, Long64_t> > entries;
+  if (!flag_det_cv){
+    for (Long64_t i=0;i!=T_eval_cv->GetEntries();i++){
+      entries.push_back(std::make_pair(i, i));
+    }
+  }else{
+    TBranch *br_flag = T_eval_cv->GetBranch(flag_name);
+    if (!br_flag){
+      std::cout << "ERROR! No " << flag_name << " in T_eval_cv of " << file_cv->GetName() << std::endl;
+      exit(1);
+    }
+    Int_t flag_match = 0;
+    T_eval_cv->SetBranchAddress(flag_name, &flag_match);
+    Long64_t ndet = 0;
+    for (Long64_t i=0;i!=T_eval_cv->GetEntries();i++){
+      br_flag->GetEntry(i);
+      if (flag_match == 1) entries.push_back(std::make_pair(i, ndet++));
+    }
+    T_eval_cv->ResetBranchAddress(br_flag);
+    if (ndet != T_eval_det->GetEntries()){
+      std::cout << "ERROR! " << ndet << " CV events flagged in " << file_cv->GetName() << ", " << T_eval_det->GetEntries() << " events in " << input_filename << std::endl;
+      exit(1);
+    }
+  }
 
   // fill histogram ...
   // switch on the branches the analysis code reads (one list for all apps, see analysis_trees.h)
@@ -466,29 +540,37 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
 
   std::vector< std::tuple<TString,  int, float, float, TString, TString, TString, TString > > histo_infos = get_histograms(input_filename,0);
 
-  vec_events.resize(T_eval_cv->GetEntries());
+  vec_events.resize(entries.size());
 
   bool flag_first_event = true;
-  for (Int_t i=0;i!=T_eval_cv->GetEntries();i++){
-    T_BDTvars_cv->GetEntry(i);
-    T_eval_cv->GetEntry(i);
-    T_KINEvars_cv->GetEntry(i);
-    T_PFeval_cv->GetEntry(i);
-    if(T_spacepoints_cv) T_spacepoints_cv->GetEntry(i);
-    if(T_pandora_cv) T_pandora_cv->GetEntry(i);
-    if(T_lantern_cv) T_lantern_cv->GetEntry(i);
-    if(T_glee_cv) T_glee_cv->GetEntry(i);
+  for (size_t i=0;i!=entries.size();i++){
+    Long64_t i_cv = entries.at(i).first;
+    Long64_t i_det = entries.at(i).second;
+    T_BDTvars_cv->GetEntry(i_cv);
+    T_eval_cv->GetEntry(i_cv);
+    T_KINEvars_cv->GetEntry(i_cv);
+    T_PFeval_cv->GetEntry(i_cv);
+    if(T_spacepoints_cv) T_spacepoints_cv->GetEntry(i_cv);
+    if(T_pandora_cv) T_pandora_cv->GetEntry(i_cv);
+    if(T_lantern_cv) T_lantern_cv->GetEntry(i_cv);
+    if(T_glee_cv) T_glee_cv->GetEntry(i_cv);
 
-    T_BDTvars_det->GetEntry(i);
-    T_eval_det->GetEntry(i);
-    T_KINEvars_det->GetEntry(i);
-    T_PFeval_det->GetEntry(i);
-    if(T_spacepoints_det) T_spacepoints_det->GetEntry(i);
-    if(T_pandora_det) T_pandora_det->GetEntry(i);
-    if(T_lantern_det) T_lantern_det->GetEntry(i);
-    if(T_glee_det) T_glee_det->GetEntry(i);
+    T_BDTvars_det->GetEntry(i_det);
+    T_eval_det->GetEntry(i_det);
+    T_KINEvars_det->GetEntry(i_det);
+    T_PFeval_det->GetEntry(i_det);
+    if(T_spacepoints_det) T_spacepoints_det->GetEntry(i_det);
+    if(T_pandora_det) T_pandora_det->GetEntry(i_det);
+    if(T_lantern_det) T_lantern_det->GetEntry(i_det);
+    if(T_glee_det) T_glee_det->GetEntry(i_det);
 
-    if ( !(eval_cv.run == eval_det.run && eval_cv.event == eval_det.event)) std::cout <<"Wrong! " << std::endl;
+    if ( !(eval_cv.run == eval_det.run && eval_cv.event == eval_det.event)){
+      std::cout <<"Wrong! " << std::endl;
+      if (flag_det_cv){
+        std::cout << "ERROR! CV event " << eval_cv.run << " " << eval_cv.event << " paired with DetVar event " << eval_det.run << " " << eval_det.event << " (" << file_cv->GetName() << ", " << input_filename << ")" << std::endl;
+        exit(1);
+      }
+    }
 
     std::get<0>(vec_events.at(i)) = eval_cv.run;
     std::get<1>(vec_events.at(i)) = eval_cv.event;
@@ -557,6 +639,7 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
 
   map_all_events[input_filename] = vec_events;
 
+  if (file_cv != file) delete file_cv;
   delete file;
 }
 

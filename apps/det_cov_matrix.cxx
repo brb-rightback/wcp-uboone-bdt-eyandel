@@ -17,6 +17,7 @@
 #include "TTree.h"
 #include "TStyle.h"
 #include "TVectorD.h"
+#include "TSystem.h"
 
 using namespace std;
 using namespace LEEana;
@@ -129,6 +130,8 @@ int main( int argc, char** argv )
   //
 
   if (flag_osc) cov.add_osc_config();
+  // DetVar files of merge_det -m2, the CV events are read from the merge_det -m3 file
+  if (!gSystem->AccessPathName("./configurations/det_cv_input.txt")) cov.add_det_cv_config("./configurations/det_cv_input.txt");
 
   cov.print_rw(cov.get_rw_info());
 
