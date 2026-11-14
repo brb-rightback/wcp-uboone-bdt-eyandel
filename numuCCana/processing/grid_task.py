@@ -75,6 +75,8 @@ def main():
 
     # small files the task carries (e.g. the results of earlier tasks its check needs), written before the command
     for fname, content in task.get('files', {}).items():
+        if os.path.dirname(fname):
+            os.makedirs(os.path.join(work, os.path.dirname(fname)), exist_ok=True)
         with open(os.path.join(work, fname), 'w') as f:
             f.write(content)
     subst = {'code': code, 'work': work}
