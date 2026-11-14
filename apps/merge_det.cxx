@@ -110,7 +110,7 @@ int main( int argc, char** argv )
     }
     int ndet = vec_det_no.size();
 
-    TFile *file1 = new TFile(input_file_cv);
+    TFile *file1 = TFile::Open(input_file_cv);
     TTree *T_BDTvars_cv = (TTree*)file1->Get("wcpselection/T_BDTvars");
     TTree *T_eval_cv = (TTree*)file1->Get("wcpselection/T_eval");
     TTree *T_pot_cv = (TTree*)file1->Get("wcpselection/T_pot");
@@ -147,7 +147,7 @@ int main( int argc, char** argv )
     std::vector<std::vector<int> > vec_flag_pot(ndet);
     std::vector<std::vector<double> > vec_pot_rse(ndet);
     for (int k=0;k!=ndet;k++){
-      TFile *file_det = new TFile(vec_det_file.at(k));
+      TFile *file_det = TFile::Open(vec_det_file.at(k));
       TTree *T_rse_flag = (TTree*)file_det->Get("wcpselection/T_cv_rse_flag");
       TTree *T_pot_flag = (TTree*)file_det->Get("wcpselection/T_cv_pot_flag");
       if (file_det->IsZombie() || !T_rse_flag || !T_pot_flag){
@@ -286,7 +286,7 @@ int main( int argc, char** argv )
     return 0;
   }
 
-  TFile *file1 = new TFile(input_file_cv);
+  TFile *file1 = TFile::Open(input_file_cv);
   TTree *T_BDTvars_cv = (TTree*)file1->Get("wcpselection/T_BDTvars");
   TTree *T_eval_cv = (TTree*)file1->Get("wcpselection/T_eval");
   TTree *T_pot_cv = (TTree*)file1->Get("wcpselection/T_pot");
@@ -294,7 +294,7 @@ int main( int argc, char** argv )
   TTree *T_KINEvars_cv = (TTree*)file1->Get("wcpselection/T_KINEvars");
   TTree *T_spacepoints_cv = (TTree*)file1->Get("wcpselection/T_spacepoints");
 
-  TFile *file2 = new TFile(input_file_det);
+  TFile *file2 = TFile::Open(input_file_det);
   TTree *T_BDTvars_det = (TTree*)file2->Get("wcpselection/T_BDTvars");
   TTree *T_eval_det = (TTree*)file2->Get("wcpselection/T_eval");
   TTree *T_pot_det = (TTree*)file2->Get("wcpselection/T_pot");
