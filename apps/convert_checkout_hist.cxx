@@ -39,7 +39,7 @@ int main( int argc, char** argv )
   }
 
 
-  TFile *file = new TFile(input_filename,"READ");
+  TFile *file = TFile::Open(input_filename,"READ");
 
   CovMatrix cov;
   if (flag_osc) cov.add_osc_config();

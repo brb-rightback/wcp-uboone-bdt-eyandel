@@ -1458,7 +1458,7 @@ void LEEana::CovMatrix::enable_addressed_branches_only(TTree *T){
 }
 
 std::pair<std::vector<int>, std::vector<int> > LEEana::CovMatrix::get_events_weights_xs(TString input_filename, std::map<TString, std::set<std::tuple<float, float, std::vector<float>, std::vector<int>, std::set<std::tuple<int, float, bool, int> > > > >& map_passed_events, std::map<TString, double>& map_filename_pot, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos){
-  TFile *file = new TFile(input_filename);
+  TFile *file = TFile::Open(input_filename);
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;

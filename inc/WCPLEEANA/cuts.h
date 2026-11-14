@@ -57,6 +57,7 @@ namespace LEEana{
   void get_principal_axis(const std::vector<TVector3>& pts, TVector3& centroid, TVector3& axis);
 
   int get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold, double scat_bdt_threshold, double vtxact_bdt_threshold);
+  int get_particle_0pNp_wc_bin(PFevalInfo& pfeval, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold);
 
   std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> get_range_proton_KE(PFevalInfo& pfeval, SpaceInfo& space, bool return_MeV);
   double get_range_proton_KE_particle(PFevalInfo& pfeval, SpaceInfo& space, int i);
@@ -99,6 +100,8 @@ namespace LEEana{
     bool part_bin_set = false;     // cached get_particle_0pNp_bdt_bin result for this event
     double part_bin_thresholds[4];
     int part_bin;
+    bool part_wc_bin_set = false;  // cached get_particle_0pNp_wc_bin result for this event
+    int part_wc_bin;
   };
   void fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
   bool get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutEventInfo& info, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern);
@@ -1009,6 +1012,24 @@ int LEEana::get_particle_0pNp_bdt_bin(PFevalInfo& pfeval, TaggerInfo& tagger, Sp
   else if(tagger.VtxAct_bdt_score>vtxact_bdt_threshold) bdt_bin=2;
   else if(KE<1 && KE_p<1 && KE_l<1 && KE_ll<1) bdt_bin=0;
   return bdt_bin;
+}
+
+// 0p/Np categories without the spacepoint BDTs, the 0p side defined by WireCell alone:
+//   3 Np:     leading primary WireCell proton (range KE) >= KE_threshold (the Np of get_particle_0pNp_bdt_bin)
+//   2 PorLNp: not Np, but Pandora, LArPID on the WireCell tracks or Lantern has a proton > KE_pl_threshold (as there)
+//   1 Trk0p:  neither, and WireCell has a primary proton track below KE_threshold
+//   0 G0p:    neither, and WireCell has no primary proton track (range KE < 1 MeV: 0 if there is none)
+int LEEana::get_particle_0pNp_wc_bin(PFevalInfo& pfeval, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern, double KE_threshold, double KE_pl_threshold){
+  std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> result = get_range_proton_KE(pfeval,space,true);
+  double KE = std::get<0>(result).at(0);
+  double KE_p = get_pandora_proton_KE(pandora,0.2,true).at(0);
+  double KE_l = std::get<2>(result).at(0);
+  double KE_ll = get_lantern_KE(lantern, 2212, 10, true).at(0);
+  int wc_bin=0;
+  if(KE>=KE_threshold) wc_bin=3;
+  else if(KE_p>KE_pl_threshold || KE_l>KE_pl_threshold || KE_ll>KE_pl_threshold) wc_bin=2;
+  else if(KE>=1) wc_bin=1;
+  return wc_bin;
 }
 
 // Kinetic energy [MeV] from the range of reco particle i, assuming a proton (see get_range_proton_KE for the range).
@@ -2073,6 +2094,29 @@ double LEEana::get_kine_var(KineInfo& kine, EvalInfo& eval, PFevalInfo& pfeval, 
       for(int k=0; k<5; k++) sum += q_feature(q.at(k));
       return sum;
     }
+    // first N = 3 or 5 charges from the vertex: _sum3, _max3, _max5 (largest charge), _maxdq3, _maxdq5 (largest
+    // |difference| between neighbouring charges), all of transformed charges; -999 if the muon has fewer than N
+    if(var_name == "muon_spacepoints_q_sum3" || var_name == "muon_spacepoints_q_max3" || var_name == "muon_spacepoints_q_max5"
+       || var_name == "muon_spacepoints_q_maxdq3" || var_name == "muon_spacepoints_q_maxdq5"){
+      size_t n = var_name.EndsWith("3") ? 3 : 5;
+      if(q.size()<n) return -999;
+      double sum = 0, max_q = q_feature(q.at(0)), max_dq = 0;
+      for(size_t k=0; k<n; k++){
+        sum += q_feature(q.at(k));
+        max_q = std::max(max_q, q_feature(q.at(k)));
+        if(k>0) max_dq = std::max(max_dq, fabs(q_feature(q.at(k))-q_feature(q.at(k-1))));
+      }
+      if(var_name.BeginsWith("muon_spacepoints_q_sum")) return sum;
+      if(var_name.BeginsWith("muon_spacepoints_q_maxdq")) return max_dq;
+      return max_q;
+    }
+    // muon_spacepoints_q_bck_<k>: the k-th charge from the muon end, q[n-1-k] (spacepoints_q_bck_k of particle.h)
+    if(var_name.BeginsWith("muon_spacepoints_q_bck_")){
+      TString kb_str = var_name(23, var_name.Length()-23);
+      if(!kb_str.IsDigit()) return -999;
+      size_t kb = kb_str.Atoi();
+      return (kb<q.size()) ? q_feature(q.at(q.size()-1-kb)) : -999;
+    }
     TString k_str = var_name(19, var_name.Length()-19);
     if(!k_str.IsDigit()) return -999;
     size_t k = k_str.Atoi();
@@ -2665,6 +2709,7 @@ void LEEana::fill_cut_event_info(CutEventInfo& info, bool flag_data, EvalInfo& e
   Enu_bin = get_Enu_bin(reco_Enu);
 
   info.part_bin_set = false;
+  info.part_wc_bin_set = false;
 }
 
 bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, EvalInfo& eval, PFevalInfo& pfeval, TaggerInfo& tagger, KineInfo& kine, SpaceInfo& space, PandoraInfo& pandora, LanternInfo& lantern){
@@ -2759,18 +2804,24 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
    ||ch_name_string == "numuCC_part_bdt_G0p_sig"    || ch_name_string == "numuCC_part_bdt_G0p_bck"    || ch_name_string == "numuCC_part_bdt_G0p_ext"    || ch_name_string == "numuCC_part_bdt_G0p_dirt"    || ch_name_string == "numuCC_part_bdt_G0p"
    ||ch_name_string == "numuCC_part_bdt_sig"        || ch_name_string == "numuCC_part_bdt_bck"        || ch_name_string == "numuCC_part_bdt_ext"        || ch_name_string == "numuCC_part_bdt_dirt"        || ch_name_string == "numuCC_part_bdt"
    ||ch_name_string == "numuCC_part_bdt_0p_sig"     || ch_name_string == "numuCC_part_bdt_0p_bck"     || ch_name_string == "numuCC_part_bdt_0p_ext"     || ch_name_string == "numuCC_part_bdt_0p_dirt"     || ch_name_string == "numuCC_part_bdt_0p"
+   ||ch_name_string == "numuCC_part_bdt_WC0p_sig"   || ch_name_string == "numuCC_part_bdt_WC0p_bck"   || ch_name_string == "numuCC_part_bdt_WC0p_ext"   || ch_name_string == "numuCC_part_bdt_WC0p_dirt"   || ch_name_string == "numuCC_part_bdt_WC0p"
+   ||ch_name_string == "numuCC_part_bdt_WCTrk0p_sig" || ch_name_string == "numuCC_part_bdt_WCTrk0p_bck" || ch_name_string == "numuCC_part_bdt_WCTrk0p_ext" || ch_name_string == "numuCC_part_bdt_WCTrk0p_dirt" || ch_name_string == "numuCC_part_bdt_WCTrk0p"
+   ||ch_name_string == "numuCC_part_bdt_WCG0p_sig"  || ch_name_string == "numuCC_part_bdt_WCG0p_bck"  || ch_name_string == "numuCC_part_bdt_WCG0p_ext"  || ch_name_string == "numuCC_part_bdt_WCG0p_dirt"  || ch_name_string == "numuCC_part_bdt_WCG0p"
    || ch_name_string == "numuCC_part_bdt_Np_open" || ch_name_string == "numuCC_part_bdt_PorLNp_open" || ch_name_string == "numuCC_part_bdt_Scat0p_open" || ch_name_string == "numuCC_part_bdt_Act0p_open" || ch_name_string == "numuCC_part_bdt_Trk0p_open" || ch_name_string == "numuCC_part_bdt_G0p_open" || ch_name_string == "numuCC_part_bdt_0p_open"){
 
     if(pfeval.run<20700 && (ch_name_string == "numuCC_part_bdt_Np_open" || ch_name_string == "numuCC_part_bdt_PorLNp_open" || ch_name_string == "numuCC_part_bdt_Scat0p_open" || ch_name_string == "numuCC_part_bdt_Act0p_open" || ch_name_string == "numuCC_part_bdt_Trk0p_open" || ch_name_string == "numuCC_part_bdt_G0p_open" || ch_name_string == "numuCC_part_bdt_0p_open")) return false;
 
     if( (ch_name_string == "numuCC_part_bdt_Np_sig"    || ch_name_string == "numuCC_part_bdt_PorLNp_sig" || ch_name_string == "numuCC_part_bdt_Scat0p_sig" 
-      || ch_name_string == "numuCC_part_bdt_Act0p_sig" || ch_name_string == "numuCC_part_bdt_Trk0p_sig"  || ch_name_string == "numuCC_part_bdt_G0p_sig" || ch_name_string == "numuCC_part_bdt_sig" || ch_name_string == "numuCC_part_bdt_0p_sig") 
+      || ch_name_string == "numuCC_part_bdt_Act0p_sig" || ch_name_string == "numuCC_part_bdt_Trk0p_sig"  || ch_name_string == "numuCC_part_bdt_G0p_sig" || ch_name_string == "numuCC_part_bdt_sig" || ch_name_string == "numuCC_part_bdt_0p_sig"
+      || ch_name_string == "numuCC_part_bdt_WC0p_sig" || ch_name_string == "numuCC_part_bdt_WCTrk0p_sig" || ch_name_string == "numuCC_part_bdt_WCG0p_sig")
       && map_cuts_flag["XsnumuCCinFV"]==false) return false;
 
     if( (ch_name_string == "numuCC_part_bdt_Np_bck" || ch_name_string == "numuCC_part_bdt_Np_dirt" || ch_name_string == "numuCC_part_bdt_PorLNp_bck" || ch_name_string == "numuCC_part_bdt_PorLNp_dirt"
        ||ch_name_string == "numuCC_part_bdt_Scat0p_bck" || ch_name_string == "numuCC_part_bdt_Scat0p_dirt" || ch_name_string == "numuCC_part_bdt_Act0p_bck" || ch_name_string == "numuCC_part_bdt_Act0p_dirt"
        ||ch_name_string == "numuCC_part_bdt_Trk0p_bck" || ch_name_string == "numuCC_part_bdt_Trk0p_dirt" || ch_name_string == "numuCC_part_bdt_G0p_bck" || ch_name_string == "numuCC_part_bdt_G0p_dirt"
-       || ch_name_string == "numuCC_part_bdt_bck" || ch_name_string == "numuCC_part_bdt_dirt" || ch_name_string == "numuCC_part_bdt_0p_bck" || ch_name_string == "numuCC_part_bdt_0p_dirt") 
+       || ch_name_string == "numuCC_part_bdt_bck" || ch_name_string == "numuCC_part_bdt_dirt" || ch_name_string == "numuCC_part_bdt_0p_bck" || ch_name_string == "numuCC_part_bdt_0p_dirt"
+       || ch_name_string == "numuCC_part_bdt_WC0p_bck" || ch_name_string == "numuCC_part_bdt_WC0p_dirt" || ch_name_string == "numuCC_part_bdt_WCTrk0p_bck" || ch_name_string == "numuCC_part_bdt_WCTrk0p_dirt"
+       || ch_name_string == "numuCC_part_bdt_WCG0p_bck" || ch_name_string == "numuCC_part_bdt_WCG0p_dirt")
         && map_cuts_flag["XsnumuCCinFV"]==true) return false; 
 
     if(require_FC >= 0 && eval.match_isFC != require_FC) return false;
@@ -2782,6 +2833,25 @@ bool LEEana::get_cut_pass(TString ch_name, TString add_cut, bool flag_data, CutE
 
     if((ch_name_string == "numuCC_part_bdt_sig" || ch_name_string == "numuCC_part_bdt_bck" || ch_name_string == "numuCC_part_bdt_ext"
      || ch_name_string == "numuCC_part_bdt_dirt" || ch_name_string == "numuCC_part_bdt")) return true;
+
+    // WireCell-only 0p categories (no spacepoint BDTs), computed once per event and cached in info
+    if(ch_name_string.find("numuCC_part_bdt_WC") == 0){
+      if(!info.part_wc_bin_set){
+        info.part_wc_bin = get_particle_0pNp_wc_bin(pfeval, space, pandora, lantern, 45, 45);
+        info.part_wc_bin_set = true;
+      }
+      int part_wc_bin = info.part_wc_bin;
+      if((ch_name_string == "numuCC_part_bdt_WC0p_sig" || ch_name_string == "numuCC_part_bdt_WC0p_bck" || ch_name_string == "numuCC_part_bdt_WC0p_ext"
+       || ch_name_string == "numuCC_part_bdt_WC0p_dirt" || ch_name_string == "numuCC_part_bdt_WC0p") && part_wc_bin<3) return true;
+
+      if((ch_name_string == "numuCC_part_bdt_WCTrk0p_sig" || ch_name_string == "numuCC_part_bdt_WCTrk0p_bck" || ch_name_string == "numuCC_part_bdt_WCTrk0p_ext"
+       || ch_name_string == "numuCC_part_bdt_WCTrk0p_dirt" || ch_name_string == "numuCC_part_bdt_WCTrk0p") && part_wc_bin==1) return true;
+
+      if((ch_name_string == "numuCC_part_bdt_WCG0p_sig" || ch_name_string == "numuCC_part_bdt_WCG0p_bck" || ch_name_string == "numuCC_part_bdt_WCG0p_ext"
+       || ch_name_string == "numuCC_part_bdt_WCG0p_dirt" || ch_name_string == "numuCC_part_bdt_WCG0p") && part_wc_bin==0) return true;
+
+      return false;
+    }
 
     //int part_bin = get_particle_0pNp_bdt_bin(pfeval, tagger, space, pandora, lantern, 45, 45, -0.65, 1.60); 
     // computed once per event and cached in info (recomputed if the thresholds change)

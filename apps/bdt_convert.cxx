@@ -208,7 +208,7 @@ int main( int argc, char** argv )
   if(flag_set_samdef) wrangler_ex.set_samdef(flag_set_samdef, samdef);
   tree_wrangler wrangler_pot(flag_config, config_file_name, delimiter,true);
 
-  TFile *file1 = new TFile(input_file);
+  TFile *file1 = TFile::Open(input_file);
   TTree *T_BDTvars = (TTree*)file1->Get("wcpselection/T_BDTvars");
 
   TTree *T_eval = (TTree*)file1->Get("wcpselection/T_eval");

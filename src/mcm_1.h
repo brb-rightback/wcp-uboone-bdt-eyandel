@@ -405,10 +405,10 @@ void LEEana::CovMatrix::fill_det_histograms(std::map<TString, TH1D*> map_filenam
  void LEEana::CovMatrix::get_events_info(TString input_filename, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool, double, bool> > > > > &map_all_events, std::map<TString, double>& map_filename_pot,  std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos){
 
    //   std::cout << input_filename << std::endl;
-  TFile *file = new TFile(input_filename);
+  TFile *file = TFile::Open(input_filename);
   // merge_det -m2 file: the CV events are in a separate file (merge_det -m3), flagged with flag_match_rse_<DetVar number>
   TFile *file_cv = file;
-  if (flag_det_cv) file_cv = new TFile(map_inputfile_cv[input_filename]);
+  if (flag_det_cv) file_cv = TFile::Open(map_inputfile_cv[input_filename]);
 
   AnalysisTrees trees_cv = get_analysis_trees(file_cv, "_cv");
   TTree *T_BDTvars_cv = trees_cv.T_BDTvars, *T_eval_cv = trees_cv.T_eval, *T_PFeval_cv = trees_cv.T_PFeval, *T_KINEvars_cv = trees_cv.T_KINEvars;

@@ -542,7 +542,7 @@ int main( int argc, char** argv )
   tree_wrangler wrangler_pot(true, config_file_name, delimiter,1);
 
 
-  TFile *file1 = new TFile(input_file);
+  TFile *file1 = TFile::Open(input_file);
 
 
   // Load other trees from directories as specified by the config file
@@ -642,7 +642,7 @@ int main( int argc, char** argv )
 
   // The first pass reads the run/subrun/event (and Lantern's haveReco) from a second handle of the input file, with only
   // these branches enabled, so it does not decompress the full trees (the trees of file1 are the ones being copied)
-  TFile *file1_rse = new TFile(input_file);
+  TFile *file1_rse = TFile::Open(input_file);
 
   // Load Lantern, used when dropping subruns where container failed.
   int haveReco = 1;
