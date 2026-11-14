@@ -372,7 +372,7 @@ void LEEana::CovMatrix::fill_pred_stat_histograms(std::map<TString, std::vector<
 }
 
 void LEEana::CovMatrix::get_pred_events_info(TString input_filename, std::map<TString, std::vector< std::tuple<int, int, double, double, std::set<std::tuple<int, double, bool> > > > >&map_all_events, std::map<TString, double>& map_filename_pot, std::map<TString, std::tuple<int, int, int, TString>>& map_histoname_infos){
-  TFile *file = new TFile(input_filename);
+  TFile *file = TFile::Open(input_filename);
 
   AnalysisTrees trees = get_analysis_trees(file);
   TTree *T_BDTvars = trees.T_BDTvars, *T_eval = trees.T_eval, *T_PFeval = trees.T_PFeval, *T_KINEvars = trees.T_KINEvars;
