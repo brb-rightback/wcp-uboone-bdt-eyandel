@@ -35,16 +35,29 @@
 #   python3 numuCCana/processing/run_production_det.py --reset 'm2:lya'          # forget the tasks matching a regex
 #   (tasks of a run range are named <task>.<NN>, --status and --dry-run show them per task)
 #
+# Grid (on a gpvm, natively: no ROOT needed there; the apps come from the code tarball of --app-dir, which must have the
+# TFile::Open versions of bdt_convert, tree_trimmer and merge_det; the BDT weights are shipped too):
+#   python3 numuCCana/processing/run_production_det.py --grid --app-dir <build> [--wait]
+#   python3 numuCCana/processing/run_production_det.py --grid --app-dir <build> --dry-run      # the first submission
+# Every task is a grid job (onsite, 30 GB disk; memory / lifetime per kind in GRID_RES) that runs the command and then the
+# task's check on the worker (--worker-check); each --grid run collects the finished jobs and submits the tasks whose
+# dependencies are done (--wait: until everything is done). The first run submits jobs counting the events per run of
+# the unprocessed CV files, for the run ranges (--worker-runs), and continues once they are in. Intermediate files go to
+# /pnfs/uboone/scratch/users/<user>/grid/det/work (deleted once used), the final -m2 / -m3 files are written to
+# .../grid/det/final and copied to --det-dir; job logs and markers in .../grid/det/jobs. A failed or lost job is
+# resubmitted on the next run, up to --max-tries submissions; at most --max-detvar DetVar bdt_convert files exist at once.
+#
 # Resuming works as in run_production.py (whose helpers are used here): every task writes to a temporary file renamed
 # after its check, its progress is in <state dir>/state.json, finished tasks are skipped unless their command (or -m3
 # list) changed, and a deleted bdt_convert file is made again if a task that still has to run needs it.
-import argparse, fcntl, json, os, re, signal, socket, subprocess, sys, time, traceback
+import argparse, fcntl, json, os, re, shlex, shutil, signal, socket, subprocess, sys, time, traceback
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import run_production as rp
 from run_production import StepError, State, log, tmp_name, remove, pid_alive, ROOT_LOCK
+import grid as G
 
 TOP = rp.TOP
 OUT_DIR = '/pnfs/uboone/persistent/users/bbogart/numucc'
@@ -92,11 +105,19 @@ def samdef_of(path):
     return re.sub(r'_reco2_(1|3)$', r'_reco2_hist_\1', os.path.basename(path)[:-len('.root')])
 
 
+def readable(path):
+    '''the name ROOT opens a file by: on a grid worker (--worker-*), /pnfs files are read over xrootd'''
+    if os.environ.get('DET_GRID_WORKER') and path.startswith('/pnfs/'):
+        import grid_task
+        return grid_task.xrootd_url(path)
+    return path
+
+
 def run_counts(path):
     '''{run: events} of wcpselection/T_eval'''
     with ROOT_LOCK:
         R = rp.root()
-        f = R.TFile.Open(path)
+        f = R.TFile.Open(readable(path))
         if not f or f.IsZombie():
             raise StepError('can not open %s' % path)
         try:
@@ -146,28 +167,42 @@ def chunk_grid(counts, n):
 
 
 class Grids:
-    '''run ranges of the CV samples, from the runs of their unprocessed file, cached in <state dir>/chunks.json'''
-    def __init__(self, path, n):
-        self.path, self.n = path, n
+    '''run ranges of the CV samples, from the runs of their unprocessed file, cached in <state dir>/chunks.json
+    (fixed: take the cached ranges as they are, without looking at the files: grid workers)'''
+    def __init__(self, path, n, fixed=False):
+        self.path, self.n, self.fixed = path, n, fixed
         self.data = {}
         if os.path.exists(path):
             with open(path) as f:
                 self.data = json.load(f)
 
-    def get(self, key, path):
+    def cached(self, key, path):
         st = os.stat(path)
         c = self.data.get(key)
         if not c or c['input'] != path or c['size'] != st.st_size or c['mtime'] != int(st.st_mtime) or c['events'] != self.n:
+            return None
+        return c
+
+    def store(self, key, path, counts):
+        '''the run ranges of {run: events} of the unprocessed file path'''
+        st = os.stat(path)
+        c = dict(input=path, size=st.st_size, mtime=int(st.st_mtime), events=self.n, grid=chunk_grid(counts, self.n),
+                 runs=[min(counts), max(counts)], total=sum(counts.values()))
+        self.data[key] = c
+        tmp = self.path + '.tmp'
+        with open(tmp, 'w') as f:
+            json.dump(self.data, f, indent=1, sort_keys=True)
+        os.replace(tmp, self.path)
+        log('run ranges of %s: %d events in %d ranges' % (key, c['total'], len(c['grid'])))
+        return c
+
+    def get(self, key, path):
+        if self.fixed:
+            return self.data[key]
+        c = self.cached(key, path)
+        if not c:
             log('run ranges of %s: reading the runs of %s' % (key, path))
-            counts = run_counts(path)
-            c = dict(input=path, size=st.st_size, mtime=int(st.st_mtime), events=self.n, grid=chunk_grid(counts, self.n),
-                     runs=[min(counts), max(counts)], total=sum(counts.values()))
-            self.data[key] = c
-            tmp = self.path + '.tmp'
-            with open(tmp, 'w') as f:
-                json.dump(self.data, f, indent=1, sort_keys=True)
-            os.replace(tmp, self.path)
-            log('run ranges of %s: %d events in %d ranges' % (key, c['total'], len(c['grid'])))
+            c = self.store(key, path, run_counts(path))
         return c
 
 
@@ -178,7 +213,7 @@ def query(path, trees, counts=None, sums=None, absent=()):
     sums {key: (tree, expression, selection)} -> sum; trees in absent must not exist'''
     with ROOT_LOCK:
         R = rp.root()
-        f = R.TFile.Open(path)
+        f = R.TFile.Open(readable(path))
         if not f or f.IsZombie():
             raise StepError('can not open %s' % path)
         info = {}
@@ -527,6 +562,243 @@ def delete_unneeded(tasks, a, state, todo, consumers):
             log('deleted %s' % f)
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# grid (--grid): every task is a grid job; its check runs on the worker (which has ROOT) right after the command
+# (--worker-check: the same task list, built from the shipped wiki and run ranges), so the machine following the jobs
+# needs no ROOT. Intermediate files (bdt_convert, run ranges, CV hadd) live in --work-dir on /pnfs scratch, the final
+# -m2 / -m3 files are written to scratch and copied to --det-dir. Run ranges: the run counts of the unprocessed CV
+# files come from grid jobs too (--worker-runs) the first time.
+GRID_RES = {'runs': ('2GB', '2h'), 'bdt': ('4GB', '24h'), 'trim': ('2GB', '4h'), 'm2r': ('2GB', '4h'), 'hadd': ('2GB', '8h'),
+            'm3': ('4GB', '8h')}
+
+
+def grid_kind(name):
+    if name.startswith('bdt:'):
+        return 'bdt'
+    if name.startswith('trim:'):
+        return 'trim'
+    if name.startswith('m2:'):
+        return 'm2r' if re.search(r'\.\d+$', name) else 'hadd'
+    if name.startswith('cv:'):
+        return 'hadd'
+    return 'm3'
+
+
+def safe_name(name):
+    return re.sub(r'[^A-Za-z0-9_.-]', '_', name)
+
+
+def needed_cvs(wiki, a):
+    '''[(CV key, unprocessed CV file)] of the DetVar files selected'''
+    wiki_cv = dict((os.path.basename(f[0])[:-len('.root')], f[0]) for f in wiki if len(f) == 1)
+    keys = set()
+    for var, no in VARS:
+        if a.vars and var not in a.vars.split(','):
+            continue
+        files = detvar_files(var, wiki)
+        for run in RUNS:
+            if (not a.runs or run in a.runs.split(',')) and run in files:
+                keys.update(k for k, _ in cv_keys(var, run))
+    out = []
+    for c in CVS:
+        if c['key'] in keys:
+            if c['samdef'] not in wiki_cv:
+                raise StepError('no unprocessed %s in the wiki' % c['samdef'])
+            out.append((c['key'], wiki_cv[c['samdef']]))
+    return out
+
+
+def worker_args(a):
+    '''the options a worker needs to build the same task list (paths of the shipped wiki and run ranges)'''
+    args = ['--work-dir', a.work_dir, '--det-dir', a.det_dir, '--wiki', '{code}/processing/mcc910wiki.txt',
+            '--chunks', '{code}/processing/det_chunks.json', '--chunk-events', str(a.chunk_events)]
+    if a.vars:
+        args += ['--vars', a.vars]
+    if a.runs:
+        args += ['--runs', a.runs]
+    return args
+
+
+def grid_task_of(t, a, by_name, state, stage_dir, info_dir):
+    '''the grid.py task of a task: its command with the apps, configs and inputs of the worker, then --worker-check'''
+    sub = {}
+    for x in ('bdt_convert', 'tree_trimmer', 'merge_det'):
+        sub[os.path.join(a.bin_dir, x)] = '{code}/bin/' + x
+    sub[a.trim_config] = '{code}/processing/' + os.path.basename(a.trim_config)
+    sub['-t' + a.config] = '-t{code}/processing/' + os.path.basename(a.config)
+    sub['{tmp}'] = '{out0}'
+    files = {}
+    if t['content']:   # the -m3 list: the -m2 files read over xrootd
+        import grid_task
+        sub[t['content'][0]] = 'det_list.txt'
+        files['det_list.txt'] = ''.join('%s %s\n' % (l.split()[0], grid_task.xrootd_url(l.split()[1])) if l.split()[0] != 'end' else l + '\n'
+                                        for l in t['content'][1].strip().split('\n'))
+    inputs = []
+    for x in t['cmd']:
+        if x in t['inputs'] and x not in sub:
+            sub[x] = '{in%d}' % len(inputs)
+            inputs.append(dict(path=x, mode='copy' if grid_kind(t['name']) == 'm2r' else 'stream'))
+    cmd = [sub.get(x, x) for x in t['cmd']]
+    # results of the tasks the check may look at (its dependencies and theirs)
+    need = set(t['deps'])
+    for d in t['deps']:
+        need.update(by_name[d]['deps'])
+    done_info = dict((n, {'info': state.data[n]['info']}) for n in need if state.data.get(n, {}).get('info') is not None)
+    files['done.json'] = json.dumps(done_info)
+    final = t['outputs'][0]
+    dest = tmp_name(final) if t['intermediate'] else os.path.join(stage_dir, os.path.basename(final))
+    sn = safe_name(t['name'])
+    check = ' '.join(shlex.quote(x) for x in ['python3', '{code}/processing/run_production_det.py', '--worker-check', t['name'],
+                                               '{out0}', 'done.json', '{out1}'] + worker_args(a))
+    return dict(name=sn, cmd=['bash', '-c', ' '.join(shlex.quote(x) for x in cmd) + ' && ' + check],
+                inputs=inputs, files=files, marker_dir=info_dir,
+                outputs=[dict(name=os.path.basename(final), dest=dest), dict(name=sn + '.info.json', dest=os.path.join(info_dir, sn + '.info.json'))])
+
+
+def copy_to(src, dst):
+    '''copy src to dst through a temporary file, checking the size'''
+    tmp = tmp_name(dst)
+    remove(tmp)
+    shutil.copyfile(src, tmp)
+    if os.path.getsize(tmp) != os.path.getsize(src):
+        remove(tmp)
+        raise StepError('copy of %s to %s has the wrong size' % (src, dst))
+    os.replace(tmp, dst)
+
+
+def grid_runs(wiki, a, state, grids, g, run_dir):
+    '''the run ranges of the CV files that have none yet, from grid jobs counting the events per run: True when all are known'''
+    missing = [(k, p) for k, p in needed_cvs(wiki, a) if not grids.cached(k, p)]
+    sub = []
+    for key, path in missing:
+        name = 'runs:cv_' + key
+        st = state.data.get(name, {})
+        out = os.path.join(run_dir, 'runs_cv_%s.json' % key)
+        if st.get('status') == 'submitted':
+            kind, marker = G.Grid.result(dict(marker_dir=run_dir, name=safe_name(name)))
+            if kind == 'done':
+                counts = dict((int(r), n) for r, n in json.load(open(out)).items())
+                grids.store(key, path, counts)
+                st.update(status='done')
+                state.save()
+            elif kind == 'fail':
+                st.update(status='failed', error='grid job failed, log %s' % os.path.join(run_dir, safe_name(name) + '.log'))
+                state.save()
+                log('%s: FAILED, log %s' % (name, os.path.join(run_dir, safe_name(name) + '.log')))
+            continue
+        if st.get('status') == 'failed' and st.get('tries', 0) >= a.max_tries:
+            log('%s: failed %d times, not resubmitting (--reset it after a look at the log)' % (name, st['tries']))
+            continue
+        sub.append(dict(name=safe_name(name), marker_dir=run_dir,
+                        cmd=['bash', '-c', 'python3 {code}/processing/run_production_det.py --worker-runs {in0} {out0}'],
+                        inputs=[dict(path=path, mode='stream')], outputs=[dict(name=os.path.basename(out), dest=out)]))
+    if sub:
+        jobid = g.submit(sub, 'det_runs', memory=GRID_RES['runs'][0], lifetime=GRID_RES['runs'][1])
+        if not a.dry_run:
+            for t in sub:
+                name = 'runs:' + t['name'][len('runs_'):]
+                st = state.data.setdefault(name, {})
+                st.update(status='submitted', jobid=jobid, tries=st.get('tries', 0) + 1)
+            state.save()
+    return not [k for k, p in needed_cvs(wiki, a) if not grids.cached(k, p)]
+
+
+def run_grid(tasks, todo, by_name, consumers, a, state, g):
+    '''one pass: collect finished jobs, submit the tasks that can run now; returns the number of jobs still running'''
+    stage_dir = G.scratch_dir('det', 'final')
+    info_dir = G.scratch_dir('det', 'jobs')
+    queued = None
+    for t in tasks:
+        n = t['name']
+        st = state.data.get(n, {})
+        if st.get('status') != 'submitted':
+            continue
+        sn = safe_name(n)
+        kind, marker = G.Grid.result(dict(marker_dir=info_dir, name=sn))
+        if kind == 'done':
+            try:
+                info = json.load(open(os.path.join(info_dir, sn + '.info.json')))
+                final = t['outputs'][0]
+                if t['intermediate']:
+                    os.replace(tmp_name(final), final)
+                else:
+                    os.makedirs(os.path.dirname(final), exist_ok=True)
+                    copy_to(os.path.join(stage_dir, os.path.basename(final)), final)
+                    remove(os.path.join(stage_dir, os.path.basename(final)))
+                with state.lock:
+                    st.update(status='done', info=info, cmd=signature(t), seconds=round(marker.get('wall', 0)), error=None,
+                              grid=dict((k, marker.get(k)) for k in ('host', 'wall', 'maxrss_mb', 'disk_mb')),
+                              finished=time.strftime('%Y-%m-%d %H:%M:%S'), deleted=False)
+                    state.save()
+                todo.discard(n)
+                log('%s: done on the grid (%.0f s, %.0f MB)' % (n, marker.get('wall', 0), marker.get('maxrss_mb', 0)))
+            except Exception as e:
+                with state.lock:
+                    st.update(status='failed', error='after the grid job: %s' % e)
+                    state.save()
+                log('%s: FAILED after the grid job: %s' % (n, e))
+        elif kind == 'fail':
+            logf = os.path.join(info_dir, sn + '.log')
+            with state.lock:
+                st.update(status='failed', error='grid job failed at %s (rc %s), log %s' % (marker.get('stage'), marker.get('rc'), logf))
+                state.save()
+            log('%s: grid job FAILED at %s, log %s' % (n, marker.get('stage'), logf))
+        else:
+            if queued is None:
+                queued = g.queued()
+            if G.Grid.cluster(st.get('jobid')) not in queued:
+                with state.lock:
+                    st.update(status='failed', error='grid job %s left the queue without a result (jobsub_fetchlog for its log)' % st.get('jobid'))
+                    state.save()
+                log('%s: grid job %s lost' % (n, st.get('jobid')))
+    delete_unneeded(tasks, a, state, todo, consumers)
+
+    # tasks that can run now: to do, not submitted, every dependency done
+    det_bdt = [t for t in tasks if t['name'].startswith('bdt:') and not t['name'].startswith('bdt:cv_')]
+    status = lambda n: state.data.get(n, {}).get('status')
+    on_disk = sum(1 for t in det_bdt if status(t['name']) == 'submitted' or
+                  (t['name'] not in todo and not state.data.get(t['name'], {}).get('deleted') and
+                   any(u['name'] in todo for u in consumers.get(t['outputs'][0], []))))
+    ready = {}
+    for t in tasks:
+        n = t['name']
+        if n not in todo or status(n) == 'submitted' or any(d in todo for d in t['deps']):
+            continue
+        if status(n) == 'failed' and state.data[n].get('tries', 0) >= a.max_tries:
+            continue
+        if t in det_bdt:
+            if on_disk >= a.max_detvar:
+                continue
+            on_disk += 1
+        ready.setdefault(grid_kind(n), []).append(t)
+    for kind, ts in ready.items():
+        for i in range(0, len(ts), a.batch):
+            batch = ts[i:i + a.batch]
+            specs = [grid_task_of(t, a, by_name, state, stage_dir, info_dir) for t in batch]
+            jobid = g.submit(specs, 'det_' + kind, memory=GRID_RES[kind][0], lifetime=GRID_RES[kind][1])
+            if a.dry_run:
+                log('%d %s tasks, e.g. %s: %s' % (len(batch), kind, batch[0]['name'], specs[0]['cmd'][2][:600]))
+                continue
+            with state.lock:
+                for t in batch:
+                    st = state.data.setdefault(t['name'], {})
+                    st.update(status='submitted', jobid=jobid, tries=st.get('tries', 0) + 1, error=None, mode='grid',
+                              submitted=time.strftime('%Y-%m-%d %H:%M:%S'))
+                state.save()
+    return sum(1 for t in tasks if status(t['name']) == 'submitted')
+
+
+def write_det_cv_input(tasks, by_name, a, state):
+    '''det_cv_input.txt of the -m2 files made so far (configurations/det_cv_input.txt format)'''
+    lines = []
+    for t in tasks:
+        if t['name'].startswith('m3:') and state.data.get(t['name'], {}).get('status') == 'done':
+            for d in t['deps'][1:]:
+                lines.append('%s %s\n' % (by_name[d]['outputs'][0], t['outputs'][0]))
+    with open(os.path.join(a.state_dir, 'det_cv_input.txt'), 'w') as f:
+        f.write(''.join(lines) + 'end end\n')
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('-j', '--jobs', type=int, default=1, help='tasks run at the same time (default 1)')
@@ -540,7 +812,8 @@ def main():
     p.add_argument('--max-detvar', type=int, default=None,
                    help='DetVar bdt_convert files on disk at the same time (default: -j, at least 2)')
     p.add_argument('--det-dir', default=os.path.join(OUT_DIR, 'DetVar'))
-    p.add_argument('--work-dir', default=os.path.join(OUT_DIR, 'work', 'DetVar'))
+    p.add_argument('--work-dir', default=None, help='bdt_convert and run range files (default %s, with --grid %s)'
+                   % (os.path.join(OUT_DIR, 'work', 'DetVar'), G.scratch_dir('det', 'work')))
     p.add_argument('--state-dir', default=os.path.join(HERE, 'state_det'), help='state file and logs (keep it off /pnfs)')
     p.add_argument('--bin-dir', default=os.path.join(TOP, 'bin'))
     p.add_argument('--wiki', default=os.path.join(TOP, 'numuCCana/mcc910wiki.txt'))
@@ -548,15 +821,70 @@ def main():
     p.add_argument('--trim-config', default=os.path.join(HERE, 'config_wc.txt'),
                    help='tree_trimmer config of the run ranges (config.txt with wcpselection T_pot as a POT tree)')
     p.add_argument('--weights', default=os.path.join(HERE, 'weights'), help='BDT weights directory of bdt_convert')
+    p.add_argument('--chunks', default=None, help='run ranges file (default <state dir>/chunks.json)')
+    p.add_argument('--grid', action='store_true', help='run the tasks as grid jobs (on a gpvm; no ROOT needed there)')
+    p.add_argument('--wait', action='store_true', help='--grid: follow the jobs (and submit what becomes ready) until all are done')
+    p.add_argument('--poll', type=int, default=300, help='--wait: seconds between checks (default 300)')
+    p.add_argument('--max-tries', type=int, default=2, help='--grid: submissions of a task before giving up (default 2)')
+    p.add_argument('--batch', type=int, default=500, help='--grid: tasks per submission (default 500)')
+    p.add_argument('--app-dir', default=TOP, help='--grid: directory with bin/, lib/, lib64/ for the code tarball')
+    p.add_argument('--worker-runs', nargs=2, metavar=('FILE', 'OUT'), help=argparse.SUPPRESS)
+    p.add_argument('--worker-check', nargs=4, metavar=('TASK', 'FILE', 'DONE', 'OUT'), help=argparse.SUPPRESS)
     a = p.parse_args()
     a.state_dir = os.path.abspath(a.state_dir)
     a.run_dir = os.path.join(a.state_dir, 'run')
+    a.chunks = a.chunks or os.path.join(a.state_dir, 'chunks.json')
+    if a.work_dir is None:
+        a.work_dir = G.scratch_dir('det', 'work') if a.grid else os.path.join(OUT_DIR, 'work', 'DetVar')
+    a.max_detvar = a.max_detvar or (10 if a.grid else max(2, a.jobs))
+
+    # grid worker: the run counts of an unprocessed CV file, or the check of a task's output (files read over xrootd)
+    if a.worker_runs:
+        os.environ['DET_GRID_WORKER'] = '1'
+        counts = run_counts(a.worker_runs[0])
+        with open(a.worker_runs[1], 'w') as f:
+            json.dump(dict((str(r), n) for r, n in counts.items()), f)
+        return 0
+    if a.worker_check:
+        os.environ['DET_GRID_WORKER'] = '1'
+        name, output, done_file, info_file = a.worker_check
+        tasks = build_tasks(rp.read_wiki(a.wiki), a, Grids(a.chunks, a.chunk_events, fixed=True).get)
+        t = dict((x['name'], x) for x in tasks)[name]
+        info = t['check'](output, json.load(open(done_file)))
+        with open(info_file, 'w') as f:
+            json.dump(info, f)
+        log('%s: check passed' % name)
+        return 0
+
     os.makedirs(os.path.join(a.state_dir, 'logs'), exist_ok=True)
     state = State(os.path.join(a.state_dir, 'state.json'), dry=a.dry_run or a.status)
-
     wiki = rp.read_wiki(a.wiki)
-    grids = Grids(os.path.join(a.state_dir, 'chunks.json'), a.chunk_events)
-    tasks = build_tasks(wiki, a, grids.get)
+    grids = Grids(a.chunks, a.chunk_events)
+    if not a.status and not a.dry_run:
+        lockf = open(os.path.join(a.state_dir, '.lock'), 'w')
+        try:
+            fcntl.flock(lockf, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            print('another run_production_det.py is using %s' % a.state_dir)
+            return 1
+    if a.grid and not a.status and not a.reset:
+        # run ranges of the CV files: from grid jobs the first time (counting runs needs ROOT)
+        g_runs = G.Grid(os.path.join(a.state_dir, 'grid'), a.app_dir, dry=a.dry_run, log=log, extra=[(a.wiki, 'processing/mcc910wiki.txt')])
+        while not grid_runs(wiki, a, state, grids, g_runs, G.scratch_dir('det', 'runs')):
+            if not a.wait or a.dry_run:
+                log('the run ranges of the CV files come from grid jobs; run again when they are done (or use --wait)')
+                return 0
+            log('waiting for the run counts of the CV files, next check in %d s' % a.poll)
+            time.sleep(a.poll)
+
+    def get_grid(key, path):
+        if not a.grid:
+            return grids.get(key, path)
+        c = grids.cached(key, path)
+        if not c:
+            raise StepError('run ranges of %s not known yet (run with --grid to get them)' % key)
+        return c
+    tasks = build_tasks(wiki, a, get_grid)
     by_name = dict((t['name'], t) for t in tasks)
     consumers = {}
     for t in tasks:
@@ -586,14 +914,6 @@ def main():
         print('(* output deleted after use)')
         return 0
 
-    lockf = open(os.path.join(a.state_dir, '.lock'), 'w')
-    if not a.dry_run:
-        try:
-            fcntl.flock(lockf, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except OSError:
-            print('another run_production_det.py is using %s' % a.state_dir)
-            return 1
-
     if a.reset:
         names = [n for n in list(state.data) if re.search(a.reset, n)]
         for n in names:
@@ -616,6 +936,26 @@ def main():
                     if d not in todo and not all(os.path.exists(o) for o in by_name[d]['outputs']):
                         todo.add(d)
                         changed = True
+
+    if a.grid:
+        bad = [t['inputs'][0] for t in tasks if t['name'] in todo and t['name'].startswith('bdt:') and not os.path.exists(t['inputs'][0])]
+        if bad:
+            print('inputs not found:\n  ' + '\n  '.join(bad))
+            return 1
+        g = G.Grid(os.path.join(a.state_dir, 'grid'), a.app_dir, weights=True, dry=a.dry_run, log=log,
+                   extra=[(a.wiki, 'processing/mcc910wiki.txt'), (a.chunks, 'processing/det_chunks.json')])
+        while True:
+            n = run_grid(tasks, todo, by_name, consumers, a, state, g)
+            if not a.wait or a.dry_run or not n:
+                break
+            log('%d grid jobs running, next check in %d s' % (n, a.poll))
+            time.sleep(a.poll)
+        if not a.dry_run:
+            write_det_cv_input(tasks, by_name, a, state)
+        left = [t['name'] for t in tasks if t['name'] in todo]
+        log('%d of %d tasks done, %d grid jobs running%s' % (len(tasks) - len(left), len(tasks), n,
+                                                              (', failed: ' + ' '.join(t for t in left if state.data.get(t, {}).get('status') == 'failed')) if left else ''))
+        return 1 if left else 0
 
     if a.dry_run:
         shown = {}
@@ -688,7 +1028,7 @@ def main():
     signal.signal(signal.SIGTERM, stop)
 
     delete_unneeded(tasks, a, state, todo, consumers)  # files left by a run stopped before deleting them
-    max_detvar = a.max_detvar or max(2, a.jobs)
+    max_detvar = a.max_detvar
     det_bdt = [t for t in tasks if t['name'].startswith('bdt:') and not t['name'].startswith('bdt:cv_')]
 
     def detvar_on_disk():
@@ -730,14 +1070,7 @@ def main():
             if rp.STOP.is_set() and not running:
                 break
 
-    # det_cv_input.txt of the -m2 files made so far (configurations/det_cv_input.txt format)
-    lines = []
-    for t in tasks:
-        if t['name'].startswith('m3:') and state.data.get(t['name'], {}).get('status') == 'done':
-            for d in t['deps'][1:]:
-                lines.append('%s %s\n' % (by_name[d]['outputs'][0], t['outputs'][0]))
-    with open(os.path.join(a.state_dir, 'det_cv_input.txt'), 'w') as f:
-        f.write(''.join(lines) + 'end end\n')
+    write_det_cv_input(tasks, by_name, a, state)
 
     left = [t['name'] for t in tasks if t['name'] in todo]
     log('%d of %d tasks done%s; det_cv_input.txt in %s' % (len(tasks) - len(left), len(tasks),

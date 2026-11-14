@@ -9,7 +9,7 @@
 #   {out0}, {out1}, ... its outputs: files ./out/<name> the command writes, copied with ifdh cp to their "dest" on /pnfs
 #                       (scratch) after the command succeeded
 #   {code}              the unpacked code tarball (bin/, lib/, lib64/, processing/)
-#   {work}              the working directory of the task
+#   {work}              the working directory of the task (where its "files", {name: content}, are written first)
 # The command's stdout/stderr go to <task name>.log, which is copied next to the first output's dest, together with the
 # marker <task name>.done (all outputs copied) or <task name>.fail (anything failed): a json with the exit code, the
 # wall time, the peak memory of the command and the disk used, which grid.py reads to follow the jobs and to measure
@@ -73,6 +73,10 @@ def main():
             subprocess.call(['ifdh', 'cp', f, os.path.join(dest_dir, f)])
         sys.exit(0 if ok else 1)
 
+    # small files the task carries (e.g. the results of earlier tasks its check needs), written before the command
+    for fname, content in task.get('files', {}).items():
+        with open(os.path.join(work, fname), 'w') as f:
+            f.write(content)
     subst = {'code': code, 'work': work}
     for i, inp in enumerate(task.get('inputs', [])):
         if inp.get('mode', 'stream') == 'copy':

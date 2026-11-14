@@ -38,9 +38,11 @@ def scratch_dir(*parts):
 
 
 class Grid:
-    def __init__(self, work_dir, app_dir=TOP, weights=False, dry=False, log=print):
-        '''work_dir: local directory for the tarballs and the submitted task lists (e.g. <state dir>/grid)'''
+    def __init__(self, work_dir, app_dir=TOP, weights=False, dry=False, log=print, extra=()):
+        '''work_dir: local directory for the tarballs and the submitted task lists (e.g. <state dir>/grid); extra: more
+        files for the tarball, [(path on disk, path in the tarball)]'''
         self.work_dir, self.app_dir, self.weights, self.dry, self.log = work_dir, os.path.abspath(app_dir), weights, dry, log
+        self.extra = list(extra)
         os.makedirs(os.path.join(work_dir, 'submissions'), exist_ok=True)
         self._tar = None
 
@@ -62,6 +64,7 @@ class Grid:
                 for f in files:
                     p = os.path.join(root, f)
                     out.append((p, os.path.join('processing', os.path.relpath(p, HERE))))
+        out += self.extra
         if not any(m[1].startswith('bin/') for m in out):
             raise RuntimeError('no apps in %s/bin' % self.app_dir)
         return sorted(out, key=lambda m: m[1])
