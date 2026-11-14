@@ -37,7 +37,7 @@ int main( int argc, char** argv )
 {
 
   if (argc < 2){
-    std::cout << "./plot_hist -r[#run, 0 for all] -e[1 for standard, 2 for Bayesian, 3 for total uncertainty] -l[LEE strength, check against total uncertainty config] -s[path-to-external covmatrix file] -c[check MC and DATA spectra against the ones from external file]" << std::endl;
+    std::cout << "./plot_hist -r[#run, 0 for all] -e[1 for standard, 2 for Bayesian, 3 for total uncertainty] -l[LEE strength, check against total uncertainty config] -s[path-to-external covmatrix file] -c[check MC and DATA spectra against the ones from external file] -q[1: batch, exit after writing the plots]" << std::endl;
   }
 
   int run = 1; // run 1 ...
@@ -50,6 +50,7 @@ int main( int argc, char** argv )
   TString cov_inputfile = "";
   int flag_check = 0;
   int flag_truthlabel = 0;
+  int flag_quit = 0; // 1: batch (no display), exit after writing the plots instead of the event loop
 
   argc = LEEana::join_option_values(argc, argv, 1); // also take "-x VALUE" for "-xVALUE"
   for (Int_t i=1;i!=argc;i++){
@@ -78,6 +79,9 @@ int main( int argc, char** argv )
     }break;
     case 't':{
       flag_truthlabel = atoi(&argv[i][2]);
+    }break;
+    case 'q':{
+      flag_quit = atoi(&argv[i][2]);
     }break;
     }
   }
@@ -379,6 +383,7 @@ int main( int argc, char** argv )
     // plotting ...
     TApplication theApp("theApp",&argc,argv);
     theApp.SetReturnFromRun(true);
+    if(flag_quit) gROOT->SetBatch(kTRUE);
     gStyle->SetOptStat(0);
 
     if(flag_breakdown == 0){
@@ -917,7 +922,7 @@ int main( int argc, char** argv )
     }
 
   }
-  theApp.Run();
+  if(!flag_quit) theApp.Run();
   }
   else // flag_breakdown == true
   {
@@ -1889,7 +1894,7 @@ datapot = 4.0e19;
         else canvas[obschannel-1]->Print("selection.pdf");
 
     }
-    theApp.Run();
+    if(!flag_quit) theApp.Run();
   } // flag_breakdown end
   }
 
