@@ -12,7 +12,7 @@ import run_production as rp
 
 TREES = dict(rp.EVENT_TREES)
 TREES[rp.POT_TREE[0]] = rp.POT_TREE[1]
-TREES['nuselection/SubRun'] = ['run', 'subRun', 'pot']
+TREES['nuselection/SubRun'] = ['run', 'subRun']
 
 
 def main():

@@ -58,7 +58,7 @@ INPUTS = [
 PNFS_OUT = '/pnfs/uboone/persistent/users/bbogart/numucc'
 EXP_OUT = '/exp/uboone/data/users/bbogart/numucc'
 FLAGS = ['-o1', '-k1', '-c1']
-GRID_RES = dict(memory='2GB', lifetime='4h')
+GRID_RES = dict(memory='4GB', lifetime='4h')   # tree_trimmer peaks at ~2.2 GB on the full runs (2 GB jobs were killed)
 
 
 def out_name(inp):
