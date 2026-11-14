@@ -2,6 +2,7 @@
 // calculations are in TLee.cxx.
 
 #include "PlotTLee_val.h"
+#include "PlotTLee_sp.h"
 
 // x axis segments of the style in the current pad: an axis with the variable values below the bins of each segment
 // (labels if flag_axis_labels), separators between the segments, the segment labels and the test description at the top
@@ -133,7 +134,8 @@ TLeeGoFPlotStyle TLee::Get_GoF_plot_style(int index)
 	break;
 
   default:
-	get_val_plot_style(index, style);// model-validation tests (src/PlotTLee_val.h)
+	if( !get_val_plot_style(index, style) )// model-validation tests (src/PlotTLee_val.h)
+	  get_sp_plot_style(index, style);// muon spacepoint comparisons (src/PlotTLee_sp.h)
 	break;
   }
 
