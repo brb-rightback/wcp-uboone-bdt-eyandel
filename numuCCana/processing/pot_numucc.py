@@ -9,9 +9,11 @@
 # Wiki check (SubRun list, the one the wiki column uses): each file is compared with the wiki entry it corresponds to:
 #   beam on   checkout_<name>_v2.root   <->  the _v2 file it was trimmed from (trim_checkout_<name>_v2.root): the trim
 #             kept every subrun, so the POT must agree to the 4 digits the wiki prints and the triggers exactly
-#   beam off  checkout_<name>.root      <->  the uboonepro checkout of the same name (wc processed; runs 1, 3: the file
-#             without the WC BDT training subruns, as run_production.py removes them too): reported, a difference
-#             means the two productions kept different subruns
+#   beam off  checkout_<name>.root      <->  the uboonepro checkout of the same name (wc processed): reported, a difference
+#             means the two productions kept different subruns. Runs 1 and 3 (TRAIN_KEPT): our EXT files keep the Wire-Cell
+#             BDT training subruns on purpose (the analysis BDTs were not trained on EXT), the wiki entry is the file
+#             without them; so the check removes the training subruns (trainlist_all.dat) from our SubRun list, runs
+#             getDataInfo.py on the rest and requires the wiki value exactly ("match, training subruns kept")
 # Files without a wiki entry (or an entry without POT/triggers) are listed. Exit code 1 if a beam-on file disagrees.
 #
 # Run where getDataInfo.py works (python2, or the SL7 container wrapper trimmed_gdi.py uses) and uproot or PyROOT reads
@@ -28,6 +30,24 @@ import run_production as rp
 import run_trim_numucc as rt
 
 TRIMMED_GDI = os.path.join(rp.TOP, 'numuCCana', 'pot_info', 'trimmed_check', 'trimmed_gdi.py')
+TRAINLIST = os.path.join(HERE, 'trainlist_all.dat')
+# EXT checkouts that keep the Wire-Cell BDT training subruns (run -> file type of trainlist_all.dat), see run_production.py
+TRAIN_KEPT = {'1': 'data_extbnb_run1', '3': 'data_extbnb_run3'}
+
+
+def train_kept(path):
+    '''the trainlist file type of an EXT checkout that keeps its training subruns, else None'''
+    m = re.search(r'_BNB_beam_off_data_surprise_reco2_hist_(\d)\.root$', os.path.basename(path))
+    return TRAIN_KEPT.get(m.group(1)) if m else None
+
+
+def training_keys(ftype, shift):
+    out = set()
+    for l in open(TRAINLIST):
+        t = l.split()
+        if len(t) >= 3 and t[0] == ftype:
+            out.add(int(t[1]) * shift + int(t[2]))
+    return out
 POT_REL = 5e-4   # the wiki prints the POT with 4 significant digits
 
 
@@ -91,6 +111,11 @@ def main():
             sys.exit('trimmed_gdi.py failed')
     res = dict((r['path'], r) for r in json.load(open(os.path.join(gdir, 'results.json'))))
     wiki = read_wiki_values(a.wiki)
+    runner = None
+    if any(train_kept(f) for f, _, _, _ in F):   # getDataInfo.py of trimmed_gdi.py (same command and cache)
+        sys.path.insert(0, os.path.dirname(TRIMMED_GDI))
+        import shutil, trimmed_gdi as T
+        runner = T.Runner(a.gdi_cmd or ('python2 %s' % T.GDI if shutil.which('python2') else 'bash %s' % T.CONTAINER), 3, os.path.join(gdir, 'gdi'))
 
     lines = ['POT / triggers (getDataInfo.py -v3, SubRun list) vs the per-file column of %s' % a.wiki, '',
              '%-8s %-92s %12s %12s %12s %12s  %s' % ('kind', 'file', 'POT', 'wiki POT', 'triggers', 'wiki trig', 'result')]
@@ -108,22 +133,36 @@ def main():
         else:                    # the wc processed file (not the Wire-Cell only one, which has a _v2 name)
             entry = [e for e in entry if '/wc_only' not in e[0]]
         wpot, wtrig = parse_value(entry[0][1]) if len(entry) == 1 else (None, None)
+        train = None
         if len(entry) != 1:
             result = 'no wiki entry' if not entry else 'several wiki entries (%d)' % len(entry)
+        elif kind == 'beam off' and train_kept(f):
+            # the wiki file is ours without the training subruns: compare that part exactly
+            name = os.path.basename(f)[:-len('.root')]
+            keys = set(int(l.split()[0]) * T.SHIFT + int(l.split()[1]) for l in open(os.path.join(gdir, 'lists', name + '_SubRun.txt')) if l.strip())
+            tk = training_keys(train_kept(f), T.SHIFT)
+            rest = sorted(keys - tk)
+            g = runner.get(T.QUANT[('BNB', False)][0], rest) or {}
+            ext_rest = g.get('EXT')
+            train = dict(type=train_kept(f), subruns=len(keys & tk), ext_without_training=ext_rest,
+                         ext_training=(x['trig'] - ext_rest) if ext_rest is not None and x['trig'] is not None else None)
+            ok = ext_rest is not None and abs(ext_rest - wtrig) < 0.5
+            result = ('match, training subruns kept (%d subruns, %d triggers)' % (train['subruns'], round(train['ext_training']))
+                      if ok else 'DIFFERENT (without the training subruns: %s triggers)' % ('%d' % round(ext_rest) if ext_rest is not None else '-'))
         else:
             ok_pot = (x['pot'] is None and wpot is None) or (wpot is not None and x['pot'] is not None and abs(x['pot'] - wpot) <= POT_REL * wpot)
             ok_trig = wtrig is not None and x['trig'] is not None and abs(x['trig'] - wtrig) < 0.5
             result = 'match' if ok_pot and ok_trig else 'DIFFERENT (%s)' % ', '.join(n for n, ok in (('POT', ok_pot), ('triggers', ok_trig)) if not ok)
-        if result != 'match' and kind == 'beam on':
+        if not result.startswith('match') and kind == 'beam on':
             bad_on += 1
-        if result != 'match' and kind == 'beam off':
+        if not result.startswith('match') and kind == 'beam off':
             notes.append(os.path.basename(f))
         lines.append('%-8s %-92s %12s %12s %12s %12s  %s' % (
             kind, os.path.basename(f)[:92], '%.4e' % x['pot'] if x['pot'] else '-', '%.4e' % wpot if wpot else '-',
             '%d' % round(x['trig']) if x['trig'] is not None else '-', '%d' % wtrig if wtrig else '-', result))
         table[f] = dict(kind=kind, pot=x['pot'], triggers=x['trig'], subruns=x['nsub'], events=r['nev'],
                         tpot_list=dict(pot=t.get('pot'), triggers=t.get('trig'), subruns=t.get('nsub')),
-                        wiki_file=wname, wiki_pot=wpot, wiki_triggers=wtrig, wiki_check=result)
+                        wiki_file=wname, wiki_pot=wpot, wiki_triggers=wtrig, wiki_check=result, training_kept=train)
     lines += ['', 'beam on: %d of %d disagree with the wiki' % (bad_on, sum(1 for _, k, _, _ in F if k == 'beam on')),
               'beam off: %d of %d differ from the wiki entry of the same name%s' % (
                   len(notes), sum(1 for _, k, _, _ in F if k == 'beam off'),

@@ -8,6 +8,8 @@
 #
 # The run 1 and 3 open data beam-on samples have no unprocessed file of their own: they are made from the new run 1 / 3
 # beam-on checkout with tree_trimmer -i full_opendata{1,3}_anti_list.txt (as the production team made them).
+# The beam-on data samples (beam_on, opendata) are now replaced by the POT-trimmed _v2 checkouts of run_trim_numucc.py and
+# are skipped unless --include-replaced. EXT runs 1 and 3 keep the Wire-Cell BDT training subruns (see SAMPLES).
 # bdt_convert flags follow the production table (numuCCana/proscessingwiki.txt, Production Details), with config.txt
 # everywhere (no spline weights): -p1 -r1 -a<samdef> -t<config>, plus -l<trainlist> -g<file type> -b0 for the run 1 / 3 nu
 # overlay and dirt (WC BDT training subruns) and -i<zero lifetime list> for the run 4b / 5 nu overlay and dirt.
@@ -78,9 +80,12 @@ SAMPLES = [
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_on_retuple_retuple_hist_opendata_19550', kind='opendata', run='4a'),
     dict(name='MCC9.10_Run4b_v10_04_07_20_BNB_beam_on_metapatch_retuple_retuple_hist_opendata_20700', kind='opendata', run='4b'),
 
-    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_1', kind='beam_off', run='1', train='data_extbnb_run1'),
+    # EXT runs 1, 3: the Wire-Cell BDT training subruns (data_extbnb_run1/3 of trainlist_all.dat) are kept on purpose, the
+    # BDTs of this analysis were not trained on EXT. So these files are the uboonepro non-training EXT checkout plus the
+    # training subruns, and their EXT triggers are larger than the wiki value of that file (pot_numucc.py checks this).
+    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_1', kind='beam_off', run='1'),
     dict(name=R123 + 'beam_off_data_surprise_reco2_hist_2', kind='beam_off', run='2'),
-    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_3', kind='beam_off', run='3', train='data_extbnb_run3'),
+    dict(name=R123 + 'beam_off_data_surprise_reco2_hist_3', kind='beam_off', run='3'),
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_off_retuple_retuple_hist_4a', kind='beam_off', run='4a'),
     dict(name='MCC9.10_Run4b_v10_04_07_20_BNB_beam_off_metapatch_retuple_retuple_hist', kind='beam_off', run='4b'),
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_off_retuple_retuple_hist_4c', kind='beam_off', run='4c'),
@@ -88,6 +93,9 @@ SAMPLES = [
     dict(name='MCC9.10_Run4acd5_v10_04_07_23_BNB_beam_off_retuple_retuple_hist_5', kind='beam_off', run='5'),
 ]
 MC_KINDS = ('nu_overlay', 'dirt')
+# beam-on data made here before; the analysis uses the POT-trimmed _v2 checkouts of run_trim_numucc.py instead (the
+# checkouts made here were deleted), so these samples are skipped unless --include-replaced
+REPLACED_KINDS = ('beam_on', 'opendata')
 
 # branches every final file must have (tree: branches); the event trees must all have the same number of entries
 EVENT_TREES = {
@@ -498,6 +506,8 @@ def main():
     p.add_argument('--trainlist', default=os.path.join(HERE, 'trainlist_all.dat'))
     p.add_argument('--zero-list', default=os.path.join(HERE, 'zero_e_lieftime_list.txt'))
     p.add_argument('--weights', default=os.path.join(HERE, 'weights'), help='BDT weights directory of bdt_convert')
+    p.add_argument('--include-replaced', action='store_true',
+                   help='also the beam-on data samples (%s), replaced by run_trim_numucc.py' % ', '.join(REPLACED_KINDS))
     a = p.parse_args()
     a.state_dir = os.path.abspath(a.state_dir)
     a.run_dir = os.path.join(a.state_dir, 'run')
@@ -509,6 +519,12 @@ def main():
         sel = [s for s in sel if s['kind'] in a.kinds.split(',')]
     if a.runs:
         sel = [s for s in sel if s['run'] in a.runs.split(',')]
+    if not a.include_replaced:
+        n = len(sel)
+        sel = [s for s in sel if s['kind'] not in REPLACED_KINDS]
+        if n != len(sel):
+            print('%d beam-on data samples skipped: replaced by the _v2 checkouts of run_trim_numucc.py (--include-replaced to '
+                  'make them here anyway)' % (n - len(sel)))
 
     os.makedirs(a.state_dir, exist_ok=True)
     state = State(os.path.join(a.state_dir, 'state.json'), dry=a.dry_run or a.status)
