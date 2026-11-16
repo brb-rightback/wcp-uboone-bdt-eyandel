@@ -958,7 +958,7 @@ int main( int argc, char** argv )
         pad1->Draw();
         pad2->Draw();
         hstack[obschannel-1] = new THStack(Form("hs%d", obschannel),"");
-        legend[obschannel-1] = new TLegend(0.2, 0.72, 0.92, 0.92);
+        legend[obschannel-1] = new TLegend(0.2, 0.72, 0.89, 0.92);// inside the frame (right margin 0.1)
         legend[obschannel-1]->SetNColumns(3);
         TH1F* hdata = (TH1F*)map_obsch_histos[obschannel].at(0)->Clone("hdata");
         TH1F* hbadmatch = (TH1F*)hdata->Clone("hbadmatch");
@@ -1692,7 +1692,7 @@ datapot = 4.0e19;
         }
 
 
-        //legend[obschannel-1]->SetFillStyle(0);
+        legend[obschannel-1]->SetFillStyle(0);// no white box over the frame and the spectrum
         double relerr_data = 1./TMath::Sqrt(hdata->Integral());
         double relerr_pred = TMath::Sqrt(sumtotalcov[obschannel])/hmc->Integral();
         double data_pred_ratio = hdata->Integral()/normalization/hmc->Integral();
@@ -1883,7 +1883,9 @@ datapot = 4.0e19;
         legend2[obschannel-1]->SetTextSize(0.08);
         legend2[obschannel-1]->SetFillStyle(0);
         legend2[obschannel-1]->Draw();
-        draw_hist_axis(plot_style, hdata, pad1, pad2);
+        HistPlotStyle style_axis = plot_style;
+        style_axis.description = "";// the channel is already in the plot title
+        draw_hist_axis(style_axis, hdata, pad1, pad2);
         pad2->Modified();
 
         canvas[obschannel-1]->Print((TString)hdata->GetTitle()+".png");
