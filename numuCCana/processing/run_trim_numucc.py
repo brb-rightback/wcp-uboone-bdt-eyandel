@@ -201,7 +201,7 @@ def follow_grid(sel, a, state, g):
         if st.get('status') != 'submitted':
             continue
         task = st['task']
-        kind, marker = G.Grid.result(task)
+        kind, marker = G.Grid.result(task, st.get('jobid'))
         if kind == 'done':
             out, info = grid_paths(s)
             log('%s: grid job done (%.0f s, %.0f MB peak memory)' % (s['name'], marker.get('wall', 0), marker.get('maxrss_mb', 0)))

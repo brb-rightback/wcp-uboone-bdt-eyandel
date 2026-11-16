@@ -2,7 +2,10 @@
 # Production of the BNB detector variation files from the unprocessed SURPRISE DetVar ntuples listed in
 # numuCCana/mcc910wiki.txt, with the merge_det format that stores the CV once:
 #
-#   bdt_convert -p1 -r1 -a<samdef> -t<config>      every CV and DetVar file
+#   tree_trimmer <trimmer_config_det_pre.txt>      every CV and DetVar file: only the trees and branches bdt_convert and
+#                                                  the analysis read (the branches of trimmer_config_numucc.txt, with
+#                                                  pot_tor875), about 10 of the 79 GB of a 1M event file
+#   bdt_convert -p1 -r1 -a<samdef> -t<config>      every pre-trimmed file
 #   tree_trimmer -y<lo> -z<hi> -k0 -r0             split each file in run ranges of about --chunk-events CV events
 #   merge_det <cv> <detvar> <out> -m2 -n<XX>       per run range: DetVar events matched to the CV, plus the flags of
 #                                                  the CV events used; then hadd of the run ranges
@@ -18,10 +21,10 @@
 # XX is the DetVar number of det_input.txt (#period; flag_match_rse_XX is what det_cov_matrix -rXX reads). The run 3
 # DetVar files are merged twice, with the run 3a CV (output ..._3a) and with the run 3b CV (..._3b): the 1mil 3b CV for
 # the ly* and WM* variations, the 500k one for recomb2 and sce. The bdt_convert and run range files are deleted once
-# nothing needs them. At the end <state dir>/det_cv_input.txt lists every -m2 file with its CV file
+# nothing needs them (the pre-trimmed file once its bdt_convert is done). At the end <state dir>/det_cv_input.txt lists every -m2 file with its CV file
 # (configurations/det_cv_input.txt format).
 #
-# Checks: every run range file has the events and POT subruns of its source in that range (none lost or duplicated);
+# Checks: every pre-trimmed file has the entries of every tree it keeps and the POT of the unprocessed file; every run range file has the events and POT subruns of its source in that range (none lost or duplicated);
 # every -m2 run range as for the whole file; the hadd files add up to their run ranges and to the bdt_convert CV file.
 #
 # Run inside the SL7 container with uboonecode set up, with bin/merge_det built from the det_disk_saver branch and
@@ -45,7 +48,7 @@
 # the unprocessed CV files, for the run ranges (--worker-runs), and continues once they are in. Intermediate files go to
 # /pnfs/uboone/scratch/users/<user>/grid/det/work (deleted once used), the final -m2 / -m3 files are written to
 # .../grid/det/final and copied to --det-dir; job logs and markers in .../grid/det/jobs. A failed or lost job is
-# resubmitted on the next run, up to --max-tries submissions; at most --max-detvar DetVar bdt_convert files exist at once.
+# resubmitted on the next run, up to --max-tries submissions; at most --max-detvar DetVar files have pre-trim / bdt_convert files at once.
 #
 # Resuming works as in run_production.py (whose helpers are used here): every task writes to a temporary file renamed
 # after its check, its progress is in <state dir>/state.json, finished tasks are skipped unless their command (or -m3
@@ -274,6 +277,34 @@ def check_bdt(path, done):
     return info
 
 
+PRE_TREES = {'wcpselection/T_eval': ['run', 'subrun', 'event', 'weight_cv', 'match_found'],
+             'wcpselection/T_BDTvars': ['numu_cc_flag'],
+             'wcpselection/T_PFeval': ['run', 'reco_nuvtxX'],
+             'wcpselection/T_KINEvars': ['kine_reco_Enu'],
+             'wcpselection/T_spacepoints': ['Trecchargeblob_spacepoints_q', 'Trecchargeblob_spacepoints_real_cluster_id'],
+             'nuselection/NeutrinoSelectionFilter': ['run', 'sub', 'evt'],
+             'lantern/EventTree': ['run', 'subrun', 'event', 'haveReco'],
+             'singlephotonana/eventweight_tree': ['GTruth_ResNum'],
+             'wcpselection/T_pot': ['runNo', 'subRunNo', 'pot_tor875'],
+             'nuselection/SubRun': ['run', 'subRun'],
+             'lantern/potTree': ['run', 'subrun'],
+             'singlephotonana/run_subrun_tree': ['run', 'subrun']}
+
+
+def check_pre(src):
+    '''pre-trim of the unprocessed file src: every tree kept has all its entries, the same POT, the big trees are gone'''
+    def check(path, done):
+        sums = {'pot': ('wcpselection/T_pot', 'pot_tor875', '')}
+        info = query(path, PRE_TREES, sums=sums, absent=['singlephotonana/vertex_tree', 'shrreco3d/_dedx_tree'])
+        same_entries(info, [t for t in event_trees('') if t in PRE_TREES], path)
+        ref = query(src, dict((t, []) for t in PRE_TREES), sums=sums)
+        bad = ['%s %d (%d)' % (t, info[t], ref[t]) for t in PRE_TREES if info[t] != ref[t]]
+        if bad or not close(info['pot'], ref['pot']):
+            raise StepError('%s: entries (unprocessed file) %s, POT %g (%g)' % (path, ', '.join(bad), info['pot'], ref['pot']))
+        return info
+    return check
+
+
 def close(x, y):
     return abs(x - y) <= 1e-9 * max(abs(x), abs(y))
 
@@ -399,6 +430,8 @@ def build_tasks(wiki, a, get_grid):
     app = lambda x: os.path.join(a.bin_dir, x)
     flags = lambda samdef: ['-p1', '-r1', '-a' + samdef, '-t' + a.config]
     bdt_out = lambda samdef: os.path.join(a.work_dir, 'bdt_convert_%s.root' % samdef)
+    pre_out = lambda samdef: os.path.join(a.work_dir, 'pre_%s.root' % samdef)
+    pre = lambda src: [app('tree_trimmer'), src, '{tmp}', a.pre_config, '-o1', '-k0', '-r0', '-v100000']
     chunk_out = lambda name, lo, hi: os.path.join(a.work_dir, 'ranges', '%s_%d_%d.root' % (name, lo, hi))
     trim = lambda src, lo, hi: [app('tree_trimmer'), src, '{tmp}', a.trim_config, '-o1', '-k0', '-r0', '-y%d' % lo, '-z%d' % hi, '-v100000']
 
@@ -427,8 +460,10 @@ def build_tasks(wiki, a, get_grid):
             raise StepError('no unprocessed %s in the wiki' % c['samdef'])
         out = bdt_out(c['samdef'])
         cvt = 'bdt:cv_' + key
-        add(cvt, cmd=[app('bdt_convert'), wiki_cv[c['samdef']], '{tmp}'] + flags(c['samdef']),
-            inputs=[wiki_cv[c['samdef']]], outputs=[out], deps=[], check=check_bdt, intermediate=True)
+        src, pout = wiki_cv[c['samdef']], pre_out(c['samdef'])
+        add('pre:cv_' + key, cmd=pre(src), inputs=[src], outputs=[pout], deps=[], check=check_pre(src), intermediate=True)
+        add(cvt, cmd=[app('bdt_convert'), pout, '{tmp}'] + flags(c['samdef']),
+            inputs=[pout], outputs=[out], deps=['pre:cv_' + key], check=check_bdt, intermediate=True)
         grids[key] = get_grid(key, wiki_cv[c['samdef']])
         for i, (lo, hi) in enumerate(grids[key]['grid']):
             add('trim:cv_%s.%02d' % (key, i), cmd=trim(out, lo, hi), inputs=[out],
@@ -440,7 +475,10 @@ def build_tasks(wiki, a, get_grid):
         samdef = samdef_of(f)
         out = bdt_out(samdef)
         bt = 'bdt:%s_%s' % (var, run)
-        add(bt, cmd=[app('bdt_convert'), f, '{tmp}'] + flags(samdef), inputs=[f], outputs=[out], deps=[], check=check_bdt, intermediate=True)
+        pt = 'pre:%s_%s' % (var, run)
+        add(pt, cmd=pre(f), inputs=[f], outputs=[pre_out(samdef)], deps=[], check=check_pre(f), intermediate=True)
+        add(bt, cmd=[app('bdt_convert'), pre_out(samdef), '{tmp}'] + flags(samdef), inputs=[pre_out(samdef)], outputs=[out],
+            deps=[pt], check=check_bdt, intermediate=True)
         for key, suffix in cv_keys(var, run):
             rmin, rmax = grids[key]['runs']
             name = 'm2:%s_%s%s' % (var, run, suffix)
@@ -545,6 +583,24 @@ def run_task(t, a, state):
         return False
 
 
+def detvar_on_disk(tasks, state, todo, consumers, busy):
+    '''DetVar files (not the CV ones) with a pre-trim or bdt_convert file being made (busy(name)), or made and still
+    needed; at most --max-detvar at once (a new one starts with its pre-trim)'''
+    def holds(t):
+        n = t['name']
+        return busy(n) or (n not in todo and not state.data.get(n, {}).get('deleted') and
+                           any(u['name'] in todo for u in consumers.get(t['outputs'][0], [])))
+    by_file = {}
+    for t in tasks:
+        if t['name'].startswith(('pre:', 'bdt:')) and not t['name'].startswith(('pre:cv_', 'bdt:cv_')):
+            by_file.setdefault(t['name'].split(':', 1)[1], []).append(t)
+    return sum(1 for ts in by_file.values() if any(holds(t) for t in ts))
+
+
+def starts_detvar(t):
+    return t['name'].startswith('pre:') and not t['name'].startswith('pre:cv_')
+
+
 def delete_unneeded(tasks, a, state, todo, consumers):
     '''delete the bdt_convert and run range files whose consumers are all done (and not to be run again)'''
     if a.keep_work:
@@ -568,11 +624,13 @@ def delete_unneeded(tasks, a, state, todo, consumers):
 # needs no ROOT. Intermediate files (bdt_convert, run ranges, CV hadd) live in --work-dir on /pnfs scratch, the final
 # -m2 / -m3 files are written to scratch and copied to --det-dir. Run ranges: the run counts of the unprocessed CV
 # files come from grid jobs too (--worker-runs) the first time.
-GRID_RES = {'runs': ('2GB', '2h'), 'bdt': ('4GB', '24h'), 'trim': ('2GB', '4h'), 'm2r': ('2GB', '4h'), 'hadd': ('2GB', '8h'),
+GRID_RES = {'runs': ('2GB', '2h'), 'pre': ('8GB', '16h'), 'bdt': ('4GB', '24h'), 'trim': ('6GB', '4h'), 'm2r': ('2GB', '4h'), 'hadd': ('2GB', '8h'),
             'm3': ('4GB', '8h')}
 
 
 def grid_kind(name):
+    if name.startswith('pre:'):
+        return 'pre'
     if name.startswith('bdt:'):
         return 'bdt'
     if name.startswith('trim:'):
@@ -611,6 +669,7 @@ def needed_cvs(wiki, a):
 def worker_args(a):
     '''the options a worker needs to build the same task list (paths of the shipped wiki and run ranges)'''
     args = ['--work-dir', a.work_dir, '--det-dir', a.det_dir, '--wiki', '{code}/processing/mcc910wiki.txt',
+            '--pre-config', '{code}/processing/' + os.path.basename(a.pre_config),
             '--chunks', '{code}/processing/det_chunks.json', '--chunk-events', str(a.chunk_events)]
     if a.vars:
         args += ['--vars', a.vars]
@@ -625,6 +684,7 @@ def grid_task_of(t, a, by_name, state, stage_dir, info_dir):
     for x in ('bdt_convert', 'tree_trimmer', 'merge_det'):
         sub[os.path.join(a.bin_dir, x)] = '{code}/bin/' + x
     sub[a.trim_config] = '{code}/processing/' + os.path.basename(a.trim_config)
+    sub[a.pre_config] = '{code}/processing/' + os.path.basename(a.pre_config)
     sub['-t' + a.config] = '-t{code}/processing/' + os.path.basename(a.config)
     sub['{tmp}'] = '{out0}'
     files = {}
@@ -639,10 +699,19 @@ def grid_task_of(t, a, by_name, state, stage_dir, info_dir):
             sub[x] = '{in%d}' % len(inputs)
             inputs.append(dict(path=x, mode='copy' if grid_kind(t['name']) == 'm2r' else 'stream'))
     cmd = [sub.get(x, x) for x in t['cmd']]
-    # results of the tasks the check may look at (its dependencies and theirs)
-    need = set(t['deps'])
-    for d in t['deps']:
-        need.update(by_name[d]['deps'])
+    if grid_kind(t['name']) == 'pre':
+        # the raw files streamed over xrootd: without the TTreeCache, whose vector reads of the large baskets of the run 1 / 3
+        # files dCache refuses ("[3002] Single readv transfer is too large", then garbage reads and runaway memory); only on
+        # the worker, so the task's command (its signature) stays the same
+        cmd = ['env', 'ROOT_TTREECACHE_SIZE=0'] + cmd
+    # results of the tasks the check may look at: all the tasks before it (the hadd of the -m2 run ranges compares with the
+    # bdt_convert CV file, three levels up)
+    need, todo = set(), list(t['deps'])
+    while todo:
+        d = todo.pop()
+        if d not in need:
+            need.add(d)
+            todo.extend(by_name[d]['deps'])
     done_info = dict((n, {'info': state.data[n]['info']}) for n in need if state.data.get(n, {}).get('info') is not None)
     files['done.json'] = json.dumps(done_info)
     final = t['outputs'][0]
@@ -675,7 +744,7 @@ def grid_runs(wiki, a, state, grids, g, run_dir):
         st = state.data.get(name, {})
         out = os.path.join(run_dir, 'runs_cv_%s.json' % key)
         if st.get('status') == 'submitted':
-            kind, marker = G.Grid.result(dict(marker_dir=run_dir, name=safe_name(name)))
+            kind, marker = G.Grid.result(dict(marker_dir=run_dir, name=safe_name(name)), st.get('jobid'))
             if kind == 'done':
                 counts = dict((int(r), n) for r, n in json.load(open(out)).items())
                 grids.store(key, path, counts)
@@ -714,7 +783,7 @@ def run_grid(tasks, todo, by_name, consumers, a, state, g):
         if st.get('status') != 'submitted':
             continue
         sn = safe_name(n)
-        kind, marker = G.Grid.result(dict(marker_dir=info_dir, name=sn))
+        kind, marker = G.Grid.result(dict(marker_dir=info_dir, name=sn), st.get('jobid'))
         if kind == 'done':
             try:
                 info = json.load(open(os.path.join(info_dir, sn + '.info.json')))
@@ -754,11 +823,8 @@ def run_grid(tasks, todo, by_name, consumers, a, state, g):
     delete_unneeded(tasks, a, state, todo, consumers)
 
     # tasks that can run now: to do, not submitted, every dependency done
-    det_bdt = [t for t in tasks if t['name'].startswith('bdt:') and not t['name'].startswith('bdt:cv_')]
     status = lambda n: state.data.get(n, {}).get('status')
-    on_disk = sum(1 for t in det_bdt if status(t['name']) == 'submitted' or
-                  (t['name'] not in todo and not state.data.get(t['name'], {}).get('deleted') and
-                   any(u['name'] in todo for u in consumers.get(t['outputs'][0], []))))
+    on_disk = detvar_on_disk(tasks, state, todo, consumers, lambda n: status(n) == 'submitted')
     ready = {}
     for t in tasks:
         n = t['name']
@@ -766,7 +832,7 @@ def run_grid(tasks, todo, by_name, consumers, a, state, g):
             continue
         if status(n) == 'failed' and state.data[n].get('tries', 0) >= a.max_tries:
             continue
-        if t in det_bdt:
+        if starts_detvar(t):
             if on_disk >= a.max_detvar:
                 continue
             on_disk += 1
@@ -810,7 +876,8 @@ def main():
     p.add_argument('--keep-work', action='store_true', help='do not delete the bdt_convert and run range files')
     p.add_argument('--chunk-events', type=int, default=CHUNK_EVENTS, help='CV events per run range (default %d)' % CHUNK_EVENTS)
     p.add_argument('--max-detvar', type=int, default=None,
-                   help='DetVar bdt_convert files on disk at the same time (default: -j, at least 2)')
+                   help='DetVar files with pre-trim or bdt_convert files on disk at the same time (default: 10 with --grid, '
+                   'otherwise -j, at least 2)')
     p.add_argument('--det-dir', default=os.path.join(OUT_DIR, 'DetVar'))
     p.add_argument('--work-dir', default=None, help='bdt_convert and run range files (default %s, with --grid %s)'
                    % (os.path.join(OUT_DIR, 'work', 'DetVar'), G.scratch_dir('det', 'work')))
@@ -820,6 +887,8 @@ def main():
     p.add_argument('--config', default=os.path.join(HERE, 'config.txt'))
     p.add_argument('--trim-config', default=os.path.join(HERE, 'config_wc.txt'),
                    help='tree_trimmer config of the run ranges (config.txt with wcpselection T_pot as a POT tree)')
+    p.add_argument('--pre-config', default=os.path.join(HERE, 'trimmer_config_det_pre.txt'),
+                   help='tree_trimmer config of the pre-trim before bdt_convert (trees and branches kept)')
     p.add_argument('--weights', default=os.path.join(HERE, 'weights'), help='BDT weights directory of bdt_convert')
     p.add_argument('--chunks', default=None, help='run ranges file (default <state dir>/chunks.json)')
     p.add_argument('--grid', action='store_true', help='run the tasks as grid jobs (on a gpvm; no ROOT needed there)')
@@ -938,7 +1007,7 @@ def main():
                         changed = True
 
     if a.grid:
-        bad = [t['inputs'][0] for t in tasks if t['name'] in todo and t['name'].startswith('bdt:') and not os.path.exists(t['inputs'][0])]
+        bad = [t['inputs'][0] for t in tasks if t['name'] in todo and t['name'].startswith('pre:') and not os.path.exists(t['inputs'][0])]
         if bad:
             print('inputs not found:\n  ' + '\n  '.join(bad))
             return 1
@@ -994,7 +1063,7 @@ def main():
         out = subprocess.run([os.path.join(a.bin_dir, 'merge_det')], stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.decode(errors='replace')
         if '-m3' not in out:
             problems.append('%s has no -m2 / -m3 (build it from the det_disk_saver branch)' % os.path.join(a.bin_dir, 'merge_det'))
-    for f in [a.config, a.trim_config, a.weights]:
+    for f in [a.config, a.trim_config, a.pre_config, a.weights]:
         if not os.path.exists(f):
             problems.append('missing %s' % f)
     try:
@@ -1002,7 +1071,7 @@ def main():
     except Exception as e:
         problems.append('no PyROOT: %s' % e)
     for t in tasks:
-        if t['name'] in todo and t['name'].startswith('bdt:') and not os.path.exists(t['inputs'][0]):
+        if t['name'] in todo and t['name'].startswith('pre:') and not os.path.exists(t['inputs'][0]):
             problems.append('input of %s not found: %s' % (t['name'], t['inputs'][0]))
     if problems:
         print('\n'.join(problems))
@@ -1029,13 +1098,9 @@ def main():
 
     delete_unneeded(tasks, a, state, todo, consumers)  # files left by a run stopped before deleting them
     max_detvar = a.max_detvar
-    det_bdt = [t for t in tasks if t['name'].startswith('bdt:') and not t['name'].startswith('bdt:cv_')]
 
-    def detvar_on_disk():
-        '''DetVar bdt_convert files being made, or made and still needed'''
-        return sum(1 for t in det_bdt if t['name'] in running.values() or
-                   (t['name'] not in todo and not state.data.get(t['name'], {}).get('deleted') and
-                    any(u['name'] in todo for u in consumers.get(t['outputs'][0], []))))
+    def on_disk():
+        return detvar_on_disk(tasks, state, todo, consumers, lambda n: n in running.values())
 
     failed = set()
     running = {}
@@ -1054,7 +1119,7 @@ def main():
                         continue
                     if any(d in todo for d in t['deps']):
                         continue
-                    if t in det_bdt and detvar_on_disk() >= max_detvar:
+                    if starts_detvar(t) and on_disk() >= max_detvar:
                         continue
                     running[pool.submit(run_task, t, a, state)] = n
             if not running:

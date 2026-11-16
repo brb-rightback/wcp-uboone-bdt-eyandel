@@ -37,7 +37,9 @@
 # --breakdown: also the plot_hist breakdown plots in <work dir>/breakdown: the cv_input files whose cuts differ in the
 # base folder's breakdown/file_ch.txt (the nu overlays, split by truth category) are converted again there with it
 # (bconv:<n>), the others are linked from the work directory; then (breakdown) plot_hist <--breakdown-opts> -b1 -q1 there,
-# by default -r0 -e3 with the total uncertainty of the TLee covariance matrix (so after tlee) -> <channel>.png, canvas<n>.pdf,
+# by default -r0 -e3 -t2: the total uncertainty of the TLee covariance matrix (so after tlee) and the cross-section truth
+# categories (-t2: XsecNumuCC0pinFV, XsecNumuCCNpinFV, XsecBkgCC, XsecNC, XsecCosmic of breakdown/file_ch.txt; the default
+# -t0 stacks the LEE categories, which these files do not have) -> <channel>.png, canvas<n>.pdf,
 # selection.pdf. On the grid its inputs are staged to scratch. plot_hist needs -q (batch, exits after the plots).
 # --save: at the end, copy each configuration with a new finished tlee to numuCCana/hist_rootfiles_<config.txt>_<N>
 # (--save-dir), in the layout of save_config.pl (also tlee.log, tlee_summary.txt, logs/); e.g. alone after a run:
@@ -62,6 +64,8 @@ DET_SEED = 7
 GRID_RES = {'conv': ('2GB', '4h'), 'stat': ('2GB', '8h'), 'xf': ('3GB', '8h'), 'det': ('3GB', '8h'),
             'merge': ('2GB', '2h'), 'tlee': ('4GB', '8h'), 'plot': ('2GB', '2h')}
 BREAKDOWN = 'breakdown'   # sub-directory of the work directory with the breakdown plots
+# the tarballs of the grid jobs hold plain files only: extracted with the "data" filter where tarfile has it (no warning)
+SAFE_TAR = {'filter': 'data'} if hasattr(tarfile, 'data_filter') else {}
 # the last line read_TLee_v20 prints: after it, a non-zero exit code is ROOT's crash at exit (TTF::Cleanup, freetype),
 # with every result already written
 TLEE_FINISHED = ' ---> Finish all the program'
@@ -231,7 +235,8 @@ def build_tasks(config, a):
     h_all = hashlib.md5(''.join(k + files[k] for k in sorted(files) if k != 'TLee_config.txt').encode()).hexdigest()
     h_tlee = hashlib.md5(files['TLee_config.txt'].encode()).hexdigest()
     for t in tasks:
-        t['sig'] = ' '.join(t['cmd']) + ' | ' + h_all + (' ' + h_tlee if t['kind'] == 'tlee' else '')
+        # tlee, and the breakdown plots that draw its covariance matrix (-e3), are redone when TLee_config.txt changes (det)
+        t['sig'] = ' '.join(t['cmd']) + ' | ' + h_all + (' ' + h_tlee if t['kind'] == 'tlee' or (t['kind'] == 'plot' and 'tlee' in t['deps']) else '')
         if t.get('over'):
             t['sig'] += ' ' + hashlib.md5(''.join(k + v for k, v in sorted(t['over'].items())).encode()).hexdigest()
     return files, tasks
@@ -379,12 +384,13 @@ def grid_spec(config, t, gfiles, urls, tasks_by_name, a):
     cmd = ' '.join(q(urls.get(x, x)) for x in t['cmd'])   # the input files as in the worker's configuration
     outs = []
     if t['kind'] == 'tlee':   # everything it writes in the directory, as a tarball
-        run = ('touch .stamp && { %s > .tlee_out 2>&1; rc=$?; cat .tlee_out; '
-               'if [ $rc -ne 0 ]; then grep -q %s .tlee_out || exit $rc; echo "exit code $rc after the end (ROOT crash at exit), kept"; fi; } && '
+        # ( ) not { }: grid_task.py fills the {in0}/{out0} placeholders with str.format
+        run = ('touch .stamp && ( %s > .tlee_out 2>&1; rc=$?; cat .tlee_out; '
+               'if [ $rc -ne 0 ]; then grep -q %s .tlee_out || exit $rc; echo "exit code $rc after the end (ROOT crash at exit), kept"; fi ) && '
                'find . -maxdepth 1 -type f -newer .stamp ! -name .stamp ! -name .tlee_out | tar czf {out0} -T -') % (cmd, q(TLEE_FINISHED))
         outs.append(dict(name='tlee_outputs.tar.gz', dest=scratch(config, 'tlee_outputs.tar.gz')))
     elif t['kind'] == 'plot':   # the plots, as a tarball; a crash at exit after selection.pdf is written is ignored
-        run = ('touch .stamp && { %s; rc=$?; [ -s selection.pdf ] || exit $rc; } && '
+        run = ('touch .stamp && ( %s; rc=$?; [ -s selection.pdf ] || exit $rc ) && '
                'find . -maxdepth 1 -type f -newer .stamp ! -name .stamp | tar czf {out0} -T -') % cmd
         outs.append(dict(name='breakdown_plots.tar.gz', dest=scratch(config, 'breakdown_plots.tar.gz')))
     elif t.get('log_to') == t['out']:   # the output is what the command prints (merge: mcstat/0.log)
@@ -407,12 +413,12 @@ def collect(config, t, a):
     w = work_dir(config, a)
     if t['kind'] == 'plot':
         with tarfile.open(scratch(config, 'breakdown_plots.tar.gz')) as tf:
-            tf.extractall(os.path.join(w, t['cwd']))
+            tf.extractall(os.path.join(w, t['cwd']), **SAFE_TAR)
         return
     if t['kind'] == 'tlee':
         tb = scratch(config, 'tlee_outputs.tar.gz')
         with tarfile.open(tb) as tf:
-            tf.extractall(w)
+            tf.extractall(w, **SAFE_TAR)
         logf = os.path.join(scratch(config, 'jobs'), t['name'].replace(':', '_') + '.log')
         shutil.copyfile(logf, os.path.join(w, 'tlee.log'))
         return
@@ -436,7 +442,7 @@ def run_grid(configs, a, state, g):
             st = state.data.get(key, {})
             if st.get('status') != 'submitted':
                 continue
-            kind, marker = G.Grid.result(dict(marker_dir=scratch(config, 'jobs'), name=t['name'].replace(':', '_')))
+            kind, marker = G.Grid.result(dict(marker_dir=scratch(config, 'jobs'), name=t['name'].replace(':', '_')), st.get('jobid'))
             if kind == 'done':
                 try:
                     collect(config, t, a)
@@ -545,11 +551,27 @@ def summarize(configs, a):
     log('summary of %d tests in %s' % (len(rows), os.path.join(a.val_dir, 'summary.txt')))
 
 
+def save_breakdown(w, dest):
+    '''the breakdown plots of the work directory w into dest/plots/breakdown (replacing those there), and the file_ch.txt
+    they were made with as dest/configuration/breakdown_file_ch.txt'''
+    bplots = glob.glob(os.path.join(w, BREAKDOWN, '*.png')) + glob.glob(os.path.join(w, BREAKDOWN, '*.pdf'))
+    pd = os.path.join(dest, 'plots', BREAKDOWN)
+    if os.path.exists(pd):
+        shutil.rmtree(pd)
+    os.makedirs(pd)
+    for f in bplots:
+        shutil.copy2(f, pd)
+    os.makedirs(os.path.join(dest, 'configuration'), exist_ok=True)
+    shutil.copy2(os.path.join(w, BREAKDOWN, 'configurations', 'file_ch.txt'), os.path.join(dest, 'configuration', 'breakdown_file_ch.txt'))
+    return len(bplots)
+
+
 def save(configs, a, state):
     '''--save: a copy of the work directory of every configuration with a finished tlee, in the layout of save_config.pl:
     <save dir>/hist_rootfiles_<config.txt>_<N> (N = the first free number) with the hist files, DetVar/, XsFlux/, mcstat/,
     merge.root, file_collapsed_covariance_matrix.root, plots/ (png, pdf, other root files), configuration/ (*.txt), and
-    also tlee.log, tlee_summary.txt, logs/. Copied (the work directory stays for reruns); each tlee result saved once.'''
+    also tlee.log, tlee_summary.txt, logs/, and the breakdown plots (plots/breakdown/) if they are done. Copied (the work
+    directory stays for reruns); each tlee result saved once; breakdown plots made after it are added to its folder.'''
     for config, (files, tasks, _, _) in configs.items():
         key = '%s:tlee' % config
         st = state.data.get(key, {})
@@ -557,10 +579,22 @@ def save(configs, a, state):
         if not done(state, key, t):
             log('%s: tlee not done, not saved' % config)
             continue
-        if st.get('saved_finished') == st.get('finished') and os.path.isdir(st.get('saved', '')):
-            log('%s: this tlee result is already saved in %s' % (config, st['saved']))
-            continue
+        bkey = '%s:breakdown' % config
+        bst = state.data.get(bkey, {})
+        bt = [x for x in tasks if x['name'] == 'breakdown']
+        bdone = done(state, bkey, bt[0]) if bt else bst.get('status') == 'done'
         w = work_dir(config, a)
+        if st.get('saved_finished') == st.get('finished') and os.path.isdir(st.get('saved', '')):
+            if bdone and st.get('saved_breakdown') != bst.get('finished'):
+                if a.dry_run:
+                    log('%s: would add the breakdown plots to %s' % (config, st['saved']))
+                    continue
+                n = save_breakdown(w, st['saved'])
+                state.update(key, saved_breakdown=bst.get('finished'))
+                log('%s: %d breakdown plots added to %s' % (config, n, st['saved']))
+            else:
+                log('%s: this tlee result is already saved in %s' % (config, st['saved']))
+            continue
         name = open(os.path.join(w, 'config.txt')).read().strip()
         n = 0
         while os.path.exists(os.path.join(a.save_dir, 'hist_rootfiles_%s_%d' % (name, n))):
@@ -587,14 +621,10 @@ def save(configs, a, state):
                 shutil.copy2(p, os.path.join(tmp, 'plots'))
         for f in glob.glob(os.path.join(w, 'configurations', '*.txt')):
             shutil.copy2(f, os.path.join(tmp, 'configuration'))
-        bplots = glob.glob(os.path.join(w, BREAKDOWN, '*.png')) + glob.glob(os.path.join(w, BREAKDOWN, '*.pdf'))
-        if bplots:   # the breakdown plots and the file_ch.txt they were made with
-            os.makedirs(os.path.join(tmp, 'plots', BREAKDOWN))
-            for f in bplots:
-                shutil.copy2(f, os.path.join(tmp, 'plots', BREAKDOWN))
-            shutil.copy2(os.path.join(w, BREAKDOWN, 'configurations', 'file_ch.txt'), os.path.join(tmp, 'configuration', 'breakdown_file_ch.txt'))
+        if bdone:
+            save_breakdown(w, tmp)
         os.rename(tmp, dest)
-        state.update(key, saved=dest, saved_finished=st.get('finished'))
+        state.update(key, saved=dest, saved_finished=st.get('finished'), saved_breakdown=bst.get('finished') if bdone else None)
         log('%s: saved to %s' % (config, dest))
 
 
@@ -620,8 +650,9 @@ def main():
                     'new finished tlee to <save dir>/hist_rootfiles_<config.txt>_<N> (as save_config.pl)')
     ap.add_argument('--breakdown', action='store_true', help='also the plot_hist breakdown plots (truth categories of the nu '
                     'overlay, breakdown/file_ch.txt of the base folder) in <work dir>/breakdown')
-    ap.add_argument('--breakdown-opts', default='-r0 -e3', help='--breakdown: plot_hist options (default "-r0 -e3": all runs, '
-                    'total uncertainty from the TLee covariance matrix; -b1 -q1 are added)')
+    ap.add_argument('--breakdown-opts', default='-r0 -e3 -t2', help='--breakdown: plot_hist options (default "-r0 -e3 -t2": all '
+                    'runs, total uncertainty from the TLee covariance matrix, the cross-section truth categories of breakdown/file_ch.txt '
+                    '(numu CC 0p / Np in FV with the 45 MeV proton threshold, other CC, NC, cosmic, plus EXT and dirt); -b1 -q1 are added)')
     ap.add_argument('--save-dir', default=ANA, help='--save: where (default numuCCana, next to those of save_config.pl)')
     a = ap.parse_args()
     if not a.configs and not a.reset:

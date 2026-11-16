@@ -57,7 +57,8 @@ def main():
         os.symlink(os.path.join(code, 'processing', 'weights'), 'weights')
     logname = name + '.log'
     log = open(logname, 'w')
-    info = dict(name=name, host=socket.gethostname(), start=time.time(), rc=None, stage=None)
+    # cluster: which submission wrote the marker (a job of an earlier submission may still run and write one later)
+    info = dict(name=name, host=socket.gethostname(), cluster=os.environ.get('CLUSTER'), start=time.time(), rc=None, stage=None)
 
     def finish(stage, rc):
         info.update(stage=stage, rc=rc, end=time.time(), wall=time.time() - info['start'],
@@ -90,7 +91,11 @@ def main():
             subst['in%d' % i] = xrootd_url(inp['path'])
     for i, out in enumerate(task.get('outputs', [])):
         subst['out%d' % i] = os.path.join(work, 'out', out['name'])
-    cmd = [c.format(**subst) for c in task['cmd']]
+    try:
+        cmd = [c.format(**subst) for c in task['cmd']]
+    except (KeyError, IndexError, ValueError) as e:   # a { } in the command that is not a placeholder
+        log.write('bad placeholder in the command: %r\n' % e)
+        finish('placeholders', 1)
 
     t0 = time.time()
     rc = sh(cmd, log)

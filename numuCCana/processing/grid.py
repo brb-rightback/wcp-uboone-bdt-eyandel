@@ -105,8 +105,16 @@ class Grid:
         if not self.dry:   # ifdh cp does not make directories on /pnfs
             for t in tasks:
                 os.makedirs(t['marker_dir'], exist_ok=True)
+                for kind in ('done', 'fail', 'log'):   # markers of an earlier try would be read as this job's result
+                    p = os.path.join(t['marker_dir'], '%s.%s' % (t['name'], kind))
+                    if os.path.exists(p):
+                        os.remove(p)
                 for o in t.get('outputs', []):
                     os.makedirs(os.path.dirname(o['dest']), exist_ok=True)
+                    # dCache files are not overwritten, and ifdh rm on the worker does not remove them: an output of an
+                    # earlier try (collected already, or failed) would make the copy-out fail
+                    if os.path.exists(o['dest']):
+                        os.remove(o['dest'])
         stamp = time.strftime('%Y%m%d_%H%M%S')
         tfile = os.path.join(self.work_dir, 'submissions', '%s_%s.json' % (tag, stamp))
         with open(tfile, 'w') as f:
@@ -130,15 +138,30 @@ class Grid:
 
     # -------------------------------------------------------------------------------------------- following jobs
     @staticmethod
-    def result(task):
-        '''the marker of a task: ('done' | 'fail', marker json) or (None, None) if there is none yet'''
+    def marker_cluster(info):
+        '''the job cluster that wrote a marker: its "cluster", or from the worker's host name <user>-<cluster>-<process>-...'''
+        if info.get('cluster'):
+            return str(info['cluster'])
+        m = re.match(r'[^-]+-(\d+)-\d+-', info.get('host') or '')
+        return m.group(1) if m else None
+
+    @staticmethod
+    def result(task, jobid=None):
+        '''the marker of a task: ('done' | 'fail', marker json) or (None, None) if there is none yet; with jobid (the task's
+        current submission), a marker written by a job of another cluster (an earlier submission still running when the
+        task was submitted again) is ignored'''
         for kind in ('done', 'fail'):
             p = os.path.join(task['marker_dir'], '%s.%s' % (task['name'], kind))
             if os.path.exists(p):
                 try:
-                    return kind, json.load(open(p))
+                    info = json.load(open(p))
                 except ValueError:
                     return None, None   # being written
+                m = re.match(r'(\d+)\.', jobid or '')
+                c = Grid.marker_cluster(info)
+                if m and c and c != m.group(1):
+                    return None, None   # not this submission's
+                return kind, info
         return None, None
 
     def queued(self):
