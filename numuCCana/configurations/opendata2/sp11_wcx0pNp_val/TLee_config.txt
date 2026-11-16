@@ -1,0 +1,205 @@
+# sp11_wcx0pNp_val (make_sp_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  88 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon_spacepoints_q_0 numuCC_part_bdt_Np LFC
+  1 62001 none 0-30 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_Np LPC
+  1 62002 none 31-61 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_PorLNp LFC
+  1 62003 none 62-92 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_PorLNp LPC
+  1 62004 none 93-123 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_WCTrk0p LFC
+  1 62005 none 124-154 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_WCTrk0p LPC
+  1 62006 none 155-185 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_WCG0p LFC
+  1 62007 none 186-216 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt_WCG0p LPC
+  1 62008 none 217-247 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_Np LFC
+  1 62009 none 248-273 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_Np LPC
+  1 62010 none 274-299 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_PorLNp LFC
+  1 62011 none 300-325 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_PorLNp LPC
+  1 62012 none 326-351 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_WCTrk0p LFC
+  1 62013 none 352-377 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_WCTrk0p LPC
+  1 62014 none 378-403 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_WCG0p LFC
+  1 62015 none 404-429 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt_WCG0p LPC
+  1 62016 none 430-455 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_Np LFC
+  1 62017 none 456-481 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_Np LPC
+  1 62018 none 482-507 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_PorLNp LFC
+  1 62019 none 508-533 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_PorLNp LPC
+  1 62020 none 534-559 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_WCTrk0p LFC
+  1 62021 none 560-585 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_WCTrk0p LPC
+  1 62022 none 586-611 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_WCG0p LFC
+  1 62023 none 612-637 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt_WCG0p LPC
+  1 62024 none 638-663 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_Np LFC
+  1 62025 none 664-689 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_Np LPC
+  1 62026 none 690-715 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_PorLNp LFC
+  1 62027 none 716-741 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_PorLNp LPC
+  1 62028 none 742-767 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_WCTrk0p LFC
+  1 62029 none 768-793 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_WCTrk0p LPC
+  1 62030 none 794-819 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_WCG0p LFC
+  1 62031 none 820-845 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt_WCG0p LPC
+  1 62032 none 846-871 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_Np LFC
+  1 62033 none 872-897 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_Np LPC
+  1 62034 none 898-923 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_PorLNp LFC
+  1 62035 none 924-949 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_PorLNp LPC
+  1 62036 none 950-975 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_WCTrk0p LFC
+  1 62037 none 976-1001 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_WCTrk0p LPC
+  1 62038 none 1002-1027 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_WCG0p LFC
+  1 62039 none 1028-1053 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt_WCG0p LPC
+  1 62040 none 1054-1079 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_Np LFC
+  1 62041 none 1080-1110 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_Np LPC
+  1 62042 none 1111-1141 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_PorLNp LFC
+  1 62043 none 1142-1172 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_PorLNp LPC
+  1 62044 none 1173-1203 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_WCTrk0p LFC
+  1 62045 none 1204-1234 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_WCTrk0p LPC
+  1 62046 none 1235-1265 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_WCG0p LFC
+  1 62047 none 1266-1296 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt_WCG0p LPC
+  1 62048 none 1297-1327 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_Np LFC
+  1 62049 none 1328-1358 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_Np LPC
+  1 62050 none 1359-1389 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_PorLNp LFC
+  1 62051 none 1390-1420 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_PorLNp LPC
+  1 62052 none 1421-1451 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_WCTrk0p LFC
+  1 62053 none 1452-1482 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_WCTrk0p LPC
+  1 62054 none 1483-1513 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_WCG0p LFC
+  1 62055 none 1514-1544 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt_WCG0p LPC
+  1 62056 none 1545-1575 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_Np LFC
+  1 62057 none 1576-1601 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_Np LPC
+  1 62058 none 1602-1627 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_PorLNp LFC
+  1 62059 none 1628-1653 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_PorLNp LPC
+  1 62060 none 1654-1679 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_WCTrk0p LFC
+  1 62061 none 1680-1705 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_WCTrk0p LPC
+  1 62062 none 1706-1731 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_WCG0p LFC
+  1 62063 none 1732-1757 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt_WCG0p LPC
+  1 62064 none 1758-1783 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_Np LFC
+  1 62065 none 1784-1809 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_Np LPC
+  1 62066 none 1810-1835 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_PorLNp LFC
+  1 62067 none 1836-1861 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_PorLNp LPC
+  1 62068 none 1862-1887 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_WCTrk0p LFC
+  1 62069 none 1888-1913 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_WCTrk0p LPC
+  1 62070 none 1914-1939 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_WCG0p LFC
+  1 62071 none 1940-1965 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt_WCG0p LPC
+  1 62072 none 1966-1991 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_Np LFC
+  1 62073 none 1992-2017 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_Np LPC
+  1 62074 none 2018-2043 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_PorLNp LFC
+  1 62075 none 2044-2069 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_PorLNp LPC
+  1 62076 none 2070-2095 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_WCTrk0p LFC
+  1 62077 none 2096-2121 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_WCTrk0p LPC
+  1 62078 none 2122-2147 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_WCG0p LFC
+  1 62079 none 2148-2173 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt_WCG0p LPC
+  1 62080 none 2174-2199 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_Np LFC
+  1 62081 none 2200-2228 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_Np LPC
+  1 62082 none 2229-2257 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_PorLNp LFC
+  1 62083 none 2258-2286 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_PorLNp LPC
+  1 62084 none 2287-2315 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_WCTrk0p LFC
+  1 62085 none 2316-2344 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_WCTrk0p LPC
+  1 62086 none 2345-2373 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_WCG0p LFC
+  1 62087 none 2374-2402 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt_WCG0p LPC
+  1 62088 none 2403-2431 1 1 1 1 1
+# muon_spacepoints_q_0, all its channels
+  1 62089 none 0-30,31-61,62-92,93-123,124-154,155-185,186-216,217-247 1 1 1 1 1
+# muon_spacepoints_q_1, all its channels
+  1 62090 none 248-273,274-299,300-325,326-351,352-377,378-403,404-429,430-455 1 1 1 1 1
+# muon_spacepoints_q_2, all its channels
+  1 62091 none 456-481,482-507,508-533,534-559,560-585,586-611,612-637,638-663 1 1 1 1 1
+# muon_spacepoints_q_3, all its channels
+  1 62092 none 664-689,690-715,716-741,742-767,768-793,794-819,820-845,846-871 1 1 1 1 1
+# muon_spacepoints_q_4, all its channels
+  1 62093 none 872-897,898-923,924-949,950-975,976-1001,1002-1027,1028-1053,1054-1079 1 1 1 1 1
+# muon_spacepoints_q_bck_0, all its channels
+  1 62094 none 1080-1110,1111-1141,1142-1172,1173-1203,1204-1234,1235-1265,1266-1296,1297-1327 1 1 1 1 1
+# muon_spacepoints_q_bck_1, all its channels
+  1 62095 none 1328-1358,1359-1389,1390-1420,1421-1451,1452-1482,1483-1513,1514-1544,1545-1575 1 1 1 1 1
+# muon_spacepoints_q_bck_2, all its channels
+  1 62096 none 1576-1601,1602-1627,1628-1653,1654-1679,1680-1705,1706-1731,1732-1757,1758-1783 1 1 1 1 1
+# muon_spacepoints_q_bck_3, all its channels
+  1 62097 none 1784-1809,1810-1835,1836-1861,1862-1887,1888-1913,1914-1939,1940-1965,1966-1991 1 1 1 1 1
+# muon_spacepoints_q_bck_4, all its channels
+  1 62098 none 1992-2017,2018-2043,2044-2069,2070-2095,2096-2121,2122-2147,2148-2173,2174-2199 1 1 1 1 1
+# muon_spacepoints_q_med, all its channels
+  1 62099 none 2200-2228,2229-2257,2258-2286,2287-2315,2316-2344,2345-2373,2374-2402,2403-2431 1 1 1 1 1
+End

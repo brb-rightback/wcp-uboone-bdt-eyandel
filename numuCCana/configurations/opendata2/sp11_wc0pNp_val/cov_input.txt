@@ -1,0 +1,265 @@
+numuCC_part_bdt_Np_LFC_1                            muon_spacepoints_q_0              30      0       150000          1       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_1                        muon_spacepoints_q_0              30      0       150000          1       1               1       0               0               1               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_1                        muon_spacepoints_q_0              30      0       150000          1       1               1       0               0               2               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_1                       muon_spacepoints_q_0              30      0       150000          1       0               0       0.5             0               2               4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_1                        muon_spacepoints_q_0              30      0       150000          1       0               0       0               0               89              3       unity                       0
+
+numuCC_part_bdt_Np_LPC_1                            muon_spacepoints_q_0              30      0       150000          2       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_1                        muon_spacepoints_q_0              30      0       150000          2       1               1       0               0               3               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_1                        muon_spacepoints_q_0              30      0       150000          2       1               1       0               0               4               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_1                       muon_spacepoints_q_0              30      0       150000          2       0               0       0.5             0               4               4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_1                        muon_spacepoints_q_0              30      0       150000          2       0               0       0               0               90              3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_1                          muon_spacepoints_q_0              30      0       150000          3       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_1                      muon_spacepoints_q_0              30      0       150000          3       1               1       0               0               5               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_1                      muon_spacepoints_q_0              30      0       150000          3       1               1       0               0               6               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_1                     muon_spacepoints_q_0              30      0       150000          3       0               0       0.5             0               6               4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_1                      muon_spacepoints_q_0              30      0       150000          3       0               0       0               0               91              3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_1                          muon_spacepoints_q_0              30      0       150000          4       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_1                      muon_spacepoints_q_0              30      0       150000          4       1               1       0               0               7               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_1                      muon_spacepoints_q_0              30      0       150000          4       1               1       0               0               8               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_1                     muon_spacepoints_q_0              30      0       150000          4       0               0       0.5             0               8               4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_1                      muon_spacepoints_q_0              30      0       150000          4       0               0       0               0               92              3       unity                       0
+
+numuCC_part_bdt_Np_LFC_2                            muon_spacepoints_q_1              25      0       100000          5       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_2                        muon_spacepoints_q_1              25      0       100000          5       1               1       0               0               9               2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_2                        muon_spacepoints_q_1              25      0       100000          5       1               1       0               0               10              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_2                       muon_spacepoints_q_1              25      0       100000          5       0               0       0.5             0               10              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_2                        muon_spacepoints_q_1              25      0       100000          5       0               0       0               0               93              3       unity                       0
+
+numuCC_part_bdt_Np_LPC_2                            muon_spacepoints_q_1              25      0       100000          6       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_2                        muon_spacepoints_q_1              25      0       100000          6       1               1       0               0               11              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_2                        muon_spacepoints_q_1              25      0       100000          6       1               1       0               0               12              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_2                       muon_spacepoints_q_1              25      0       100000          6       0               0       0.5             0               12              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_2                        muon_spacepoints_q_1              25      0       100000          6       0               0       0               0               94              3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_2                          muon_spacepoints_q_1              25      0       100000          7       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_2                      muon_spacepoints_q_1              25      0       100000          7       1               1       0               0               13              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_2                      muon_spacepoints_q_1              25      0       100000          7       1               1       0               0               14              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_2                     muon_spacepoints_q_1              25      0       100000          7       0               0       0.5             0               14              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_2                      muon_spacepoints_q_1              25      0       100000          7       0               0       0               0               95              3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_2                          muon_spacepoints_q_1              25      0       100000          8       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_2                      muon_spacepoints_q_1              25      0       100000          8       1               1       0               0               15              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_2                      muon_spacepoints_q_1              25      0       100000          8       1               1       0               0               16              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_2                     muon_spacepoints_q_1              25      0       100000          8       0               0       0.5             0               16              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_2                      muon_spacepoints_q_1              25      0       100000          8       0               0       0               0               96              3       unity                       0
+
+numuCC_part_bdt_Np_LFC_3                            muon_spacepoints_q_2              25      0       100000          9       0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_3                        muon_spacepoints_q_2              25      0       100000          9       1               1       0               0               17              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_3                        muon_spacepoints_q_2              25      0       100000          9       1               1       0               0               18              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_3                       muon_spacepoints_q_2              25      0       100000          9       0               0       0.5             0               18              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_3                        muon_spacepoints_q_2              25      0       100000          9       0               0       0               0               97              3       unity                       0
+
+numuCC_part_bdt_Np_LPC_3                            muon_spacepoints_q_2              25      0       100000          10      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_3                        muon_spacepoints_q_2              25      0       100000          10      1               1       0               0               19              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_3                        muon_spacepoints_q_2              25      0       100000          10      1               1       0               0               20              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_3                       muon_spacepoints_q_2              25      0       100000          10      0               0       0.5             0               20              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_3                        muon_spacepoints_q_2              25      0       100000          10      0               0       0               0               98              3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_3                          muon_spacepoints_q_2              25      0       100000          11      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_3                      muon_spacepoints_q_2              25      0       100000          11      1               1       0               0               21              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_3                      muon_spacepoints_q_2              25      0       100000          11      1               1       0               0               22              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_3                     muon_spacepoints_q_2              25      0       100000          11      0               0       0.5             0               22              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_3                      muon_spacepoints_q_2              25      0       100000          11      0               0       0               0               99              3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_3                          muon_spacepoints_q_2              25      0       100000          12      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_3                      muon_spacepoints_q_2              25      0       100000          12      1               1       0               0               23              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_3                      muon_spacepoints_q_2              25      0       100000          12      1               1       0               0               24              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_3                     muon_spacepoints_q_2              25      0       100000          12      0               0       0.5             0               24              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_3                      muon_spacepoints_q_2              25      0       100000          12      0               0       0               0               100             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_4                            muon_spacepoints_q_3              25      0       100000          13      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_4                        muon_spacepoints_q_3              25      0       100000          13      1               1       0               0               25              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_4                        muon_spacepoints_q_3              25      0       100000          13      1               1       0               0               26              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_4                       muon_spacepoints_q_3              25      0       100000          13      0               0       0.5             0               26              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_4                        muon_spacepoints_q_3              25      0       100000          13      0               0       0               0               101             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_4                            muon_spacepoints_q_3              25      0       100000          14      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_4                        muon_spacepoints_q_3              25      0       100000          14      1               1       0               0               27              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_4                        muon_spacepoints_q_3              25      0       100000          14      1               1       0               0               28              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_4                       muon_spacepoints_q_3              25      0       100000          14      0               0       0.5             0               28              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_4                        muon_spacepoints_q_3              25      0       100000          14      0               0       0               0               102             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_4                          muon_spacepoints_q_3              25      0       100000          15      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_4                      muon_spacepoints_q_3              25      0       100000          15      1               1       0               0               29              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_4                      muon_spacepoints_q_3              25      0       100000          15      1               1       0               0               30              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_4                     muon_spacepoints_q_3              25      0       100000          15      0               0       0.5             0               30              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_4                      muon_spacepoints_q_3              25      0       100000          15      0               0       0               0               103             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_4                          muon_spacepoints_q_3              25      0       100000          16      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_4                      muon_spacepoints_q_3              25      0       100000          16      1               1       0               0               31              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_4                      muon_spacepoints_q_3              25      0       100000          16      1               1       0               0               32              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_4                     muon_spacepoints_q_3              25      0       100000          16      0               0       0.5             0               32              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_4                      muon_spacepoints_q_3              25      0       100000          16      0               0       0               0               104             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_5                            muon_spacepoints_q_4              25      0       100000          17      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_5                        muon_spacepoints_q_4              25      0       100000          17      1               1       0               0               33              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_5                        muon_spacepoints_q_4              25      0       100000          17      1               1       0               0               34              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_5                       muon_spacepoints_q_4              25      0       100000          17      0               0       0.5             0               34              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_5                        muon_spacepoints_q_4              25      0       100000          17      0               0       0               0               105             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_5                            muon_spacepoints_q_4              25      0       100000          18      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_5                        muon_spacepoints_q_4              25      0       100000          18      1               1       0               0               35              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_5                        muon_spacepoints_q_4              25      0       100000          18      1               1       0               0               36              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_5                       muon_spacepoints_q_4              25      0       100000          18      0               0       0.5             0               36              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_5                        muon_spacepoints_q_4              25      0       100000          18      0               0       0               0               106             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_5                          muon_spacepoints_q_4              25      0       100000          19      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_5                      muon_spacepoints_q_4              25      0       100000          19      1               1       0               0               37              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_5                      muon_spacepoints_q_4              25      0       100000          19      1               1       0               0               38              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_5                     muon_spacepoints_q_4              25      0       100000          19      0               0       0.5             0               38              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_5                      muon_spacepoints_q_4              25      0       100000          19      0               0       0               0               107             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_5                          muon_spacepoints_q_4              25      0       100000          20      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_5                      muon_spacepoints_q_4              25      0       100000          20      1               1       0               0               39              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_5                      muon_spacepoints_q_4              25      0       100000          20      1               1       0               0               40              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_5                     muon_spacepoints_q_4              25      0       100000          20      0               0       0.5             0               40              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_5                      muon_spacepoints_q_4              25      0       100000          20      0               0       0               0               108             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_6                            muon_spacepoints_q_bck_0          30      0       150000          21      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_6                        muon_spacepoints_q_bck_0          30      0       150000          21      1               1       0               0               41              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_6                        muon_spacepoints_q_bck_0          30      0       150000          21      1               1       0               0               42              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_6                       muon_spacepoints_q_bck_0          30      0       150000          21      0               0       0.5             0               42              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_6                        muon_spacepoints_q_bck_0          30      0       150000          21      0               0       0               0               109             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_6                            muon_spacepoints_q_bck_0          30      0       150000          22      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_6                        muon_spacepoints_q_bck_0          30      0       150000          22      1               1       0               0               43              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_6                        muon_spacepoints_q_bck_0          30      0       150000          22      1               1       0               0               44              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_6                       muon_spacepoints_q_bck_0          30      0       150000          22      0               0       0.5             0               44              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_6                        muon_spacepoints_q_bck_0          30      0       150000          22      0               0       0               0               110             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_6                          muon_spacepoints_q_bck_0          30      0       150000          23      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_6                      muon_spacepoints_q_bck_0          30      0       150000          23      1               1       0               0               45              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_6                      muon_spacepoints_q_bck_0          30      0       150000          23      1               1       0               0               46              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_6                     muon_spacepoints_q_bck_0          30      0       150000          23      0               0       0.5             0               46              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_6                      muon_spacepoints_q_bck_0          30      0       150000          23      0               0       0               0               111             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_6                          muon_spacepoints_q_bck_0          30      0       150000          24      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_6                      muon_spacepoints_q_bck_0          30      0       150000          24      1               1       0               0               47              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_6                      muon_spacepoints_q_bck_0          30      0       150000          24      1               1       0               0               48              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_6                     muon_spacepoints_q_bck_0          30      0       150000          24      0               0       0.5             0               48              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_6                      muon_spacepoints_q_bck_0          30      0       150000          24      0               0       0               0               112             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_7                            muon_spacepoints_q_bck_1          30      0       120000          25      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_7                        muon_spacepoints_q_bck_1          30      0       120000          25      1               1       0               0               49              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_7                        muon_spacepoints_q_bck_1          30      0       120000          25      1               1       0               0               50              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_7                       muon_spacepoints_q_bck_1          30      0       120000          25      0               0       0.5             0               50              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_7                        muon_spacepoints_q_bck_1          30      0       120000          25      0               0       0               0               113             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_7                            muon_spacepoints_q_bck_1          30      0       120000          26      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_7                        muon_spacepoints_q_bck_1          30      0       120000          26      1               1       0               0               51              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_7                        muon_spacepoints_q_bck_1          30      0       120000          26      1               1       0               0               52              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_7                       muon_spacepoints_q_bck_1          30      0       120000          26      0               0       0.5             0               52              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_7                        muon_spacepoints_q_bck_1          30      0       120000          26      0               0       0               0               114             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_7                          muon_spacepoints_q_bck_1          30      0       120000          27      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_7                      muon_spacepoints_q_bck_1          30      0       120000          27      1               1       0               0               53              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_7                      muon_spacepoints_q_bck_1          30      0       120000          27      1               1       0               0               54              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_7                     muon_spacepoints_q_bck_1          30      0       120000          27      0               0       0.5             0               54              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_7                      muon_spacepoints_q_bck_1          30      0       120000          27      0               0       0               0               115             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_7                          muon_spacepoints_q_bck_1          30      0       120000          28      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_7                      muon_spacepoints_q_bck_1          30      0       120000          28      1               1       0               0               55              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_7                      muon_spacepoints_q_bck_1          30      0       120000          28      1               1       0               0               56              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_7                     muon_spacepoints_q_bck_1          30      0       120000          28      0               0       0.5             0               56              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_7                      muon_spacepoints_q_bck_1          30      0       120000          28      0               0       0               0               116             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_8                            muon_spacepoints_q_bck_2          25      0       100000          29      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_8                        muon_spacepoints_q_bck_2          25      0       100000          29      1               1       0               0               57              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_8                        muon_spacepoints_q_bck_2          25      0       100000          29      1               1       0               0               58              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_8                       muon_spacepoints_q_bck_2          25      0       100000          29      0               0       0.5             0               58              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_8                        muon_spacepoints_q_bck_2          25      0       100000          29      0               0       0               0               117             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_8                            muon_spacepoints_q_bck_2          25      0       100000          30      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_8                        muon_spacepoints_q_bck_2          25      0       100000          30      1               1       0               0               59              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_8                        muon_spacepoints_q_bck_2          25      0       100000          30      1               1       0               0               60              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_8                       muon_spacepoints_q_bck_2          25      0       100000          30      0               0       0.5             0               60              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_8                        muon_spacepoints_q_bck_2          25      0       100000          30      0               0       0               0               118             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_8                          muon_spacepoints_q_bck_2          25      0       100000          31      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_8                      muon_spacepoints_q_bck_2          25      0       100000          31      1               1       0               0               61              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_8                      muon_spacepoints_q_bck_2          25      0       100000          31      1               1       0               0               62              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_8                     muon_spacepoints_q_bck_2          25      0       100000          31      0               0       0.5             0               62              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_8                      muon_spacepoints_q_bck_2          25      0       100000          31      0               0       0               0               119             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_8                          muon_spacepoints_q_bck_2          25      0       100000          32      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_8                      muon_spacepoints_q_bck_2          25      0       100000          32      1               1       0               0               63              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_8                      muon_spacepoints_q_bck_2          25      0       100000          32      1               1       0               0               64              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_8                     muon_spacepoints_q_bck_2          25      0       100000          32      0               0       0.5             0               64              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_8                      muon_spacepoints_q_bck_2          25      0       100000          32      0               0       0               0               120             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_9                            muon_spacepoints_q_bck_3          25      0       100000          33      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_9                        muon_spacepoints_q_bck_3          25      0       100000          33      1               1       0               0               65              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_9                        muon_spacepoints_q_bck_3          25      0       100000          33      1               1       0               0               66              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_9                       muon_spacepoints_q_bck_3          25      0       100000          33      0               0       0.5             0               66              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_9                        muon_spacepoints_q_bck_3          25      0       100000          33      0               0       0               0               121             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_9                            muon_spacepoints_q_bck_3          25      0       100000          34      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_9                        muon_spacepoints_q_bck_3          25      0       100000          34      1               1       0               0               67              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_9                        muon_spacepoints_q_bck_3          25      0       100000          34      1               1       0               0               68              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_9                       muon_spacepoints_q_bck_3          25      0       100000          34      0               0       0.5             0               68              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_9                        muon_spacepoints_q_bck_3          25      0       100000          34      0               0       0               0               122             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_9                          muon_spacepoints_q_bck_3          25      0       100000          35      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_9                      muon_spacepoints_q_bck_3          25      0       100000          35      1               1       0               0               69              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_9                      muon_spacepoints_q_bck_3          25      0       100000          35      1               1       0               0               70              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_9                     muon_spacepoints_q_bck_3          25      0       100000          35      0               0       0.5             0               70              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_9                      muon_spacepoints_q_bck_3          25      0       100000          35      0               0       0               0               123             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_9                          muon_spacepoints_q_bck_3          25      0       100000          36      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_9                      muon_spacepoints_q_bck_3          25      0       100000          36      1               1       0               0               71              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_9                      muon_spacepoints_q_bck_3          25      0       100000          36      1               1       0               0               72              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_9                     muon_spacepoints_q_bck_3          25      0       100000          36      0               0       0.5             0               72              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_9                      muon_spacepoints_q_bck_3          25      0       100000          36      0               0       0               0               124             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_10                           muon_spacepoints_q_bck_4          25      0       100000          37      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_10                       muon_spacepoints_q_bck_4          25      0       100000          37      1               1       0               0               73              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_10                       muon_spacepoints_q_bck_4          25      0       100000          37      1               1       0               0               74              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_10                      muon_spacepoints_q_bck_4          25      0       100000          37      0               0       0.5             0               74              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_10                       muon_spacepoints_q_bck_4          25      0       100000          37      0               0       0               0               125             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_10                           muon_spacepoints_q_bck_4          25      0       100000          38      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_10                       muon_spacepoints_q_bck_4          25      0       100000          38      1               1       0               0               75              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_10                       muon_spacepoints_q_bck_4          25      0       100000          38      1               1       0               0               76              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_10                      muon_spacepoints_q_bck_4          25      0       100000          38      0               0       0.5             0               76              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_10                       muon_spacepoints_q_bck_4          25      0       100000          38      0               0       0               0               126             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_10                         muon_spacepoints_q_bck_4          25      0       100000          39      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_10                     muon_spacepoints_q_bck_4          25      0       100000          39      1               1       0               0               77              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_10                     muon_spacepoints_q_bck_4          25      0       100000          39      1               1       0               0               78              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_10                    muon_spacepoints_q_bck_4          25      0       100000          39      0               0       0.5             0               78              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_10                     muon_spacepoints_q_bck_4          25      0       100000          39      0               0       0               0               127             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_10                         muon_spacepoints_q_bck_4          25      0       100000          40      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_10                     muon_spacepoints_q_bck_4          25      0       100000          40      1               1       0               0               79              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_10                     muon_spacepoints_q_bck_4          25      0       100000          40      1               1       0               0               80              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_10                    muon_spacepoints_q_bck_4          25      0       100000          40      0               0       0.5             0               80              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_10                     muon_spacepoints_q_bck_4          25      0       100000          40      0               0       0               0               128             3       unity                       0
+
+numuCC_part_bdt_Np_LFC_11                           muon_spacepoints_q_med            28      18000   46000           41      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LFC_11                       muon_spacepoints_q_med            28      18000   46000           41      1               1       0               0               81              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LFC_11                       muon_spacepoints_q_med            28      18000   46000           41      1               1       0               0               82              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LFC_11                      muon_spacepoints_q_med            28      18000   46000           41      0               0       0.5             0               82              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LFC_11                       muon_spacepoints_q_med            28      18000   46000           41      0               0       0               0               129             3       unity                       0
+
+numuCC_part_bdt_Np_LPC_11                           muon_spacepoints_q_med            28      18000   46000           42      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_Np_sig_LPC_11                       muon_spacepoints_q_med            28      18000   46000           42      1               1       0               0               83              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_bck_LPC_11                       muon_spacepoints_q_med            28      18000   46000           42      1               1       0               0               84              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_dirt_LPC_11                      muon_spacepoints_q_med            28      18000   46000           42      0               0       0.5             0               84              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_Np_ext_LPC_11                       muon_spacepoints_q_med            28      18000   46000           42      0               0       0               0               130             3       unity                       0
+
+numuCC_part_bdt_WC0p_LFC_11                         muon_spacepoints_q_med            28      18000   46000           43      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LFC_11                     muon_spacepoints_q_med            28      18000   46000           43      1               1       0               0               85              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LFC_11                     muon_spacepoints_q_med            28      18000   46000           43      1               1       0               0               86              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LFC_11                    muon_spacepoints_q_med            28      18000   46000           43      0               0       0.5             0               86              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LFC_11                     muon_spacepoints_q_med            28      18000   46000           43      0               0       0               0               131             3       unity                       0
+
+numuCC_part_bdt_WC0p_LPC_11                         muon_spacepoints_q_med            28      18000   46000           44      0               0       0               0               0               5       unity                       0
+numuCC_part_bdt_WC0p_sig_LPC_11                     muon_spacepoints_q_med            28      18000   46000           44      1               1       0               0               87              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_bck_LPC_11                     muon_spacepoints_q_med            28      18000   46000           44      1               1       0               0               88              2       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_dirt_LPC_11                    muon_spacepoints_q_med            28      18000   46000           44      0               0       0.5             0               88              4       cv_spline_rootino_1.9964    0
+numuCC_part_bdt_WC0p_ext_LPC_11                     muon_spacepoints_q_med            28      18000   46000           44      0               0       0               0               132             3       unity                       0
+End                                     End             -1      -1      -1      -1      -1              -1      -1              -1              -1              -1      end             -1
+Name:                                   #Var:           #bin    #start  #end    #obs    #xs_flux        #det    #add_sys        #same_mc        #cov_sec        #file   #weight         #le

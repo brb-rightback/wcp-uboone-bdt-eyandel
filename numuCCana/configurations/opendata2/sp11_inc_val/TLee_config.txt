@@ -1,0 +1,73 @@
+# sp11_inc_val (make_sp_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  22 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon_spacepoints_q_0 numuCC_part_bdt LFC
+  1 60001 none 0-30 1 1 1 1 1
+# muon_spacepoints_q_0 numuCC_part_bdt LPC
+  1 60002 none 31-61 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt LFC
+  1 60003 none 62-87 1 1 1 1 1
+# muon_spacepoints_q_1 numuCC_part_bdt LPC
+  1 60004 none 88-113 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt LFC
+  1 60005 none 114-139 1 1 1 1 1
+# muon_spacepoints_q_2 numuCC_part_bdt LPC
+  1 60006 none 140-165 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt LFC
+  1 60007 none 166-191 1 1 1 1 1
+# muon_spacepoints_q_3 numuCC_part_bdt LPC
+  1 60008 none 192-217 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt LFC
+  1 60009 none 218-243 1 1 1 1 1
+# muon_spacepoints_q_4 numuCC_part_bdt LPC
+  1 60010 none 244-269 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt LFC
+  1 60011 none 270-300 1 1 1 1 1
+# muon_spacepoints_q_bck_0 numuCC_part_bdt LPC
+  1 60012 none 301-331 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt LFC
+  1 60013 none 332-362 1 1 1 1 1
+# muon_spacepoints_q_bck_1 numuCC_part_bdt LPC
+  1 60014 none 363-393 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt LFC
+  1 60015 none 394-419 1 1 1 1 1
+# muon_spacepoints_q_bck_2 numuCC_part_bdt LPC
+  1 60016 none 420-445 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt LFC
+  1 60017 none 446-471 1 1 1 1 1
+# muon_spacepoints_q_bck_3 numuCC_part_bdt LPC
+  1 60018 none 472-497 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt LFC
+  1 60019 none 498-523 1 1 1 1 1
+# muon_spacepoints_q_bck_4 numuCC_part_bdt LPC
+  1 60020 none 524-549 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt LFC
+  1 60021 none 550-578 1 1 1 1 1
+# muon_spacepoints_q_med numuCC_part_bdt LPC
+  1 60022 none 579-607 1 1 1 1 1
+# muon_spacepoints_q_0, all its channels
+  1 60023 none 0-30,31-61 1 1 1 1 1
+# muon_spacepoints_q_1, all its channels
+  1 60024 none 62-87,88-113 1 1 1 1 1
+# muon_spacepoints_q_2, all its channels
+  1 60025 none 114-139,140-165 1 1 1 1 1
+# muon_spacepoints_q_3, all its channels
+  1 60026 none 166-191,192-217 1 1 1 1 1
+# muon_spacepoints_q_4, all its channels
+  1 60027 none 218-243,244-269 1 1 1 1 1
+# muon_spacepoints_q_bck_0, all its channels
+  1 60028 none 270-300,301-331 1 1 1 1 1
+# muon_spacepoints_q_bck_1, all its channels
+  1 60029 none 332-362,363-393 1 1 1 1 1
+# muon_spacepoints_q_bck_2, all its channels
+  1 60030 none 394-419,420-445 1 1 1 1 1
+# muon_spacepoints_q_bck_3, all its channels
+  1 60031 none 446-471,472-497 1 1 1 1 1
+# muon_spacepoints_q_bck_4, all its channels
+  1 60032 none 498-523,524-549 1 1 1 1 1
+# muon_spacepoints_q_med, all its channels
+  1 60033 none 550-578,579-607 1 1 1 1 1
+End

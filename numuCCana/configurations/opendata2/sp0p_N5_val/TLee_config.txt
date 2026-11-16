@@ -1,0 +1,49 @@
+# sp0p_N5_val (make_sp_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  18 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon_spacepoints_q_sum5 numuCC_part_bdt_0p LFC
+  1 64001 none 0-20 1 1 1 1 1
+# muon_spacepoints_q_sum5 numuCC_part_bdt_0p LPC
+  1 64002 none 21-41 1 1 1 1 1
+# muon_spacepoints_q_sum5 numuCC_part_bdt_WCG0p LFC
+  1 64003 none 42-62 1 1 1 1 1
+# muon_spacepoints_q_sum5 numuCC_part_bdt_WCG0p LPC
+  1 64004 none 63-83 1 1 1 1 1
+# muon_spacepoints_q_sum5 numuCC_part_bdt_WCTrk0p LFC
+  1 64005 none 84-104 1 1 1 1 1
+# muon_spacepoints_q_sum5 numuCC_part_bdt_WCTrk0p LPC
+  1 64006 none 105-125 1 1 1 1 1
+# muon_spacepoints_q_max5 numuCC_part_bdt_0p LFC
+  1 64007 none 126-154 1 1 1 1 1
+# muon_spacepoints_q_max5 numuCC_part_bdt_0p LPC
+  1 64008 none 155-183 1 1 1 1 1
+# muon_spacepoints_q_max5 numuCC_part_bdt_WCG0p LFC
+  1 64009 none 184-212 1 1 1 1 1
+# muon_spacepoints_q_max5 numuCC_part_bdt_WCG0p LPC
+  1 64010 none 213-241 1 1 1 1 1
+# muon_spacepoints_q_max5 numuCC_part_bdt_WCTrk0p LFC
+  1 64011 none 242-270 1 1 1 1 1
+# muon_spacepoints_q_max5 numuCC_part_bdt_WCTrk0p LPC
+  1 64012 none 271-299 1 1 1 1 1
+# muon_spacepoints_q_maxdq5 numuCC_part_bdt_0p LFC
+  1 64013 none 300-330 1 1 1 1 1
+# muon_spacepoints_q_maxdq5 numuCC_part_bdt_0p LPC
+  1 64014 none 331-361 1 1 1 1 1
+# muon_spacepoints_q_maxdq5 numuCC_part_bdt_WCG0p LFC
+  1 64015 none 362-392 1 1 1 1 1
+# muon_spacepoints_q_maxdq5 numuCC_part_bdt_WCG0p LPC
+  1 64016 none 393-423 1 1 1 1 1
+# muon_spacepoints_q_maxdq5 numuCC_part_bdt_WCTrk0p LFC
+  1 64017 none 424-454 1 1 1 1 1
+# muon_spacepoints_q_maxdq5 numuCC_part_bdt_WCTrk0p LPC
+  1 64018 none 455-485 1 1 1 1 1
+# muon_spacepoints_q_sum5, all its channels
+  1 64019 none 0-20,21-41,42-62,63-83,84-104,105-125 1 1 1 1 1
+# muon_spacepoints_q_max5, all its channels
+  1 64020 none 126-154,155-183,184-212,213-241,242-270,271-299 1 1 1 1 1
+# muon_spacepoints_q_maxdq5, all its channels
+  1 64021 none 300-330,331-361,362-392,393-423,424-454,455-485 1 1 1 1 1
+End

@@ -1,0 +1,49 @@
+# sp0p_N3_val (make_sp_configs.py)
+#
+# channels_observation flag_lookelsewhere
+  18 1
+#
+# run index support target xsflux det add mcstat mcstatcor
+# muon_spacepoints_q_sum3 numuCC_part_bdt_0p LFC
+  1 63001 none 0-24 1 1 1 1 1
+# muon_spacepoints_q_sum3 numuCC_part_bdt_0p LPC
+  1 63002 none 25-49 1 1 1 1 1
+# muon_spacepoints_q_sum3 numuCC_part_bdt_WCG0p LFC
+  1 63003 none 50-74 1 1 1 1 1
+# muon_spacepoints_q_sum3 numuCC_part_bdt_WCG0p LPC
+  1 63004 none 75-99 1 1 1 1 1
+# muon_spacepoints_q_sum3 numuCC_part_bdt_WCTrk0p LFC
+  1 63005 none 100-124 1 1 1 1 1
+# muon_spacepoints_q_sum3 numuCC_part_bdt_WCTrk0p LPC
+  1 63006 none 125-149 1 1 1 1 1
+# muon_spacepoints_q_max3 numuCC_part_bdt_0p LFC
+  1 63007 none 150-178 1 1 1 1 1
+# muon_spacepoints_q_max3 numuCC_part_bdt_0p LPC
+  1 63008 none 179-207 1 1 1 1 1
+# muon_spacepoints_q_max3 numuCC_part_bdt_WCG0p LFC
+  1 63009 none 208-236 1 1 1 1 1
+# muon_spacepoints_q_max3 numuCC_part_bdt_WCG0p LPC
+  1 63010 none 237-265 1 1 1 1 1
+# muon_spacepoints_q_max3 numuCC_part_bdt_WCTrk0p LFC
+  1 63011 none 266-294 1 1 1 1 1
+# muon_spacepoints_q_max3 numuCC_part_bdt_WCTrk0p LPC
+  1 63012 none 295-323 1 1 1 1 1
+# muon_spacepoints_q_maxdq3 numuCC_part_bdt_0p LFC
+  1 63013 none 324-354 1 1 1 1 1
+# muon_spacepoints_q_maxdq3 numuCC_part_bdt_0p LPC
+  1 63014 none 355-385 1 1 1 1 1
+# muon_spacepoints_q_maxdq3 numuCC_part_bdt_WCG0p LFC
+  1 63015 none 386-416 1 1 1 1 1
+# muon_spacepoints_q_maxdq3 numuCC_part_bdt_WCG0p LPC
+  1 63016 none 417-447 1 1 1 1 1
+# muon_spacepoints_q_maxdq3 numuCC_part_bdt_WCTrk0p LFC
+  1 63017 none 448-478 1 1 1 1 1
+# muon_spacepoints_q_maxdq3 numuCC_part_bdt_WCTrk0p LPC
+  1 63018 none 479-509 1 1 1 1 1
+# muon_spacepoints_q_sum3, all its channels
+  1 63019 none 0-24,25-49,50-74,75-99,100-124,125-149 1 1 1 1 1
+# muon_spacepoints_q_max3, all its channels
+  1 63020 none 150-178,179-207,208-236,237-265,266-294,295-323 1 1 1 1 1
+# muon_spacepoints_q_maxdq3, all its channels
+  1 63021 none 324-354,355-385,386-416,417-447,448-478,479-509 1 1 1 1 1
+End
