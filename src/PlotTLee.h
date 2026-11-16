@@ -57,7 +57,7 @@ static void draw_gof_segments(const TLeeGoFPlotStyle& style, bool flag_axis_labe
   if( flag_names && style.description!="" ) {// above the frame
 	TLatex *latex_desc = new TLatex();
 	latex_desc->SetNDC(); latex_desc->SetTextFont(42); latex_desc->SetTextAlign(11); latex_desc->SetTextSize(0.045);
-	latex_desc->DrawLatex(left, 1-top+0.015, style.description);
+	latex_desc->DrawLatex(left, 1-top+0.025, style.description);// high enough that subscripts clear the frame
   }
 }
 
@@ -168,6 +168,9 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   bool flag_axis_user = flag_axis_userAA || flag_axis_userAB || !style.segments.empty();
   int axis_user_divisions = style.axis_user_divisions;
   TString title_axis_user = style.title_axis_user;
+  // x title of the user axes: a bit smaller than the other titles, and shrunk further for long ones (e.g. the spacepoint
+  // charges), so that it fits within the frame
+  auto title_size_user = [&](double size) { return size*std::min(0.85, 40./std::max(1, title_axis_user.Length())); };
 
   double userAA_index_low = style.userAA_index_low;
   double userAA_index_hgh = style.userAA_index_hgh;
@@ -369,6 +372,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
 	h1_pred_Y_noConstraint_rel_error->GetXaxis()->SetTickLength(0);
 	h1_pred_Y_noConstraint_rel_error->GetXaxis()->SetLabelSize(0);
 	h1_pred_Y_noConstraint_rel_error->SetXTitle( title_axis_user );
+	h1_pred_Y_noConstraint_rel_error->GetXaxis()->SetTitleSize( title_size_user(0.078) );// also the wi-constraint clone
 
 	if( flag_axis_userAA && flag_axis_userAB ) line_FC_PC->Draw("same");
 
@@ -559,6 +563,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   h1_spectra_wi2no->GetYaxis()->SetTickLength(0.03);
   if( flag_axis_user ) {/// ttt
 	func_xy_title(h1_spectra_wi2no, title_axis_user, "Prediction wi/no constraint");
+	h1_spectra_wi2no->GetXaxis()->SetTitleSize( title_size_user(0.05) );
 	h1_spectra_wi2no->GetXaxis()->SetLabelSize(0);
 	if( flag_axis_userAA ) axis_userAA_wi2no->Draw();
 	if( flag_axis_userAB ) axis_userAB_wi2no->Draw();
@@ -750,6 +755,7 @@ void TLee::Plotting_GoF(int index, int num_Y, int num_X, TMatrixD matrix_pred_Y,
   h1_spectra_relerr->GetYaxis()->SetTickLength(0.03);
   if( flag_axis_user ) {/// ttt
 	func_xy_title(h1_spectra_relerr, title_axis_user,"Rel.Err to Pred no constraint");
+	h1_spectra_relerr->GetXaxis()->SetTitleSize( title_size_user(0.05) );
 
 	if( flag_axis_userAA && flag_axis_userAB ) {
 	  line_FC_PC->Draw("same");
