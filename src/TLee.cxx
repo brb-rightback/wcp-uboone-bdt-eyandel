@@ -1775,9 +1775,13 @@ void TLee::Set_Collapse()
 
   ////////////////////////////////////////
 
+   // The per-source flux/Xs matrices (only written to the output file, after the first Set_Collapse) are made absolute and
+   // collapsed on the first call; their uncollapsed copies are then freed (memory), and later calls keep the collapsed ones
+   // (the conversion to absolute is done in place, so a second pass would scale them by the spectra again).
    for( auto it_sub=matrix_sub_flux_geant4_Xs_oldworld.begin(); it_sub!=matrix_sub_flux_geant4_Xs_oldworld.end(); it_sub++ ) {
     int index = it_sub->first;
     int rows = matrix_sub_flux_geant4_Xs_oldworld[index].GetNrows();
+    if( rows==0 ) continue;// collapsed by an earlier call
 
     for(int idx=0; idx<rows; idx++) {
       for(int jdx=0; jdx<rows; jdx++) {
@@ -1790,6 +1794,7 @@ void TLee::Set_Collapse()
     matrix_sub_flux_geant4_Xs_newworld[index].Clear();
     matrix_sub_flux_geant4_Xs_newworld[index].ResizeTo(bins_newworld, bins_newworld);
     matrix_sub_flux_geant4_Xs_newworld[index] = matrix_transform_Lee_T * matrix_sub_flux_geant4_Xs_oldworld[index] * matrix_transform_Lee;
+    matrix_sub_flux_geant4_Xs_oldworld[index].ResizeTo(0, 0);// frees the uncollapsed copy
    }
  
 
@@ -2223,6 +2228,14 @@ void TLee::Set_Spectra_MatrixCov()
 	  //cout << "lhagaman debug, adding to reweight_cor_frac\n";
 	  matrix_reweight_cor_frac += (*map_matrix_flux_Xs_frac[idx]);
 	}
+
+	// the copy read from the file is not used any further: freed with its file (bins_oldworld^2 doubles each, e.g. 1.2 GB
+	// for 12k bins, which with the per-source copy above made the memory grow with the square of the bins)
+	delete map_matrix_flux_Xs_frac[idx];
+	map_matrix_flux_Xs_frac[idx] = 0;
+	map_file_flux_Xs_frac[idx]->Close();
+	delete map_file_flux_Xs_frac[idx];
+	map_file_flux_Xs_frac[idx] = 0;
   }
   cout<<endl;
 
