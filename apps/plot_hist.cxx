@@ -1573,14 +1573,14 @@ datapot = 4.0e19;
         hXsecBkgCC->SetLineWidth(1);
 
         hstack[obschannel-1]->Add(hXsecNumuCCStub0pinFV);
-        legend[obschannel-1]->AddEntry(hXsecNumuCCStub0pinFV, Form("#nu_{#mu} CC G0p (K_{p}<15 MeV) in FV, %.1f", hXsecNumuCCStub0pinFV->Integral()), "F");
+        legend[obschannel-1]->AddEntry(hXsecNumuCCStub0pinFV, Form("#nu_{#mu} CC G0p (<15 MeV), %.1f", hXsecNumuCCStub0pinFV->Integral()), "F");
         hXsecNumuCCStub0pinFV->SetFillStyle(1001);
         hXsecNumuCCStub0pinFV->SetFillColorAlpha(kBlue, 0.5);
         hXsecNumuCCStub0pinFV->SetLineColor(kBlue);
         hXsecNumuCCStub0pinFV->SetLineWidth(1);
 
         hstack[obschannel-1]->Add(hXsecNumuCCStubinFV);
-        legend[obschannel-1]->AddEntry(hXsecNumuCCStubinFV, Form("#nu_{#mu} CC stub (15-45 MeV) in FV, %.1f", hXsecNumuCCStubinFV->Integral()), "F");
+        legend[obschannel-1]->AddEntry(hXsecNumuCCStubinFV, Form("#nu_{#mu} CC stub (15-45 MeV), %.1f", hXsecNumuCCStubinFV->Integral()), "F");
         hXsecNumuCCStubinFV->SetFillStyle(1001);
         hXsecNumuCCStubinFV->SetFillColorAlpha(kYellow-3, 0.5);
         hXsecNumuCCStubinFV->SetLineColor(kYellow-3);
